@@ -24,6 +24,16 @@ router.post("/register", {
 
     const body = context.request.body;
 
+    const oldUser = User.findOne({
+        where: {
+            email: body.email
+        }
+    });
+
+    if(oldUser) {
+        throw new HttpError(409, "error.emailexists");
+    }
+
     const hashedPassword = await bcrypt.hash(body.password, SALT_ROUNDS);
 
     const user = await User.create({

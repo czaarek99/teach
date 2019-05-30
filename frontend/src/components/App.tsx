@@ -1,12 +1,13 @@
 import React from 'react';
+import LoginPage from './pages/LoginPage';
 
 class App extends React.Component {
 
 	public render() : React.ReactNode {
+
+
 		return (
-			<p>
-				Hello world
-			</p>
+			<LoginPage />
 		)
 	}
 
