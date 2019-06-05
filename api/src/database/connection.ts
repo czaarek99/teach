@@ -4,16 +4,16 @@ import { User } from "./models/User";
 import { Session } from "./models/Session";
 
 export const connection = new Sequelize(
-    config.databaseName, 
-    config.databaseUser, 
-    config.databasePassword, 
-    {
-        host: config.databaseHost,
-        dialect: "mariadb"
-    }
+	config.databaseName, 
+	config.databaseUser, 
+	config.databasePassword, 
+	{
+		host: config.databaseHost,
+		dialect: "mariadb"
+	}
 );
 
 connection.addModels([
-    User,
-    Session
+	User,
+	Session
 ])

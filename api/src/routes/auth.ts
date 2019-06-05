@@ -11,80 +11,80 @@ const router = Router();
 const SALT_ROUNDS = 10;
 
 router.post("/register", {
-    validate: {
-        body: {
-            email: Joi.string().email(),
-            password: Joi.string().min(10),
-            firstName: Joi.string().min(1).max(200),
-            lastName: Joi.string().min(1).max(200)
-        },
-        type: "json"
-    }
+	validate: {
+		body: {
+			email: Joi.string().email(),
+			password: Joi.string().min(10),
+			firstName: Joi.string().min(1).max(200),
+			lastName: Joi.string().min(1).max(201)
+		},
+		type: "json"
+	}
 }, async (context: CustomContext) => {
 
-    const body = context.request.body;
+	const body = context.request.body;
 
-    const oldUser = User.findOne({
-        where: {
-            email: body.email
-        }
-    });
+	const oldUser = User.findOne({
+		where: {
+			email: body.email
+		}
+	});
 
-    if(oldUser) {
-        throw new HttpError(409, "error.emailexists");
-    }
+	if(oldUser) {
+		throw new HttpError(409, "error.emailexists");
+	}
 
-    const hashedPassword = await bcrypt.hash(body.password, SALT_ROUNDS);
+	const hashedPassword = await bcrypt.hash(body.password, SALT_ROUNDS);
 
-    const user = await User.create({
-        email: body.email,
-        password: hashedPassword,
-        firstName: body.firstName,
-        lastName: body.lastName
-    });
+	const user = await User.create({
+		email: body.email,
+		password: hashedPassword,
+		firstName: body.firstName,
+		lastName: body.lastName
+	});
 
-    context.session.userId = user.id;
-    context.status = 200;
+	context.session.userId = user.id;
+	context.status = 200;
 
-    context.state.logger.userInfo(user.id, "Just registered");
+	context.state.logger.userInfo(user.id, "Just registered");
 });
 
 function throwNoSuchUserError() {
-    throw new HttpError(404, "error.usernotfound")
+	throw new HttpError(404, "error.usernotfound")
 }
 
 router.post("/login", {
-    validate: {
-        body: {
-            email: Joi.string(),
-            password: Joi.string()
-        },
-        type: "json"
-    }
+	validate: {
+		body: {
+			email: Joi.string(),
+			password: Joi.string()
+		},
+		type: "json"
+	}
 }, async (context: CustomContext) => {
 
-    const body = context.request.body;
+	const body = context.request.body;
 
-    const user = await User.findOne({
-        where: {
-            email: body.email
-        }
-    });
+	const user = await User.findOne({
+		where: {
+			email: body.email
+		}
+	});
 
-    if(!user) {
-        throwNoSuchUserError();
-    }
+	if(!user) {
+		throwNoSuchUserError();
+	}
 
-    const isPasswordValid = await bcrypt.compare(body.password, user.password);
+	const isPasswordValid = await bcrypt.compare(body.password, user.password);
 
-    if(!isPasswordValid) {
-        throwNoSuchUserError();
-    }
+	if(!isPasswordValid) {
+		throwNoSuchUserError();
+	}
 
-    context.session.userId = user.id;
-    context.status = 200;
+	context.session.userId = user.id;
+	context.status = 200;
 
-    context.state.logger.userInfo(user.id, "Logged in");
+	context.state.logger.userInfo(user.id, "Logged in");
 });
 
 export default router;

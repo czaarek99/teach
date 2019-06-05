@@ -5,22 +5,22 @@ export interface ISession {
 }
 
 @Table({
-    tableName: "sessions",
-    timestamps: false
+	tableName: "sessions",
+	timestamps: false
 })
 
 export class Session extends Model<Session> {
 
-    @AllowNull(false)
-    @Column
-    public expirationDate: Date;
+	@AllowNull(false)
+	@Column
+	public expirationDate: Date;
 
-    @AllowNull(false)
-    @Column(DataType.STRING(36))
-    public key: string;
+	@AllowNull(false)
+	@Column(DataType.STRING(36))
+	public key: string;
 
-    @AllowNull(false)
-    @Column(DataType.JSON)
-    public session: ISession;
+	@AllowNull(false)
+	@Column(DataType.JSON)
+	public session: ISession;
 
 }
