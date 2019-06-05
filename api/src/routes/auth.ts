@@ -4,7 +4,7 @@ import * as bcrypt from "bcrypt";
 import { Joi } from "koa-joi-router";
 import { User } from "../database/models/User";
 import { CustomContext } from "../Server";
-import { HttpError } from "../util/HttpError";
+import { HttpError, ErrorMessage } from "common-library";
 
 const router = Router();
 
@@ -31,7 +31,7 @@ router.post("/register", {
 	});
 
 	if(oldUser) {
-		throw new HttpError(409, "error.emailexists");
+		throw new HttpError(409, ErrorMessage.EMAIL_EXISTS);
 	}
 
 	const hashedPassword = await bcrypt.hash(body.password, SALT_ROUNDS);
@@ -43,14 +43,14 @@ router.post("/register", {
 		lastName: body.lastName
 	});
 
-	context.session.userId = user.id;
-	context.status = 200;
+	context.state.logger.info(`Just registered a user with id: ${user.id}`);
 
-	context.state.logger.userInfo(user.id, "Just registered");
+	context.session.userId = user.id;
+	context.response.status = 200;
 });
 
 function throwNoSuchUserError() {
-	throw new HttpError(404, "error.usernotfound")
+	throw new HttpError(404, ErrorMessage.USER_NOT_FOUND)
 }
 
 router.post("/login", {
@@ -81,10 +81,10 @@ router.post("/login", {
 		throwNoSuchUserError();
 	}
 
-	context.session.userId = user.id;
-	context.status = 200;
+	context.state.logger.info(`User with id: ${user.id} just logged in`);
 
-	context.state.logger.userInfo(user.id, "Logged in");
+	context.session.userId = user.id;
+	context.response.status = 200;
 });
 
 export default router;

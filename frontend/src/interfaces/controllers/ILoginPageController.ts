@@ -1,7 +1,19 @@
-import { ILoginPageModel } from "../models/ILoginPageModel";
+import { ILoginModel } from "../models/ILoginModel";
+import { ErrorState, ErrorModel } from "../../validation/ErrorModel";
+import { LoadingButtonState } from "../../components/LoadingButton";
+
+export interface ILoginPageErrorState extends ErrorState {
+	email: string[]
+	password: string[]
+}
 
 export interface ILoginPageController {
-	readonly model: ILoginPageModel;
+	readonly model: ILoginModel
+	readonly errorModel: ErrorModel<ILoginPageErrorState>
+	readonly loading: boolean
+	readonly errorMessage: string | null
+	readonly loginButtonState: LoadingButtonState;
 
-	onChange: (value: string) => void
+	onLogin: () => Promise<void>
+	onChange: (key: keyof ILoginModel, value: string) => void
 }

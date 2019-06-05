@@ -5,7 +5,12 @@ export interface IRegistrationData {
 	lastName: string
 }
 
+export interface ILoginData {
+	email: string
+	password: string
+}
+
 export interface IAuthenticationService {
-	logIn: (email: string, password: string) => Promise<void>
+	logIn: (data: ILoginData) => Promise<void>
 	register: (data: IRegistrationData) => Promise<void>
 }

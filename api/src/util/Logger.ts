@@ -1,48 +1,57 @@
 import { createLogger, Logger as Winston, transports } from "winston";
 
+interface ILogData {
+	loggerName: string
+	message: string
+	date: Date
+	[key: string]: any
+}
+
 export class Logger {
 
+	private readonly data : object = {};
 	private readonly winston: Winston;
+	private readonly loggerName: string;
 
-	constructor() {
+	constructor(loggerName: string, data?: object) {
+		this.loggerName = loggerName;
+
+		if(data) {
+			for(const [key, value] of Object.entries(data)) {
+				if(value !== undefined) {
+					this.data[key] = value;
+				}
+			}
+		}
+
 		this.winston = createLogger({
 			transports: [
 				new transports.Console()
 			]
-		})
-	}
-
-	public userError(userId: number, error: string) : void {
-		this.winston.error({
-			userId,
-			error
 		});
 	}
 
-	public userInfo(userId: number, message: string) : void {
-		this.winston.info({
-			userId,
-			message
-		});
-	}
+	private getData(message: string) : ILogData {
+		const data : ILogData = {
+			...this.data,
+			message,
+			loggerName: this.loggerName,
+			date: new Date(),
+		};
 
-	public userDebug(userId: number, message: string) : void {
-		this.winston.debug({
-			userId,
-			message
-		})
+		return data;
 	}
 
 	public error(error: string) : void {
-		this.winston.error(error);
+		this.winston.error(this.getData(error));
 	}
 
 	public info(message: string) : void {
-		this.winston.info(message);
+		this.winston.info(this.getData(message));
 	}
 
 	public debug(message: string) : void {
-		this.winston.debug(message);
+		this.winston.debug(this.getData(message));
 	}
 
 }

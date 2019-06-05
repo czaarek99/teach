@@ -1,17 +1,14 @@
-import { IAuthenticationService, IRegistrationData } from "../interfaces/services/IAuthenticationService";
-import Axios from "axios";
+import { IAuthenticationService, IRegistrationData, ILoginData } from "../interfaces/services/IAuthenticationService";
+import { BaseService } from "./BaseService";
 
-export class AuthenticationService implements IAuthenticationService {
+export class AuthenticationService extends BaseService implements IAuthenticationService {
 
-	public async logIn(email: string, password: string) : Promise<void> {
-		await Axios.post("/auth/login", {
-			email,
-			password
-		});
+	public async logIn(data: ILoginData) : Promise<void> {
+		await this.axios.post("/auth/login", data);
 	}
 
 	public async register(data: IRegistrationData) : Promise<void> {
-		await Axios.post("/auth/register", data);
+		await this.axios.post("/auth/register", data);
 	}
 
 }
