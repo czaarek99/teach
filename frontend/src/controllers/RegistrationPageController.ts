@@ -3,10 +3,11 @@ import { observable } from "mobx";
 import { RegistrationModel } from "../models/RegistrationModel";
 import { ErrorModel } from "../validation/ErrorModel";
 import { AddressModel } from "../models/AddressModel";
-import { LoadingButtonState } from "../components/LoadingButton";
+import { LoadingButtonState } from "../components/molecules/LoadingButton/LoadingButton";
 import { IRegistrationModel } from "../interfaces/models/IRegistrationModel";
 import { IAddressModel } from "../interfaces/models/IAddressModel";
 import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
+import { MaterialUiPickersDate } from "@material-ui/pickers";
 
 export class RegistrationPageController implements IRegistrationPageController {
 
@@ -37,8 +38,8 @@ export class RegistrationPageController implements IRegistrationPageController {
 		this.authenticationService = authenticationService;
 	}
 
-	public onChange(key: keyof IRegistrationModel, value: string) : void {
-
+	public onChange(key: keyof IRegistrationModel, value: any) : void {
+		this.registrationModel[key as (keyof RegistrationModel)] = value;
 	}
 
 	public onAddressChange(key: keyof IAddressModel, value: string) : void {
@@ -47,6 +48,12 @@ export class RegistrationPageController implements IRegistrationPageController {
 
 	public async onRegister() : Promise<void> {
 
+	}
+
+	public onBirthDateChange(date: MaterialUiPickersDate) : void {
+		if(date !== null) {
+			this.registrationModel.birthDate = date;
+		}
 	}
 
 }

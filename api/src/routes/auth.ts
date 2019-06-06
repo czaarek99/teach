@@ -4,7 +4,8 @@ import * as bcrypt from "bcrypt";
 import { Joi } from "koa-joi-router";
 import { User } from "../database/models/User";
 import { CustomContext } from "../Server";
-import { subYears } from "date-fns";
+import { addDays } from "date-fns";
+
 
 import {
 	HttpError,
@@ -15,7 +16,6 @@ import {
 	FIRST_NAME_MAX_LENGTH,
 	LAST_NAME_MIN_LENGTH,
 	LAST_NAME_MAX_LENGTH,
-	USER_MIN_AGE,
 	STREET_MIN_LENGTH,
 	STREET_MAX_LENGTH,
 	ZIP_CODE_MIN_LENGTH,
@@ -26,13 +26,13 @@ import {
 	EMAIL_MAX_LENGTH,
 	EMAIL_MIN_LENGTH,
 	STATE_MAX_LENGTH,
-	STATE_MIN_LENGTH
+	STATE_MIN_LENGTH,
+	getUserMaxDate,
 } from "common-library";
 
 const router = Router();
 
 const SALT_ROUNDS = 10;
-const EIGHTEEN_YEARS_AGO = subYears(new Date(), USER_MIN_AGE);
 
 router.post("/register", {
 	validate: {
@@ -41,7 +41,7 @@ router.post("/register", {
 			password: Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).required(),
 			firstName: Joi.string().min(FIRST_NAME_MIN_LENGTH).max(FIRST_NAME_MAX_LENGTH).required(),
 			lastName: Joi.string().min(LAST_NAME_MIN_LENGTH).max(LAST_NAME_MAX_LENGTH).required(),
-			birthDate: Joi.date().less(EIGHTEEN_YEARS_AGO).required(),
+			birthDate: Joi.date().max(addDays(getUserMaxDate(), 3)).required(),
 			address: Joi.object({
 				street: Joi.string().min(STREET_MIN_LENGTH).max(STREET_MAX_LENGTH).required(),
 				zipCode: Joi.string().min(ZIP_CODE_MIN_LENGTH).max(ZIP_CODE_MAX_LENGTH).required(),

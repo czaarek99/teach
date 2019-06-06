@@ -1,25 +1,27 @@
 import * as React from "react";
 
+import MailIcon from "@material-ui/icons/Mail";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import LoadingButton from "../LoadingButton";
-import InfoBox from "../InfoBox";
+import KeyIcon from "@material-ui/icons/VpnKey";
 
-import { getTextFieldErrorState } from "../../validation/getErrorState";
+import { getTextFieldErrorState } from "../../../validation/getErrorState";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
-import { ILoginPageController } from "../../interfaces/controllers/ILoginPageController";
-import { simpleFormat } from "../../util/simpleFormat";
+import { ILoginPageController } from "../../../interfaces/controllers/ILoginPageController";
+import { simpleFormat } from "../../../util/simpleFormat";
 import { observer } from "mobx-react";
+import { PASSWORD_MAX_LENGTH, EMAIL_MAX_LENGTH } from "common-library";
+import { InfoBox, CustomTextField, LoadingButton } from "../../molecules";
 
 import {
-	TextField,
 	Paper,
 	Theme,
 	createStyles,
 	WithStyles,
 	withStyles,
 	Box,
-	Typography
+	Typography,
 } from "@material-ui/core";
+
 
 const styles = (theme: Theme) => createStyles({
 	loginButton: {
@@ -86,19 +88,22 @@ class LoginPage extends React.Component<
 								display="flex"
 								justifyContent="center">
 
-								<Typography className={classes.loginText}>
+								<Typography className={classes.loginText}
+									component="h1">
+
 									{loginLabel}
 								</Typography>
 							</Box>
 
 							<Box marginBottom={margin}>
-								<TextField variant="outlined"
-									disabled={disabled}
+								<CustomTextField disabled={disabled}
+									type="email"
+									maxLength={EMAIL_MAX_LENGTH}
 									value={controller.model.email}
-									fullWidth={true}
 									label={emailLabel}
 									required={true}
 									onChange={event => controller.onChange("email", event.target.value)}
+									startAdornment={ <MailIcon /> }
 									{...getTextFieldErrorState(
 										intl,
 										controller.errorModel,
@@ -111,13 +116,14 @@ class LoginPage extends React.Component<
 							</Box>
 
 							<Box marginBottom={margin}>
-								<TextField variant="outlined"
-									disabled={disabled}
+								<CustomTextField disabled={disabled}
+									type="password"
+									maxLength={PASSWORD_MAX_LENGTH}
 									value={controller.model.password}
-									fullWidth={true}
 									label={passwordLabel}
 									required={true}
 									onChange={event => controller.onChange("password", event.target.value)}
+									startAdornment={ <KeyIcon /> }
 									{...getTextFieldErrorState(
 										intl,
 										controller.errorModel,

@@ -1,7 +1,16 @@
 import * as React from "react";
+
 import { observer } from "mobx-react";
-import { WithStyles, Theme, createStyles, Paper, withStyles } from "@material-ui/core";
+
 import clsx from "clsx";
+
+import {
+	WithStyles,
+	Theme,
+	createStyles,
+	Paper,
+	withStyles
+} from "@material-ui/core";
 
 type InfoBoxType = "success" | "error" | "default";
 

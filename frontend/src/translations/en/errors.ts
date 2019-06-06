@@ -7,4 +7,5 @@ export default {
 	[ErrorMessage.USER_NOT_FOUND]: "No user found with this email & password",
 	[ErrorMessage.UNKNOWN]: "Unknown error",
 	[ErrorMessage.INTERNAL_SERVER_ERROR]: "Internal server error. Contact the administrator",
+	[ErrorMessage.USER_TOO_YOUNG]: "You have to be at least 18 to register"
 }

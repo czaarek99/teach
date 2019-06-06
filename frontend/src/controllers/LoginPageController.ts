@@ -7,7 +7,7 @@ import { ErrorModel } from "../validation/ErrorModel";
 import { validate, ValidatorMap } from "../validation/validate";
 import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
 import { HttpError } from "common-library";
-import { LoadingButtonState } from "../components/LoadingButton";
+import { LoadingButtonState } from "../components/molecules/LoadingButton/LoadingButton";
 
 const validators : ValidatorMap<ILoginModel> = {
 	email: [empty],

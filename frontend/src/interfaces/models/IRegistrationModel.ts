@@ -1,5 +1,5 @@
-import { IUser } from "common-library";
+import { IUser, IAddress } from "common-library";
 
-export type IRegistrationModel = Readonly<IUser> & {
+export interface IRegistrationModel extends Readonly<IUser> {
 	readonly repeatPassword: string
 }

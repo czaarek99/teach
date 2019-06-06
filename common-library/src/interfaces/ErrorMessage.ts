@@ -12,6 +12,8 @@ export enum ErrorMessage {
 	EMAIL_EXISTS = "error.emailExists",
 
 	USER_NOT_FOUND = "error.userNotFound",
+	USER_TOO_YOUNG = "error.userTooYoung",
+
 	UNAUTHORIZED = "error.unauthorized",
 	UNKNOWN = "error.unknown",
 	INTERNAL_SERVER_ERROR = "error.internalServerError"

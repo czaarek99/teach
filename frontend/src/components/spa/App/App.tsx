@@ -1,11 +1,10 @@
 import React from 'react';
-import LoginPage from '../pages/LoginPage';
-import { IAppController } from '../../interfaces/controllers/IAppController';
+
+import { IAppController } from '../../../interfaces/controllers/IAppController';
 import { observer, inject } from 'mobx-react';
-import { Router } from 'react-router';
-import { Routes } from '../../interfaces/Routes';
+import { Routes } from '../../../interfaces/Routes';
 import { RouterStore } from 'mobx-react-router';
-import RegistrationPage from '../pages/RegistrationPage';
+import { LoginPage, RegistrationPage } from '../../pages';
 
 interface IAppProps {
 	controller: IAppController

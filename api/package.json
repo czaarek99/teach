@@ -17,7 +17,7 @@
 		"@types/koa-router": "^7.0.40",
 		"bcrypt": "^3.0.6",
 		"common-library": "file:../common-library",
-		"date-fns": "^2.0.0-alpha.27",
+		"date-fns": "^2.0.0-alpha.31",
 		"json-stringify-safe": "^5.0.1",
 		"koa": "^2.7.0",
 		"koa-bodyparser": "^4.2.1",
