@@ -1,9 +1,11 @@
 import * as React from "react";
 
 import TextField, { TextFieldProps } from "@material-ui/core/TextField";
-import { Omit, InputAdornment } from "@material-ui/core";
 
-type CustomTextFieldProps = Omit<TextFieldProps, "variant"> & {
+import { InputAdornment } from "@material-ui/core";
+import { InjectedIntlProps } from "react-intl";
+
+export type CustomTextFieldProps = Omit<TextFieldProps, "variant"> & {
 	variant?: "standard" | "filled" | "outlined",
 	maxLength?: number
 	minLength?: number
@@ -11,7 +13,10 @@ type CustomTextFieldProps = Omit<TextFieldProps, "variant"> & {
 	endAndornment?: React.ReactNode
 };
 
-export class CustomTextField extends React.Component<CustomTextFieldProps> {
+export class CustomTextField extends React.Component<
+	CustomTextFieldProps &
+	InjectedIntlProps
+> {
 
 	public static defaultProps: Partial<CustomTextFieldProps> =  {
 		variant: "outlined",

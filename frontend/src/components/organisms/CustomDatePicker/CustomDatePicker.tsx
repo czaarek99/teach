@@ -5,6 +5,7 @@ import { MaterialUiPickersDate, DatePicker } from "@material-ui/pickers";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import { simpleFormat } from "../../../util/simpleFormat";
 import { CustomTextField } from "../../molecules";
+import DatePickerTextField from "./internal/DatePickerTextField";
 
 interface ICustomDatePickerProps {
 	value: MaterialUiPickersDate
@@ -14,6 +15,7 @@ interface ICustomDatePickerProps {
 	maxDateMessage?: string
 	minDateMessage?: string
 	required?: boolean
+	icon?: boolean
 	onChange: (date: MaterialUiPickersDate) => void
 }
 
@@ -22,6 +24,10 @@ class CustomDatePicker extends React.Component<
 	ICustomDatePickerProps &
 	InjectedIntlProps
 > {
+
+	public static defaultProps: Partial<ICustomDatePickerProps> = {
+		icon: true
+	}
 
 	public render() : React.ReactNode {
 
@@ -34,6 +40,7 @@ class CustomDatePicker extends React.Component<
 			maxDateMessage,
 			label,
 			required,
+			icon,
 			intl
 		} = this.props;
 
@@ -53,12 +60,17 @@ class CustomDatePicker extends React.Component<
 			return "";
 		}
 
+		let textFieldType : React.ComponentType = CustomTextField;
+		if(icon) {
+			textFieldType = DatePickerTextField;
+		}
+
 		return (
 			<DatePicker value={value}
 				okLabel={okLabel}
 				required={required}
 				cancelLabel={cancelLabel}
-				TextFieldComponent={CustomTextField}
+				TextFieldComponent={textFieldType}
 				maxDate={maxDate}
 				minDate={minDate}
 				onChange={onChange}

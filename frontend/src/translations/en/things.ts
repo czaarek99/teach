@@ -8,5 +8,7 @@ export default {
 	"things.address": "Address",
 	"things.country": "Country",
 	"things.birthDate": "Birth date",
-	"things.state": "State"
+	"things.state": "State",
+	"things.personalInformation": "Personal information",
+	"things.accountDetails": "Account details"
 }
