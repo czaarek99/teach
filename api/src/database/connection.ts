@@ -1,19 +1,15 @@
 import { Sequelize } from "sequelize-typescript";
 import { config } from "../config";
 import { User } from "./models/User";
-import { Session } from "./models/Session";
 
-export const connection = new Sequelize(
-	config.databaseName, 
-	config.databaseUser, 
-	config.databasePassword, 
-	{
-		host: config.databaseHost,
-		dialect: "mariadb"
-	}
-);
+export const connection = new Sequelize({
+	database: config.databaseName,
+	username: config.databaseUser,
+	password: config.databasePassword,
+	host: config.databaseHost,
+	dialect: "mariadb",
+});
 
 connection.addModels([
-	User,
-	Session
-])
+	User
+]);

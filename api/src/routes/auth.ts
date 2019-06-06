@@ -1,4 +1,3 @@
-import * as Koa from "koa";
 import * as Router from "koa-joi-router";
 import * as bcrypt from "bcrypt";
 import { Joi } from "koa-joi-router";
@@ -31,7 +30,8 @@ router.post("/register", {
 	});
 
 	if(oldUser) {
-		throw new HttpError(409, ErrorMessage.EMAIL_EXISTS);
+		context.state.throwApiError(new HttpError(409, ErrorMessage.EMAIL_EXISTS, context.state.requestId));
+		return;
 	}
 
 	const hashedPassword = await bcrypt.hash(body.password, SALT_ROUNDS);
@@ -43,14 +43,16 @@ router.post("/register", {
 		lastName: body.lastName
 	});
 
-	context.state.logger.info(`Just registered a user with id: ${user.id}`);
+	context.state.logger.info("User registration",  {
+		userId: user.id
+	});
 
 	context.session.userId = user.id;
-	context.response.status = 200;
+	context.status = 200;
 });
 
-function throwNoSuchUserError() {
-	throw new HttpError(404, ErrorMessage.USER_NOT_FOUND)
+function throwNoSuchUserError(context: CustomContext) {
+	context.state.throwApiError(new HttpError(404, ErrorMessage.USER_NOT_FOUND, context.state.requestId));
 }
 
 router.post("/login", {
@@ -72,19 +74,23 @@ router.post("/login", {
 	});
 
 	if(!user) {
-		throwNoSuchUserError();
+		throwNoSuchUserError(context);
+		return;
 	}
 
 	const isPasswordValid = await bcrypt.compare(body.password, user.password);
 
 	if(!isPasswordValid) {
-		throwNoSuchUserError();
+		throwNoSuchUserError(context);
+		return;
 	}
 
-	context.state.logger.info(`User with id: ${user.id} just logged in`);
+	context.state.logger.info("User login", {
+		userId: user.id
+	});
 
 	context.session.userId = user.id;
-	context.response.status = 200;
+	context.status = 200;
 });
 
 export default router;

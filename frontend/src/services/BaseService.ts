@@ -1,5 +1,5 @@
 import Axios, { AxiosInstance, AxiosError } from "axios";
-import { IHttpError, HttpError } from "common-library";
+import { IHttpError, HttpError, ErrorMessage } from "common-library";
 
 export class BaseService {
 
@@ -10,25 +10,36 @@ export class BaseService {
 		this.axios.interceptors.response.use((response) => {
 			return response;
 		}, (error: AxiosError) => {
-			if(error.response &&
-					error.response.data &&
-					typeof error.response.data === "object" &&
-					"requestId" in error.response.data
-				) {
+			if(error.response && error.response.data) {
 
-				const data = error.response.data as IHttpError;
+				if(typeof error.response.data === "object" &&
+					"requestId" in error.response.data) {
 
-				const httpError =  new HttpError()
-				httpError.fromJSON(data);
+					const data = error.response.data as IHttpError;
 
-				return Promise.reject(httpError);
-			} else {
-				console.error("Unknown axios error below: ")
-				console.dir(error);
-				console.error("---------------------------");
+					const httpError =  new HttpError()
+					httpError.fromJSON(data);
 
-				return Promise.reject(error);
+					return Promise.reject(httpError);
+				} else {
+					console.error("Unknown axios error below: ")
+					console.dir(error);
+					console.error("---------------------------");
+
+					const httpError = new HttpError(
+						error.response.status,
+						ErrorMessage.UNKNOWN,
+						"",
+						true
+					);
+
+					return Promise.reject(httpError);
+				}
+
 			}
+
+			//Not an axios error
+			return Promise.reject(error);
 		})
 	}
 

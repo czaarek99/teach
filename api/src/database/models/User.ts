@@ -1,17 +1,15 @@
-import { 
-	Table, 
-	Column, 
-	Model, 
-	CreatedAt, 
-	UpdatedAt, 
-	Unique, 
-	AllowNull, 
-	DataType 
+import {
+	Table,
+	Column,
+	Model,
+	CreatedAt,
+	UpdatedAt,
+	Unique,
+	AllowNull,
+	DataType
 } from "sequelize-typescript";
 
-@Table({
-	tableName: "users"
-})
+@Table
 export class User extends Model<User> {
 
 	@AllowNull(false)
@@ -22,6 +20,7 @@ export class User extends Model<User> {
 	@Column(DataType.STRING(100))
 	public lastName: string;
 
+	@Unique
 	@AllowNull(false)
 	@Column(DataType.STRING(255))
 	public email: string;

@@ -1,4 +1,10 @@
 import { Server } from "./Server"
 
-const server = new Server();
-server.startServer();
+async function start() {
+	const server = new Server();
+
+	await server.startDatabase();
+	server.startServer();
+}
+
+start();

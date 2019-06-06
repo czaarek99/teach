@@ -1,57 +1,76 @@
-import { createLogger, Logger as Winston, transports } from "winston";
+import * as stringify from "json-stringify-safe";
 
 interface ILogData {
 	loggerName: string
-	message: string
 	date: Date
+
+	message?: string
+	data?: object
+
 	[key: string]: any
+}
+
+export enum LogLevel {
+	CRITICAL = "critical",
+	ERROR = "error",
+	WARNING = "warning",
+	INFO = "info",
+	DEBUG = "debug"
 }
 
 export class Logger {
 
-	private readonly data : object = {};
-	private readonly winston: Winston;
+	private readonly persistentData : object = {};
 	private readonly loggerName: string;
 
-	constructor(loggerName: string, data?: object) {
+	constructor(loggerName: string, persistentData?: object) {
 		this.loggerName = loggerName;
 
-		if(data) {
-			for(const [key, value] of Object.entries(data)) {
+		if(persistentData) {
+			for(const [key, value] of Object.entries(persistentData)) {
 				if(value !== undefined) {
-					this.data[key] = value;
+					this.persistentData[key] = value;
 				}
 			}
 		}
-
-		this.winston = createLogger({
-			transports: [
-				new transports.Console()
-			]
-		});
 	}
 
-	private getData(message: string) : ILogData {
-		const data : ILogData = {
-			...this.data,
-			message,
+	private log(level: LogLevel, message: string, dataIn?: object) : void {
+		const dataOut : ILogData = {
+			...this.persistentData,
+			level,
 			loggerName: this.loggerName,
 			date: new Date(),
-		};
+		}
 
-		return data;
+		if(dataIn) {
+			dataOut.data = dataIn;
+		}
+
+		if(message) {
+			dataOut.message = message;
+		}
+
+		console.log(stringify(dataOut));
 	}
 
-	public error(error: string) : void {
-		this.winston.error(this.getData(error));
+	public critical(message: string, dataIn?: object) : void {
+		this.log(LogLevel.CRITICAL, message, dataIn);
 	}
 
-	public info(message: string) : void {
-		this.winston.info(this.getData(message));
+	public error(message: string, dataIn?: object) : void {
+		this.log(LogLevel.ERROR, message, dataIn);
 	}
 
-	public debug(message: string) : void {
-		this.winston.debug(this.getData(message));
+	public warning(message: string, dataIn?: object) : void {
+		this.log(LogLevel.WARNING, message, dataIn);
 	}
 
+	public info(message: string, dataIn?: object) : void {
+		this.log(LogLevel.INFO, message, dataIn);
+	}
+
+	public debug(message: string, dataIn?: object) : void {
+		this.log(LogLevel.DEBUG, message, dataIn);
+	}
 }

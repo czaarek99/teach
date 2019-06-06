@@ -63,13 +63,13 @@ class LoginPage extends
 		if(controller.errorMessage !== null) {
 			errorBox = (
 				<Paper className={classes.errorBox}>
-					<Typography>
-						<Box padding="5px"
-							marginBottom={margin}>
+					<Box padding="10px"
+						marginBottom={margin}>
 
+						<Typography>
 							<FormattedMessage id={controller.errorMessage}/>
-						</Box>
-					</Typography>
+						</Typography>
+					</Box>
 				</Paper>
 			)
 		}
