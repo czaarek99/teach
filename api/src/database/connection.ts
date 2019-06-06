@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize-typescript";
 import { config } from "../config";
 import { User } from "./models/User";
+import { Address } from "./models/Address";
 
 export const connection = new Sequelize({
 	database: config.databaseName,
@@ -11,5 +12,6 @@ export const connection = new Sequelize({
 });
 
 connection.addModels([
-	User
+	User,
+	Address,
 ]);

@@ -58,6 +58,11 @@ export class LoginPageController implements ILoginPageController {
 			try {
 				await this.authenticationService.logIn(this.model);
 				this.loginButtonState = "success";
+
+				setTimeout(() => {
+					//TODO: Redirect to  logged in page
+					console.log("logged in!")
+				}, 1000)
 			} catch(error) {
 				const typedError = error as HttpError;
 				this.errorMessage = typedError.error;
@@ -65,10 +70,6 @@ export class LoginPageController implements ILoginPageController {
 			}
 
 			this.loading = false;
-
-			setTimeout(() => {
-				console.log("logged in!")
-			}, 1000)
 		}
 	}
 

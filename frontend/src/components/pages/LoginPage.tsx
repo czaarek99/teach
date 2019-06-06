@@ -2,6 +2,7 @@ import * as React from "react";
 
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import LoadingButton from "../LoadingButton";
+import InfoBox from "../InfoBox";
 
 import { getTextFieldErrorState } from "../../validation/getErrorState";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
@@ -19,8 +20,6 @@ import {
 	Box,
 	Typography
 } from "@material-ui/core";
-
-
 
 const styles = (theme: Theme) => createStyles({
 	loginButton: {
@@ -41,13 +40,17 @@ interface ILoginPageProps {
 }
 
 @observer
-class LoginPage extends
-	React.Component<ILoginPageProps & WithStyles<typeof styles> & InjectedIntlProps> {
+class LoginPage extends React.Component<
+	ILoginPageProps &
+	WithStyles<typeof styles> &
+	InjectedIntlProps
+> {
 
 	public render() : React.ReactNode {
 		const {
 			classes,
-			controller
+			controller,
+			intl
 		} = this.props;
 
 		const emailLabel = simpleFormat(this, "things.email");
@@ -62,16 +65,12 @@ class LoginPage extends
 
 		if(controller.errorMessage !== null) {
 			errorBox = (
-				<Paper className={classes.errorBox}>
-					<Box padding="10px"
-						marginBottom={margin}>
-
-						<Typography>
-							<FormattedMessage id={controller.errorMessage}/>
-						</Typography>
-					</Box>
-				</Paper>
-			)
+				<InfoBox type="error">
+					<Typography>
+						<FormattedMessage id={controller.errorMessage}/>
+					</Typography>
+				</InfoBox>
+			);
 		}
 
 		return (
@@ -98,12 +97,14 @@ class LoginPage extends
 									value={controller.model.email}
 									fullWidth={true}
 									label={emailLabel}
+									required={true}
 									onChange={event => controller.onChange("email", event.target.value)}
 									{...getTextFieldErrorState(
-										this.props.intl,
+										intl,
 										controller.errorModel,
-										"email", {
-											value: "Email"
+										"email",
+										{
+											value: emailLabel
 										}
 									)}
 								/>
@@ -115,12 +116,14 @@ class LoginPage extends
 									value={controller.model.password}
 									fullWidth={true}
 									label={passwordLabel}
+									required={true}
 									onChange={event => controller.onChange("password", event.target.value)}
 									{...getTextFieldErrorState(
-										this.props.intl,
+										intl,
 										controller.errorModel,
-										"password", {
-											value: "Password"
+										"password",
+										{
+											value: passwordLabel
 										}
 									)}
 								/>
@@ -128,7 +131,10 @@ class LoginPage extends
 
 							{errorBox}
 
-							<Box justifyContent="flex-end" display="flex">
+							<Box justifyContent="flex-end"
+								display="flex"
+								marginTop={margin}>
+
 								<LoadingButton state={controller.loginButtonState}
 									onClick={() => controller.onLogin()}
 									className={classes.loginButton}>
@@ -143,7 +149,6 @@ class LoginPage extends
 			</Box>
 		)
 	}
-
 }
 
 export default withStyles(styles)(injectIntl(LoginPage));
