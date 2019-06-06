@@ -1,12 +1,13 @@
 import * as React from "react";
 
 import PersonalInformationContent from "./internal/PersonalInformationContent";
+import AccountDetailsContent from "./internal/AccountDetailsContent";
+import AddressContent from "./internal/AddressContent";
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { simpleFormat } from "../../../util/simpleFormat";
-import { getTextFieldErrorState } from "../../../validation/getErrorState";
-import { InfoBox, CustomTextField, LoadingButton } from "../../molecules";
+import { InfoBox, LoadingButton } from "../../molecules";
 
 import {
 	IRegistrationPageController
@@ -21,13 +22,6 @@ import {
 	Typography,
 	Paper,
 } from "@material-ui/core";
-
-import {
-	EMAIL_MIN_LENGTH,
-	EMAIL_MAX_LENGTH,
-	PASSWORD_MIN_LENGTH,
-	PASSWORD_MAX_LENGTH,
-} from "common-library";
 
 const styles = (theme: Theme) => createStyles({
 
@@ -55,21 +49,12 @@ class RegistrationPage extends React.Component<
 
 		const {
 			controller,
-			classes,
-			intl
 		} = this.props;
 
 		const margin = "10px";
 		const isDisabled = controller.loading;
 
 		const registerLabel = simpleFormat(this, "actions.register");
-
-
-		const zipCodeLabel = simpleFormat(this, "things.zipCode");
-		const streetLabel = simpleFormat(this, "things.street");
-		const addressLabel = simpleFormat(this, "things.address");
-		const countryLabel = simpleFormat(this, "things.country");
-		const stateLabel = simpleFormat(this, "things.state");
 
 		let errorBox = null;
 
@@ -87,6 +72,7 @@ class RegistrationPage extends React.Component<
 			<Box display="flex"
 				justifyContent="center"
 				alignItems="center"
+				padding="20px"
 				height="100%">
 
 				<Box width="300px">
@@ -105,20 +91,13 @@ class RegistrationPage extends React.Component<
 								margin={margin}
 								isDisabled={isDisabled}/>
 
+							<AccountDetailsContent controller={controller}
+								margin={margin}
+								isDisabled={isDisabled}/>
 
-							<Box>
-								<Box marginBottom={margin}
-									display="flex"
-									justifyContent="center">
-
-
-									<Typography variant="h6">
-										<FormattedMessage id="things.address"/>
-									</Typography>
-								</Box>
-
-
-							</Box>
+							<AddressContent controller={controller}
+								margin={margin}
+								isDisabled={isDisabled}/>
 
 							{errorBox}
 
@@ -132,7 +111,6 @@ class RegistrationPage extends React.Component<
 									{registerLabel}
 
 								</LoadingButton>
-
 							</Box>
 						</Box>
 					</Paper>

@@ -5,16 +5,17 @@ import KeyIcon from "@material-ui/icons/VpnKey";
 
 import { observer } from "mobx-react";
 import { IRegistrationContentProps } from "../RegistrationPage";
-import { InjectedIntlProps, FormattedMessage } from "react-intl";
+import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { Box, Typography } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
 import { simpleFormat } from "../../../../util/simpleFormat";
 
 import {
 	EMAIL_MIN_LENGTH,
-	EMAIL_MAX_LENGTH
+	EMAIL_MAX_LENGTH,
+	PASSWORD_MIN_LENGTH,
+	PASSWORD_MAX_LENGTH
 } from "common-library";
-import { getTextFieldErrorState } from "../../../../validation/getErrorState";
 
 @observer
 class AccountDetailsContent extends React.Component<
@@ -28,7 +29,6 @@ class AccountDetailsContent extends React.Component<
 			margin,
 			controller,
 			isDisabled,
-			intl
 		} = this.props;
 
 		const emailLabel = simpleFormat(this, "things.email");
@@ -57,14 +57,11 @@ class AccountDetailsContent extends React.Component<
 						required={true}
 						onChange={event => controller.onChange("email", event.target.value)}
 						startAdornment={ <MailIcon /> }
-						{...getTextFieldErrorState(
-							intl,
-							controller.registrationErrorModel,
-							"email",
-							{
-								value: emailLabel
-							}
-						)}
+						errorModel={controller.registrationErrorModel}
+						validationKey="email"
+						errorTranslationValues={{
+							value: emailLabel
+						}}
 					/>
 				</Box>
 
@@ -78,14 +75,11 @@ class AccountDetailsContent extends React.Component<
 						required={true}
 						onChange={event => controller.onChange("password", event.target.value)}
 						startAdornment={ <KeyIcon /> }
-						{...getTextFieldErrorState(
-							intl,
-							controller.registrationErrorModel,
-							"password",
-							{
-								value: passwordLabel
-							}
-						)}
+						errorModel={controller.registrationErrorModel}
+						validationKey="password"
+						errorTranslationValues={{
+							value: passwordLabel
+						}}
 					/>
 				</Box>
 
@@ -99,18 +93,16 @@ class AccountDetailsContent extends React.Component<
 						required={true}
 						onChange={event => controller.onChange("repeatPassword", event.target.value)}
 						startAdornment={ <KeyIcon /> }
-						{...getTextFieldErrorState(
-							intl,
-							controller.registrationErrorModel,
-							"password",
-							{
-								value: passwordLabel
-							}
-						)}
+						errorModel={controller.registrationErrorModel}
+						validationKey="repeatPassword"
+						errorTranslationValues={{
+							value: passwordLabel
+						}}
 					/>
 				</Box>
 			</Box>
 		)
 	}
-
 }
+
+export default injectIntl(AccountDetailsContent);

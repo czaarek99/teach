@@ -50,7 +50,7 @@ export class ErrorModel<T extends ErrorState> {
 	}
 
 	@action public setErrors(key: keyof T, errors: string[]) : void {
-		this.validationObject.errorState[key as string] = errors;
+		(this.validationObject.errorState as any)[key] = errors;
 	}
 
 	@action public reset() : void {

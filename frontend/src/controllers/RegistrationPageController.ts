@@ -7,7 +7,6 @@ import { LoadingButtonState } from "../components/molecules/LoadingButton/Loadin
 import { IRegistrationModel } from "../interfaces/models/IRegistrationModel";
 import { IAddressModel } from "../interfaces/models/IAddressModel";
 import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
-import { MaterialUiPickersDate } from "@material-ui/pickers";
 
 export class RegistrationPageController implements IRegistrationPageController {
 
@@ -43,17 +42,11 @@ export class RegistrationPageController implements IRegistrationPageController {
 	}
 
 	public onAddressChange(key: keyof IAddressModel, value: string) : void {
-
+		this.addressModel[key] = value;
 	}
 
 	public async onRegister() : Promise<void> {
 
-	}
-
-	public onBirthDateChange(date: MaterialUiPickersDate) : void {
-		if(date !== null) {
-			this.registrationModel.birthDate = date;
-		}
 	}
 
 }

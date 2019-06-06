@@ -7,7 +7,6 @@ import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { Box, Typography } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
 import { simpleFormat } from "../../../../util/simpleFormat";
-import { getTextFieldErrorState } from "../../../../validation/getErrorState";
 import { CustomDatePicker } from "../../../organisms";
 import { IRegistrationContentProps } from "../RegistrationPage";
 
@@ -32,7 +31,6 @@ class PersonalInformationContent extends React.Component<
 			margin,
 			controller,
 			isDisabled,
-			intl
 		} = this.props;
 
 		const firstNameLabel = simpleFormat(this, "things.firstName");
@@ -60,14 +58,11 @@ class PersonalInformationContent extends React.Component<
 						required={true}
 						onChange={event => controller.onChange("firstName", event.target.value)}
 						startAdornment={ <UserIcon /> }
-						{...getTextFieldErrorState(
-							intl,
-							controller.registrationErrorModel,
-							"firstName",
-							{
-								value: firstNameLabel
-							}
-						)}
+						errorModel={controller.registrationErrorModel}
+						validationKey="firstName"
+						errorTranslationValues={{
+							value: firstNameLabel
+						}}
 					/>
 
 				</Box>
@@ -81,14 +76,11 @@ class PersonalInformationContent extends React.Component<
 						required={true}
 						onChange={event => controller.onChange("lastName", event.target.value)}
 						startAdornment={ <UserIcon /> }
-						{...getTextFieldErrorState(
-							intl,
-							controller.registrationErrorModel,
-							"lastName",
-							{
-								value: lastNameLabel
-							}
-						)}
+						errorModel={controller.registrationErrorModel}
+						validationKey="lastName"
+						errorTranslationValues={{
+							value: lastNameLabel
+						}}
 					/>
 
 				</Box>

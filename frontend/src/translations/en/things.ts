@@ -7,6 +7,7 @@ export default {
 	"things.street": "Street",
 	"things.address": "Address",
 	"things.country": "Country",
+	"things.city": "City",
 	"things.birthDate": "Birth date",
 	"things.state": "State",
 	"things.personalInformation": "Personal information",

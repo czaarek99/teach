@@ -5,8 +5,6 @@ import { IAuthenticationService } from "../interfaces/services/IAuthenticationSe
 import { AuthenticationService } from "../services/AuthenticationService";
 import { IRegistrationPageController } from "../interfaces/controllers/IRegistrationPageController";
 import { RegistrationPageController } from "./RegistrationPageController";
-import { syncHistoryWithStore, RouterStore } from "mobx-react-router";
-import { createBrowserHistory } from "history";
 
 interface IServices {
 	authenticationService: IAuthenticationService

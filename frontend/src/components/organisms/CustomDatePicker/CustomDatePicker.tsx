@@ -60,7 +60,7 @@ class CustomDatePicker extends React.Component<
 			return "";
 		}
 
-		let textFieldType : React.ComponentType = CustomTextField;
+		let textFieldType : any = CustomTextField;
 		if(icon) {
 			textFieldType = DatePickerTextField;
 		}

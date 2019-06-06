@@ -1,6 +1,6 @@
 import { observable } from "mobx";
-import { subYears } from "date-fns";
-import { USER_MIN_AGE } from "common-library";
+import { subMonths } from "date-fns";
+import { getUserMaxDate } from "common-library";
 import { IRegistrationModel } from "../interfaces/models/IRegistrationModel";
 
 export class RegistrationModel implements IRegistrationModel {
@@ -10,7 +10,7 @@ export class RegistrationModel implements IRegistrationModel {
 	@observable public email = "";
 	@observable public password = "";
 	@observable public repeatPassword = "";
-	@observable public birthDate = subYears(new Date(), USER_MIN_AGE);
+	@observable public birthDate = subMonths(getUserMaxDate(), 1);
 
 	public toJson() : IRegistrationModel {
 		return {

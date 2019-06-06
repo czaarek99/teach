@@ -28,7 +28,6 @@ export interface IRegistrationPageController {
 	readonly errorMessage: string | null
 	readonly registerButtonState: LoadingButtonState;
 
-	onBirthDateChange: (date: MaterialUiPickersDate) => void
 	onChange: (key: keyof IRegistrationModel, value: any) => void
 	onAddressChange: (key: keyof IAddressModel, value: string) => void
 	onRegister: () => Promise<void>

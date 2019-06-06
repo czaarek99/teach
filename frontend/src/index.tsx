@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import en from './translations/en';
 import theme from './theme/theme';
 import DateFnsUtils from "@date-io/date-fns";
+import englishLocale from "i18n-iso-countries/langs/en.json";
 
 import { IntlProvider } from 'react-intl';
 import { AppController } from './controllers/AppController';
@@ -13,6 +14,9 @@ import { createBrowserHistory } from 'history';
 import { Provider } from 'mobx-react';
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { App } from './components';
+import { registerLocale } from "i18n-iso-countries";
+
+registerLocale(englishLocale);
 
 const appController = new AppController();
 const routingStore = new RouterStore();

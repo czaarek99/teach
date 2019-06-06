@@ -6,7 +6,7 @@ export class AddressModel implements IAddressModel {
 	@observable public street = "";
 	@observable public zipCode = "";
 	@observable public city = "";
-	@observable public countryCode = "se";
+	@observable public countryCode = "SE";
 	@observable public state = "";
 
 	public toJson() : IAddressModel {

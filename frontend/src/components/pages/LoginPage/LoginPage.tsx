@@ -4,13 +4,15 @@ import MailIcon from "@material-ui/icons/Mail";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import KeyIcon from "@material-ui/icons/VpnKey";
 
-import { getTextFieldErrorState } from "../../../validation/getErrorState";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
-import { ILoginPageController } from "../../../interfaces/controllers/ILoginPageController";
 import { simpleFormat } from "../../../util/simpleFormat";
 import { observer } from "mobx-react";
 import { PASSWORD_MAX_LENGTH, EMAIL_MAX_LENGTH } from "common-library";
 import { InfoBox, CustomTextField, LoadingButton } from "../../molecules";
+
+import {
+	ILoginPageController,
+} from "../../../interfaces/controllers/ILoginPageController";
 
 import {
 	Paper,
@@ -24,17 +26,7 @@ import {
 
 
 const styles = (theme: Theme) => createStyles({
-	loginButton: {
-		width: 150
-	},
 
-	loginText: {
-		fontWeight: 600
-	},
-
-	errorBox: {
-		backgroundColor: theme.palette.error.main
-	}
 });
 
 interface ILoginPageProps {
@@ -49,10 +41,9 @@ class LoginPage extends React.Component<
 > {
 
 	public render() : React.ReactNode {
+
 		const {
-			classes,
 			controller,
-			intl
 		} = this.props;
 
 		const emailLabel = simpleFormat(this, "things.email");
@@ -88,9 +79,7 @@ class LoginPage extends React.Component<
 								display="flex"
 								justifyContent="center">
 
-								<Typography className={classes.loginText}
-									component="h1">
-
+								<Typography variant="h5">
 									{loginLabel}
 								</Typography>
 							</Box>
@@ -104,14 +93,11 @@ class LoginPage extends React.Component<
 									required={true}
 									onChange={event => controller.onChange("email", event.target.value)}
 									startAdornment={ <MailIcon /> }
-									{...getTextFieldErrorState(
-										intl,
-										controller.errorModel,
-										"email",
-										{
-											value: emailLabel
-										}
-									)}
+									errorModel={controller.errorModel}
+									validationKey="email"
+									errorTranslationValues={{
+										value: emailLabel
+									}}
 								/>
 							</Box>
 
@@ -124,14 +110,11 @@ class LoginPage extends React.Component<
 									required={true}
 									onChange={event => controller.onChange("password", event.target.value)}
 									startAdornment={ <KeyIcon /> }
-									{...getTextFieldErrorState(
-										intl,
-										controller.errorModel,
-										"password",
-										{
-											value: passwordLabel
-										}
-									)}
+									errorModel={controller.errorModel}
+									validationKey="password"
+									errorTranslationValues={{
+										value: passwordLabel
+									}}
 								/>
 							</Box>
 
@@ -142,8 +125,7 @@ class LoginPage extends React.Component<
 								marginTop={margin}>
 
 								<LoadingButton state={controller.loginButtonState}
-									onClick={() => controller.onLogin()}
-									className={classes.loginButton}>
+									onClick={() => controller.onLogin()}>
 									{loginLabel}
 
 									<ArrowForwardIcon />
