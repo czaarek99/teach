@@ -24,7 +24,6 @@ import {
 	STREET_MAX_LENGTH,
 	CITY_MIN_LENGTH,
 	CITY_MAX_LENGTH,
-	STATE_MIN_LENGTH,
 	STATE_MAX_LENGTH,
 	ZIP_CODE_MIN_LENGTH,
 	ZIP_CODE_MAX_LENGTH
@@ -99,7 +98,9 @@ class AddressContent extends React.Component<
 						errorModel={controller.addressErrorModel}
 						validationKey="street"
 						errorTranslationValues={{
-							value: streetLabel
+							value: streetLabel,
+							minLength: STREET_MIN_LENGTH,
+							maxLength: STREET_MAX_LENGTH
 						}}
 					/>
 				</Box>
@@ -116,7 +117,9 @@ class AddressContent extends React.Component<
 						errorModel={controller.addressErrorModel}
 						validationKey="city"
 						errorTranslationValues={{
-							value: cityLabel
+							value: cityLabel,
+							minLength: CITY_MIN_LENGTH,
+							maxLength: CITY_MAX_LENGTH
 						}}
 					/>
 				</Box>
@@ -134,7 +137,9 @@ class AddressContent extends React.Component<
 						errorModel={controller.addressErrorModel}
 						validationKey="zipCode"
 						errorTranslationValues={{
-							value: zipCodeLabel
+							value: zipCodeLabel,
+							minLength: ZIP_CODE_MIN_LENGTH,
+							maxLength: ZIP_CODE_MAX_LENGTH
 						}}
 					/>
 				</Box>
@@ -142,7 +147,6 @@ class AddressContent extends React.Component<
 				<Box marginBottom={margin}>
 					<CustomTextField disabled={isDisabled}
 						value={controller.addressModel.state}
-						minLength={STATE_MIN_LENGTH}
 						maxLength={STATE_MAX_LENGTH}
 						label={stateLabel}
 						onChange={event => controller.onAddressChange("state", event.target.value)}
@@ -150,7 +154,7 @@ class AddressContent extends React.Component<
 						errorModel={controller.addressErrorModel}
 						validationKey="state"
 						errorTranslationValues={{
-							value: stateLabel
+							value: stateLabel,
 						}}
 					/>
 				</Box>

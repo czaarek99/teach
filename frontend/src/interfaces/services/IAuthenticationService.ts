@@ -1,16 +1,8 @@
-export interface IRegistrationData {
-	email: string
-	password: string
-	firstName: string
-	lastName: string
-}
+import { IUser } from "common-library";
 
-export interface ILoginData {
-	email: string
-	password: string
-}
+export type LoginData = Pick<IUser, "email" | "password">;
 
 export interface IAuthenticationService {
-	logIn: (data: ILoginData) => Promise<void>
-	register: (data: IRegistrationData) => Promise<void>
+	logIn: (data: LoginData) => Promise<void>
+	register: (data: IUser) => Promise<void>
 }

@@ -29,6 +29,7 @@ import {
 	STATE_MIN_LENGTH,
 	getUserMaxDate,
 } from "common-library";
+import { Address } from "../database/models/Address";
 
 const router = Router();
 
@@ -47,8 +48,8 @@ router.post("/register", {
 				zipCode: Joi.string().min(ZIP_CODE_MIN_LENGTH).max(ZIP_CODE_MAX_LENGTH).required(),
 				city: Joi.string().min(CITY_MIN_LENGTH).max(CITY_MAX_LENGTH).required(),
 				countryCode: Joi.string().length(COUNTRY_CODE_LENGTH).required(),
-				state: Joi.string().min(STATE_MIN_LENGTH).max(STATE_MAX_LENGTH)
-			}).required()
+				state: Joi.string().max(STATE_MAX_LENGTH).allow("").optional()
+			}).requiredKeys("street", "zipCode", "city", "countryCode").optionalKeys("state")
 		},
 		type: "json"
 	}
@@ -56,14 +57,30 @@ router.post("/register", {
 
 	const body = context.request.body;
 
-	const oldUser = User.findOne({
+	const emailValidation = Joi.string().email().validate(body.email);
+
+	if(emailValidation.error !== null) {
+		context.state.throwApiError(new HttpError(
+			400,
+			ErrorMessage.INVALID_EMAIL,
+			context.state.requestId)
+		);
+
+		return;
+	}
+
+	const oldUser = await User.findOne({
 		where: {
 			email: body.email
 		}
 	});
 
 	if(oldUser) {
-		context.state.throwApiError(new HttpError(409, ErrorMessage.EMAIL_EXISTS, context.state.requestId));
+		context.state.throwApiError(new HttpError(
+			409,
+			ErrorMessage.EMAIL_EXISTS,
+			context.state.requestId)
+		);
 		return;
 	}
 
@@ -71,17 +88,22 @@ router.post("/register", {
 
 	const address = body.address;
 
-	const user = await User.create({
+	const user = await User.create<User>({
 		email: body.email,
 		password: hashedPassword,
 		firstName: body.firstName,
 		lastName: body.lastName,
+		birthDate: body.birthDate,
 		address: {
 			street: address.street,
 			zipCode: address.zipCode,
 			city: address.city,
 			countryCode: address.countryCode
 		}
+	}, {
+		include: [
+			Address
+		]
 	});
 
 	context.state.logger.info("User registration",  {

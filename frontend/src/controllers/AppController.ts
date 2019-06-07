@@ -5,6 +5,7 @@ import { IAuthenticationService } from "../interfaces/services/IAuthenticationSe
 import { AuthenticationService } from "../services/AuthenticationService";
 import { IRegistrationPageController } from "../interfaces/controllers/IRegistrationPageController";
 import { RegistrationPageController } from "./RegistrationPageController";
+import { RouterStore } from "mobx-react-router";
 
 interface IServices {
 	authenticationService: IAuthenticationService
@@ -12,11 +13,14 @@ interface IServices {
 
 export class AppController implements IAppController {
 
+	private readonly routingStore: RouterStore;
 	private readonly services: IServices;
 	private _loginPageController: ILoginPageController | null = null;
 	private _registrationPageController: IRegistrationPageController | null = null;
 
-	constructor() {
+	constructor(routingStore: RouterStore) {
+		this.routingStore = routingStore;
+
 		this.services = {
 			authenticationService: new AuthenticationService()
 		}
@@ -25,7 +29,8 @@ export class AppController implements IAppController {
 	public get loginPageController() : ILoginPageController {
 		if(this._loginPageController === null) {
 			this._loginPageController = new LoginPageController(
-				this.services.authenticationService
+				this.services.authenticationService,
+				this.routingStore
 			);
 		}
 
@@ -35,7 +40,8 @@ export class AppController implements IAppController {
 	public get registrationPageController() : IRegistrationPageController {
 		if(this._registrationPageController === null) {
 			this._registrationPageController = new RegistrationPageController(
-				this.services.authenticationService
+				this.services.authenticationService,
+				this.routingStore
 			);
 		}
 

@@ -18,9 +18,10 @@ import { registerLocale } from "i18n-iso-countries";
 
 registerLocale(englishLocale);
 
-const appController = new AppController();
 const routingStore = new RouterStore();
 const history = syncHistoryWithStore(createBrowserHistory(), routingStore);
+
+const appController = new AppController(routingStore);
 
 ReactDOM.render(
 	(

@@ -1,6 +1,6 @@
 export enum ErrorMessage {
 	EMPTY = "error.empty",
-
+	PASSWORDS_DONT_MATCH = "error.passwordsDontMatch",
 	TOO_SHORT = "error.tooShort",
 	TOO_LONG = "error.tooLong",
 	WRONG_LENGTH = "error.wrongLength",
@@ -14,7 +14,9 @@ export enum ErrorMessage {
 	USER_NOT_FOUND = "error.userNotFound",
 	USER_TOO_YOUNG = "error.userTooYoung",
 
-	UNAUTHORIZED = "error.unauthorized",
 	UNKNOWN = "error.unknown",
+	COMPONENT = "error.component",
+
+	UNAUTHORIZED = "error.unauthorized",
 	INTERNAL_SERVER_ERROR = "error.internalServerError"
 }

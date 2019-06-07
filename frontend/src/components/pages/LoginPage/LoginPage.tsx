@@ -20,12 +20,43 @@ import {
 	createStyles,
 	WithStyles,
 	withStyles,
-	Box,
 	Typography,
 } from "@material-ui/core";
 
+const MARGIN = 10;
 
 const styles = (theme: Theme) => createStyles({
+	root: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		height: "100%"
+	},
+
+	formContainer: {
+		width: 300,
+		padding: 10
+	},
+
+	titleContainer: {
+		display: "flex",
+		justifyContent: "center"
+	},
+
+	textField: {
+		marginBottom: MARGIN
+	},
+
+	loginButtonContainer: {
+		marginTop: MARGIN,
+		display: "flex",
+		justifyContent: "flex-end",
+	},
+
+	errorBox: {
+		marginTop: MARGIN
+	}
+
 
 });
 
@@ -44,6 +75,7 @@ class LoginPage extends React.Component<
 
 		const {
 			controller,
+			classes
 		} = this.props;
 
 		const emailLabel = simpleFormat(this, "things.email");
@@ -52,13 +84,13 @@ class LoginPage extends React.Component<
 
 		const disabled = controller.loading;
 
-		const margin = "10px";
-
 		let errorBox = null;
 
 		if(controller.errorMessage !== null) {
 			errorBox = (
-				<InfoBox type="error">
+				<InfoBox type="error"
+					className={classes.errorBox}>
+
 					<Typography>
 						<FormattedMessage id={controller.errorMessage}/>
 					</Typography>
@@ -67,74 +99,57 @@ class LoginPage extends React.Component<
 		}
 
 		return (
-			<Box display="flex"
-				justifyContent="center"
-				alignItems="center"
-				height="100%">
+			<div className={classes.root}>
+				<Paper className={classes.formContainer}>
+					<div className={classes.titleContainer}>
+						<Typography variant="h5">
+							{loginLabel}
+						</Typography>
+					</div>
 
-				<Box width="300px">
-					<Paper>
-						<Box padding="10px">
-							<Box marginBottom={margin}
-								display="flex"
-								justifyContent="center">
+					<CustomTextField disabled={disabled}
+						className={classes.textField}
+						type="email"
+						maxLength={EMAIL_MAX_LENGTH}
+						value={controller.model.email}
+						label={emailLabel}
+						required={true}
+						onChange={event => controller.onChange("email", event.target.value)}
+						startAdornment={ <MailIcon /> }
+						errorModel={controller.errorModel}
+						validationKey="email"
+						errorTranslationValues={{
+							value: emailLabel
+						}}
+					/>
 
-								<Typography variant="h5">
-									{loginLabel}
-								</Typography>
-							</Box>
+					<CustomTextField disabled={disabled}
+						type="password"
+						maxLength={PASSWORD_MAX_LENGTH}
+						value={controller.model.password}
+						label={passwordLabel}
+						required={true}
+						onChange={event => controller.onChange("password", event.target.value)}
+						startAdornment={ <KeyIcon /> }
+						errorModel={controller.errorModel}
+						validationKey="password"
+						errorTranslationValues={{
+							value: passwordLabel
+						}}
+					/>
 
-							<Box marginBottom={margin}>
-								<CustomTextField disabled={disabled}
-									type="email"
-									maxLength={EMAIL_MAX_LENGTH}
-									value={controller.model.email}
-									label={emailLabel}
-									required={true}
-									onChange={event => controller.onChange("email", event.target.value)}
-									startAdornment={ <MailIcon /> }
-									errorModel={controller.errorModel}
-									validationKey="email"
-									errorTranslationValues={{
-										value: emailLabel
-									}}
-								/>
-							</Box>
+					{errorBox}
 
-							<Box marginBottom={margin}>
-								<CustomTextField disabled={disabled}
-									type="password"
-									maxLength={PASSWORD_MAX_LENGTH}
-									value={controller.model.password}
-									label={passwordLabel}
-									required={true}
-									onChange={event => controller.onChange("password", event.target.value)}
-									startAdornment={ <KeyIcon /> }
-									errorModel={controller.errorModel}
-									validationKey="password"
-									errorTranslationValues={{
-										value: passwordLabel
-									}}
-								/>
-							</Box>
+					<div className={classes.loginButtonContainer}>
+						<LoadingButton state={controller.loginButtonState}
+							onClick={() => controller.onLogin()}>
+							{loginLabel}
 
-							{errorBox}
-
-							<Box justifyContent="flex-end"
-								display="flex"
-								marginTop={margin}>
-
-								<LoadingButton state={controller.loginButtonState}
-									onClick={() => controller.onLogin()}>
-									{loginLabel}
-
-									<ArrowForwardIcon />
-								</LoadingButton>
-							</Box>
-						</Box>
-					</Paper>
-				</Box>
-			</Box>
+							<ArrowForwardIcon />
+						</LoadingButton>
+					</div>
+				</Paper>
+			</div>
 		)
 	}
 }

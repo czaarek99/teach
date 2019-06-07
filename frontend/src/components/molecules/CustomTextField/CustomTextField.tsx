@@ -88,7 +88,7 @@ export class CustomTextField<T extends ErrorState = {}> extends React.Component<
 		}
 
 		return (
-			<TextField { ...rest as any }
+			<TextField { ...rest as TextFieldProps}
 			error={translatedError !== null}
 			helperText={translatedError}
 			InputProps={{

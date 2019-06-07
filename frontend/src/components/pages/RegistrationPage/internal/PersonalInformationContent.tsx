@@ -61,7 +61,9 @@ class PersonalInformationContent extends React.Component<
 						errorModel={controller.registrationErrorModel}
 						validationKey="firstName"
 						errorTranslationValues={{
-							value: firstNameLabel
+							value: firstNameLabel,
+							minLength: FIRST_NAME_MIN_LENGTH,
+							maxLength: FIRST_NAME_MAX_LENGTH
 						}}
 					/>
 
@@ -79,12 +81,13 @@ class PersonalInformationContent extends React.Component<
 						errorModel={controller.registrationErrorModel}
 						validationKey="lastName"
 						errorTranslationValues={{
-							value: lastNameLabel
+							value: lastNameLabel,
+							minLength: LAST_NAME_MIN_LENGTH,
+							maxLength: LAST_NAME_MAX_LENGTH
 						}}
 					/>
 
 				</Box>
-
 
 				<Box marginBottom={margin}
 					display="flex"

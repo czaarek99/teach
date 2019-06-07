@@ -3,18 +3,14 @@ import React from 'react';
 import { IAppController } from '../../../interfaces/controllers/IAppController';
 import { observer, inject } from 'mobx-react';
 import { Routes } from '../../../interfaces/Routes';
-import { RouterStore } from 'mobx-react-router';
 import { LoginPage, RegistrationPage } from '../../pages';
+import { IRoutingStoreProps } from '../../../interfaces/props/IRoutingStoreProps';
 
 interface IAppProps {
 	controller: IAppController
 }
 
-interface IAppInternalProps {
-	routingStore: RouterStore
-}
-
-type AllProps = IAppProps & IAppInternalProps;
+type AllProps = IAppProps & IRoutingStoreProps;
 
 @inject("routingStore")
 @observer

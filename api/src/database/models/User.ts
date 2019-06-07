@@ -8,7 +8,8 @@ import {
 	AllowNull,
 	DataType,
 	HasOne,
-	PrimaryKey
+	PrimaryKey,
+	AutoIncrement
 } from "sequelize-typescript";
 
 import {
@@ -25,6 +26,7 @@ export class User extends Model<User> implements IUser {
 
 	@Unique
 	@PrimaryKey
+	@AutoIncrement
 	@Column(DataType.INTEGER.UNSIGNED)
 	public id: number;
 
@@ -49,6 +51,6 @@ export class User extends Model<User> implements IUser {
 	@Column
 	public birthDate: Date;
 
-	@HasOne(() => Address)
+	@HasOne(() => Address, "userId")
 	public address: Address;
 }

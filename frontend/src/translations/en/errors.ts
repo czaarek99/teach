@@ -7,5 +7,10 @@ export default {
 	[ErrorMessage.USER_NOT_FOUND]: "No user found with this email & password",
 	[ErrorMessage.UNKNOWN]: "Unknown error",
 	[ErrorMessage.INTERNAL_SERVER_ERROR]: "Internal server error. Contact the administrator",
-	[ErrorMessage.USER_TOO_YOUNG]: "You have to be at least 18 to register"
+	[ErrorMessage.USER_TOO_YOUNG]: "You have to be at least 18 to register",
+	[ErrorMessage.COMPONENT]: "Unknown javascript error",
+	[ErrorMessage.TOO_SHORT]: "{value} is too short. It has to be at least {minLength} characters long.",
+	[ErrorMessage.TOO_LONG]: "{value} is too long. It can not be longer than {maxLength} characters long.",
+	[ErrorMessage.INVALID_EMAIL]: "Invalid email",
+	[ErrorMessage.PASSWORDS_DONT_MATCH]: "Passwords do not match"
 }

@@ -15,6 +15,7 @@ import {
 type InfoBoxType = "success" | "error" | "default";
 
 interface IInfoBoxProps {
+	className?: string
 	type: InfoBoxType
 }
 
@@ -52,13 +53,14 @@ class InfoBox extends React.Component<
 		const {
 			classes,
 			type,
-			children
+			children,
+			className
 		} = this.props;
 
 		const rootClassNames = clsx(classes.root, {
 			[classes.errorBox]: type === "error",
 			[classes.successBox]: type === "success"
-		});
+		}, className);
 
 
 		return (

@@ -6,7 +6,8 @@ import {
 	Model,
 	AllowNull,
 	DataType,
-	ForeignKey
+	ForeignKey,
+	BelongsTo
 } from "sequelize-typescript";
 
 import {
@@ -21,6 +22,10 @@ import {
 @Table
 export class Address extends Model<Address> implements IAddress {
 
+	@BelongsTo(() => User, "userId")
+	public user: User;
+
+	@AllowNull(false)
 	@ForeignKey(() => User)
 	@Column(DataType.INTEGER.UNSIGNED)
 	public userId: number;

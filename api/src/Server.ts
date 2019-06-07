@@ -35,6 +35,8 @@ export class Server {
 	public startServer() : void {
 		const app = new Koa();
 
+		app.keys = config.applicationKeys;
+
 		app.use(async (context: CustomContext, next: Function) => {
 			context.state.requestId = v4();
 			context.state.logger = new Logger("api-request", {

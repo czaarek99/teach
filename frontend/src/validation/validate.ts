@@ -4,7 +4,7 @@ export type ValidationResult = ErrorMessage | null;
 export type Validator = (value: any) => ValidationResult
 
 export type ValidatorMap<T> = {
-	[K in keyof T]: Validator[]
+	[K in keyof T]?: Validator[]
 }
 
 export function validate(value: any, validators: Validator[]) : string[] {

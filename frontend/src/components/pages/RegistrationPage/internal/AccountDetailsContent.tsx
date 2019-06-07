@@ -60,14 +60,16 @@ class AccountDetailsContent extends React.Component<
 						errorModel={controller.registrationErrorModel}
 						validationKey="email"
 						errorTranslationValues={{
-							value: emailLabel
+							value: emailLabel,
+							minLength: EMAIL_MIN_LENGTH,
+							maxLength: EMAIL_MAX_LENGTH
 						}}
 					/>
 				</Box>
 
 				<Box marginBottom={margin}>
 					<CustomTextField disabled={isDisabled}
-						type="email"
+						type="password"
 						value={controller.registrationModel.password}
 						minLength={PASSWORD_MIN_LENGTH}
 						maxLength={PASSWORD_MAX_LENGTH}
@@ -78,14 +80,16 @@ class AccountDetailsContent extends React.Component<
 						errorModel={controller.registrationErrorModel}
 						validationKey="password"
 						errorTranslationValues={{
-							value: passwordLabel
+							value: passwordLabel,
+							minLength: PASSWORD_MIN_LENGTH,
+							maxLength: PASSWORD_MAX_LENGTH
 						}}
 					/>
 				</Box>
 
 				<Box marginBottom={margin}>
 					<CustomTextField disabled={isDisabled}
-						type="email"
+						type="password"
 						value={controller.registrationModel.repeatPassword}
 						minLength={PASSWORD_MIN_LENGTH}
 						maxLength={PASSWORD_MAX_LENGTH}

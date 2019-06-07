@@ -5,5 +5,6 @@ export const config = {
 	databaseHost: process.env.DATABASE_HOST,
 	serverPort: parseInt(process.env.SERVER_PORT),
 	isDevelopment: process.env.NODE_ENV === "development",
-	isProduction: process.env.NODE_ENV === "production"
+	isProduction: process.env.NODE_ENV === "production",
+	applicationKeys: process.env.APPLICATION_KEYS.split(",")
 }

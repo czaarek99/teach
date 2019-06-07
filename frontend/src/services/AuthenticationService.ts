@@ -1,13 +1,14 @@
-import { IAuthenticationService, IRegistrationData, ILoginData } from "../interfaces/services/IAuthenticationService";
 import { BaseService } from "./BaseService";
+import { IAuthenticationService, LoginData } from "../interfaces/services/IAuthenticationService";
+import { IUser } from "common-library";
 
 export class AuthenticationService extends BaseService implements IAuthenticationService {
 
-	public async logIn(data: ILoginData) : Promise<void> {
+	public async logIn(data: LoginData) : Promise<void> {
 		await this.axios.post("/auth/login", data);
 	}
 
-	public async register(data: IRegistrationData) : Promise<void> {
+	public async register(data: IUser) : Promise<void> {
 		await this.axios.post("/auth/register", data);
 	}
 

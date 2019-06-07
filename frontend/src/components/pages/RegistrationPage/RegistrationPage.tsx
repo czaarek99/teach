@@ -4,7 +4,7 @@ import PersonalInformationContent from "./internal/PersonalInformationContent";
 import AccountDetailsContent from "./internal/AccountDetailsContent";
 import AddressContent from "./internal/AddressContent";
 
-import { observer } from "mobx-react";
+import { observer, inject } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { simpleFormat } from "../../../util/simpleFormat";
 import { InfoBox, LoadingButton } from "../../molecules";
@@ -18,13 +18,37 @@ import {
 	createStyles,
 	WithStyles,
 	withStyles,
-	Box,
 	Typography,
 	Paper,
 } from "@material-ui/core";
 
+const MARGIN = "10px";
+
 const styles = (theme: Theme) => createStyles({
 
+	root: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		height: "100%",
+		padding: 40
+	},
+
+	formContainer: {
+		width: 300,
+		padding: 10
+	},
+
+	titleContainer: {
+		display: "flex",
+		justifyContent: "center"
+	},
+
+	registerButtonContainer: {
+		marginTop: MARGIN,
+		display: "flex",
+		justifyContent: "flex-end",
+	},
 
 });
 
@@ -38,6 +62,7 @@ interface IRegistrationPageProps {
 	controller: IRegistrationPageController
 }
 
+@inject("routingStore")
 @observer
 class RegistrationPage extends React.Component<
 	IRegistrationPageProps &
@@ -49,11 +74,10 @@ class RegistrationPage extends React.Component<
 
 		const {
 			controller,
+			classes
 		} = this.props;
 
-		const margin = "10px";
 		const isDisabled = controller.loading;
-
 		const registerLabel = simpleFormat(this, "actions.register");
 
 		let errorBox = null;
@@ -69,53 +93,38 @@ class RegistrationPage extends React.Component<
 		}
 
 		return (
-			<Box display="flex"
-				justifyContent="center"
-				alignItems="center"
-				padding="20px"
-				height="100%">
+			<div className={classes.root}>
+				<Paper className={classes.formContainer}>
+					<div className={classes.titleContainer}>
+						<Typography variant="h5">
+							{registerLabel}
+						</Typography>
+					</div>
 
-				<Box width="300px">
-					<Paper>
-						<Box padding={margin}>
-							<Box marginBottom={margin}
-								display="flex"
-								justifyContent="center">
+					<PersonalInformationContent controller={controller}
+						margin={MARGIN}
+						isDisabled={isDisabled}/>
 
-								<Typography variant="h5">
-									{registerLabel}
-								</Typography>
-							</Box>
+					<AccountDetailsContent controller={controller}
+						margin={MARGIN}
+						isDisabled={isDisabled}/>
 
-							<PersonalInformationContent controller={controller}
-								margin={margin}
-								isDisabled={isDisabled}/>
+					<AddressContent controller={controller}
+						margin={MARGIN}
+						isDisabled={isDisabled}/>
 
-							<AccountDetailsContent controller={controller}
-								margin={margin}
-								isDisabled={isDisabled}/>
+					{errorBox}
 
-							<AddressContent controller={controller}
-								margin={margin}
-								isDisabled={isDisabled}/>
+					<div className={classes.registerButtonContainer}>
+						<LoadingButton state={controller.registerButtonState}
+							onClick={() => controller.onRegister()}>
 
-							{errorBox}
+							{registerLabel}
 
-							<Box justifyContent="flex-end"
-								display="flex"
-								marginTop={margin}>
-
-								<LoadingButton state={controller.registerButtonState}
-									onClick={() => controller.onRegister()}>
-
-									{registerLabel}
-
-								</LoadingButton>
-							</Box>
-						</Box>
-					</Paper>
-				</Box>
-			</Box>
+						</LoadingButton>
+					</div>
+				</Paper>
+			</div>
 		)
 	}
 }
