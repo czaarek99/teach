@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import React from 'react';
 import MailIcon from "@material-ui/icons/Mail";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import KeyIcon from "@material-ui/icons/VpnKey";
@@ -10,13 +9,13 @@ import { observer } from "mobx-react";
 import { PASSWORD_MAX_LENGTH, EMAIL_MAX_LENGTH } from "common-library";
 import { InfoBox, CustomTextField, LoadingButton } from "../../molecules";
 import { Routes } from "../../../interfaces/Routes";
+import { AuthenticationTemplate, AUTHENTICATION_MARGIN } from "../../templates";
 
 import {
 	ILoginPageController,
 } from "../../../interfaces/controllers/pages/ILoginPageController";
 
 import {
-	Paper,
 	Theme,
 	createStyles,
 	WithStyles,
@@ -25,40 +24,20 @@ import {
 	Link,
 } from "@material-ui/core";
 
-const MARGIN = 10;
-
 const styles = (theme: Theme) => createStyles({
-	root: {
-		padding: 40,
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-		minHeight: "100vh"
-	},
-
-	formContainer: {
-		width: 300,
-		padding: 10
-	},
-
-	titleContainer: {
-		display: "flex",
-		justifyContent: "center",
-		marginBottom: MARGIN
-	},
 
 	textField: {
-		marginBottom: MARGIN
+		marginBottom: AUTHENTICATION_MARGIN
 	},
 
 	loginButtonContainer: {
-		marginTop: MARGIN,
+		marginTop: AUTHENTICATION_MARGIN,
 		display: "flex",
 		justifyContent: "flex-end",
 	},
 
 	errorBox: {
-		marginTop: MARGIN
+		marginTop: AUTHENTICATION_MARGIN
 	},
 
 	loginButton: {
@@ -111,66 +90,56 @@ class LoginPage extends React.Component<
 		}
 
 		return (
-			<div className={classes.root}>
-				<Paper className={classes.formContainer}
-					elevation={4}>
+			<AuthenticationTemplate title={loginLabel}>
+				<CustomTextField disabled={disabled}
+					className={classes.textField}
+					type="email"
+					maxLength={EMAIL_MAX_LENGTH}
+					value={controller.model.email}
+					label={emailLabel}
+					required={true}
+					onChange={event => controller.onChange("email", event.target.value)}
+					startAdornment={ <MailIcon /> }
+					errorModel={controller.errorModel}
+					validationKey="email"
+					errorTranslationValues={{
+						value: emailLabel
+					}}
+				/>
 
-					<div className={classes.titleContainer}>
-						<Typography variant="h5">
-							{loginLabel}
-						</Typography>
-					</div>
+				<CustomTextField disabled={disabled}
+					type="password"
+					maxLength={PASSWORD_MAX_LENGTH}
+					value={controller.model.password}
+					label={passwordLabel}
+					required={true}
+					onChange={event => controller.onChange("password", event.target.value)}
+					startAdornment={ <KeyIcon /> }
+					errorModel={controller.errorModel}
+					validationKey="password"
+					errorTranslationValues={{
+						value: passwordLabel
+					}}
+				/>
 
-					<CustomTextField disabled={disabled}
-						className={classes.textField}
-						type="email"
-						maxLength={EMAIL_MAX_LENGTH}
-						value={controller.model.email}
-						label={emailLabel}
-						required={true}
-						onChange={event => controller.onChange("email", event.target.value)}
-						startAdornment={ <MailIcon /> }
-						errorModel={controller.errorModel}
-						validationKey="email"
-						errorTranslationValues={{
-							value: emailLabel
-						}}
-					/>
+				<Link href={Routes.FORGOT_PASSWORD} >
+					<Typography>
+						<FormattedMessage id="actions.forgotPassword"/>
+					</Typography>
+				</Link>
 
-					<CustomTextField disabled={disabled}
-						type="password"
-						maxLength={PASSWORD_MAX_LENGTH}
-						value={controller.model.password}
-						label={passwordLabel}
-						required={true}
-						onChange={event => controller.onChange("password", event.target.value)}
-						startAdornment={ <KeyIcon /> }
-						errorModel={controller.errorModel}
-						validationKey="password"
-						errorTranslationValues={{
-							value: passwordLabel
-						}}
-					/>
+				{errorBox}
 
-					<Link href={Routes.FORGOT_PASSWORD} >
-						<Typography>
-							<FormattedMessage id="actions.forgotPassword"/>
-						</Typography>
-					</Link>
+				<div className={classes.loginButtonContainer}>
+					<LoadingButton state={controller.loginButtonState}
+						className={classes.loginButton}
+						onClick={() => controller.onLogin()}>
+						{loginLabel}
 
-					{errorBox}
-
-					<div className={classes.loginButtonContainer}>
-						<LoadingButton state={controller.loginButtonState}
-							className={classes.loginButton}
-							onClick={() => controller.onLogin()}>
-							{loginLabel}
-
-							<ArrowForwardIcon />
-						</LoadingButton>
-					</div>
-				</Paper>
-			</div>
+						<ArrowForwardIcon />
+					</LoadingButton>
+				</div>
+			</AuthenticationTemplate>
 		)
 	}
 }

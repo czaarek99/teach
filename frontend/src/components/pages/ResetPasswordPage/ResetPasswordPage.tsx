@@ -1,11 +1,18 @@
 import React from 'react';
+import KeyIcon from "@material-ui/icons/VpnKey";
 
 import { Theme, createStyles, WithStyles, withStyles } from '@material-ui/core';
 import { InjectedIntlProps, injectIntl } from 'react-intl';
 import { IResetPasswordPageController } from '../../../interfaces/controllers/pages/IResetPasswordPageController';
+import { AuthenticationTemplate, AUTHENTICATION_MARGIN } from '../../templates';
+import { simpleFormat } from "../../../util/simpleFormat";
+import { CustomTextField } from "../../molecules";
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "common-library";
 
 const styles = (theme: Theme) => createStyles({
-
+	textField: {
+		marginBottom: AUTHENTICATION_MARGIN
+	}
 });
 
 interface IResetPasswordPageProps {
@@ -19,8 +26,56 @@ export class ResetPasswordPage extends React.Component<
 > {
 
 	public render() : React.ReactNode {
+		const {
+			controller,
+			classes
+		} = this.props;
+
+		const resetPasswordLabel = simpleFormat(this, "actions.resetPassword");
+		const newPasswordLabel = simpleFormat(this,  "things.newPassword")
+		const passwordLabel = simpleFormat(this, "things.password");
+		const repeatPasswordLabel = simpleFormat(this, "actions.repeatPassword");
+
+		const isDisabled = controller.loading;
+
 		return (
-			<div></div>
+			<AuthenticationTemplate title={resetPasswordLabel}>
+
+				<CustomTextField disabled={isDisabled}
+					className={classes.textField}
+					type="password"
+					maxLength={PASSWORD_MAX_LENGTH}
+					minLength={PASSWORD_MIN_LENGTH}
+					value={controller.model.password}
+					label={newPasswordLabel}
+					required={true}
+					onChange={event => controller.onChange("password", event.target.value)}
+					startAdornment={ <KeyIcon /> }
+					errorModel={controller.errorModel}
+					validationKey="password"
+					errorTranslationValues={{
+						value: passwordLabel
+					}}
+				/>
+
+				<CustomTextField disabled={isDisabled}
+					className={classes.textField}
+					type="password"
+					maxLength={PASSWORD_MAX_LENGTH}
+					minLength={PASSWORD_MIN_LENGTH}
+					value={controller.model.repeatPassword}
+					label={repeatPasswordLabel}
+					required={true}
+					onChange={event => controller.onChange("repeatPassword", event.target.value)}
+					startAdornment={ <KeyIcon /> }
+					errorModel={controller.errorModel}
+					validationKey="repeatPassword"
+					errorTranslationValues={{
+						value: passwordLabel
+					}}
+				/>
+
+			</AuthenticationTemplate>
 		)
 	}
 

@@ -14,5 +14,6 @@ export default {
 	"things.birthDate": "Birth date",
 	"things.state": "State",
 	"things.personalInformation": "Personal information",
-	"things.accountDetails": "Account details"
+	"things.accountDetails": "Account details",
+	"things.newPassword": "New password"
 }
