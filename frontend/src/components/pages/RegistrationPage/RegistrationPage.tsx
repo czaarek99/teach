@@ -94,7 +94,9 @@ class RegistrationPage extends React.Component<
 
 		return (
 			<div className={classes.root}>
-				<Paper className={classes.formContainer}>
+				<Paper className={classes.formContainer}
+					elevation={4}>
+
 					<div className={classes.titleContainer}>
 						<Typography variant="h5">
 							{registerLabel}

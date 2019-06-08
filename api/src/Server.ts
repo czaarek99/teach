@@ -2,20 +2,21 @@ import * as Koa from "koa";
 import * as session from "koa-session";
 import * as bodyParser from "koa-bodyparser";
 import * as Router from "koa-router";
+import * as userAgent from "koa-useragent";
 
 import auth from "./routes/auth";
 
 import { config } from "./config";
 import { Logger } from "./util/Logger";
 import { v4 } from "uuid";
-import { HttpError, ErrorMessage, IHttpError } from "common-library";
-import { inspect } from "util";
+import { HttpError, ErrorMessage } from "common-library";
 import { authMiddleware } from "./middleware/auth";
 import { connection } from "./database/connection";
-
+import { EmailClient } from "./email/EmailClient";
 
 interface IState {
 	logger: Logger
+	emailClient: EmailClient
 	requestId: string
 	throwApiError: (error: HttpError) => void
 }
@@ -37,8 +38,12 @@ export class Server {
 
 		app.keys = config.applicationKeys;
 
+		const emailClient = new EmailClient(this.globalLogger);
+
 		app.use(async (context: CustomContext, next: Function) => {
 			context.state.requestId = v4();
+			context.state.emailClient = emailClient;
+
 			context.state.logger = new Logger("api-request", {
 				requestId: context.state.requestId,
 				userId: context.session.userId
@@ -70,6 +75,7 @@ export class Server {
 			}
 		});
 
+		app.use(userAgent);
 		app.use(bodyParser());
 
 		app.use(session({

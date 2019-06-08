@@ -5,5 +5,5 @@ import things from "./things";
 export default {
 	...errors,
 	...actions,
-	...things
+	...things,
 }

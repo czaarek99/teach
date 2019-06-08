@@ -5,7 +5,9 @@ import { Joi } from "koa-joi-router";
 import { User } from "../database/models/User";
 import { CustomContext } from "../Server";
 import { addDays } from "date-fns";
-
+import { Address } from "../database/models/Address";
+import { PasswordReset } from "../database/models/PasswordReset";
+import { v4 } from "uuid";
 
 import {
 	HttpError,
@@ -26,19 +28,41 @@ import {
 	EMAIL_MAX_LENGTH,
 	EMAIL_MIN_LENGTH,
 	STATE_MAX_LENGTH,
-	STATE_MIN_LENGTH,
 	getUserMaxDate,
+	DOMAIN,
 } from "common-library";
-import { Address } from "../database/models/Address";
+
+import {
+	PASSWORD_RESET_TEMPLATE,
+	renderTemplate,
+	PASSWORD_RESET_HELP_TEMPLATE
+} from "../email/templates/templates";
 
 const router = Router();
 
 const SALT_ROUNDS = 10;
+const SIMPLE_EMAIL_VALIDATOR = Joi.string().min(EMAIL_MIN_LENGTH).max(EMAIL_MAX_LENGTH).required();
+
+function validateEmail(context: CustomContext, email: string) : boolean {
+	const emailValidation = Joi.string().email().validate(email);
+
+	if(emailValidation.error !== null) {
+		context.state.throwApiError(new HttpError(
+			400,
+			ErrorMessage.INVALID_EMAIL,
+			context.state.requestId)
+		);
+
+		return false;
+	}
+
+	return true;
+}
 
 router.post("/register", {
 	validate: {
 		body: {
-			email: Joi.string().min(EMAIL_MIN_LENGTH).max(EMAIL_MAX_LENGTH).required(),
+			email: SIMPLE_EMAIL_VALIDATOR,
 			password: Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).required(),
 			firstName: Joi.string().min(FIRST_NAME_MIN_LENGTH).max(FIRST_NAME_MAX_LENGTH).required(),
 			lastName: Joi.string().min(LAST_NAME_MIN_LENGTH).max(LAST_NAME_MAX_LENGTH).required(),
@@ -57,15 +81,7 @@ router.post("/register", {
 
 	const body = context.request.body;
 
-	const emailValidation = Joi.string().email().validate(body.email);
-
-	if(emailValidation.error !== null) {
-		context.state.throwApiError(new HttpError(
-			400,
-			ErrorMessage.INVALID_EMAIL,
-			context.state.requestId)
-		);
-
+	if(!validateEmail(context, body.email)) {
 		return;
 	}
 
@@ -130,7 +146,7 @@ router.post("/login", {
 
 	const body = context.request.body;
 
-	const user = await User.findOne({
+	const user = await User.findOne<User>({
 		where: {
 			email: body.email
 		}
@@ -153,6 +169,53 @@ router.post("/login", {
 	});
 
 	context.session.userId = user.id;
+	context.status = 200;
+});
+
+router.get("/passwordReset", {
+
+	validate: {
+		params: {
+			email: SIMPLE_EMAIL_VALIDATOR
+		}
+	}
+
+}, async (context: CustomContext) => {
+
+	const email = context.params.email;
+
+	if(!validateEmail(context, email)) {
+		return;
+	}
+
+	const user = await User.findOne<User>({
+		where: {
+			email
+		}
+	});
+
+	let html;
+
+	if(user) {
+		const resetKey = v4();
+
+		await PasswordReset.create<PasswordReset>({
+			userId: user.id,
+			resetKey
+		});
+
+		html = renderTemplate(PASSWORD_RESET_TEMPLATE, {
+			resetPasswordLink: `http://${DOMAIN}/auth/passwordReset/${resetKey}`
+		});
+
+	} else {
+		html = renderTemplate(PASSWORD_RESET_HELP_TEMPLATE, {
+			email
+		});
+	}
+
+	await context.state.emailClient.sendMail(user.email, "Password Reset", html);
+
 	context.status = 200;
 });
 

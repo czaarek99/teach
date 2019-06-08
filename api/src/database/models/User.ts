@@ -9,7 +9,8 @@ import {
 	DataType,
 	HasOne,
 	PrimaryKey,
-	AutoIncrement
+	AutoIncrement,
+	HasMany
 } from "sequelize-typescript";
 
 import {
@@ -18,6 +19,7 @@ import {
 	LAST_NAME_MAX_LENGTH,
 	EMAIL_MAX_LENGTH
 } from "common-library";
+import { PasswordReset } from "./PasswordReset";
 
 const PASSWORD_HASH_MAX_LENGTH = 60;
 
@@ -53,4 +55,7 @@ export class User extends Model<User> implements IUser {
 
 	@HasOne(() => Address, "userId")
 	public address: Address;
+
+	@HasMany(() => PasswordReset, "userId")
+	public passwordResets: PasswordReset[]
 }

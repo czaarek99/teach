@@ -6,5 +6,7 @@ export const config = {
 	serverPort: parseInt(process.env.SERVER_PORT),
 	isDevelopment: process.env.NODE_ENV === "development",
 	isProduction: process.env.NODE_ENV === "production",
-	applicationKeys: process.env.APPLICATION_KEYS.split(",")
+	applicationKeys: process.env.APPLICATION_KEYS.split(","),
+	sesKey: process.env.SES_KEY,
+	sesSecret: process.env.SES_SECRET,
 }

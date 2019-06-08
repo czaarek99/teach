@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize-typescript";
 import { config } from "../config";
 import { User } from "./models/User";
 import { Address } from "./models/Address";
+import { PasswordReset } from "./models/PasswordReset";
 
 export const connection = new Sequelize({
 	database: config.databaseName,
@@ -14,4 +15,5 @@ export const connection = new Sequelize({
 connection.addModels([
 	User,
 	Address,
+	PasswordReset
 ]);

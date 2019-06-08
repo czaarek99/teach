@@ -17,4 +17,12 @@ export default createMuiTheme({
 			main: cyan[500]
 		}
 	},
+
+	typography: {
+		fontFamily: [
+			"Roboto Mono, monospace",
+			"Helvetica",
+			"sans-serif"
+		].join(",")
+	}
 });

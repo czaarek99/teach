@@ -27,10 +27,11 @@ const MARGIN = 10;
 
 const styles = (theme: Theme) => createStyles({
 	root: {
+		padding: 40,
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
-		height: "100%"
+		minHeight: "100vh"
 	},
 
 	formContainer: {
@@ -40,7 +41,8 @@ const styles = (theme: Theme) => createStyles({
 
 	titleContainer: {
 		display: "flex",
-		justifyContent: "center"
+		justifyContent: "center",
+		marginBottom: MARGIN
 	},
 
 	textField: {
@@ -55,8 +57,16 @@ const styles = (theme: Theme) => createStyles({
 
 	errorBox: {
 		marginTop: MARGIN
-	}
+	},
 
+	loginButton: {
+		width: 120,
+		transition: "font-size 600ms",
+
+		"&:hover": {
+			fontSize: 0
+		}
+	}
 
 });
 
@@ -100,7 +110,9 @@ class LoginPage extends React.Component<
 
 		return (
 			<div className={classes.root}>
-				<Paper className={classes.formContainer}>
+				<Paper className={classes.formContainer}
+					elevation={4}>
+
 					<div className={classes.titleContainer}>
 						<Typography variant="h5">
 							{loginLabel}
@@ -142,6 +154,7 @@ class LoginPage extends React.Component<
 
 					<div className={classes.loginButtonContainer}>
 						<LoadingButton state={controller.loginButtonState}
+							className={classes.loginButton}
 							onClick={() => controller.onLogin()}>
 							{loginLabel}
 

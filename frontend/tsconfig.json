@@ -23,6 +23,6 @@
 	},
 	"include": [
 		"src",
-		"../common-library/src/interfaces/ErrorMessage.ts"
+		"../common-library/src/interfaces/ErrorMessage.ts", "../common-library/src/translations/en"
 	]
 }

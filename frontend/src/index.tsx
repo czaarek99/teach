@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import en from './translations/en';
 import theme from './theme/theme';
 import DateFnsUtils from "@date-io/date-fns";
 import englishLocale from "i18n-iso-countries/langs/en.json";
+import translations from './translations';
 
 import { IntlProvider } from 'react-intl';
 import { AppController } from './controllers/AppController';
@@ -28,7 +28,7 @@ ReactDOM.render(
 		<Provider routingStore={routingStore}>
 			<Router history={history}>
 				<ThemeProvider theme={theme}>
-					<IntlProvider locale="en" messages={en}>
+					<IntlProvider locale="en" messages={translations.en}>
 						<MuiPickersUtilsProvider utils={DateFnsUtils}>
 							<App controller={appController} />
 						</MuiPickersUtilsProvider>
