@@ -8,6 +8,7 @@ import { observer, inject } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { simpleFormat } from "../../../util/simpleFormat";
 import { InfoBox, LoadingButton } from "../../molecules";
+import { CustomCaptcha } from "../../organisms";
 
 import {
 	IRegistrationPageController
@@ -50,6 +51,11 @@ const styles = (theme: Theme) => createStyles({
 		justifyContent: "flex-end",
 	},
 
+	errorBox: {
+		marginTop: MARGIN
+	}
+
+
 });
 
 export interface IRegistrationContentProps {
@@ -84,12 +90,23 @@ class RegistrationPage extends React.Component<
 
 		if(controller.errorMessage !== null) {
 			errorBox = (
-				<InfoBox type="error">
+				<InfoBox type="error" className={classes.errorBox}>
 					<Typography>
 						<FormattedMessage id={controller.errorMessage}/>
 					</Typography>
 				</InfoBox>
 			);
+		}
+
+		const captchaError = controller.registrationErrorModel.getFirstKeyError("captcha");
+		let translatedCaptchaError;
+
+		if(captchaError) {
+			translatedCaptchaError = this.props.intl.formatMessage({
+				id: captchaError
+			}, {
+				value: "Captcha"
+			})
 		}
 
 		return (
@@ -114,6 +131,11 @@ class RegistrationPage extends React.Component<
 					<AddressContent controller={controller}
 						margin={MARGIN}
 						isDisabled={isDisabled}/>
+
+					<div>
+						<CustomCaptcha onChange={value => controller.onChange("captcha", value)}
+							error={translatedCaptchaError}/>
+					</div>
 
 					{errorBox}
 

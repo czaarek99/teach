@@ -1,7 +1,11 @@
 import * as Handlebars from "handlebars"
+import * as HandlebarsIntl from "handlebars-intl";
+
 import { readFileSync } from "fs";
 import { join } from "path";
 import translations from "../translations";
+
+HandlebarsIntl.registerWith(Handlebars);
 
 export interface IPasswordResetTemplate {
 	resetPasswordLink: string
@@ -20,10 +24,12 @@ function compileTemplate<T>(fileName: string) : HandlebarsTemplateDelegate<T> {
 export function renderTemplate<T>(template: Handlebars.TemplateDelegate<T>, options: T) : string {
 	return template(options, {
 		data: {
-			locales: [
-				"en-US"
-			],
-			messages: translations.en
+			intl: {
+				locales: [
+					"en-US"
+				],
+				messages: translations.en
+			}
 		}
 	})
 }

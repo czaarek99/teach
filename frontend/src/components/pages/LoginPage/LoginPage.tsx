@@ -9,6 +9,7 @@ import { simpleFormat } from "../../../util/simpleFormat";
 import { observer } from "mobx-react";
 import { PASSWORD_MAX_LENGTH, EMAIL_MAX_LENGTH } from "common-library";
 import { InfoBox, CustomTextField, LoadingButton } from "../../molecules";
+import { Routes } from "../../../interfaces/Routes";
 
 import {
 	ILoginPageController,
@@ -21,6 +22,7 @@ import {
 	WithStyles,
 	withStyles,
 	Typography,
+	Link,
 } from "@material-ui/core";
 
 const MARGIN = 10;
@@ -66,7 +68,7 @@ const styles = (theme: Theme) => createStyles({
 		"&:hover": {
 			fontSize: 0
 		}
-	}
+	},
 
 });
 
@@ -149,6 +151,12 @@ class LoginPage extends React.Component<
 							value: passwordLabel
 						}}
 					/>
+
+					<Link href={Routes.FORGOT_PASSWORD} >
+						<Typography>
+							<FormattedMessage id="actions.forgotPassword"/>
+						</Typography>
+					</Link>
 
 					{errorBox}
 

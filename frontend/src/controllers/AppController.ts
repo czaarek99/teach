@@ -6,6 +6,9 @@ import { AuthenticationService } from "../services/AuthenticationService";
 import { IRegistrationPageController } from "../interfaces/controllers/IRegistrationPageController";
 import { RegistrationPageController } from "./RegistrationPageController";
 import { RouterStore } from "mobx-react-router";
+import { IForgotPageController } from "../interfaces/controllers/IForgotPageController";
+import { ForgotPageController } from "./ForgotPageController";
+import { observable, computed } from "mobx";
 
 interface IServices {
 	authenticationService: IAuthenticationService
@@ -15,8 +18,10 @@ export class AppController implements IAppController {
 
 	private readonly routingStore: RouterStore;
 	private readonly services: IServices;
-	private _loginPageController: ILoginPageController | null = null;
-	private _registrationPageController: IRegistrationPageController | null = null;
+
+	@observable private _loginPageController: ILoginPageController | null = null;
+	@observable private _registrationPageController: IRegistrationPageController | null = null;
+	@observable private _forgotPageController: IForgotPageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -26,7 +31,7 @@ export class AppController implements IAppController {
 		}
 	}
 
-	public get loginPageController() : ILoginPageController {
+	@computed public get loginPageController() : ILoginPageController {
 		if(this._loginPageController === null) {
 			this._loginPageController = new LoginPageController(
 				this.services.authenticationService,
@@ -37,7 +42,7 @@ export class AppController implements IAppController {
 		return this._loginPageController;
 	}
 
-	public get registrationPageController() : IRegistrationPageController {
+	@computed public get registrationPageController() : IRegistrationPageController {
 		if(this._registrationPageController === null) {
 			this._registrationPageController = new RegistrationPageController(
 				this.services.authenticationService,
@@ -46,6 +51,16 @@ export class AppController implements IAppController {
 		}
 
 		return this._registrationPageController;
+	}
+
+	@computed public get forgotPageController() : IForgotPageController {
+		if(this._forgotPageController === null) {
+			this._forgotPageController = new ForgotPageController(
+				this.services.authenticationService
+			);
+		}
+
+		return this._forgotPageController;
 	}
 
 }

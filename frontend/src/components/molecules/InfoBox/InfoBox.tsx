@@ -12,7 +12,7 @@ import {
 	withStyles
 } from "@material-ui/core";
 
-type InfoBoxType = "success" | "error" | "default";
+export type InfoBoxType = "success" | "error" | "default";
 
 interface IInfoBoxProps {
 	className?: string

@@ -9,4 +9,5 @@ export const config = {
 	applicationKeys: process.env.APPLICATION_KEYS.split(","),
 	sesKey: process.env.SES_KEY,
 	sesSecret: process.env.SES_SECRET,
+	recaptchaSecret: process.env.RECAPTCHA_SECRET
 }

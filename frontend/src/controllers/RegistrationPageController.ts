@@ -7,7 +7,11 @@ import { IRegistrationModel } from "../interfaces/models/IRegistrationModel";
 import { IAddressModel } from "../interfaces/models/IAddressModel";
 import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
 import { ValidatorMap, validate } from "../validation/validate";
-import { email, minLength, maxLength, password } from "../validation/validators";
+import { email, minLength, maxLength, password, notSet } from "../validation/validators";
+import { RouterStore } from "mobx-react-router";
+import { logIn } from "../util/logIn";
+import { objectKeys } from "../util/objectKeys";
+import { IRecaptchaFunctions } from "../components";
 
 import {
 	FIRST_NAME_MIN_LENGTH,
@@ -30,8 +34,6 @@ import {
 	IRegistrationPageErrorState,
 	IAddressErrorState
 } from "../interfaces/controllers/IRegistrationPageController";
-import { RouterStore } from "mobx-react-router";
-import { logIn } from "../util/logIn";
 
 const validators : ValidatorMap<IRegistrationModel> = {
 	email: [
@@ -47,6 +49,9 @@ const validators : ValidatorMap<IRegistrationModel> = {
 	],
 	password: [
 		password
+	],
+	captcha: [
+		notSet
 	]
 }
 
@@ -75,6 +80,7 @@ export class RegistrationPageController implements IRegistrationPageController {
 	private shouldValidate = false;
 	private shouldValidatePassword = false;
 	private isLoggedIn = false;
+	private captchaFunctions?: IRecaptchaFunctions;
 
 	@observable public registrationModel = new RegistrationModel();
 	@observable public addressModel = new AddressModel();
@@ -87,7 +93,8 @@ export class RegistrationPageController implements IRegistrationPageController {
 		password: [],
 		repeatPassword: [],
 		firstName: [],
-		lastName: []
+		lastName: [],
+		captcha: []
 	});
 
 	@observable public addressErrorModel = new ErrorModel<IAddressErrorState>({
@@ -160,6 +167,10 @@ export class RegistrationPageController implements IRegistrationPageController {
 		this.validateAddress(key);
 	}
 
+	public onFunctions(functions: IRecaptchaFunctions) : void {
+		this.captchaFunctions = functions;
+	}
+
 	public async onRegister() : Promise<void> {
 		if(this.isLoggedIn) {
 			return;
@@ -167,12 +178,12 @@ export class RegistrationPageController implements IRegistrationPageController {
 
 		this.shouldValidate = true;
 
-		for(const key of Object.keys(this.registrationModel.toJson())) {
-			this.validate(key as (keyof IRegistrationModel));
+		for(const key of objectKeys(this.registrationModel.toJson())) {
+			this.validate(key);
 		}
 
-		for(const key of Object.keys(this.addressModel.toJson())) {
-			this.validateAddress(key as (keyof IAddressModel));
+		for(const key of objectKeys(this.addressModel.toJson())) {
+			this.validateAddress(key);
 		}
 
 		if(!this.registrationErrorModel.hasErrors() && !this.addressErrorModel.hasErrors()) {
@@ -184,14 +195,14 @@ export class RegistrationPageController implements IRegistrationPageController {
 					address: this.addressModel.toJson()
 				};
 
-				delete toSend.repeatPassword;
-
 				await this.authenticationService.register(toSend);
 
 				this.errorMessage = null;
 				this.registerButtonState = "success";
 				logIn(this.routingStore);
 			} catch(error) {
+				this.registrationModel.captcha = null;
+
 				if(error instanceof HttpError) {
 					this.errorMessage = error.error;
 				} else {

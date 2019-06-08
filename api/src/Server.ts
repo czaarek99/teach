@@ -13,12 +13,14 @@ import { HttpError, ErrorMessage } from "common-library";
 import { authMiddleware } from "./middleware/auth";
 import { connection } from "./database/connection";
 import { EmailClient } from "./email/EmailClient";
+import { verifyRecaptcha } from "./util/verifyRecaptcha";
 
 interface IState {
 	logger: Logger
 	emailClient: EmailClient
 	requestId: string
 	throwApiError: (error: HttpError) => void
+	verifyRecaptcha: (captcha: string) => Promise<boolean>
 }
 
 export type CustomContext = Koa.ParameterizedContext<IState>;
@@ -35,8 +37,9 @@ export class Server {
 
 	public startServer() : void {
 		const app = new Koa();
-
 		app.keys = config.applicationKeys;
+		app.use(bodyParser());
+		app.use(userAgent);
 
 		const emailClient = new EmailClient(this.globalLogger);
 
@@ -49,11 +52,23 @@ export class Server {
 				userId: context.session.userId
 			});
 
-			context.state.throwApiError = (error: HttpError) => {
+			context.state.throwApiError = (error: HttpError) : void => {
 				context.body = error.toJSON();
 				context.status = error.statusCode;
 
 				context.state.logger.info("Api error", error.toJSON());
+			}
+
+			context.state.verifyRecaptcha = async (captcha: string) : Promise<boolean> => {
+				const success = await verifyRecaptcha(captcha, context.ip);
+
+				if(success) {
+					return true;
+				} else {
+					context.state.throwApiError(new HttpError(400, ErrorMessage.BAD_CAPTCHA));
+					return false;
+				}
+
 			}
 
 			const request = context.request;
@@ -75,8 +90,6 @@ export class Server {
 			}
 		});
 
-		app.use(userAgent);
-		app.use(bodyParser());
 
 		app.use(session({
 			maxAge: 7 * 24 * 60 * 60,

@@ -13,7 +13,7 @@ export class BaseService {
 			if(error.response && error.response.data) {
 
 				if(typeof error.response.data === "object" &&
-					"requestId" in error.response.data) {
+					"statusCode" in error.response.data) {
 
 					const data = error.response.data as IHttpError;
 

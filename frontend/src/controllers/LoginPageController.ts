@@ -10,6 +10,7 @@ import { HttpError, ErrorMessage } from "common-library";
 import { LoadingButtonState } from "../components/molecules/LoadingButton/LoadingButton";
 import { RouterStore } from "mobx-react-router";
 import { logIn } from "../util/logIn";
+import { objectKeys } from "../util/objectKeys";
 
 const validators : ValidatorMap<ILoginModel> = {
 	email: [empty],
@@ -66,7 +67,7 @@ export class LoginPageController implements ILoginPageController {
 
 		this.shouldValidate = true;
 
-		for(const key of Object.keys(this.model.toJson())) {
+		for(const key of objectKeys(this.model.toJson())) {
 			this.validate(key as (keyof ILoginModel));
 		}
 
@@ -75,7 +76,7 @@ export class LoginPageController implements ILoginPageController {
 			this.loginButtonState = "loading";
 
 			try {
-				await this.authenticationService.logIn(this.model);
+				await this.authenticationService.logIn(this.model.toJson());
 
 				this.isLoggedIn = true;
 				this.errorMessage = null;

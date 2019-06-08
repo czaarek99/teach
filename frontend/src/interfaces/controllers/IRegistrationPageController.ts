@@ -2,7 +2,7 @@ import { ErrorState, ErrorModel } from "../../validation/ErrorModel";
 import { IRegistrationModel } from "../models/IRegistrationModel";
 import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
 import { IAddressModel } from "../models/IAddressModel";
-import { MaterialUiPickersDate } from "@material-ui/pickers";
+import { OnFunctions } from "../../components";
 
 export interface IRegistrationPageErrorState extends ErrorState {
 	firstName: string[]
@@ -10,6 +10,7 @@ export interface IRegistrationPageErrorState extends ErrorState {
 	email: string[]
 	password: string[]
 	repeatPassword: string[]
+	captcha: string[]
 }
 
 export interface IAddressErrorState extends ErrorState {
@@ -28,6 +29,7 @@ export interface IRegistrationPageController {
 	readonly errorMessage: string | null
 	readonly registerButtonState: LoadingButtonState;
 
+	onFunctions: OnFunctions
 	onChange: (key: keyof IRegistrationModel, value: any) => void
 	onAddressChange: (key: keyof IAddressModel, value: string) => void
 	onRegister: () => Promise<void>

@@ -94,6 +94,7 @@ class PersonalInformationContent extends React.Component<
 					justifyContent="center">
 
 					<CustomDatePicker value={controller.registrationModel.birthDate}
+						disabled={isDisabled}
 						required={true}
 						label={birthDateLabel}
 						maxDate={getUserMaxDate()}

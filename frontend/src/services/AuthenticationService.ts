@@ -1,6 +1,6 @@
 import { BaseService } from "./BaseService";
 import { IAuthenticationService, LoginData } from "../interfaces/services/IAuthenticationService";
-import { IUser } from "common-library";
+import { IUser, IForgot } from "common-library";
 
 export class AuthenticationService extends BaseService implements IAuthenticationService {
 
@@ -10,6 +10,10 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
 
 	public async register(data: IUser) : Promise<void> {
 		await this.axios.post("/auth/register", data);
+	}
+
+	public async forgot(data: IForgot) : Promise<void> {
+		await this.axios.post("/auth/forgot", data);
 	}
 
 }

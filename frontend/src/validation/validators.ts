@@ -1,6 +1,14 @@
 import { ErrorMessage, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, EMAIL_MIN_LENGTH, EMAIL_MAX_LENGTH } from "common-library";
 import { ValidationResult, Validator } from "./validate";
 
+export function notSet(value: any | null | undefined) : ValidationResult {
+	if(value === null || value === undefined) {
+		return ErrorMessage.NOT_SET
+	}
+
+	return null;
+}
+
 export function empty(value: string) : ValidationResult {
 	const trimmed = value.replace(/\s/g, "");
 

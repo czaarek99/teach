@@ -1,17 +1,16 @@
-import * as sendmail from "sendmail";
-
 import { createClient, Client, SendEmailError } from "node-ses"
 import { config } from "../config";
 import { Logger } from "../util/Logger";
 import { DOMAIN } from "common-library";
 
-const sendMail = sendmail({});
-
 export class EmailClient {
 
 	private readonly sesClient: Client | null;
+	private readonly logger: Logger;
 
 	constructor(logger: Logger) {
+		this.logger = logger;
+
 		if(config.isProduction) {
 			this.sesClient = createClient({
 				key: config.sesKey,
@@ -28,24 +27,15 @@ export class EmailClient {
 				from,
 				to,
 				subject,
+				message: email
 			};
 
-			if(this.sesClient === null) {
-				sendMail({
-					...options,
-					html: email
-				}, (error: Error) => {
-					if(error) {
-						reject(error);
-					} else {
-						resolve();
-					}
-				})
+			if(this.sesClient === undefined) {
+				this.logger.warning("Printing mail to console in dev mode", options)
+
+				resolve();
 			} else {
-				this.sesClient.sendEmail({
-					...options,
-					message: email
-				}, (error: SendEmailError) => {
+				this.sesClient.sendEmail(options, (error: SendEmailError) => {
 					if(error) {
 						reject(error);
 					} else {

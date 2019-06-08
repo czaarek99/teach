@@ -16,6 +16,7 @@ interface ICustomDatePickerProps {
 	minDateMessage?: string
 	required?: boolean
 	icon?: boolean
+	disabled?: boolean
 	onChange: (date: MaterialUiPickersDate) => void
 }
 
@@ -41,7 +42,8 @@ class CustomDatePicker extends React.Component<
 			label,
 			required,
 			icon,
-			intl
+			disabled,
+			intl,
 		} = this.props;
 
 
@@ -67,6 +69,7 @@ class CustomDatePicker extends React.Component<
 
 		return (
 			<DatePicker value={value}
+				disabled={disabled}
 				okLabel={okLabel}
 				required={required}
 				cancelLabel={cancelLabel}

@@ -30,6 +30,7 @@ import {
 	STATE_MAX_LENGTH,
 	getUserMaxDate,
 	DOMAIN,
+	IForgot,
 } from "common-library";
 
 import {
@@ -63,7 +64,9 @@ router.post("/register", {
 	validate: {
 		body: {
 			email: SIMPLE_EMAIL_VALIDATOR,
+			captcha: Joi.string(),
 			password: Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).required(),
+			repeatPassword: Joi.string(),
 			firstName: Joi.string().min(FIRST_NAME_MIN_LENGTH).max(FIRST_NAME_MAX_LENGTH).required(),
 			lastName: Joi.string().min(LAST_NAME_MIN_LENGTH).max(LAST_NAME_MAX_LENGTH).required(),
 			birthDate: Joi.date().max(addDays(getUserMaxDate(), 3)).required(),
@@ -80,6 +83,11 @@ router.post("/register", {
 }, async (context: CustomContext) => {
 
 	const body = context.request.body;
+
+	const captchaResult = await context.state.verifyRecaptcha(body.captcha);
+	if(!captchaResult) {
+		return;
+	}
 
 	if(!validateEmail(context, body.email)) {
 		return;
@@ -172,25 +180,30 @@ router.post("/login", {
 	context.status = 200;
 });
 
-router.get("/passwordReset", {
-
+router.post("/forgot", {
 	validate: {
-		params: {
-			email: SIMPLE_EMAIL_VALIDATOR
-		}
+		body: {
+			email: SIMPLE_EMAIL_VALIDATOR,
+			captcha: Joi.string()
+		},
+		type: "json"
 	}
-
 }, async (context: CustomContext) => {
 
-	const email = context.params.email;
+	const body = context.request.body as IForgot;
 
-	if(!validateEmail(context, email)) {
+	if(!validateEmail(context, body.email)) {
+		return;
+	}
+
+	const captchaResult = await context.state.verifyRecaptcha(body.captcha);
+	if(!captchaResult) {
 		return;
 	}
 
 	const user = await User.findOne<User>({
 		where: {
-			email
+			email: body.email
 		}
 	});
 
@@ -210,11 +223,11 @@ router.get("/passwordReset", {
 
 	} else {
 		html = renderTemplate(PASSWORD_RESET_HELP_TEMPLATE, {
-			email
+			email: body.email
 		});
 	}
 
-	await context.state.emailClient.sendMail(user.email, "Password Reset", html);
+	await context.state.emailClient.sendMail(body.email, "Password Reset", html);
 
 	context.status = 200;
 });

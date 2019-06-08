@@ -12,5 +12,7 @@ export default {
 	[ErrorMessage.TOO_SHORT]: "{value} is too short. It has to be at least {minLength} characters long.",
 	[ErrorMessage.TOO_LONG]: "{value} is too long. It can not be longer than {maxLength} characters long.",
 	[ErrorMessage.INVALID_EMAIL]: "Invalid email",
-	[ErrorMessage.PASSWORDS_DONT_MATCH]: "Passwords do not match"
+	[ErrorMessage.PASSWORDS_DONT_MATCH]: "Passwords do not match",
+	[ErrorMessage.BAD_CAPTCHA]: "Invalid captcha",
+	[ErrorMessage.NOT_SET]: "{value} has to be set"
 }
