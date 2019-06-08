@@ -1,19 +1,19 @@
 import { observable } from "mobx";
-import { ForgotModel } from "../models/ForgotModel";
-import { IForgotModel } from "../interfaces/models/IForgotModel";
-import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
-import { LoadingButtonState, InfoBoxType, IRecaptchaFunctions } from "../components";
-import { ErrorModel } from "../validation/ErrorModel";
-import { ValidatorMap, validate } from "../validation/validate";
-import { email, notSet } from "../validation/validators";
-import { objectKeys } from "../util/objectKeys";
+import { ForgotModel } from "../../models/ForgotModel";
+import { IForgotModel } from "../../interfaces/models/IForgotModel";
+import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
+import { LoadingButtonState, InfoBoxType, IRecaptchaFunctions } from "../../components";
+import { ErrorModel } from "../../validation/ErrorModel";
+import { ValidatorMap, validate } from "../../validation/validate";
+import { email, notSet } from "../../validation/validators";
+import { objectKeys } from "../../util/objectKeys";
 import { HttpError } from "common-library";
 import { ErrorMessage } from "common-library";
 
 import {
 	IForgotPageController,
 	IForgotPageErrorState
-} from "../interfaces/controllers/IForgotPageController";
+} from "../../interfaces/controllers/pages/IForgotPageController";
 
 const validators : ValidatorMap<IForgotModel> = {
 	email: [email],

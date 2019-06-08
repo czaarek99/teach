@@ -15,5 +15,6 @@ export enum ErrorMessage {
 	COMPONENT = "error.component",
 	UNAUTHORIZED = "error.unauthorized",
 	INTERNAL_SERVER_ERROR = "error.internalServerError",
-	NOT_SET = "error.notSet"
+	NOT_SET = "error.notSet",
+	PASSWORD_AND_EMAIL_SAME = "error.passwordAndEmailSame"
 }

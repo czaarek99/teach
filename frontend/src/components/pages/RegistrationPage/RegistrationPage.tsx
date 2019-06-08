@@ -12,7 +12,7 @@ import { CustomCaptcha } from "../../organisms";
 
 import {
 	IRegistrationPageController
-} from "../../../interfaces/controllers/IRegistrationPageController";
+} from "../../../interfaces/controllers/pages/IRegistrationPageController";
 
 import {
 	Theme,
@@ -54,8 +54,6 @@ const styles = (theme: Theme) => createStyles({
 	errorBox: {
 		marginTop: MARGIN
 	}
-
-
 });
 
 export interface IRegistrationContentProps {

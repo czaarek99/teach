@@ -1,17 +1,17 @@
 import { observable } from "mobx";
-import { RegistrationModel } from "../models/RegistrationModel";
-import { ErrorModel } from "../validation/ErrorModel";
-import { AddressModel } from "../models/AddressModel";
-import { LoadingButtonState } from "../components/molecules/LoadingButton/LoadingButton";
-import { IRegistrationModel } from "../interfaces/models/IRegistrationModel";
-import { IAddressModel } from "../interfaces/models/IAddressModel";
-import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
-import { ValidatorMap, validate } from "../validation/validate";
-import { email, minLength, maxLength, password, notSet } from "../validation/validators";
+import { RegistrationModel } from "../../models/RegistrationModel";
+import { ErrorModel } from "../../validation/ErrorModel";
+import { AddressModel } from "../../models/AddressModel";
+import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
+import { IRegistrationModel } from "../../interfaces/models/IRegistrationModel";
+import { IAddressModel } from "../../interfaces/models/IAddressModel";
+import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
+import { ValidatorMap, validate } from "../../validation/validate";
+import { email, minLength, maxLength, password, notSet } from "../../validation/validators";
 import { RouterStore } from "mobx-react-router";
-import { logIn } from "../util/logIn";
-import { objectKeys } from "../util/objectKeys";
-import { IRecaptchaFunctions } from "../components";
+import { logIn } from "../../util/logIn";
+import { objectKeys } from "../../util/objectKeys";
+import { IRecaptchaFunctions } from "../../components";
 
 import {
 	FIRST_NAME_MIN_LENGTH,
@@ -33,7 +33,7 @@ import {
 	IRegistrationPageController,
 	IRegistrationPageErrorState,
 	IAddressErrorState
-} from "../interfaces/controllers/IRegistrationPageController";
+} from "../../interfaces/controllers/pages/IRegistrationPageController";
 
 const validators : ValidatorMap<IRegistrationModel> = {
 	email: [
@@ -186,6 +186,16 @@ export class RegistrationPageController implements IRegistrationPageController {
 			this.validateAddress(key);
 		}
 
+		if(this.registrationModel.password === this.registrationModel.email) {
+			this.registrationErrorModel.setErrors("password", [
+				ErrorMessage.PASSWORD_AND_EMAIL_SAME
+			]);
+
+			this.registrationErrorModel.setErrors("email", [
+				ErrorMessage.PASSWORD_AND_EMAIL_SAME
+			]);
+		}
+
 		if(!this.registrationErrorModel.hasErrors() && !this.addressErrorModel.hasErrors()) {
 			this.loading = true;
 
@@ -202,6 +212,10 @@ export class RegistrationPageController implements IRegistrationPageController {
 				logIn(this.routingStore);
 			} catch(error) {
 				this.registrationModel.captcha = null;
+
+				if(this.captchaFunctions) {
+					this.captchaFunctions.reset();
+				}
 
 				if(error instanceof HttpError) {
 					this.errorMessage = error.error;

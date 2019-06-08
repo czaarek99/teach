@@ -1,8 +1,8 @@
-import { ErrorState, ErrorModel } from "../../validation/ErrorModel";
-import { IRegistrationModel } from "../models/IRegistrationModel";
-import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
-import { IAddressModel } from "../models/IAddressModel";
-import { OnFunctions } from "../../components";
+import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
+import { IRegistrationModel } from "../../models/IRegistrationModel";
+import { LoadingButtonState } from "../../../components/molecules/LoadingButton/LoadingButton";
+import { IAddressModel } from "../../models/IAddressModel";
+import { OnFunctions } from "../../../components";
 
 export interface IRegistrationPageErrorState extends ErrorState {
 	firstName: string[]

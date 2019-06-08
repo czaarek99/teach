@@ -43,6 +43,7 @@ const router = Router();
 
 const SALT_ROUNDS = 10;
 const SIMPLE_EMAIL_VALIDATOR = Joi.string().min(EMAIL_MIN_LENGTH).max(EMAIL_MAX_LENGTH).required();
+const PASSWORD_VALIDATOR = Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).required();
 
 function validateEmail(context: CustomContext, email: string) : boolean {
 	const emailValidation = Joi.string().email().validate(email);
@@ -65,7 +66,7 @@ router.post("/register", {
 		body: {
 			email: SIMPLE_EMAIL_VALIDATOR,
 			captcha: Joi.string(),
-			password: Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).required(),
+			password: PASSWORD_VALIDATOR,
 			repeatPassword: Joi.string(),
 			firstName: Joi.string().min(FIRST_NAME_MIN_LENGTH).max(FIRST_NAME_MAX_LENGTH).required(),
 			lastName: Joi.string().min(LAST_NAME_MIN_LENGTH).max(LAST_NAME_MAX_LENGTH).required(),
@@ -93,6 +94,16 @@ router.post("/register", {
 		return;
 	}
 
+	if(body.password === body.email) {
+		context.state.throwApiError(new HttpError(
+				400,
+				ErrorMessage.PASSWORD_AND_EMAIL_SAME,
+				context.state.requestId
+			)
+		)
+		return;
+	}
+
 	const oldUser = await User.findOne({
 		where: {
 			email: body.email
@@ -101,9 +112,10 @@ router.post("/register", {
 
 	if(oldUser) {
 		context.state.throwApiError(new HttpError(
-			409,
-			ErrorMessage.EMAIL_EXISTS,
-			context.state.requestId)
+				409,
+				ErrorMessage.EMAIL_EXISTS,
+				context.state.requestId
+			)
 		);
 		return;
 	}
@@ -230,6 +242,20 @@ router.post("/forgot", {
 	await context.state.emailClient.sendMail(body.email, "Password Reset", html);
 
 	context.status = 200;
+});
+
+router.post("/reset/:resetKey", {
+	validate: {
+		body: {
+			password: PASSWORD_VALIDATOR,
+			resetKey: Joi.string().uuid({
+				version: "uuidv4"
+			})
+		},
+		type: "json"
+	}
+}, async (context: CustomContext) => {
+
 });
 
 export default router;

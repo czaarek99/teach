@@ -2,7 +2,7 @@ import * as React from "react";
 
 import MailIcon from "@material-ui/icons/Mail";
 
-import { IForgotPageController } from "../../../interfaces/controllers/IForgotPageController";
+import { IForgotPageController } from "../../../interfaces/controllers/pages/IForgotPageController";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { simpleFormat } from "../../../util/simpleFormat";
 import { observer } from "mobx-react";

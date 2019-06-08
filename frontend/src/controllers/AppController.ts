@@ -1,14 +1,17 @@
 import { IAppController } from "../interfaces/controllers/IAppController";
-import { ILoginPageController } from "../interfaces/controllers/ILoginPageController";
-import { LoginPageController } from "./LoginPageController";
+import { ILoginPageController } from "../interfaces/controllers/pages/ILoginPageController";
+import { LoginPageController } from "./pages/LoginPageController";
 import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
 import { AuthenticationService } from "../services/AuthenticationService";
-import { IRegistrationPageController } from "../interfaces/controllers/IRegistrationPageController";
-import { RegistrationPageController } from "./RegistrationPageController";
+import { IRegistrationPageController } from "../interfaces/controllers/pages/IRegistrationPageController";
+import { RegistrationPageController } from "./pages/RegistrationPageController";
 import { RouterStore } from "mobx-react-router";
-import { IForgotPageController } from "../interfaces/controllers/IForgotPageController";
-import { ForgotPageController } from "./ForgotPageController";
+import { IForgotPageController } from "../interfaces/controllers/pages/IForgotPageController";
+import { ForgotPageController } from "./pages/ForgotPageController";
 import { observable, computed } from "mobx";
+import { Routes, DEFAULT_ROUTE } from "../interfaces/Routes";
+import { IResetPasswordPageController } from "../interfaces/controllers/pages/IResetPasswordPageController";
+import { ResetPasswordPageController } from "./pages/ResetPasswordPageController";
 
 interface IServices {
 	authenticationService: IAuthenticationService
@@ -22,9 +25,15 @@ export class AppController implements IAppController {
 	@observable private _loginPageController: ILoginPageController | null = null;
 	@observable private _registrationPageController: IRegistrationPageController | null = null;
 	@observable private _forgotPageController: IForgotPageController | null = null;
+	@observable private _resetPasswordPageController: IResetPasswordPageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
+
+		const routes = Object.values(Routes);
+		if(!routes.includes(routingStore.location.pathname)) {
+			routingStore.push(DEFAULT_ROUTE);
+		}
 
 		this.services = {
 			authenticationService: new AuthenticationService()
@@ -61,6 +70,16 @@ export class AppController implements IAppController {
 		}
 
 		return this._forgotPageController;
+	}
+
+	@computed public get resetPasswordPageController() : IResetPasswordPageController {
+		if(this._resetPasswordPageController === null) {
+			this._resetPasswordPageController = new ResetPasswordPageController(
+				this.services.authenticationService
+			);
+		}
+
+		return this._resetPasswordPageController;
 	}
 
 }

@@ -3,7 +3,7 @@ import React from 'react';
 import { IAppController } from '../../../interfaces/controllers/IAppController';
 import { observer, inject } from 'mobx-react';
 import { Routes } from '../../../interfaces/Routes';
-import { LoginPage, RegistrationPage, ForgotPage } from '../../pages';
+import { LoginPage, RegistrationPage, ForgotPage, ResetPasswordPage } from '../../pages';
 import { IRoutingStoreProps } from '../../../interfaces/props/IRoutingStoreProps';
 
 interface IAppProps {
@@ -37,6 +37,10 @@ class App extends React.Component<IAppProps> {
 		} else if(pathName === Routes.FORGOT_PASSWORD) {
 			page = (
 				<ForgotPage controller={controller.forgotPageController} />
+			)
+		} else if(pathName === Routes.RESET_PASSWORD) {
+			page = (
+				<ResetPasswordPage controller={controller.resetPasswordPageController}/>
 			)
 		}
 

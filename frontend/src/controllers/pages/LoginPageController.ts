@@ -1,16 +1,16 @@
-import { ILoginPageController, ILoginPageErrorState } from "../interfaces/controllers/ILoginPageController";
-import { ILoginModel } from "../interfaces/models/ILoginModel";
+import { ILoginPageController, ILoginPageErrorState } from "../../interfaces/controllers/pages/ILoginPageController";
+import { ILoginModel } from "../../interfaces/models/ILoginModel";
 import { observable } from "mobx";
-import { LoginModel } from "../models/LoginModel";
-import { empty } from "../validation/validators";
-import { ErrorModel } from "../validation/ErrorModel";
-import { validate, ValidatorMap } from "../validation/validate";
-import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
+import { LoginModel } from "../../models/LoginModel";
+import { empty } from "../../validation/validators";
+import { ErrorModel } from "../../validation/ErrorModel";
+import { validate, ValidatorMap } from "../../validation/validate";
+import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
 import { HttpError, ErrorMessage } from "common-library";
-import { LoadingButtonState } from "../components/molecules/LoadingButton/LoadingButton";
+import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
 import { RouterStore } from "mobx-react-router";
-import { logIn } from "../util/logIn";
-import { objectKeys } from "../util/objectKeys";
+import { logIn } from "../../util/logIn";
+import { objectKeys } from "../../util/objectKeys";
 
 const validators : ValidatorMap<ILoginModel> = {
 	email: [empty],

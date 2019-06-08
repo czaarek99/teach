@@ -14,5 +14,6 @@ export default {
 	[ErrorMessage.INVALID_EMAIL]: "Invalid email",
 	[ErrorMessage.PASSWORDS_DONT_MATCH]: "Passwords do not match",
 	[ErrorMessage.BAD_CAPTCHA]: "Invalid captcha",
-	[ErrorMessage.NOT_SET]: "{value} has to be set"
+	[ErrorMessage.NOT_SET]: "{value} has to be set",
+	[ErrorMessage.PASSWORD_AND_EMAIL_SAME]: "Password and email can not be the same!",
 }

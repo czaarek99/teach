@@ -1,6 +1,6 @@
-import { IForgotModel } from "../models/IForgotModel";
-import { ErrorModel, ErrorState } from "../../validation/ErrorModel";
-import { LoadingButtonState, InfoBoxType, OnFunctions } from "../../components";
+import { IForgotModel } from "../../models/IForgotModel";
+import { ErrorModel, ErrorState } from "../../../validation/ErrorModel";
+import { LoadingButtonState, InfoBoxType, OnFunctions } from "../../../components";
 
 export interface IForgotPageErrorState extends ErrorState {
 	email: string[]

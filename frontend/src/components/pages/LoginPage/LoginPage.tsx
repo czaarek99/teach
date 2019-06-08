@@ -13,7 +13,7 @@ import { Routes } from "../../../interfaces/Routes";
 
 import {
 	ILoginPageController,
-} from "../../../interfaces/controllers/ILoginPageController";
+} from "../../../interfaces/controllers/pages/ILoginPageController";
 
 import {
 	Paper,
