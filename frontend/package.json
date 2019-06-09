@@ -9,7 +9,7 @@
 		"@material-ui/pickers": "^3.1.0",
 		"axios": "^0.18.0",
 		"clsx": "^1.0.4",
-		"common-library": "file:../common-library",
+		"common-library": "file:../libraries/common-library",
 		"date-fns": "^2.0.0-alpha.31",
 		"i18n-iso-countries": "^4.1.0",
 		"mobx": "^5.10.0",

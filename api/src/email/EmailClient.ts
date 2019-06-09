@@ -1,7 +1,7 @@
 import { createClient, Client, SendEmailError } from "node-ses"
 import { config } from "../config";
-import { Logger } from "../util/Logger";
 import { DOMAIN } from "common-library";
+import { Logger } from "server-lib";
 
 export class EmailClient {
 

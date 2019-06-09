@@ -1,0 +1,21 @@
+{
+	"name": "server-lib",
+	"version": "1.0.0",
+	"description": "",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "tsc",
+		"watch": "tsc --watch"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"json-stringify-safe": "^5.0.1"
+	},
+	"devDependencies": {
+		"@types/json-stringify-safe": "^5.0.0",
+		"typescript": "^3.5.1"
+	}
+}

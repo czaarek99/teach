@@ -7,13 +7,13 @@ import * as userAgent from "koa-useragent";
 import auth from "./routes/auth";
 
 import { config } from "./config";
-import { Logger } from "./util/Logger";
 import { v4 } from "uuid";
 import { HttpError, ErrorMessage } from "common-library";
 import { authMiddleware } from "./middleware/auth";
 import { EmailClient } from "./email/EmailClient";
 import { verifyRecaptcha } from "./util/verifyRecaptcha";
 import { connectToDatabase } from "./database/connection";
+import { Logger } from "server-lib";
 
 interface IState {
 	logger: Logger
