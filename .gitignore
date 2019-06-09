@@ -1,5 +1,7 @@
 node_modules/
 dist/
-.vscode
+.vscode/
 
+start.bat
+start.sh
 package-lock.json
