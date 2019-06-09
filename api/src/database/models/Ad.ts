@@ -1,5 +1,5 @@
 import { User } from "./User";
-import { UUID_V4_LENGTH } from "common-library";
+import { AD_NAME_MAX_LENGTH, UUID_V4_LENGTH, IAd } from "common-library";
 
 import {
 	Table,
@@ -13,7 +13,7 @@ import {
 } from "sequelize-typescript";
 
 @Table
-export class PasswordReset extends Model<PasswordReset> {
+export class Ad extends Model<Ad> implements IAd {
 
 	@BelongsTo(() => User, "userId")
 	public user: User;
@@ -24,7 +24,16 @@ export class PasswordReset extends Model<PasswordReset> {
 	public userId: number;
 
 	@AllowNull(false)
+	@Column(DataType.STRING(AD_NAME_MAX_LENGTH))
+	public name: string;
+
+	@AllowNull(false)
+	@Column(DataType.TEXT)
+	public description: string;
+
+	@AllowNull(true)
 	@Unique
 	@Column(DataType.STRING(UUID_V4_LENGTH))
-	public resetKey: string;
+	public imageId?: string;
+
 }

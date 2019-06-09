@@ -1,6 +1,4 @@
-import { User } from "./User";
-
-import {
+import { User } from "./User"; import {
 	Table,
 	Column,
 	Model,

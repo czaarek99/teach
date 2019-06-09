@@ -33,6 +33,7 @@ import {
 	DOMAIN,
 	IForgot,
 	IResetPassword,
+	PHONE_NUMBER_MAX_LENGTH,
 } from "common-library";
 
 import {
@@ -77,6 +78,7 @@ router.post("/register", {
 			firstName: Joi.string().min(FIRST_NAME_MIN_LENGTH).max(FIRST_NAME_MAX_LENGTH).required(),
 			lastName: Joi.string().min(LAST_NAME_MIN_LENGTH).max(LAST_NAME_MAX_LENGTH).required(),
 			birthDate: Joi.date().max(addDays(getUserMaxDate(), 3)).required(),
+			phoneNumber: Joi.string().max(PHONE_NUMBER_MAX_LENGTH).optional(),
 			address: Joi.object({
 				street: Joi.string().min(STREET_MIN_LENGTH).max(STREET_MAX_LENGTH).required(),
 				zipCode: Joi.string().min(ZIP_CODE_MIN_LENGTH).max(ZIP_CODE_MAX_LENGTH).required(),
@@ -136,6 +138,7 @@ router.post("/register", {
 		firstName: body.firstName,
 		lastName: body.lastName,
 		birthDate: body.birthDate,
+		phoneNumber: body.phoneNumber,
 		address: {
 			street: address.street,
 			zipCode: address.zipCode,

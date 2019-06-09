@@ -26,7 +26,8 @@ import {
 	STREET_MAX_LENGTH,
 	STATE_MAX_LENGTH,
 	HttpError,
-	ErrorMessage
+	ErrorMessage,
+	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
 
 import {
@@ -52,6 +53,9 @@ const validators : ValidatorMap<IRegistrationModel> = {
 	],
 	captcha: [
 		notSet
+	],
+	phoneNumber: [
+		maxLength(PHONE_NUMBER_MAX_LENGTH)
 	]
 }
 
@@ -94,7 +98,8 @@ export class RegistrationPageController implements IRegistrationPageController {
 		repeatPassword: [],
 		firstName: [],
 		lastName: [],
-		captcha: []
+		captcha: [],
+		phoneNumber: []
 	});
 
 	@observable public addressErrorModel = new ErrorModel<IAddressErrorState>({

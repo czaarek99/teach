@@ -2,7 +2,7 @@
 	"name": "api",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "dist/index.js",
 	"scripts": {
 		"start": "node dist/index.js",
 		"watch": "nodemon -e ts -w ./src -x npm run watch:serve",
@@ -10,8 +10,8 @@
 		"build": "tsc"
 	},
 	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"author": "Cezary Borowski",
+	"license": "UNLICENSED",
 	"dependencies": {
 		"axios": "^0.19.0",
 		"bcrypt": "^3.0.6",
@@ -31,12 +31,12 @@
 		"reflect-metadata": "^0.1.13",
 		"sequelize": "^5.8.6",
 		"sequelize-typescript": "^1.0.0-beta.3",
-		"uuid": "^3.3.2",
-		"winston": "^3.2.1"
+		"uuid": "^3.3.2"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^3.0.0",
 		"@types/json-stringify-safe": "^5.0.0",
+		"@types/koa": "^2.0.48",
 		"@types/koa-bodyparser": "^4.3.0",
 		"@types/koa-joi-router": "^5.2.2",
 		"@types/koa-router": "^7.0.40",

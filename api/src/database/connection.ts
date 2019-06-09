@@ -3,6 +3,7 @@ import { config } from "../config";
 import { User } from "./models/User";
 import { Address } from "./models/Address";
 import { PasswordReset } from "./models/PasswordReset";
+import { Ad } from "./models/Ad";
 
 export function connectToDatabase() : Sequelize {
 	const connection = new Sequelize({
@@ -16,7 +17,8 @@ export function connectToDatabase() : Sequelize {
 	connection.addModels([
 		User,
 		Address,
-		PasswordReset
+		PasswordReset,
+		Ad
 	]);
 
 	return connection;

@@ -8,4 +8,5 @@ export interface IUser {
 	password?: string
 	birthDate: Date
 	address?: IAddress
+	phoneNumber?: string
 }

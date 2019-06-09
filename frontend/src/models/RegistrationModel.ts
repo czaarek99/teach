@@ -12,6 +12,7 @@ export class RegistrationModel implements IRegistrationModel {
 	@observable public repeatPassword = "";
 	@observable public birthDate = subMonths(getUserMaxDate(), 1);
 	@observable public captcha : string | null = null;
+	@observable public phoneNumber: string = "";
 
 	public toJson() : IRegistrationModel {
 		return {
@@ -21,7 +22,8 @@ export class RegistrationModel implements IRegistrationModel {
 			password: this.password,
 			repeatPassword: this.repeatPassword,
 			birthDate: this.birthDate,
-			captcha: this.captcha
+			captcha: this.captcha,
+			phoneNumber: this.phoneNumber
 		}
 	}
 
