@@ -6,7 +6,7 @@ import { observer } from "mobx-react";
 import { IRegistrationContentProps } from "../RegistrationPage";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { simpleFormat } from "../../../../util/simpleFormat";
-import { CustomTextField, CUSTOM_TEXT_FIELD_DEFAULT_VARIANT } from "../../../molecules";
+import { CustomTextField } from "../../../molecules";
 import { computed, observable } from "mobx";
 import { getNames } from "i18n-iso-countries";
 
@@ -162,7 +162,7 @@ class AddressContent extends React.Component<
 
 				<Box marginBottom={margin}>
 					<FormControl fullWidth={true}
-						variant={CUSTOM_TEXT_FIELD_DEFAULT_VARIANT}>
+						variant="outlined">
 
 						<InputLabel htmlFor={SELECT_INPUT_ID}
 							required={true}

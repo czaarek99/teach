@@ -8,6 +8,7 @@ import { addDays } from "date-fns";
 import { Address } from "../database/models/Address";
 import { PasswordReset } from "../database/models/PasswordReset";
 import { v4 } from "uuid";
+import { isBefore, subDays } from "date-fns";
 
 import {
 	HttpError,
@@ -31,6 +32,7 @@ import {
 	getUserMaxDate,
 	DOMAIN,
 	IForgot,
+	IResetPassword,
 } from "common-library";
 
 import {
@@ -44,6 +46,10 @@ const router = Router();
 const SALT_ROUNDS = 10;
 const SIMPLE_EMAIL_VALIDATOR = Joi.string().min(EMAIL_MIN_LENGTH).max(EMAIL_MAX_LENGTH).required();
 const PASSWORD_VALIDATOR = Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).required();
+
+async function hashPassword(password: string) : Promise<string> {
+	return await bcrypt.hash(password, SALT_ROUNDS);
+}
 
 function validateEmail(context: CustomContext, email: string) : boolean {
 	const emailValidation = Joi.string().email().validate(email);
@@ -120,7 +126,7 @@ router.post("/register", {
 		return;
 	}
 
-	const hashedPassword = await bcrypt.hash(body.password, SALT_ROUNDS);
+	const hashedPassword = await hashPassword(body.password);
 
 	const address = body.address;
 
@@ -244,10 +250,11 @@ router.post("/forgot", {
 	context.status = 200;
 });
 
-router.post("/reset/:resetKey", {
+router.post("/reset", {
 	validate: {
 		body: {
 			password: PASSWORD_VALIDATOR,
+			repeatPassword: PASSWORD_VALIDATOR,
 			resetKey: Joi.string().uuid({
 				version: "uuidv4"
 			})
@@ -256,6 +263,44 @@ router.post("/reset/:resetKey", {
 	}
 }, async (context: CustomContext) => {
 
+	const body = context.request.body as IResetPassword;
+
+	const passwordReset = await PasswordReset.findOne<PasswordReset>({
+		where: {
+			resetKey: body.resetKey
+		}
+	});
+
+	if(!passwordReset) {
+		context.state.throwApiError(new HttpError(400, ErrorMessage.BAD_RESET_KEY));
+		return;
+	}
+
+	await PasswordReset.destroy({
+		where: {
+			id: passwordReset.id
+		}
+	});
+
+	const oneDayAgo = subDays(new Date(), 1);
+	const isOld = isBefore(passwordReset.createdAt, oneDayAgo);
+
+	if(isOld) {
+		context.state.throwApiError(new HttpError(400, ErrorMessage.EXPIRED_RESET_KEY));
+		return;
+	}
+
+	const hashedPassword = await hashPassword(body.password);
+
+	await User.update<User>({
+			password: hashedPassword
+		}, {
+			where: {
+				id: passwordReset.userId
+			}
+	});
+
+	context.status = 200;
 });
 
 export default router;

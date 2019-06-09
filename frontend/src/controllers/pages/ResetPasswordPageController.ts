@@ -5,13 +5,33 @@ import { observable } from "mobx";
 import { ResetPasswordModel } from "../../models/ResetPasswordModel";
 import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
 import { ErrorModel } from "../../validation/ErrorModel";
+import { LoadingButtonState, InfoBoxType } from "../../components";
+import { ErrorMessage, HttpError } from "common-library";
+import { IResetPasswordModel } from "../../interfaces/models/IResetPasswordModel";
+import { ValidatorMap, ValidationResult, validate } from "../../validation/validate";
+import { password, uuid4 } from "../../validation/validators";
+import { objectKeys } from "../../util/objectKeys";
 
 export class ResetPasswordPageController implements IResetPasswordPageController {
 
 	private readonly authenticationService: IAuthenticationService;
+	private readonly validators : ValidatorMap<IResetPasswordModel> = {
+		password: [
+			password
+		],
+		resetKey: [
+			uuid4
+		],
+		repeatPassword: [
+			this.samePasswordValidator.bind(this)
+		]
+	}
 
 	@observable public model = new ResetPasswordModel();
-	@observable public loading = false;
+	@observable public disabled = false;
+	@observable public resetPasswordButtonState : LoadingButtonState = "default";
+	@observable public infoBoxMessage : string | null = null;
+	@observable public infoBoxType : InfoBoxType = "default"
 	@observable public errorModel = new ErrorModel<IResetPasswordPageErrorState>({
 		password: [],
 		repeatPassword: []
@@ -19,9 +39,97 @@ export class ResetPasswordPageController implements IResetPasswordPageController
 
 	constructor(authenticationService: IAuthenticationService) {
 		this.authenticationService = authenticationService;
+
+		const url = new URL(window.location.href);
+
+		const resetKey = url.searchParams.get("resetKey");
+
+		let resetKeyIsBad = false;
+
+		if(resetKey) {
+			this.model.resetKey = resetKey;
+
+			if(uuid4(resetKey) !== null) {
+				resetKeyIsBad = true;
+			}
+
+		} else {
+			resetKeyIsBad = true;
+		}
+
+		if(resetKeyIsBad) {
+			this.disabled = true;
+			this.resetPasswordButtonState = "disabled";
+			this.infoBoxType = "error";
+			this.infoBoxMessage = ErrorMessage.BAD_RESET_KEY;
+		}
+
 	}
 
-	public onChange(key: keyof ResetPasswordModel) : void {
+	private validate(key: keyof IResetPasswordModel) : void {
+		const keyValidators = this.validators[key];
+
+		if(keyValidators !== undefined) {
+			const value = this.model[key];
+
+			this.errorModel.setErrors(key, validate(value, keyValidators));
+		}
+	}
+
+	private samePasswordValidator(repeatPassword: string) : ValidationResult {
+		if(this.model.password !== repeatPassword) {
+			return ErrorMessage.PASSWORDS_DONT_MATCH
+		}
+
+		return null;
+	}
+
+	public onChange(key: keyof IResetPasswordModel, value: string) : void {
+		this.model[key] = value;
+
+		this.validate(key);
+	}
+
+	public async onSubmit() : Promise<void> {
+
+		if(!this.disabled) {
+			const model = this.model.toJson();
+
+			for(const key of objectKeys(model)) {
+				this.validate(key);
+			}
+
+			if(!this.errorModel.hasErrors()) {
+				this.disabled = true;
+				this.resetPasswordButtonState = "loading";
+
+				try {
+					await this.authenticationService.resetPassword(model);
+
+					this.infoBoxType = "success";
+					this.infoBoxMessage = "actions.passwordIsReset";
+					this.resetPasswordButtonState = "success";
+
+					setTimeout(() => {
+						this.resetPasswordButtonState = "disabled";
+					}, 2000)
+				} catch(error) {
+					this.infoBoxType = "error";
+					this.resetPasswordButtonState = "error";
+					this.disabled = false;
+
+					if(error instanceof HttpError) {
+						this.infoBoxMessage = error.error;
+					} else {
+						console.error(error);
+						this.infoBoxMessage = ErrorMessage.COMPONENT;
+					}
+				}
+
+			}
+		}
+
+
 
 	}
 

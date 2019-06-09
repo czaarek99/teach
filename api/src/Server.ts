@@ -11,9 +11,9 @@ import { Logger } from "./util/Logger";
 import { v4 } from "uuid";
 import { HttpError, ErrorMessage } from "common-library";
 import { authMiddleware } from "./middleware/auth";
-import { connection } from "./database/connection";
 import { EmailClient } from "./email/EmailClient";
 import { verifyRecaptcha } from "./util/verifyRecaptcha";
+import { connectToDatabase } from "./database/connection";
 
 interface IState {
 	logger: Logger
@@ -30,9 +30,14 @@ export class Server {
 	private readonly globalLogger = new Logger("api-global");
 
 	public async startDatabase() : Promise<void> {
-		await connection.sync({
-			force: config.isDevelopment
-		});
+		const connection = connectToDatabase();
+
+		if(config.isDevelopment) {
+			await connection.sync({
+				force: config.forceDropDatabse
+			});
+		}
+
 	}
 
 	public startServer() : void {

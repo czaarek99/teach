@@ -17,7 +17,7 @@ interface ICustomCaptchaProps {
 const RECAPTCHA_HEIGHT = 78;
 
 const styles = (theme: Theme) => createStyles({
-	root: {
+	captchaContainer: {
 		minHeight: RECAPTCHA_HEIGHT
 	},
 
@@ -58,18 +58,20 @@ export class CustomCaptcha extends React.Component<
 		const {
 			onChange,
 			classes,
-			onFunctions,
 			error
 		} = this.props;
 
 		return (
-			<div className={classes.root}>
+			<div>
 				<Typography className={classes.title}>
 					Captcha
 				</Typography>
-				<ReCAPTCHA onChange={onChange}
-					ref={this.captchaRef}
-					sitekey="6LfR7g8TAAAAADQnlcRjUoCobU6725fEXSItaNPe"/>
+
+				<div className={classes.captchaContainer}>
+					<ReCAPTCHA onChange={onChange}
+						ref={this.captchaRef}
+						sitekey="6LfR7g8TAAAAADQnlcRjUoCobU6725fEXSItaNPe"/>
+				</div>
 
 				<Typography color="error"
 					className={classes.error}>

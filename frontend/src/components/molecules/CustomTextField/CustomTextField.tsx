@@ -7,14 +7,16 @@ import { InjectedIntlProps, MessageValue, injectIntl } from "react-intl";
 import { ErrorModel, ErrorState } from "../../../validation/ErrorModel";
 import { observer } from "mobx-react";
 
-export const CUSTOM_TEXT_FIELD_DEFAULT_VARIANT = "outlined";
+export const CUSTOM_TEXT_FIELD_DEFAULT_VARIANT : CustomTextFieldVariant = "filled";
 
 interface ITranslationValues {
 	[key: string]: MessageValue
 }
 
+export type CustomTextFieldVariant = "standard" | "filled" | "outlined"
+
 export type CustomTextFieldProps<T extends ErrorState> = Omit<TextFieldProps, "variant"> & {
-	variant?: "standard" | "filled" | "outlined",
+	variant?: CustomTextFieldVariant,
 	maxLength?: number
 	minLength?: number
 	startAdornment?: React.ReactNode

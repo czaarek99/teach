@@ -16,4 +16,7 @@ export default {
 	[ErrorMessage.BAD_CAPTCHA]: "Invalid captcha",
 	[ErrorMessage.NOT_SET]: "{value} has to be set",
 	[ErrorMessage.PASSWORD_AND_EMAIL_SAME]: "Password and email can not be the same!",
+	[ErrorMessage.BAD_RESET_KEY]: "The reset key you provided is invalid.",
+	[ErrorMessage.BAD_UUID]: "{value} is not a valid uuid",
+	[ErrorMessage.EXPIRED_RESET_KEY]: "This password reset link has expired."
 }

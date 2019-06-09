@@ -9,5 +9,8 @@ export default {
 	"actions.resetEmailSent": `
 		An email with instructions on how to reset your password has been sent to
 		{email}.
+	`,
+	"actions.passwordIsReset": `
+		Your password has been successfully reset.
 	`
 }

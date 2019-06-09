@@ -16,5 +16,8 @@ export enum ErrorMessage {
 	UNAUTHORIZED = "error.unauthorized",
 	INTERNAL_SERVER_ERROR = "error.internalServerError",
 	NOT_SET = "error.notSet",
-	PASSWORD_AND_EMAIL_SAME = "error.passwordAndEmailSame"
+	PASSWORD_AND_EMAIL_SAME = "error.passwordAndEmailSame",
+	BAD_RESET_KEY = "error.badResetKey",
+	EXPIRED_RESET_KEY = "error.expiredResetKey",
+	BAD_UUID = "error.badUUID"
 }

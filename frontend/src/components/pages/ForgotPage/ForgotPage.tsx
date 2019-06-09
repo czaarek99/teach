@@ -86,7 +86,7 @@ class ForgotPage extends React.Component<
 		}
 
 		return (
-			<AuthenticationTemplate title={simpleFormat(this, "acitons.forgotPassword")}>
+			<AuthenticationTemplate title={simpleFormat(this, "actions.forgotPassword")}>
 				<CustomTextField disabled={isDisabled}
 					type="email"
 					maxLength={EMAIL_MAX_LENGTH}
