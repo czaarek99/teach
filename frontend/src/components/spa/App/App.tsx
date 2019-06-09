@@ -3,7 +3,7 @@ import React from 'react';
 import { IAppController } from '../../../interfaces/controllers/IAppController';
 import { observer, inject } from 'mobx-react';
 import { Routes } from '../../../interfaces/Routes';
-import { LoginPage, RegistrationPage, ForgotPage, ResetPasswordPage } from '../../pages';
+import { LoginPage, RegistrationPage, ForgotPage, ResetPasswordPage, BrowsePage, HomePage } from '../../pages';
 import { IRoutingStoreProps } from '../../../interfaces/props/IRoutingStoreProps';
 
 interface IAppProps {
@@ -11,6 +11,10 @@ interface IAppProps {
 }
 
 type AllProps = IAppProps & IRoutingStoreProps;
+
+interface IPages {
+	[key: string]: () => React.ReactNode
+}
 
 @inject("routingStore")
 @observer
@@ -23,28 +27,29 @@ class App extends React.Component<IAppProps> {
 			routingStore
 		} = this.props as AllProps;
 
+		const pages : IPages = {
+			[Routes.LOGIN]: () =>
+				<LoginPage controller={controller.loginPageController} />,
+			[Routes.REGISTRATION]: () =>
+				<RegistrationPage controller={controller.registrationPageController} />,
+			[Routes.FORGOT_PASSWORD]: () =>
+				<ForgotPage controller={controller.forgotPageController} />,
+			[Routes.RESET_PASSWORD]: () =>
+				<ResetPasswordPage controller={controller.resetPasswordPageController}/>,
+			[Routes.BROWSE]: () =>
+				<BrowsePage />,
+			[Routes.HOME]: () =>
+				<HomePage />
+		};
+
 		const pathName = routingStore.location.pathname;
-		let page = null;
+		const page = pages[pathName];
 
-		if(pathName === Routes.LOGIN) {
-			page = (
-				<LoginPage controller={controller.loginPageController} />
-			)
-		} else if(pathName === Routes.REGISTRATION) {
-			page = (
-				<RegistrationPage controller={controller.registrationPageController} />
-			)
-		} else if(pathName === Routes.FORGOT_PASSWORD) {
-			page = (
-				<ForgotPage controller={controller.forgotPageController} />
-			)
-		} else if(pathName === Routes.RESET_PASSWORD) {
-			page = (
-				<ResetPasswordPage controller={controller.resetPasswordPageController}/>
-			)
+		if(page) {
+			return page();
+		} else {
+			return null;
 		}
-
-		return page;
 	}
 
 }

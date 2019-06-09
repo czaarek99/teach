@@ -3,7 +3,8 @@ export enum Routes {
 	REGISTRATION = "/auth/register",
 	FORGOT_PASSWORD = "/auth/forgot",
 	RESET_PASSWORD = "/auth/reset",
-	BROWSE = "/browse"
+	BROWSE = "/browse",
+	HOME = "/"
 }
 
-export const DEFAULT_ROUTE = Routes.BROWSE;
+export const DEFAULT_ROUTE = Routes.HOME;
