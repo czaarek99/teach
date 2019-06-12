@@ -3,12 +3,13 @@ import * as bcrypt from "bcrypt";
 
 import { Joi } from "koa-joi-router";
 import { User } from "../database/models/User";
-import { CustomContext } from "../Server";
+import { CustomContext, IRedisSession, SESSION_COOKIE_NAME } from "../Server";
 import { addDays } from "date-fns";
 import { Address } from "../database/models/Address";
 import { PasswordReset } from "../database/models/PasswordReset";
 import { v4 } from "uuid";
 import { isBefore, subDays } from "date-fns";
+import { randomBytes } from "crypto";
 
 import {
 	HttpError,
@@ -50,6 +51,17 @@ const PASSWORD_VALIDATOR = Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MA
 
 async function hashPassword(password: string) : Promise<string> {
 	return await bcrypt.hash(password, SALT_ROUNDS);
+}
+
+async function logIn(context: CustomContext, userId: number) : Promise<void> {
+	const sessionId = await randomBytes(128).toString("hex");
+
+	await context.state.redisClient.setJSONObject<IRedisSession>(sessionId, {
+		userId,
+		updateDate: new Date().getTime()
+	});
+
+	context.cookies.set(SESSION_COOKIE_NAME, sessionId);
 }
 
 function validateEmail(context: CustomContext, email: string) : boolean {
@@ -155,7 +167,8 @@ router.post("/register", {
 		userId: user.id
 	});
 
-	context.session.userId = user.id;
+	await logIn(context, user.id);
+
 	context.status = 200;
 });
 
@@ -197,7 +210,9 @@ router.post("/login", {
 		userId: user.id
 	});
 
-	context.session.userId = user.id;
+
+	await logIn(context, user.id);
+
 	context.status = 200;
 });
 

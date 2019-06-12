@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 import { config } from "./config";
-import { Logger } from "server-lib";
+import { Logger, RedisClient } from "server-lib";
 
 export class Server {
 

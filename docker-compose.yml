@@ -1,0 +1,81 @@
+version: "3.7"
+
+services:
+  database:
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: teach
+      MYSQL_USER: teacher
+      MYSQL_PASSWORD: test
+  redis_db:
+    image: redislabs/rejson
+    restart: always
+    ports:
+      - 6379:6379
+  libraries:
+    image: node:12.4.0
+    working_dir: /libraries
+    command: sh ./watch.sh
+    volumes:
+      - ./libraries:/libraries
+  api:
+    image: node:12.4.0
+    working_dir: /app
+    command: npm run watch
+    depends_on:
+      - database
+      - redis_db
+      - libraries
+    expose:
+      - 5000
+    volumes:
+      - ./api:/app
+      - ./libraries/common-library:/app/node_modules/common-library
+      - ./libraries/server-lib:/app/node_modules/server-lib
+    environment:
+      NODE_ENV: development
+      DATABASE_USER: teacher
+      DATABASE_NAME: teach
+      DATABASE_HOST: database
+      DATABASE_PORT: 3306
+      DATABASE_PASSWORD: test
+      SERVER_PORT: 5000
+      APPLICATION_KEYS: sjdflku84939ejdeiofe93
+      SES_KEY: test
+      SES_SECRET: test
+      RECAPTCHA_SECRET: 6LfR7g8TAAAAAIx0qNIwowCKANmn2XA6HG2x-vUQ
+      FORCE_DROP_DATABASE: "true"
+      REDIS_HOST: redis_db
+      REDIS_PORT: 6379
+      REDIS_DATABASE: 0
+  image-service:
+    image: node:12.4.0
+    working_dir: /services/image-service
+    command: npm run watch
+    volumes:
+      - ./services/image-service:/app
+      - ./services/image-service/images:/images
+      - ./libraries/common-library:/app/node_modules/common-library
+      - ./libraries/server-lib:/app/node_modules/server-lib
+    depends_on:
+      - redis_db
+      - libraries
+    ports:
+      - 6000:6000
+  frontend:
+    image: node:12.4.0
+    working_dir: /frontend
+    command: npm run start
+    volumes:
+      - ./frontend:/frontend
+      - ./libraries/common-library:/frontend/node_modules/common-library
+    depends_on:
+      - api
+    ports:
+      - 3000:80
+      - 35729:35729
+

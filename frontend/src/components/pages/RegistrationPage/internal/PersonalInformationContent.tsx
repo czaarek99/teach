@@ -39,7 +39,7 @@ class PersonalInformationContent extends React.Component<
 
 		return (
 			<Box>
-				<Box marginBottom={margin}
+				<Box mb={margin}
 					display="flex"
 					justifyContent="center">
 
@@ -49,7 +49,7 @@ class PersonalInformationContent extends React.Component<
 					</Typography>
 				</Box>
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						value={controller.registrationModel.firstName}
 						minLength={FIRST_NAME_MIN_LENGTH}
@@ -69,7 +69,7 @@ class PersonalInformationContent extends React.Component<
 
 				</Box>
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						value={controller.registrationModel.lastName}
 						minLength={LAST_NAME_MIN_LENGTH}
@@ -89,7 +89,7 @@ class PersonalInformationContent extends React.Component<
 
 				</Box>
 
-				<Box marginBottom={margin}
+				<Box mb={margin}
 					display="flex"
 					justifyContent="center">
 

@@ -2,9 +2,9 @@
 	"compilerOptions": {
 		"target": "es5",
 		"lib": [
-		"dom",
-		"dom.iterable",
-		"esnext"
+			"dom",
+			"dom.iterable",
+			"esnext"
 		],
 		"allowJs": true,
 		"skipLibCheck": true,
@@ -22,7 +22,6 @@
 		"isolatedModules": true
 	},
 	"include": [
-		"src",
-		"../common-library/src/interfaces/ErrorMessage.ts", "../common-library/src/translations/en"
+		"src"
 	]
 }

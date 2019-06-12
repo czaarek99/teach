@@ -3,12 +3,21 @@ export const config = {
 	databaseUser: process.env.DATABASE_USER,
 	databasePassword: process.env.DATABASE_PASSWORD,
 	databaseHost: process.env.DATABASE_HOST,
-	serverPort: parseInt(process.env.SERVER_PORT),
+	databasePort: parseInt(process.env.DATABASE_PORT),
+	forceDropDatabse: process.env.FORCE_DROP_DATABASE === "true",
+
 	isDevelopment: process.env.NODE_ENV === "development",
 	isProduction: process.env.NODE_ENV === "production",
-	applicationKeys: process.env.APPLICATION_KEYS.split(","),
+
 	sesKey: process.env.SES_KEY,
 	sesSecret: process.env.SES_SECRET,
+
+	redisHost: process.env.REDIS_HOST,
+	redisPort: parseInt(process.env.REDIS_PORT),
+	redisPassword: process.env.REDIS_PASSWORD,
+	redisDatabase: parseInt(process.env.REDIS_DATABASE),
+
 	recaptchaSecret: process.env.RECAPTCHA_SECRET,
-	forceDropDatabse: process.env.FORCE_DROP_DATABASE === "true"
+	serverPort: parseInt(process.env.SERVER_PORT),
+	applicationKeys: process.env.APPLICATION_KEYS.split(","),
 }

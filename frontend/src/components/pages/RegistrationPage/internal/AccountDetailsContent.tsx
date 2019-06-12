@@ -40,7 +40,7 @@ class AccountDetailsContent extends React.Component<
 
 		return (
 			<Box>
-				<Box marginBottom={margin}
+				<Box mb={margin}
 					display="flex"
 					justifyContent="center">
 
@@ -50,7 +50,7 @@ class AccountDetailsContent extends React.Component<
 					</Typography>
 				</Box>
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						type="email"
 						value={controller.registrationModel.email}
@@ -70,7 +70,7 @@ class AccountDetailsContent extends React.Component<
 					/>
 				</Box>
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						type="tel"
 						value={controller.registrationModel.phoneNumber}
@@ -87,7 +87,7 @@ class AccountDetailsContent extends React.Component<
 					/>
 				</Box>
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						type="password"
 						value={controller.registrationModel.password}
@@ -107,7 +107,7 @@ class AccountDetailsContent extends React.Component<
 					/>
 				</Box>
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						type="password"
 						value={controller.registrationModel.repeatPassword}

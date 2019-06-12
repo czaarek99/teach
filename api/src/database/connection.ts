@@ -11,6 +11,7 @@ export function connectToDatabase() : Sequelize {
 		username: config.databaseUser,
 		password: config.databasePassword,
 		host: config.databaseHost,
+		port: config.databasePort,
 		dialect: "mariadb",
 	});
 

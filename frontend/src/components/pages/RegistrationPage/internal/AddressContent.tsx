@@ -76,7 +76,7 @@ class AddressContent extends React.Component<
 
 		return (
 			<Box>
-				<Box marginBottom={margin}
+				<Box mb={margin}
 					display="flex"
 					justifyContent="center">
 
@@ -86,7 +86,7 @@ class AddressContent extends React.Component<
 					</Typography>
 				</Box>
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						value={controller.addressModel.street}
 						minLength={STREET_MIN_LENGTH}
@@ -105,7 +105,7 @@ class AddressContent extends React.Component<
 					/>
 				</Box>
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						value={controller.addressModel.city}
 						minLength={CITY_MIN_LENGTH}
@@ -125,7 +125,7 @@ class AddressContent extends React.Component<
 				</Box>
 
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						value={controller.addressModel.zipCode}
 						minLength={ZIP_CODE_MIN_LENGTH}
@@ -144,7 +144,7 @@ class AddressContent extends React.Component<
 					/>
 				</Box>
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						value={controller.addressModel.state}
 						maxLength={STATE_MAX_LENGTH}
@@ -160,7 +160,7 @@ class AddressContent extends React.Component<
 				</Box>
 
 
-				<Box marginBottom={margin}>
+				<Box mb={margin}>
 					<FormControl fullWidth={true}
 						variant="outlined">
 

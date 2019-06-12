@@ -12,9 +12,11 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"ioredis": "^4.10.0",
 		"json-stringify-safe": "^5.0.1"
 	},
 	"devDependencies": {
+		"@types/ioredis": "^4.0.12",
 		"@types/json-stringify-safe": "^5.0.0",
 		"typescript": "^3.5.1"
 	}
