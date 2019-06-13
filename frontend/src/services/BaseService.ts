@@ -6,7 +6,10 @@ export class BaseService {
 	protected readonly axios: AxiosInstance;
 
 	constructor() {
-		this.axios = Axios.create();
+		this.axios = Axios.create({
+			baseURL: `http://api.${window.location.host}`
+		});
+
 		this.axios.interceptors.response.use((response) => {
 			return response;
 		}, (error: AxiosError) => {

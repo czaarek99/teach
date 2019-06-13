@@ -7,6 +7,6 @@
 		"outDir": "dist",
 	},
 	"include": [
-		"src", "../libraries/server-lib/src/RedisClient.ts"
+		"src"
 	]
 }

@@ -5,8 +5,9 @@
 		"sourceMap": true,
 		"outDir": "dist",
 		"removeComments": true,
-		"strict": true,
 		"moduleResolution": "node",
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true
 	},
 	"include": [
 		"src"

@@ -5,3 +5,5 @@ dist/
 start.bat
 start.sh
 package-lock.json
+
+*.vim

@@ -22,16 +22,28 @@ services:
     command: sh ./watch.sh
     volumes:
       - ./libraries:/libraries
+  proxy:
+    image: traefik
+    command: --docker
+    ports:
+      - 80:80
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   api:
     image: node:12.4.0
     working_dir: /app
     command: npm run watch
+    tty: true
+    labels:
+      - traefik.enabled=true
+      - traefik.backend=api
+      - traefik.frontend.rule=Host:api.teachelly.com
+      - traefik.port=5000
     depends_on:
       - database
       - redis_db
       - libraries
-    expose:
-      - 5000
     volumes:
       - ./api:/app
       - ./libraries/common-library:/app/node_modules/common-library
@@ -54,8 +66,16 @@ services:
       REDIS_DATABASE: 0
   image-service:
     image: node:12.4.0
-    working_dir: /services/image-service
+    working_dir: /app
     command: npm run watch
+    tty: true
+    environment:
+      SERVER_PORT: 6000
+    labels:
+      - traefik.enabled=true
+      - traefik.backend=image-service
+      - traefik.frontend.rule=Host:images.teachelly.com
+      - traefik.port=6000
     volumes:
       - ./services/image-service:/app
       - ./services/image-service/images:/images
@@ -64,18 +84,19 @@ services:
     depends_on:
       - redis_db
       - libraries
-    ports:
-      - 6000:6000
   frontend:
     image: node:12.4.0
     working_dir: /frontend
     command: npm run start
+    tty: true
+    labels:
+      - traefik.frontend1.enabled=true
+      - traefik.frontend1.backend=frontend
+      - traefik.frontend1.frontend.rule=Host:teachelly.com
+      - traefik.frontend1.port=3000
     volumes:
       - ./frontend:/frontend
       - ./libraries/common-library:/frontend/node_modules/common-library
     depends_on:
       - api
-    ports:
-      - 3000:80
-      - 35729:35729
-
+      - image-service

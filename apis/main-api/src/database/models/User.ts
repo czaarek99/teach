@@ -1,5 +1,6 @@
 import { Address } from "./Address";
 import { PasswordReset } from "./PasswordReset";
+import { Ad } from "./Ad";
 
 import {
 	Table,
@@ -22,7 +23,6 @@ import {
 	PHONE_NUMBER_MAX_LENGTH,
 	UUID_V4_LENGTH
 } from "common-library";
-import { Ad } from "./Ad";
 
 const PASSWORD_HASH_MAX_LENGTH = 60;
 
