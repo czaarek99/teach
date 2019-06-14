@@ -3,13 +3,14 @@ import * as bcrypt from "bcrypt";
 
 import { Joi } from "koa-joi-router";
 import { User } from "../database/models/User";
-import { CustomContext, IRedisSession, SESSION_COOKIE_NAME } from "../Server";
+import { CustomContext } from "../Server";
 import { addDays } from "date-fns";
 import { Address } from "../database/models/Address";
 import { PasswordReset } from "../database/models/PasswordReset";
 import { v4 } from "uuid";
 import { isBefore, subDays } from "date-fns";
 import { randomBytes } from "crypto";
+import { IRedisSession, getNewExpirationDate, throwApiError } from "server-lib";
 
 import {
 	HttpError,
@@ -35,6 +36,7 @@ import {
 	IForgot,
 	IResetPassword,
 	PHONE_NUMBER_MAX_LENGTH,
+	SESSION_COOKIE_NAME,
 } from "common-library";
 
 import {
@@ -42,6 +44,7 @@ import {
 	renderTemplate,
 	PASSWORD_RESET_HELP_TEMPLATE
 } from "../email/templates/templates";
+import { verifyRecaptcha } from "../util/verifyRecaptcha";
 
 const router = Router();
 
@@ -58,7 +61,7 @@ async function logIn(context: CustomContext, userId: number) : Promise<void> {
 
 	await context.state.redisClient.setJSONObject<IRedisSession>(sessionId, {
 		userId,
-		updateDate: new Date().getTime()
+		expirationDate: getNewExpirationDate()
 	});
 
 	context.cookies.set(SESSION_COOKIE_NAME, sessionId);
@@ -68,7 +71,7 @@ function validateEmail(context: CustomContext, email: string) : boolean {
 	const emailValidation = Joi.string().email().validate(email);
 
 	if(emailValidation.error !== null) {
-		context.state.throwApiError(new HttpError(
+		throwApiError(context, new HttpError(
 			400,
 			ErrorMessage.INVALID_EMAIL,
 			context.state.requestId)
@@ -105,7 +108,7 @@ router.post("/register", {
 
 	const body = context.request.body;
 
-	const captchaResult = await context.state.verifyRecaptcha(body.captcha);
+	const captchaResult = await verifyRecaptcha(context, body.captcha);
 	if(!captchaResult) {
 		return;
 	}
@@ -115,7 +118,7 @@ router.post("/register", {
 	}
 
 	if(body.password === body.email) {
-		context.state.throwApiError(new HttpError(
+		throwApiError(context, new HttpError(
 				400,
 				ErrorMessage.PASSWORD_AND_EMAIL_SAME,
 				context.state.requestId
@@ -131,7 +134,7 @@ router.post("/register", {
 	});
 
 	if(oldUser) {
-		context.state.throwApiError(new HttpError(
+		throwApiError(context, new HttpError(
 				409,
 				ErrorMessage.EMAIL_EXISTS,
 				context.state.requestId
@@ -173,7 +176,7 @@ router.post("/register", {
 });
 
 function throwNoSuchUserError(context: CustomContext) {
-	context.state.throwApiError(new HttpError(404, ErrorMessage.USER_NOT_FOUND, context.state.requestId));
+	throwApiError(context, new HttpError(404, ErrorMessage.USER_NOT_FOUND, context.state.requestId));
 }
 
 router.post("/login", {
@@ -232,7 +235,7 @@ router.post("/forgot", {
 		return;
 	}
 
-	const captchaResult = await context.state.verifyRecaptcha(body.captcha);
+	const captchaResult = await verifyRecaptcha(context, body.captcha);
 	if(!captchaResult) {
 		return;
 	}
@@ -290,7 +293,7 @@ router.post("/reset", {
 	});
 
 	if(!passwordReset) {
-		context.state.throwApiError(new HttpError(400, ErrorMessage.BAD_RESET_KEY));
+		throwApiError(context, new HttpError(400, ErrorMessage.BAD_RESET_KEY));
 		return;
 	}
 
@@ -304,7 +307,7 @@ router.post("/reset", {
 	const isOld = isBefore(passwordReset.createdAt, oneDayAgo);
 
 	if(isOld) {
-		context.state.throwApiError(new HttpError(400, ErrorMessage.EXPIRED_RESET_KEY));
+		throwApiError(context, new HttpError(400, ErrorMessage.EXPIRED_RESET_KEY));
 		return;
 	}
 

@@ -3,7 +3,7 @@ import * as bodyParser from "koa-body";
 import * as serve from "koa-static";
 
 import { config } from "./config";
-import { Logger, RedisClient } from "server-lib";
+import { Logger, RedisClient, IApiState, requestIdMiddleware, loggerMiddleware, getSessionMiddleware, authenticationMiddleware } from "server-lib";
 import { connectToDatabase } from "./database/connection";
 import { router } from "./router";
 import { SESSION_COOKIE_NAME } from "common-library";
@@ -14,9 +14,8 @@ export interface IRedisSession {
 	expirationDate: number
 }
 
-interface IState {
+interface IState extends IApiState {
 	redisClient: RedisClient
-	userId: number
 }
 
 export type CustomContext = Koa.ParameterizedContext<IState>
@@ -40,6 +39,10 @@ export class Server {
 			multipart: true
 		}))
 
+		app.use(requestIdMiddleware);
+		app.use(loggerMiddleware);
+		app.use(getSessionMiddleware(this.redisClient));
+
 		app.use(async (context: CustomContext, next: Function) => {
 			context.state.redisClient = this.redisClient;
 
@@ -53,33 +56,7 @@ export class Server {
 			port: config.serverPort
 		});
 
-		app.use((async (context: CustomContext, next: Function) => {
-			const sessionId = context.cookies.get(SESSION_COOKIE_NAME)
-
-			if(!sessionId) {
-				context.status = 401;
-				return;
-			}
-
-			const session = await this.redisClient.getJSON<IRedisSession>(sessionId);
-
-			if(!session) {
-				context.status = 401;
-				return;
-			}
-
-			const now = new Date();
-			const expirationDate = new Date(session.expirationDate);
-
-			if(isBefore(expirationDate, now)) {
-				context.status = 401;
-				return;
-			}
-
-			context.state.userId = session.userId;
-
-			await next();
-		}));
+		app.use(authenticationMiddleware);
 
 		app.use(router.middleware());
 

@@ -19,5 +19,6 @@ export enum ErrorMessage {
 	PASSWORD_AND_EMAIL_SAME = "error.passwordAndEmailSame",
 	BAD_RESET_KEY = "error.badResetKey",
 	EXPIRED_RESET_KEY = "error.expiredResetKey",
-	BAD_UUID = "error.badUUID"
+	BAD_UUID = "error.badUUID",
+	INVALID_IMAGE = "error.invalidImage"
 }

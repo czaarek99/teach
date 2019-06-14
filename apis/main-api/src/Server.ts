@@ -6,36 +6,27 @@ import * as userAgent from "koa-useragent";
 import auth from "./routes/auth";
 
 import { config } from "./config";
-import { v4 } from "uuid";
-import { HttpError, ErrorMessage, SESSION_COOKIE_NAME } from "common-library";
+import { HttpError, ErrorMessage } from "common-library";
 import { EmailClient } from "./email/EmailClient";
-import { verifyRecaptcha } from "./util/verifyRecaptcha";
 import { connectToDatabase } from "./database/connection";
-import { Logger, RedisClient } from "server-lib";
-import { addDays, isAfter } from "date-fns";
 
-interface ISession {
-	userId: number
-}
+import { 
+	Logger, 
+	RedisClient, 
+	requestIdMiddleware, 
+	getSessionMiddleware, 
+	authenticationMiddleware, 
+	loggerMiddleware, 
+	IApiState,
+	throwApiError
+} from "server-lib";
 
-interface IState {
-	requestId: string
+interface IState extends IApiState {
 	emailClient: EmailClient
 	redisClient: RedisClient
-	logger: Logger
-	session: ISession
-	throwApiError: (error: HttpError) => void
-	verifyRecaptcha: (captcha: string) => Promise<boolean>
-}
-
-export interface IRedisSession {
-	userId: number
-	expirationDate: number
 }
 
 export type CustomContext = Koa.ParameterizedContext<IState>;
-
-const DAYS_FOR_SESSION_TO_EXPIRE = 7;
 
 export class Server {
 
@@ -56,73 +47,9 @@ export class Server {
 		}
 	}
 
-	private attachSession = async(context: CustomContext, next: Function) : Promise<void> => {
-		const sessionId = context.cookies.get(SESSION_COOKIE_NAME);
-
-		if(sessionId) {
-			const session = await this.redisClient.getJSON<IRedisSession>(sessionId);
-
-			if(session) {
-				const expirationDate = new Date(session.expirationDate);
-				const now = new Date();
-
-				if(isAfter(now, expirationDate)) {
-					await this.redisClient.deleteJSONObject(sessionId);
-				} else {
-					const newExpirationDate = addDays(now, DAYS_FOR_SESSION_TO_EXPIRE);
-
-					await this.redisClient.setJSONValue<IRedisSession>(
-						sessionId, 
-						"expirationDate",
-						newExpirationDate
-					);
-
-					context.state.session = {
-						userId: session.userId
-					}
-				}
-
-
-			}
-		} 
-
-		await next();
-	
-	}
-
 	private attachState = async (context: CustomContext, next: Function) : Promise<void> => {
-		context.state.requestId = v4();
 		context.state.emailClient = this.emailClient;
 		context.state.redisClient = this.redisClient;
-
-		const loggerData = {
-			requestId: context.state.requestId,
-			userId: undefined
-		};
-
-		if(context.state.session) {
-			loggerData.userId = context.state.session.userId;
-		}
-
-		context.state.logger = new Logger("api-request", loggerData);
-
-		context.state.throwApiError = (error: HttpError) : void => {
-			context.body = error.toJSON();
-			context.status = error.statusCode;
-
-			context.state.logger.info("Api error", error.toJSON());
-		}
-
-		context.state.verifyRecaptcha = async (captcha: string) : Promise<boolean> => {
-			const success = await verifyRecaptcha(captcha, context.ip);
-
-			if(success) {
-				return true;
-			} else {
-				context.state.throwApiError(new HttpError(400, ErrorMessage.BAD_CAPTCHA));
-				return false;
-			}
-		}
 
 		await next();
 	}
@@ -140,7 +67,7 @@ export class Server {
 				true
 			);
 
-			context.state.throwApiError(httpError);
+			throwApiError(context, httpError);
 		}
 	}
 
@@ -170,18 +97,19 @@ export class Server {
 
 		app.use(bodyParser());
 		app.use(userAgent);
-		app.use(this.attachSession);
+		app.use(requestIdMiddleware);
+		app.use(loggerMiddleware);
+		app.use(getSessionMiddleware(this.redisClient));
+
 		app.use(this.attachState);
 		app.use(this.errorHandler);
-		app.use(this.loggerMiddleware);
-
 
 		const openRouter = new Router();
 		openRouter.use("/auth", auth.middleware());
 		app.use(openRouter.routes());
 
 		const protectedRouter = new Router();
-		protectedRouter.use(this.authenticate);
+		protectedRouter.use(authenticationMiddleware);
 		app.use(protectedRouter.routes());
 
 		this.globalLogger.info("Starting server", {
