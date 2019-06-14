@@ -1,12 +1,18 @@
 import * as Koa from "koa";
+import * as bodyParser from "koa-body";
 import * as serve from "koa-static";
 
 import { config } from "./config";
 import { Logger, RedisClient } from "server-lib";
 import { connectToDatabase } from "./database/connection";
 
+interface IRedisSession {
+	
+}
+
 interface IState {
 	redisClient: RedisClient
+	userId: number
 }
 
 export type CustomContext = Koa.ParameterizedContext<IState>
@@ -26,10 +32,18 @@ export class Server {
 
 		const app = new Koa();
 
+		app.use(bodyParser({
+			multipart: true
+		}))
+
 		app.use(async (context: CustomContext, next: Function) => {
 			context.state.redisClient = this.redisClient;
 
 			await next();
+		});
+
+		app.use(async (context: CustomContext, next: Function) => {
+			this.redisClient.getJSON
 		});
 
 		app.use(serve(config.staticImagesPath));

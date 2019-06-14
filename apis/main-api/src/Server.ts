@@ -7,12 +7,12 @@ import auth from "./routes/auth";
 
 import { config } from "./config";
 import { v4 } from "uuid";
-import { HttpError, ErrorMessage } from "common-library";
+import { HttpError, ErrorMessage, SESSION_COOKIE_NAME } from "common-library";
 import { EmailClient } from "./email/EmailClient";
 import { verifyRecaptcha } from "./util/verifyRecaptcha";
 import { connectToDatabase } from "./database/connection";
 import { Logger, RedisClient } from "server-lib";
-import { subDays, isBefore } from "date-fns";
+import { addDays, isAfter } from "date-fns";
 
 interface ISession {
 	userId: number
@@ -30,13 +30,12 @@ interface IState {
 
 export interface IRedisSession {
 	userId: number
-	updateDate: number
+	expirationDate: number
 }
 
 export type CustomContext = Koa.ParameterizedContext<IState>;
 
 const DAYS_FOR_SESSION_TO_EXPIRE = 7;
-export const SESSION_COOKIE_NAME  = "sessionId";
 
 export class Server {
 
@@ -64,19 +63,18 @@ export class Server {
 			const session = await this.redisClient.getJSON<IRedisSession>(sessionId);
 
 			if(session) {
-				const updateDate = new Date(session.updateDate);
-
+				const expirationDate = new Date(session.expirationDate);
 				const now = new Date();
 
-				const lastAlllowedDate = subDays(now, DAYS_FOR_SESSION_TO_EXPIRE);
-
-				if(isBefore(updateDate, lastAlllowedDate)) {
+				if(isAfter(expirationDate, now)) {
 					await this.redisClient.deleteJSONObject(sessionId);
 				} else {
+					const newExpirationDate = addDays(now, DAYS_FOR_SESSION_TO_EXPIRE);
+
 					await this.redisClient.setJSONValue<IRedisSession>(
 						sessionId, 
-						"updateDate", 
-						now.getTime()
+						"expirationDate",
+						newExpirationDate
 					);
 
 					context.state.session = {

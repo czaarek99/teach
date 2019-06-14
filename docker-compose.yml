@@ -11,6 +11,16 @@ services:
       MYSQL_DATABASE: teach
       MYSQL_USER: teacher
       MYSQL_PASSWORD: test
+  image-database:
+    image: mariadb
+    restart: always
+    ports:
+      - 3306:3307
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: images
+      MYSQL_USER: artist
+      MYSQL_PASSWORD: test
   redis_db:
     image: redislabs/rejson
     restart: always
@@ -30,7 +40,7 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  api:
+  main-api:
     image: node:12.4.0
     working_dir: /app
     command: npm run watch
@@ -45,7 +55,7 @@ services:
       - redis_db
       - libraries
     volumes:
-      - ./api:/app
+      - ./apis/main--api:/app
       - ./libraries/common-library:/app/node_modules/common-library
       - ./libraries/server-lib:/app/node_modules/server-lib
     environment:
@@ -64,21 +74,33 @@ services:
       REDIS_HOST: redis_db
       REDIS_PORT: 6379
       REDIS_DATABASE: 0
-  image-service:
+  image-api:
     image: node:12.4.0
     working_dir: /app
     command: npm run watch
     tty: true
     environment:
       SERVER_PORT: 6000
+      NODE_ENV: development
+      USER_IMAGES_PATH: /images/generated 
+      STATIC_IMAGES_PATH: /images/static
+      DATABASE_NAME: images
+      DATABASE_USER: artist
+      DATABASE_HOST: image-database
+      DATABASE_PASSWORD: test
+      DATABASE_PORT: 3306
+      FORCE_DROP_DATABASE: "true"
+      REDIS_HOSSST: redis_db
+      REDIS_PORT: 6379
+      REDIS_DATABASE: 0
     labels:
       - traefik.enabled=true
       - traefik.backend=image-service
       - traefik.frontend.rule=Host:images.teachelly.com
       - traefik.port=6000
     volumes:
-      - ./services/image-service:/app
-      - ./services/image-service/images:/images
+      - ./apis/image-api:/app
+      - ./apis/image-api/images:/images
       - ./libraries/common-library:/app/node_modules/common-library
       - ./libraries/server-lib:/app/node_modules/server-lib
     depends_on:
