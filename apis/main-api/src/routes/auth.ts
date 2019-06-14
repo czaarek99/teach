@@ -72,9 +72,10 @@ function validateEmail(context: CustomContext, email: string) : boolean {
 
 	if(emailValidation.error !== null) {
 		throwApiError(context, new HttpError(
-			400,
-			ErrorMessage.INVALID_EMAIL,
-			context.state.requestId)
+				400,
+				ErrorMessage.INVALID_EMAIL,
+				context.state.requestId
+			)
 		);
 
 		return false;
