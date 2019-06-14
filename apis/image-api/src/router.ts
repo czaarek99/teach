@@ -7,7 +7,7 @@ import { rename, unlink } from "fs-extra";
 import { v4 } from "uuid";
 import { UserImage } from "./database/models/UserImage";
 import { throwApiError } from "server-lib";
-import { HttpError, ErrorMessage } from "../../../libraries/common-library/dist";
+import { HttpError, ErrorMessage } from "common-library";
 
 export const router = new Router();
 

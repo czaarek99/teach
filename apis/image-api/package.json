@@ -5,7 +5,7 @@
 	"scripts": {
 		"start": "node dist/index.js",
 		"watch": "nodemon -e ts -w ./src -x npm run watch:serve",
-		"watch:serve": "node --inspect -r ts-node/register src/index.ts",
+		"watch:serve": "node --inspect=9230 -r ts-node/register src/index.ts",
 		"build": "tsc"
 	},
 	"keywords": [],
@@ -29,6 +29,8 @@
 		"koa-body": "^4.1.0",
 		"koa-router": "^7.4.0",
 		"koa-static": "^5.0.0",
+		"mariadb": "^2.0.5",
+		"reflect-metadata": "^0.1.13",
 		"sequelize": "^5.8.9",
 		"sequelize-typescript": "^0.6.11",
 		"server-lib": "file:../../libraries/server-lib",

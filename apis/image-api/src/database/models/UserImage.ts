@@ -10,8 +10,9 @@ import {
 @Table
 export class UserImage extends Model<UserImage> {
 
-	@AllowNull(false)
 	@Unique
+	@AllowNull(false)
+	@Column
 	public imageFileName: string;
 
 	@AllowNull(false)
