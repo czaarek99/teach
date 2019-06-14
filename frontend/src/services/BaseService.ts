@@ -7,7 +7,7 @@ export class BaseService {
 
 	constructor() {
 		this.axios = Axios.create({
-			baseURL: `http://api.${window.location.host}`
+			baseURL: `http://api.${window.location.host}:5000`
 		});
 
 		this.axios.interceptors.response.use((response) => {

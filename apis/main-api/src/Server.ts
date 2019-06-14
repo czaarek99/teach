@@ -66,7 +66,7 @@ export class Server {
 				const expirationDate = new Date(session.expirationDate);
 				const now = new Date();
 
-				if(isAfter(expirationDate, now)) {
+				if(isAfter(now, expirationDate)) {
 					await this.redisClient.deleteJSONObject(sessionId);
 				} else {
 					const newExpirationDate = addDays(now, DAYS_FOR_SESSION_TO_EXPIRE);

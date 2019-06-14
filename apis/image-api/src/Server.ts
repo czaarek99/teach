@@ -5,9 +5,13 @@ import * as serve from "koa-static";
 import { config } from "./config";
 import { Logger, RedisClient } from "server-lib";
 import { connectToDatabase } from "./database/connection";
+import { router } from "./router";
+import { SESSION_COOKIE_NAME } from "common-library";
+import { isBefore } from "date-fns";
 
-interface IRedisSession {
-	
+export interface IRedisSession {
+	userId: number
+	expirationDate: number
 }
 
 interface IState {
@@ -42,16 +46,42 @@ export class Server {
 			await next();
 		});
 
-		app.use(async (context: CustomContext, next: Function) => {
-			this.redisClient.getJSON
-		});
-
 		app.use(serve(config.staticImagesPath));
 		app.use(serve(config.userImagesPath));
 
 		this.logger.info("Starting server", {
 			port: config.serverPort
 		});
+
+		app.use((async (context: CustomContext, next: Function) => {
+			const sessionId = context.cookies.get(SESSION_COOKIE_NAME)
+
+			if(!sessionId) {
+				context.status = 401;
+				return;
+			}
+
+			const session = await this.redisClient.getJSON<IRedisSession>(sessionId);
+
+			if(!session) {
+				context.status = 401;
+				return;
+			}
+
+			const now = new Date();
+			const expirationDate = new Date(session.expirationDate);
+
+			if(isBefore(expirationDate, now)) {
+				context.status = 401;
+				return;
+			}
+
+			context.state.userId = session.userId;
+
+			await next();
+		}));
+
+		app.use(router.middleware());
 
 		app.listen(config.serverPort);
 	}
