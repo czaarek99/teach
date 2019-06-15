@@ -2,6 +2,7 @@ import * as Koa from "koa";
 import * as bodyParser from "koa-bodyparser";
 import * as Router from "koa-router";
 import * as userAgent from "koa-useragent";
+import * as cors from "@koa/cors";
 
 import auth from "./routes/auth";
 
@@ -18,15 +19,16 @@ import {
 	authenticationMiddleware, 
 	loggerMiddleware, 
 	IApiState,
-	throwApiError
-} from "server-lib";
+	getErrorHandler,
+	ApiContext
+} from "server-lib"; 
 
 interface IState extends IApiState {
 	emailClient: EmailClient
 	redisClient: RedisClient
 }
 
-export type CustomContext = Koa.ParameterizedContext<IState>;
+export type CustomContext = ApiContext<IState>;
 
 export class Server {
 
@@ -54,30 +56,6 @@ export class Server {
 		await next();
 	}
 
-	private errorHandler = async(context: CustomContext, next: Function) : Promise<void> => {
-		try {
-			await next();
-		} catch(error) {
-			this.globalLogger.error("Uncaught error", error);
-
-			const httpError = new HttpError(
-				500,
-				ErrorMessage.INTERNAL_SERVER_ERROR,
-				context.state.requestId,
-				true
-			);
-
-			throwApiError(context, httpError);
-		}
-	}
-
-	private loggerMiddleware = async (context: CustomContext, next: Function) : Promise<void> => {
-		const request = context.request;
-		context.state.logger.info(`${request.method} ${request.path}`)
-
-		await next();
-	}
-
 	private async startDatabase() : Promise<void> {
 		const connection = connectToDatabase();
 
@@ -95,14 +73,14 @@ export class Server {
 		const app = new Koa();
 		app.keys = config.applicationKeys;
 
+		app.use(cors());
 		app.use(bodyParser());
 		app.use(userAgent);
 		app.use(requestIdMiddleware);
+		app.use(getErrorHandler(this.globalLogger));
 		app.use(loggerMiddleware);
 		app.use(getSessionMiddleware(this.redisClient));
-
 		app.use(this.attachState);
-		app.use(this.errorHandler);
 
 		const openRouter = new Router();
 		openRouter.use("/auth", auth.middleware());

@@ -1,13 +1,12 @@
 import * as Koa from "koa";
 import * as bodyParser from "koa-body";
 import * as serve from "koa-static";
+import * as cors from "@koa/cors";
 
 import { config } from "./config";
-import { Logger, RedisClient, IApiState, requestIdMiddleware, loggerMiddleware, getSessionMiddleware, authenticationMiddleware } from "server-lib";
+import { Logger, RedisClient, IApiState, requestIdMiddleware, loggerMiddleware, getSessionMiddleware, authenticationMiddleware, getErrorHandler } from "server-lib";
 import { connectToDatabase } from "./database/connection";
 import { router } from "./router";
-import { SESSION_COOKIE_NAME } from "common-library";
-import { isBefore } from "date-fns";
 
 export interface IRedisSession {
 	userId: number
@@ -35,11 +34,14 @@ export class Server {
 
 		const app = new Koa();
 
+		app.use(cors());
+
 		app.use(bodyParser({
 			multipart: true
 		}))
 
 		app.use(requestIdMiddleware);
+		app.use(getErrorHandler(this.logger));
 		app.use(loggerMiddleware);
 		app.use(getSessionMiddleware(this.redisClient));
 

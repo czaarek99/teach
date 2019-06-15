@@ -65,6 +65,7 @@ async function logIn(context: CustomContext, userId: number) : Promise<void> {
 	});
 
 	context.cookies.set(SESSION_COOKIE_NAME, sessionId);
+	context.status = 200;
 }
 
 function validateEmail(context: CustomContext, email: string) : boolean {
@@ -172,8 +173,6 @@ router.post("/register", {
 	});
 
 	await logIn(context, user.id);
-
-	context.status = 200;
 });
 
 function throwNoSuchUserError(context: CustomContext) {
@@ -217,7 +216,6 @@ router.post("/login", {
 
 	await logIn(context, user.id);
 
-	context.status = 200;
 });
 
 router.post("/forgot", {

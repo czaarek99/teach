@@ -14,4 +14,5 @@ export async function loggerMiddleware(context: ApiContext, next: Function) : Pr
 	
 	context.state.logger = new Logger("api-request", loggerData);
 
+	await next();
 }

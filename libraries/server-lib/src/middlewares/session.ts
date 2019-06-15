@@ -3,7 +3,7 @@ import * as Koa from "koa";
 import { RedisClient } from "../RedisClient";
 import { SESSION_COOKIE_NAME } from "common-library"
 import { isAfter, addDays } from "date-fns";
-import { ApiContext } from "../interfaces";
+import { ApiContext, IApiState } from "../interfaces";
 
 export interface IRedisSession {
 	userId: number
@@ -16,7 +16,7 @@ export function getNewExpirationDate() : number {
 }
 
 
-export function getSessionMiddleware(redisClient: RedisClient) : Koa.Middleware<any> {
+export function getSessionMiddleware(redisClient: RedisClient) : Koa.Middleware<IApiState> {
 	return async (context: ApiContext, next: Function) => {
 		const sessionId = context.cookies.get(SESSION_COOKIE_NAME);
 
