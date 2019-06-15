@@ -12,9 +12,12 @@ import { observable, computed } from "mobx";
 import { Routes, DEFAULT_ROUTE } from "../interfaces/Routes";
 import { IResetPasswordPageController } from "../interfaces/controllers/pages/IResetPasswordPageController";
 import { ResetPasswordPageController } from "./pages/ResetPasswordPageController";
+import { IAdService } from "../interfaces/services/IAdService";
+import { AdService } from "../services/AdService";
 
 interface IServices {
 	authenticationService: IAuthenticationService
+	adService: IAdService
 }
 
 export class AppController implements IAppController {
@@ -36,7 +39,8 @@ export class AppController implements IAppController {
 		}
 
 		this.services = {
-			authenticationService: new AuthenticationService()
+			authenticationService: new AuthenticationService(),
+			adService: new AdService()
 		}
 	}
 

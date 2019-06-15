@@ -1,8 +1,9 @@
-import * as React from "react";
-
+import React from "react";
 import Truncate from "react-truncate";
+import Skeleton from "react-loading-skeleton";
 
 import { injectIntl, InjectedIntlProps } from "react-intl";
+import { IAdController } from "../../../interfaces/controllers/IAdController";
 import { getImageUrl } from "../../../util/imageAPI";
 
 import { 
@@ -18,25 +19,28 @@ import {
 	WithStyles
 } from "@material-ui/core";
 
+export const AD_MAX_WIDTH = 500;
+export const ESTIMATED_AD_HEIGHT = 350;
+
+const IMAGE_HEIGHT = 250;
+const MAX_DESCRIPTION_LINES = 8;
+
 const styles = (theme: Theme) => createStyles({
 
 	root: {
 		margin: 10,
-		maxWidth: 500
+		maxWidth: AD_MAX_WIDTH
 	},
 
 	image: {
-		height: 250
+		height: IMAGE_HEIGHT
 	},
 });
 
 interface IAdProps {
-	userImageFileName: string
-	adImageFileName: string
-	name: string
-	description: string
-	publicationDate: Date
+	controller: IAdController
 }
+
 
 export class Ad extends React.Component<
 	IAdProps & 
@@ -47,46 +51,79 @@ export class Ad extends React.Component<
 	public render() : React.ReactNode {
 
 		const {
-			publicationDate,
-			userImageFileName,
-			adImageFileName,
-			name,
-			description,
+			controller,
 			classes,
 			intl,
 		} = this.props;
 
-		const date = intl.formatDate(publicationDate, {
-			month: "long",	
-			day: "numeric",
-			year: "2-digit"
-		});
+		const model = controller.model;
 
-		const publishedLabel = intl.formatMessage({
-			id: "info.published",
-		}, {
-			date
-		});
+		let subHeader;
+		let description;
+		let avatar;
+		let image;
+
+		if(model === null) {
+			subHeader = (
+				<Skeleton />
+			);
+
+			description = (
+				<Skeleton count={MAX_DESCRIPTION_LINES} />
+			);
+
+			avatar = (
+				<Skeleton circle={true} 
+					height={30} 
+					width={30}/>
+			);
+
+			image = (
+				<Skeleton height={IMAGE_HEIGHT} />
+			);
+		} else {
+			const date = intl.formatDate(model.publicationDate, {
+				month: "long",	
+				day: "numeric",
+				year: "2-digit"
+			});
+
+			subHeader = intl.formatMessage({
+				id: "info.published",
+			}, {
+				date
+			});
+
+			description = (
+				<Truncate lines={8} 
+					trimWhitespace={true}>
+
+					{model.description}
+				</Truncate>
+			);
+
+			avatar = (
+				<Avatar src={getImageUrl(model.teacher.avatarFileName)}/>
+			);
+
+			image = (
+				<CardMedia image={getImageUrl(model.imageFileName)} 
+					className={classes.image}/>
+			);
+		}
 
 		return (
 			<Card className={classes.root}>
 				<CardHeader title={name}
-					subheader={publishedLabel}
-					avatar={
-						<Avatar src={getImageUrl(userImageFileName)}/>
-					}
+					subheader={subHeader}
+					avatar={avatar}
 				/>
 
-				<CardMedia image={getImageUrl(adImageFileName)} 
-					className={classes.image}/>
+				{image}
 
 				<CardContent>
 					<Typography>
-						<Truncate lines={8} 
-							trimWhitespace={true}>
-
-							{description}
-						</Truncate>
+						{description}
 					</Typography>
 				</CardContent>
 			</Card>

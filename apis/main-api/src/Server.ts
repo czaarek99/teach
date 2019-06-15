@@ -5,6 +5,7 @@ import * as userAgent from "koa-useragent";
 import * as cors from "@koa/cors";
 
 import auth from "./routes/auth";
+import ad from "./routes/ad";
 
 import { config } from "./config";
 import { HttpError, ErrorMessage } from "common-library";
@@ -84,6 +85,7 @@ export class Server {
 
 		const openRouter = new Router();
 		openRouter.use("/auth", auth.middleware());
+		openRouter.use("/ad", ad.middleware());
 		app.use(openRouter.routes());
 
 		const protectedRouter = new Router();

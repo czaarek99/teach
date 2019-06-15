@@ -1,23 +1,76 @@
 import React from 'react';
-import { createStyles, Theme, WithStyles, withStyles } from "@material-ui/core";
+import Skeleton from "react-loading-skeleton";
+
 import { Ad } from '../../organisms';
+
+import { 
+	Masonry, 
+	CellMeasurerCache, 
+	CellMeasurer,
+	MasonryCellProps 
+} from "react-virtualized";
+
+import { 
+	createStyles, 
+	Theme, 
+	WithStyles, 
+	withStyles 
+} from "@material-ui/core";
+
+import { 
+	IBrowsePageController 
+} from '../../../interfaces/controllers/pages/IBrowsePageController';
 
 const styles = (theme: Theme) => createStyles({
 
 });
 
-const description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
+interface IBrowsePageProps {
+	controller: IBrowsePageController
+}
 
-export class BrowsePage extends React.Component<WithStyles<typeof styles>> {
+const cache = new CellMeasurerCache({
+});
+
+export class BrowsePage extends React.Component<
+	IBrowsePageProps & 
+	WithStyles<typeof styles>
+> {
+
+	private cellRenderer(props: MasonryCellProps) : React.ReactNode {
+		const controller = this.props.controller.getAdController(props.index);
+
+		return (
+			<CellMeasurer cache={cache} {...props}>
+				<Ad controller={controller}/>
+			</CellMeasurer>
+		)
+	} 
 
 	public render() : React.ReactNode {
-		return (
-			<Ad name ="Test ad" 
-				publicationDate={new Date()}
-				userImageFileName="avatar.png" 
-				description={description}
-				adImageFileName="ad.png"/>	
-		)
+
+		const {
+			classes,
+			controller
+		} = this.props;
+
+		let page;
+
+		if(controller.loading) {
+			page = <Skeleton />
+		} else {
+			page = (
+				<Masonry cellCount={controller.cellCount} 
+					autoHeight={false}
+					width={600}
+					height={1000}
+					cellMeasurerCache={cache}
+					cellRenderer={this.cellRenderer}
+					cellPositioner={controller.positioner}/>
+			);
+		}
+
+		return page;
 	}
 
 }

@@ -13,7 +13,7 @@ import {
 } from "sequelize-typescript";
 
 @Table
-export class Ad extends Model<Ad> implements IAd {
+export class Ad extends Model<Ad> {
 
 	@BelongsTo(() => User, "userId")
 	public user: User;

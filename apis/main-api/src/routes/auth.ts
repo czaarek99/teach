@@ -11,6 +11,7 @@ import { v4 } from "uuid";
 import { isBefore, subDays } from "date-fns";
 import { randomBytes } from "crypto";
 import { IRedisSession, getNewExpirationDate, throwApiError } from "server-lib";
+import { verifyRecaptcha } from "../util/verifyRecaptcha";
 
 import {
 	HttpError,
@@ -44,7 +45,6 @@ import {
 	renderTemplate,
 	PASSWORD_RESET_HELP_TEMPLATE
 } from "../email/templates/templates";
-import { verifyRecaptcha } from "../util/verifyRecaptcha";
 
 const router = Router();
 
