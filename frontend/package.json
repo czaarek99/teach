@@ -22,7 +22,8 @@
 		"react-google-recaptcha": "^1.0.5",
 		"react-intl": "^2.9.0",
 		"react-router": "^5.0.1",
-		"react-scripts": "3.0.1"
+		"react-scripts": "3.0.1",
+		"react-truncate": "^2.4.0"
 	},
 	"devDependencies": {
 		"@types/history": "^4.7.2",
@@ -31,6 +32,7 @@
 		"@types/react-google-recaptcha": "^1.0.0",
 		"@types/react-intl": "^2.3.17",
 		"@types/react-router": "^5.0.1",
+		"@types/react-truncate": "^2.3.3",
 		"typescript": "^3.5.1"
 	},
 	"scripts": {

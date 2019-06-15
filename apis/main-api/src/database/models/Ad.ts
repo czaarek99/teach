@@ -1,5 +1,5 @@
 import { User } from "./User";
-import { AD_NAME_MAX_LENGTH, UUID_V4_LENGTH, IAd } from "common-library";
+import { AD_NAME_MAX_LENGTH, IAd } from "common-library";
 
 import {
 	Table,
@@ -33,7 +33,7 @@ export class Ad extends Model<Ad> implements IAd {
 
 	@AllowNull(true)
 	@Unique
-	@Column(DataType.STRING(UUID_V4_LENGTH))
-	public imageId?: string;
+	@Column
+	public imageFileName?: string;
 
 }

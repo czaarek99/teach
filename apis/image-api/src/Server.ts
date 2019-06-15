@@ -54,13 +54,11 @@ export class Server {
 		app.use(serve(config.staticImagesPath));
 		app.use(serve(config.userImagesPath));
 
+		app.use(router.middleware());
+
 		this.logger.info("Starting server", {
 			port: config.serverPort
 		});
-
-		app.use(authenticationMiddleware);
-
-		app.use(router.middleware());
 
 		app.listen(config.serverPort);
 	}

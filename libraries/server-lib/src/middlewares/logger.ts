@@ -12,7 +12,10 @@ export async function loggerMiddleware(context: ApiContext, next: Function) : Pr
 	}
 
 	
-	context.state.logger = new Logger("api-request", loggerData);
+	const logger = new Logger("api-request", loggerData);
+	context.state.logger = logger;
+
+	logger.info(`${context.method} ${context.path}`);
 
 	await next();
 }

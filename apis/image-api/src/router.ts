@@ -6,7 +6,7 @@ import { CustomContext } from "./Server";
 import { rename, unlink } from "fs-extra";
 import { v4 } from "uuid";
 import { UserImage } from "./database/models/UserImage";
-import { throwApiError } from "server-lib";
+import { throwApiError, authenticationMiddleware } from "server-lib";
 import { HttpError, ErrorMessage } from "common-library";
 
 export const router = new Router();
@@ -22,7 +22,7 @@ export function throwInvalidImageError(context: CustomContext) : void {
 	);
 }
 
-router.put("/", async (context: CustomContext) => {
+router.put("/", authenticationMiddleware, async (context: CustomContext) => {
 
 	const image = context.request.files.image;
 
@@ -62,7 +62,7 @@ router.put("/", async (context: CustomContext) => {
 	context.status = 200;
 });
 
-router.delete("/:fileName", async (context: CustomContext) => {
+router.delete("/:fileName", authenticationMiddleware, async (context: CustomContext) => {
 
 	const fileName = context.params.fileName;
 
