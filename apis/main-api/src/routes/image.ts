@@ -1,4 +1,5 @@
 import * as Router from "koa-router";
+
 import { throwApiError } from "server-lib";
 import { ErrorMessage, HttpError } from "common-library";
 import { CustomContext } from "../Server";
@@ -91,3 +92,5 @@ router.delete("/:fileName", async (context: CustomContext) => {
 
 	context.status = 200;
 });
+
+export default router;

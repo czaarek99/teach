@@ -1,14 +1,19 @@
 import { IAdController } from "../IAdController";
-import { Positioner } from "react-virtualized";
-import { CellMeasurerCacheInterface } from "react-virtualized/dist/es/CellMeasurer";
+import { Positioner, OnCellsRenderedCallback, CellMeasurerCache } from "react-virtualized";
+
+export interface IOnCellsRenderedParams {
+	stopIndex: number
+	startIndex: number
+}
 
 export interface IBrowsePageController {
 	readonly loading: boolean
 	readonly cellCount: number
 	readonly positioner: Positioner
-	readonly cellCache: CellMeasurerCacheInterface
+	readonly cellCache: CellMeasurerCache
 
 
+	onCellsRendered: (params: IOnCellsRenderedParams) => void
 	getAdController(index: number) : IAdController
 
 }

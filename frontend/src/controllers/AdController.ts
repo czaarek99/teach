@@ -1,9 +1,10 @@
 import { IAdModel } from "../interfaces/models/IAdModel";
 import { IAdController } from "../interfaces/controllers/IAdController";
+import { observable } from "mobx";
 
 export class AdController implements IAdController {
 
-	public model: IAdModel | null = null;
+	@observable public model: IAdModel | null = null;
 
 	public load(ad: IAdModel) : void {
 		this.model = ad;

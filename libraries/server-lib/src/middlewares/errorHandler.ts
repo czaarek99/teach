@@ -10,7 +10,9 @@ export function getErrorHandler(logger: Logger) : Koa.Middleware<IApiState> {
 		try {
 			await next();
 		} catch(error) {
-			logger.error("Uncaught error", error);
+			logger.error("Uncaught error", {
+				errorMessage: error.message
+			});
 
 			const httpError = new HttpError(
 				500,

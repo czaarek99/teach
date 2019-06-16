@@ -14,6 +14,8 @@ import { IResetPasswordPageController } from "../interfaces/controllers/pages/IR
 import { ResetPasswordPageController } from "./pages/ResetPasswordPageController";
 import { IAdService } from "../interfaces/services/IAdService";
 import { AdService } from "../services/AdService";
+import { IBrowsePageController } from "../interfaces/controllers/pages/IBrowsePageController";
+import { BrowsePageController } from "./pages/BrowsePageController";
 
 interface IServices {
 	authenticationService: IAuthenticationService
@@ -29,6 +31,7 @@ export class AppController implements IAppController {
 	@observable private _registrationPageController: IRegistrationPageController | null = null;
 	@observable private _forgotPageController: IForgotPageController | null = null;
 	@observable private _resetPasswordPageController: IResetPasswordPageController | null = null;
+	@observable private _browsePageController: IBrowsePageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -84,6 +87,16 @@ export class AppController implements IAppController {
 		}
 
 		return this._resetPasswordPageController;
+	}
+
+	@computed public get browsePageController() : IBrowsePageController {
+		if(this._browsePageController === null) {
+			this._browsePageController = new BrowsePageController(
+				this.services.adService
+			);
+		}
+
+		return this._browsePageController;
 	}
 
 }

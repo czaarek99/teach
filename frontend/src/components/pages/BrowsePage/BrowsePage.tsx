@@ -2,6 +2,7 @@ import React from 'react';
 import Skeleton from "react-loading-skeleton";
 
 import { Ad } from '../../organisms';
+import { observer } from 'mobx-react';
 
 import { 
 	Masonry, 
@@ -29,20 +30,19 @@ interface IBrowsePageProps {
 	controller: IBrowsePageController
 }
 
-const cache = new CellMeasurerCache({
-});
-
+@observer
 export class BrowsePage extends React.Component<
 	IBrowsePageProps & 
 	WithStyles<typeof styles>
 > {
 
-	private cellRenderer(props: MasonryCellProps) : React.ReactNode {
-		const controller = this.props.controller.getAdController(props.index);
+	private cellRenderer = (props: MasonryCellProps) : React.ReactNode => {
+		const controller = this.props.controller;
+		const adController = controller.getAdController(props.index);
 
 		return (
-			<CellMeasurer cache={cache} {...props}>
-				<Ad controller={controller}/>
+			<CellMeasurer cache={controller.cellCache} {...props}>
+				<Ad controller={adController}/>
 			</CellMeasurer>
 		)
 	} 
@@ -61,10 +61,11 @@ export class BrowsePage extends React.Component<
 		} else {
 			page = (
 				<Masonry cellCount={controller.cellCount} 
+					onCellsRendered={controller.onCellsRendered}
 					autoHeight={false}
-					width={600}
-					height={1000}
-					cellMeasurerCache={cache}
+					width={570}
+					height={400}
+					cellMeasurerCache={controller.cellCache}
 					cellRenderer={this.cellRenderer}
 					cellPositioner={controller.positioner}/>
 			);

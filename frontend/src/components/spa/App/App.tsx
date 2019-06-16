@@ -37,7 +37,7 @@ class App extends React.Component<IAppProps> {
 			[Routes.RESET_PASSWORD]: () =>
 				<ResetPasswordPage controller={controller.resetPasswordPageController}/>,
 			[Routes.BROWSE]: () =>
-				<BrowsePage />,
+				<BrowsePage controller={controller.browsePageController}/>,
 			[Routes.HOME]: () =>
 				<HomePage />
 		};

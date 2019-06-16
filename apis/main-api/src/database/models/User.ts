@@ -1,6 +1,7 @@
 import { Address } from "./Address";
 import { PasswordReset } from "./PasswordReset";
 import { Ad } from "./Ad";
+import { Image } from "./Image";
 
 import {
 	Table,
@@ -23,7 +24,6 @@ import {
 	PHONE_NUMBER_MAX_LENGTH,
 	UUID_V4_LENGTH
 } from "common-library";
-import { Image } from "./Image";
 
 const PASSWORD_HASH_MAX_LENGTH = 60;
 
@@ -61,8 +61,7 @@ export class User extends Model<User> implements IUser {
 	@Column(DataType.STRING(PHONE_NUMBER_MAX_LENGTH))
 	public phoneNumber?: string
 
-	@AllowNull(true)
-	@HasOne(() => Image,  "userId")
+	@HasOne(() => Image,  "parentId")
 	public profilePicture?: Image;
 
 	@HasOne(() => Address, "userId")

@@ -7,15 +7,13 @@ import {
 	DataType,
 	ForeignKey
 } from "sequelize-typescript";
-import { User } from "./User";
 
 @Table
 export class Image extends Model<Image> {
 
 	@AllowNull(false)
-	@ForeignKey(() => User)
 	@Column(DataType.INTEGER.UNSIGNED)
-	public userId: number;
+	public parentId: number;
 
 	@Unique
 	@AllowNull(false)

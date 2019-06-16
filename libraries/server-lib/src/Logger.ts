@@ -51,7 +51,8 @@ export class Logger {
 			dataOut.message = message;
 		}
 
-		console.log(stringify(dataOut));
+		const toLog = stringify(dataOut);
+		console.log(toLog);
 	}
 
 	public critical(message: string, dataIn?: object) : void {

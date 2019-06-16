@@ -11,16 +11,8 @@ services:
       MYSQL_DATABASE: teach
       MYSQL_USER: teacher
       MYSQL_PASSWORD: test
-  image-database:
-    image: mariadb
-    restart: always
-    ports:
-      - 3307:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: test
-      MYSQL_DATABASE: images
-      MYSQL_USER: artist
-      MYSQL_PASSWORD: test
+    volumes:
+      - ./database:/var/lib/mysql
   redis_db:
     image: redislabs/rejson
     restart: always

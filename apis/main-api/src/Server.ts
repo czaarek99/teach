@@ -3,9 +3,12 @@ import * as bodyParser from "koa-body";
 import * as Router from "koa-router";
 import * as userAgent from "koa-useragent";
 import * as cors from "@koa/cors";
+import * as mount from "koa-mount";
+import * as serve from "koa-static";
 
 import auth from "./routes/auth";
 import ad from "./routes/ad";
+import image from "./routes/image";
 
 import { config } from "./config";
 import { HttpError, ErrorMessage } from "common-library";
@@ -41,14 +44,6 @@ export class Server {
 		db: config.redisDatabase,
 		host: config.redisHost
 	});
-
-	private authenticate = async(context: CustomContext, next: Function) : Promise<void> => {
-		if(context.session.populated) {
-			await next();
-		} else {
-			throw new HttpError(401, ErrorMessage.UNAUTHORIZED, context.state.requestId);
-		}
-	}
 
 	private attachState = async (context: CustomContext, next: Function) : Promise<void> => {
 		context.state.emailClient = this.emailClient;
@@ -90,14 +85,18 @@ export class Server {
 		const openRouter = new Router();
 		openRouter.use("/auth", auth.middleware());
 		openRouter.use("/ad", ad.middleware());
+		openRouter.use("/image", image.routes());
 		app.use(openRouter.routes());
 
 		const protectedRouter = new Router();
 		protectedRouter.use(authenticationMiddleware);
 		app.use(protectedRouter.routes());
 
+		app.use(mount("/images", serve(config.staticImagesPath)))
+		app.use(mount("/images", serve(config.userImagesPath)))
+
 		this.globalLogger.info("Starting server", {
-			port: config.serverPort
+			config
 		});
 
 		app.listen(config.serverPort);

@@ -1,5 +1,6 @@
 import { User } from "./User";
 import { AD_NAME_MAX_LENGTH, IAd } from "common-library";
+import { Image } from "./Image";
 
 import {
 	Table,
@@ -9,7 +10,8 @@ import {
 	AllowNull,
 	DataType,
 	BelongsTo,
-	ForeignKey
+	ForeignKey,
+	HasOne
 } from "sequelize-typescript";
 
 @Table
@@ -31,9 +33,7 @@ export class Ad extends Model<Ad> {
 	@Column(DataType.TEXT)
 	public description: string;
 
-	@AllowNull(true)
-	@Unique
-	@Column
-	public imageFileName?: string;
+	@HasOne(() => Image, "parentId")
+	public mainImage: Image;
 
 }

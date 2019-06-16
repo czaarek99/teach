@@ -2,8 +2,8 @@ export interface ITeacher {
 	firstName: string
 	lastName: string
 	age: number
-	avatarFileName: string
 	phoneNumber?: string
+	avatarFileName?: string
 	email?: string
 	city?: string
 }

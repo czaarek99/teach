@@ -5,6 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IAdController } from "../../../interfaces/controllers/IAdController";
 import { getImageUrl } from "../../../util/imageAPI";
+import { observer } from "mobx-react";
 
 import { 
 	Card, 
@@ -19,8 +20,8 @@ import {
 	WithStyles
 } from "@material-ui/core";
 
-export const AD_MAX_WIDTH = 500;
-export const ESTIMATED_AD_HEIGHT = 350;
+export const AD_MAX_WIDTH = 520;
+export const ESTIMATED_AD_HEIGHT = 574;
 
 const IMAGE_HEIGHT = 250;
 const MAX_DESCRIPTION_LINES = 8;
@@ -28,11 +29,13 @@ const MAX_DESCRIPTION_LINES = 8;
 const styles = (theme: Theme) => createStyles({
 
 	root: {
-		margin: 10,
-		maxWidth: AD_MAX_WIDTH
+		maxWidth: AD_MAX_WIDTH,
+		minWidth: AD_MAX_WIDTH,
+		padding: 10,
+		display: "inline-block"
 	},
 
-	image: {
+	image: { 
 		height: IMAGE_HEIGHT
 	},
 });
@@ -42,6 +45,7 @@ interface IAdProps {
 }
 
 
+@observer
 export class Ad extends React.Component<
 	IAdProps & 
 	InjectedIntlProps &
@@ -62,8 +66,13 @@ export class Ad extends React.Component<
 		let description;
 		let avatar;
 		let image;
+		let name;
 
 		if(model === null) {
+			name = (
+				<Skeleton />
+			);
+
 			subHeader = (
 				<Skeleton />
 			);
@@ -94,6 +103,8 @@ export class Ad extends React.Component<
 				date
 			});
 
+			name = model.name;
+
 			description = (
 				<Truncate lines={8} 
 					trimWhitespace={true}>
@@ -102,31 +113,41 @@ export class Ad extends React.Component<
 				</Truncate>
 			);
 
-			avatar = (
-				<Avatar src={getImageUrl(model.teacher.avatarFileName)}/>
-			);
-
 			image = (
 				<CardMedia image={getImageUrl(model.imageFileName)} 
 					className={classes.image}/>
 			);
+
+			if(model.teacher.avatarFileName) {
+				avatar = (
+					<Avatar src={getImageUrl(model.teacher.avatarFileName)}/>
+				);
+			} else {
+				avatar = (
+					<Avatar>
+						{model.teacher.firstName[0]}
+					</Avatar>
+				)
+			}
 		}
 
 		return (
-			<Card className={classes.root}>
-				<CardHeader title={name}
-					subheader={subHeader}
-					avatar={avatar}
-				/>
+			<div className={classes.root}>
+				<Card>
+					<CardHeader title={name}
+						subheader={subHeader}
+						avatar={avatar}
+					/>
 
-				{image}
+					{image}
 
-				<CardContent>
-					<Typography>
-						{description}
-					</Typography>
-				</CardContent>
-			</Card>
+					<CardContent>
+						<Typography>
+							{description}
+						</Typography>
+					</CardContent>
+				</Card>
+			</div>
 		)
 	}
 }
