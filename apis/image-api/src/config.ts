@@ -11,9 +11,6 @@ export const config = {
 	databasePort: parseInt(process.env.DATABASE_PORT),
 	forceDropDatabse: process.env.FORCE_DROP_DATABASE === "true",
 
-	staticImagesPath: process.env.STATIC_IMAGES_PATH,
-	userImagesPath: process.env.USER_IMAGES_PATH,
-
 	redisHost: process.env.REDIS_HOST,
 	redisPort: parseInt(process.env.REDIS_PORT),
 	redisPassword: process.env.REDIS_PASSWORD,

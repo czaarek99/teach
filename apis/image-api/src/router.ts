@@ -5,90 +5,9 @@ import { config } from "./config";
 import { CustomContext } from "./Server";
 import { rename, unlink } from "fs-extra";
 import { v4 } from "uuid";
-import { UserImage } from "./database/models/UserImage";
+import { UserImage } from "../../main-api/src/database/models/Image";
 import { throwApiError, authenticationMiddleware } from "server-lib";
 import { HttpError, ErrorMessage } from "common-library";
 
 export const router = new Router();
 
-export function throwInvalidImageError(context: CustomContext) : void {
-	throwApiError(
-		context, 
-		new HttpError(
-			400, 
-			ErrorMessage.INVALID_IMAGE, 
-			context.state.requestId
-		)
-	);
-}
-
-router.put("/", authenticationMiddleware, async (context: CustomContext) => {
-
-	const image = context.request.files.image;
-
-	if(!image) {
-		throwInvalidImageError(context);
-		return;
-	}
-
-	if(!image.type.startsWith("image")) {
-		throwInvalidImageError(context);
-		return;
-	}
-
-	const imageExtension = image.type.split("/")[1];
-
-	if(imageExtension !== "png" && imageExtension !== "jpeg") {
-		throwInvalidImageError(context);
-		return;
-	}
-
-
-	const uuid = v4();
-	const fileName = `${uuid}.${imageExtension}`;
-	const newPath = join(config.userImagesPath, fileName);
-
-	await rename(image.path, newPath);
-
-	await UserImage.create<UserImage>({
-		imageFileName: fileName,
-		userId: context.state.session.userId
-	});
-
-	context.body = {
-		fileName
-	};
-
-	context.status = 200;
-});
-
-router.delete("/:fileName", authenticationMiddleware, async (context: CustomContext) => {
-
-	const fileName = context.params.fileName;
-
-	if(!fileName) {
-		throwInvalidImageError(context);
-		return;
-	}
-
-	const userImage = await UserImage.findOne<UserImage>({
-		where: {
-			userId: context.state.session.userId,
-			fileName	
-		}
-	});
-
-	if(!userImage) {
-		throwInvalidImageError(context);
-		return;
-	}
-
-	const fullPath = join(config.userImagesPath, fileName);
-
-	await Promise.all([
-		unlink(fullPath),
-		userImage.destroy()
-	]);
-
-	context.status = 200;
-});

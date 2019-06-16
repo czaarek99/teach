@@ -23,6 +23,7 @@ import {
 	PHONE_NUMBER_MAX_LENGTH,
 	UUID_V4_LENGTH
 } from "common-library";
+import { Image } from "./Image";
 
 const PASSWORD_HASH_MAX_LENGTH = 60;
 
@@ -61,8 +62,8 @@ export class User extends Model<User> implements IUser {
 	public phoneNumber?: string
 
 	@AllowNull(true)
-	@Column(DataType.STRING(UUID_V4_LENGTH))
-	public profilePictureId?: string;
+	@HasOne(() => Image,  "userId")
+	public profilePicture?: Image;
 
 	@HasOne(() => Address, "userId")
 	public address: Address;

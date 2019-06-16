@@ -12,6 +12,9 @@ export const config = {
 	sesKey: process.env.SES_KEY,
 	sesSecret: process.env.SES_SECRET,
 
+	staticImagesPath: process.env.STATIC_IMAGES_PATH,
+	userImagesPath: process.env.USER_IMAGES_PATH,
+
 	redisHost: process.env.REDIS_HOST,
 	redisPort: parseInt(process.env.REDIS_PORT),
 	redisPassword: process.env.REDIS_PASSWORD,

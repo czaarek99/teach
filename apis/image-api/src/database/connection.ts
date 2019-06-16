@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
 import { config } from "../config";
-import { UserImage } from "./models/UserImage";
+import { UserImage } from "../../../main-api/src/database/models/Image";
 
 export function connectToDatabase() : Sequelize {
 	const connection = new Sequelize({
