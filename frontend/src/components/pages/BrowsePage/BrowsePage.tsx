@@ -1,33 +1,60 @@
 import React from 'react';
-import Skeleton from "react-loading-skeleton";
 
 import { Ad } from '../../organisms';
 import { observer } from 'mobx-react';
-
-import { 
-	Masonry, 
-	CellMeasurerCache, 
-	CellMeasurer,
-	MasonryCellProps 
-} from "react-virtualized";
+import { NavbarTemplate } from '../../templates';
 
 import { 
 	createStyles, 
 	Theme, 
 	WithStyles, 
-	withStyles 
+	withStyles, 
+	TablePagination,
+	CircularProgress
 } from "@material-ui/core";
 
 import { 
 	IBrowsePageController 
 } from '../../../interfaces/controllers/pages/IBrowsePageController';
 
+import { 
+	INavbarController 
+} from '../../../interfaces/controllers/templates/INavbarController';
+
+
 const styles = (theme: Theme) => createStyles({
+
+	root: {
+		width: "100%"
+	},
+
+	progressContainer: {
+		height: "100vh",
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+
+	adsContainer: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		width: "100%",
+		flexWrap: "wrap"
+	},
+
+	disabledPagination: {
+		opacity: .4,
+		cursor: "not-allowed",
+		pointerEvents: "none"
+	},
+
 
 });
 
 interface IBrowsePageProps {
 	controller: IBrowsePageController
+	navbarController: INavbarController
 }
 
 @observer
@@ -36,42 +63,59 @@ export class BrowsePage extends React.Component<
 	WithStyles<typeof styles>
 > {
 
-	private cellRenderer = (props: MasonryCellProps) : React.ReactNode => {
-		const controller = this.props.controller;
-		const adController = controller.getAdController(props.index);
-
-		return (
-			<CellMeasurer cache={controller.cellCache} {...props}>
-				<Ad controller={adController}/>
-			</CellMeasurer>
-		)
-	} 
-
 	public render() : React.ReactNode {
 
 		const {
 			classes,
-			controller
+			controller,
+			navbarController
 		} = this.props;
 
-		let page;
+		const ads = controller.activeAdControllers.map((controller) => {
+			return (
+				<Ad controller={controller}/>
+			)
+		});
 
-		if(controller.loading) {
-			page = <Skeleton />
-		} else {
-			page = (
-				<Masonry cellCount={controller.cellCount} 
-					onCellsRendered={controller.onCellsRendered}
-					autoHeight={false}
-					width={570}
-					height={400}
-					cellMeasurerCache={controller.cellCache}
-					cellRenderer={this.cellRenderer}
-					cellPositioner={controller.positioner}/>
-			);
+		let paginationClassName = "";
+		if(controller.listLoading) {
+			paginationClassName = classes.disabledPagination;
 		}
 
-		return page;
+		let content = null;
+
+		if(controller.pageLoading) {
+			content = (
+				<div className={classes.progressContainer}>
+					<CircularProgress size={50}/>
+				</div>
+			);
+		} else {
+			content = (
+				<React.Fragment>
+					<div className={classes.adsContainer}>
+						{ads}
+					</div>
+
+					<TablePagination component="div" 
+						className={paginationClassName}
+						rowsPerPage={controller.adsPerPage}
+						page={controller.pageNumber}
+						count={controller.totalAdCount} 
+						onChangeRowsPerPage={controller.onChangeAdsPerPage}
+						onChangePage={controller.onChangePage}/>
+				</React.Fragment>
+			)
+		}
+
+		return (
+			<NavbarTemplate controller={navbarController}>
+				<div className={classes.root}>
+					{content}
+				</div>
+			</NavbarTemplate>
+
+		)
 	}
 
 }

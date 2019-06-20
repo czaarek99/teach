@@ -1,19 +1,13 @@
 import { IAdController } from "../IAdController";
-import { Positioner, OnCellsRenderedCallback, CellMeasurerCache } from "react-virtualized";
-
-export interface IOnCellsRenderedParams {
-	stopIndex: number
-	startIndex: number
-}
 
 export interface IBrowsePageController {
-	readonly loading: boolean
-	readonly cellCount: number
-	readonly positioner: Positioner
-	readonly cellCache: CellMeasurerCache
+	readonly pageLoading: boolean
+	readonly listLoading: boolean
+	readonly pageNumber: number
+	readonly adsPerPage: number
+	readonly totalAdCount: number
+	readonly activeAdControllers: IAdController[]
 
-
-	onCellsRendered: (params: IOnCellsRenderedParams) => void
-	getAdController(index: number) : IAdController
-
+	onChangePage: (event: React.MouseEvent<HTMLButtonElement> | null, page: number) => void
+    onChangeAdsPerPage: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>
 }

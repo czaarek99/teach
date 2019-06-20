@@ -20,27 +20,41 @@ import {
 	WithStyles
 } from "@material-ui/core";
 
-export const AD_MAX_WIDTH = 520;
-export const ESTIMATED_AD_HEIGHT = 574;
+export const AD_MIN_WIDTH = 300;
+export const AD_MAX_WIDTH = 500;
+export const AD_COVER_IMAGE_HEIGHT = 250;
 
-const IMAGE_HEIGHT = 250;
 const MAX_DESCRIPTION_LINES = 8;
+
+/*
+
+width: 2000px
+height: 1000px
+aspect ratio: 2:1 
+
+*/
+
 
 const styles = (theme: Theme) => createStyles({
 
 	root: {
-		maxWidth: AD_MAX_WIDTH,
-		minWidth: AD_MAX_WIDTH,
+		width: "100%",
 		padding: 10,
-		display: "inline-block"
+		cursor: "pointer",
+
+		"@media screen and (min-width: 520px)": {
+			width: 500
+		}
 	},
 
 	image: { 
-		height: IMAGE_HEIGHT
+		width: "100%",
+		objectFit: "contain",
+		maxHeight: 250,
 	},
 });
 
-interface IAdProps {
+interface IAdProps { 
 	controller: IAdController
 }
 
@@ -88,7 +102,7 @@ export class Ad extends React.Component<
 			);
 
 			image = (
-				<Skeleton height={IMAGE_HEIGHT} />
+				<Skeleton height={AD_COVER_IMAGE_HEIGHT} />
 			);
 		} else {
 			const date = intl.formatDate(model.publicationDate, {
@@ -114,7 +128,8 @@ export class Ad extends React.Component<
 			);
 
 			image = (
-				<CardMedia image={getImageUrl(model.imageFileName)} 
+				<CardMedia component="img"
+					image={getImageUrl(model.imageFileName)} 
 					className={classes.image}/>
 			);
 

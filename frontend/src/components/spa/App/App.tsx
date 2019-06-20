@@ -3,8 +3,17 @@ import React from 'react';
 import { IAppController } from '../../../interfaces/controllers/IAppController';
 import { observer, inject } from 'mobx-react';
 import { Routes } from '../../../interfaces/Routes';
-import { LoginPage, RegistrationPage, ForgotPage, ResetPasswordPage, BrowsePage, HomePage } from '../../pages';
 import { IRoutingStoreProps } from '../../../interfaces/props/IRoutingStoreProps';
+import { CssBaseline } from '@material-ui/core';
+
+import { 
+	LoginPage, 
+	RegistrationPage, 
+	ForgotPage, 
+	ResetPasswordPage, 
+	BrowsePage, 
+	HomePage 
+} from '../../pages';
 
 interface IAppProps {
 	controller: IAppController
@@ -36,8 +45,10 @@ class App extends React.Component<IAppProps> {
 				<ForgotPage controller={controller.forgotPageController} />,
 			[Routes.RESET_PASSWORD]: () =>
 				<ResetPasswordPage controller={controller.resetPasswordPageController}/>,
-			[Routes.BROWSE]: () =>
-				<BrowsePage controller={controller.browsePageController}/>,
+			[Routes.BROWSE]: () => (
+				<BrowsePage controller={controller.browsePageController} 
+					navbarController={controller.navbarController}/>
+			),
 			[Routes.HOME]: () =>
 				<HomePage />
 		};
@@ -45,11 +56,12 @@ class App extends React.Component<IAppProps> {
 		const pathName = routingStore.location.pathname;
 		const page = pages[pathName];
 
-		if(page) {
-			return page();
-		} else {
-			return null;
-		}
+		return (
+			<React.Fragment>
+				<CssBaseline />
+				{page()}
+			</React.Fragment>
+		);
 	}
 
 }

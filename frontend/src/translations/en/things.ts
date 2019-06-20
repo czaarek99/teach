@@ -16,5 +16,10 @@ export default {
 	"things.personalInformation": "Personal information",
 	"things.accountDetails": "Account details",
 	"things.newPassword": "New password",
-	"things.phoneNumber": "Phone number"
+	"things.phoneNumber": "Phone number",
+
+	"things.pages.home": "Home",
+	"things.pages.browse": "Browse",
+	"things.pages.profile": "Profile",
+	"things.pages.settings": "Settings"
 }

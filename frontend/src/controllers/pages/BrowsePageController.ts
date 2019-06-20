@@ -4,42 +4,19 @@ import { IAdService } from "../../interfaces/services/IAdService";
 import { AdController } from "../AdController";
 
 import { 
-	IBrowsePageController, IOnCellsRenderedParams 
+	IBrowsePageController 
 } from "../../interfaces/controllers/pages/IBrowsePageController";
-
-import { 
-	createMasonryCellPositioner, 
-	CellMeasurerCache 
-} from "react-virtualized";
-
-import { 
-	AD_MAX_WIDTH, 
-	ESTIMATED_AD_HEIGHT 
-} from "../../components";
-
-const REQUEST_LIMIT = 500;
-const OVERSCAN = 50;
 
 export class BrowsePageController implements IBrowsePageController {
 
 	private readonly adService: IAdService;
-	private adControllers : IAdController[] = [];
-	private loadedIndex = 0;
+	private loadAdsTimeout?: number;
 
-	@observable public loading = true;
-	@observable public cellCount = 0;
-	@observable public cellCache = new CellMeasurerCache({
-		defaultWidth: AD_MAX_WIDTH,
-		defaultHeight: ESTIMATED_AD_HEIGHT
-	});
-
-	//Measure height before doing this
-	@observable public positioner = createMasonryCellPositioner({
-		cellMeasurerCache: this.cellCache,
-		columnCount: 1,
-		columnWidth: AD_MAX_WIDTH,
-		spacer: 10
-	});
+	@observable public pageNumber = 0;
+	@observable public totalAdCount = 0;
+	@observable public adsPerPage = 50;
+	@observable public activeAdControllers : IAdController[] = []; @observable public pageLoading = true;
+	@observable public listLoading = true;
 
 	constructor(adService: IAdService) {
 		this.adService = adService;
@@ -47,50 +24,62 @@ export class BrowsePageController implements IBrowsePageController {
 		this.load();
 	}
 
-
 	private async load() : Promise<void> {
 		const info = await this.adService.getAds({
 			limit: 0,
 			offset: 0
 		});
 
-		this.cellCount = info.totalCount;
-		this.loading = false;
+		this.totalAdCount = info.totalCount;
+		this.pageLoading = false;
+		this.loadAds();
 	}
 
-	public onCellsRendered = (params: IOnCellsRenderedParams) : void => {
-		if(params.stopIndex > this.loadedIndex - OVERSCAN)  {
-			const offset = this.loadedIndex;
-			this.loadedIndex += REQUEST_LIMIT;
+	private loadAds() : void {
+		this.listLoading = true;
+		this.activeAdControllers = [];
 
-			setTimeout(async () => {
-				const ads = await this.adService.getAds({
-					limit: REQUEST_LIMIT,
-					offset,
-				});
+		const offset = this.pageNumber * this.adsPerPage;
+		const amountToLoad = Math.min(this.totalAdCount - offset, this.adsPerPage)
 
-				for(let i = 0; i < ads.data.length; i++) {
-					const ad = ads.data[i];
-					const index = offset + i;
+		for(let i = 0; i < amountToLoad; i++) {
+			this.activeAdControllers.push(new AdController());
+		}
 
-					if(!this.adControllers[index]) {
-						this.adControllers[index] = new AdController();
-					}  
+		this.loadAdsTimeout = window.setTimeout(async () => {
+			const ads = await this.adService.getAds({
+				offset,
+				limit: amountToLoad
+			});
 
-					this.adControllers[index].load(ad);
-				}
-			}, 1)
+			this.totalAdCount = ads.totalCount;
 
+			for(let i = 0; i < amountToLoad; i++) {
+				const ad = ads.data[i];
+				this.activeAdControllers[i].load(ad);
+			}
+
+			this.listLoading = false;
+		}, 20);
+	}
+
+	public onChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) : void => {
+		this.pageNumber = page;
+		this.loadAds();
+	}
+
+	public onChangeAdsPerPage = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) : void => {
+		const newAdsPerPage = parseInt(event.target.value);
+
+		if(newAdsPerPage > this.adsPerPage) {
+			this.adsPerPage = newAdsPerPage;
+			this.loadAds();
+		} else {
+			this.adsPerPage = newAdsPerPage;
+			this.activeAdControllers.length = newAdsPerPage;
 		}
 	}
 
-	public getAdController(index: number) : IAdController {
-		if(!this.adControllers[index]) {
-			this.adControllers[index] = new AdController();
-		}  
-
-		const adController = this.adControllers[index];
-		return adController;
-	}
+	
 
 }
