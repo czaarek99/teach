@@ -12,7 +12,7 @@ services:
       MYSQL_USER: teacher
       MYSQL_PASSWORD: test
     volumes:
-      - ./database:/var/lib/mysql
+      - ./mysql_data:/var/lib/mysql
   redis_db:
     image: redislabs/rejson
     restart: always

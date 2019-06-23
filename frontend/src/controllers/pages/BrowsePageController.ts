@@ -63,13 +63,20 @@ export class BrowsePageController implements IBrowsePageController {
 		}, 20);
 	}
 
+	private resetScroll() : void {
+		window.scrollTo(0, 0);
+	}
+
 	public onChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) : void => {
 		this.pageNumber = page;
+		this.resetScroll();
 		this.loadAds();
 	}
 
 	public onChangeAdsPerPage = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) : void => {
 		const newAdsPerPage = parseInt(event.target.value);
+
+		this.resetScroll();
 
 		if(newAdsPerPage > this.adsPerPage) {
 			this.adsPerPage = newAdsPerPage;

@@ -17,6 +17,7 @@ import { AdService } from "../services/AdService";
 import { IBrowsePageController } from "../interfaces/controllers/pages/IBrowsePageController";
 import { BrowsePageController } from "./pages/BrowsePageController";
 import { NavbarController } from "./templates/NavbarController";
+import { INavbarController } from "../interfaces/controllers/templates/INavbarController";
 
 interface IServices {
 	authenticationService: IAuthenticationService
@@ -28,7 +29,7 @@ export class AppController implements IAppController {
 	private readonly routingStore: RouterStore;
 	private readonly services: IServices;
 
-	public readonly navbarController = new NavbarController();
+	public readonly navbarController: INavbarController;
 
 	@observable private _loginPageController: ILoginPageController | null = null;
 	@observable private _registrationPageController: IRegistrationPageController | null = null;
@@ -38,6 +39,7 @@ export class AppController implements IAppController {
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
+		this.navbarController = new NavbarController(routingStore);
 
 		const routes = Object.values(Routes);
 		if(!routes.includes(routingStore.location.pathname)) {

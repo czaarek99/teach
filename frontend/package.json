@@ -24,7 +24,8 @@
 		"react-loading-skeleton": "^1.1.2",
 		"react-router": "^5.0.1",
 		"react-scripts": "3.0.1",
-		"react-truncate": "^2.4.0"
+		"react-truncate": "^2.4.0",
+		"uuid": "^3.3.2"
 	},
 	"devDependencies": {
 		"@types/history": "^4.7.2",
@@ -35,6 +36,7 @@
 		"@types/react-router": "^5.0.1",
 		"@types/react-truncate": "^2.3.3",
 		"@types/react-virtualized": "^9.21.2",
+		"@types/uuid": "^3.4.4",
 		"typescript": "^3.5.1"
 	},
 	"scripts": {

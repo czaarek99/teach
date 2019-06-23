@@ -10,8 +10,7 @@ import {
 	WithStyles, 
 	withStyles, 
 	TablePagination,
-	CircularProgress
-} from "@material-ui/core";
+	CircularProgress } from "@material-ui/core";
 
 import { 
 	IBrowsePageController 
@@ -73,7 +72,7 @@ export class BrowsePage extends React.Component<
 
 		const ads = controller.activeAdControllers.map((controller) => {
 			return (
-				<Ad controller={controller}/>
+				<Ad controller={controller} key={controller.controllerId}/>
 			)
 		});
 

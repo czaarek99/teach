@@ -7,7 +7,7 @@ import PersonIcon from "@material-ui/icons/Person";
 import BrowseIcon from "@material-ui/icons/Search";
 
 import { InjectedIntlProps, injectIntl } from 'react-intl';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { simpleFormat } from '../../../util/simpleFormat';
 import { Routes } from '../../../interfaces/Routes';
 import { PRODUCT_NAME } from 'common-library';
@@ -34,21 +34,51 @@ import {
 	Theme,
 	createStyles,
 	WithStyles,
-	withStyles
+	withStyles,
+	Divider
 } from '@material-ui/core';
 
+const drawerWidth = 240;
+
 const styles = (theme: Theme) => createStyles({
-
 	root: {
-		width: "100%"
+		display: 'flex',
+    },
+
+    drawer: {
+    	[theme.breakpoints.up('sm')]: {
+			width: drawerWidth,
+			flexShrink: 0,
+	  	},
+    },
+
+    appBar: {
+    	marginLeft: drawerWidth,
+
+    	[theme.breakpoints.up('sm')]: {
+     		width: `calc(100% - ${drawerWidth}px)`,
+      	},
+    },
+
+    menuButton: {
+		marginRight: theme.spacing(2),
+      	[theme.breakpoints.up('sm')]: {
+       		display: 'none',
+    	},
+    },
+
+    toolbar: theme.mixins.toolbar,
+
+    drawerPaper: {
+    	width: drawerWidth,
+    },
+
+	content: {
+		flexGrow: 1,
+		padding: 10,
 	},
-
-	split: {
-		display: "flex"
-	},
-
-})
-
+    
+});
 
 interface INavbarTemplateProps {
 	controller: INavbarController
@@ -59,9 +89,7 @@ type ExternalProps =
 	InjectedIntlProps & 
 	WithStyles<typeof styles>;
 
-type AllProps = ExternalProps & IRoutingStoreProps;
-
-@inject("routingStore")
+@observer
 class NavbarTemplate extends React.Component<ExternalProps> {
 
 	private renderNavigationItem(
@@ -73,14 +101,13 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		const translation = simpleFormat(this, text);
 
 		const {
-			routingStore
-		} = this.props as AllProps;
+			controller
+		} = this.props;
 
 		return (
 			<ListItem button={true} 
-				onClick={() => {
-					routingStore.push(route);
-				}} 
+				selected={controller.isSelected(route)}
+				onClick={() => controller.onNavItemClick(route)}
 				key={text}>
 
 				<ListItemIcon>
@@ -92,11 +119,29 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		)
 	}
 
+	private onResize = () : void => {
+		this.props.controller.onWindowResize();
+	}
+
+	public componentDidMount() : void {
+		window.addEventListener("resize", this.onResize);
+	}
+
+	public componentWillUnmount() : void {
+		window.removeEventListener("resize", this.onResize);
+	}
+
 	private renderDrawerContent() : React.ReactNode {
+
+		const {
+			classes
+		} = this.props;
 
 		return (
 			<div>
-				<div style={this.props.theme.mixins.toolbar}/>
+				<div className={classes.toolbar}/>
+				<Divider />
+
 				<List>
 					{this.renderNavigationItem("things.pages.home", <HomeIcon />, Routes.HOME)}
 					{this.renderNavigationItem("things.pages.browse", <BrowseIcon />, Routes.BROWSE)}
@@ -117,38 +162,46 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 
 		return (
 			<div className={classes.root}>
-				<AppBar position="sticky">
+				<AppBar position="fixed" className={classes.appBar}>
 					<Toolbar>
-						<IconButton edge="start">
-							<MenuIcon onClick={() => controller.onToggleDrawer()}/>
+						<IconButton edge="start" onClick={() => controller.onToggleDrawer()}>
+							<MenuIcon className={classes.menuButton}/>
 						</IconButton>
 						<Typography variant="h6">
 							{PRODUCT_NAME}
 						</Typography>
 					</Toolbar>
 				</AppBar>
-				<div className={classes.split}>
-					<nav>
-						<Hidden smUp={true} implementation="css">
-							<Drawer variant="temporary" anchor="left" 
-								ModalProps={{
-									keepMounted: true
-								}}
-								open={controller.navigationDrawerIsOpen}>
+				<nav className={classes.drawer}>
+					<Hidden smUp={true} implementation="css">
+						<Drawer variant="temporary" 
+							anchor="left" 
+							onClose={() => controller.onToggleDrawer()}
+							classes={{
+								paper: classes.drawerPaper,
+							}}
+							ModalProps={{
+								keepMounted: true
+							}}
+							open={controller.navigationDrawerIsOpen}>
 
-								{this.renderDrawerContent()}
-							</Drawer>
-						</Hidden>
-						<Hidden xsDown={true}>
-							<Drawer variant="permanent" open={true}>
-								{this.renderDrawerContent()}
-							</Drawer>
-						</Hidden>
-					</nav>
-					<main>
-						{children}
-					</main>
-				</div>
+							{this.renderDrawerContent()}
+						</Drawer>
+					</Hidden>
+					<Hidden xsDown={true}>
+						<Drawer variant="permanent" 
+							classes={{
+								paper: classes.drawerPaper,
+							}}
+							open={true}>
+							{this.renderDrawerContent()}
+						</Drawer>
+					</Hidden>
+				</nav>
+				<main className={classes.content}>
+					<div className={classes.toolbar}/>
+					{children}
+				</main>
 			</div>
 		)
 	}

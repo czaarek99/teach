@@ -59,7 +59,7 @@ class App extends React.Component<IAppProps> {
 		return (
 			<React.Fragment>
 				<CssBaseline />
-				{page()}
+				{page && page()}
 			</React.Fragment>
 		);
 	}

@@ -49,7 +49,6 @@ interface IRegistrationPageProps {
 	controller: IRegistrationPageController
 }
 
-@inject("routingStore")
 @observer
 class RegistrationPage extends React.Component<
 	IRegistrationPageProps &

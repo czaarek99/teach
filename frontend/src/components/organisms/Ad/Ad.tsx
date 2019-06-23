@@ -52,6 +52,15 @@ const styles = (theme: Theme) => createStyles({
 		objectFit: "contain",
 		maxHeight: 250,
 	},
+
+	card: {
+		boxShadow: theme.shadows[1],
+		transition: "box-shadow 1s",
+
+		"&:hover": {
+			boxShadow: theme.shadows[20]
+		}
+	}
 });
 
 interface IAdProps { 
@@ -148,7 +157,7 @@ export class Ad extends React.Component<
 
 		return (
 			<div className={classes.root}>
-				<Card>
+				<Card className={classes.card}>
 					<CardHeader title={name}
 						subheader={subHeader}
 						avatar={avatar}
