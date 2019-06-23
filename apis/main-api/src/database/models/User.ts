@@ -68,8 +68,8 @@ export class User extends Model<User> implements IUser {
 	public address: Address;
 
 	@HasMany(() => PasswordReset, "userId")
-	public passwordResets: PasswordReset[]
+	public passwordResets?: PasswordReset[]
 
 	@HasMany(() => Ad, "userId")
-	public ads: Ad[]
+	public ads?: Ad[]
 }

@@ -35,10 +35,11 @@ import {
 	createStyles,
 	WithStyles,
 	withStyles,
-	Divider
+	Divider,
+	Avatar
 } from '@material-ui/core';
 
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 const styles = (theme: Theme) => createStyles({
 	root: {
@@ -67,7 +68,12 @@ const styles = (theme: Theme) => createStyles({
     	},
     },
 
-    toolbar: theme.mixins.toolbar,
+	toolbar: {
+		display: "flex",
+		alignItems: "center",
+
+		...theme.mixins.toolbar
+	},
 
     drawerPaper: {
     	width: drawerWidth,
@@ -77,6 +83,15 @@ const styles = (theme: Theme) => createStyles({
 		flexGrow: 1,
 		padding: 10,
 	},
+
+	avatar: {
+		marginLeft: 16,
+		marginRight: 16
+	},
+
+	userInfo: {
+
+	}
     
 });
 
@@ -139,7 +154,22 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 
 		return (
 			<div>
-				<div className={classes.toolbar}/>
+				<div className={classes.toolbar}>
+					<Avatar className={classes.avatar}>
+						R
+					</Avatar>
+					<div>
+						<Typography>
+							Real Name
+						</Typography>
+						<Typography variant="body2" 
+							color="textSecondary">
+
+							testemail@gmail.com
+						</Typography>
+					</div>
+				</div>
+
 				<Divider />
 
 				<List>
