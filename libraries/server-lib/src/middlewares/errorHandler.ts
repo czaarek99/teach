@@ -10,16 +10,29 @@ export function getErrorHandler(logger: Logger) : Koa.Middleware<IApiState> {
 		try {
 			await next();
 		} catch(error) {
-			logger.error("Uncaught error", {
-				errorMessage: error.message
-			});
+			let httpError: HttpError;
 
-			const httpError = new HttpError(
-				500,
-				ErrorMessage.INTERNAL_SERVER_ERROR,
-				context.state.requestId,
-				true
-			);
+			//koa-joi-validator errors
+			if(error.name === "ValidationError") {
+				httpError = new HttpError(
+					400,
+					error.message,
+					context.state.requestId,
+					true
+				);
+
+			} else {
+				logger.error("Uncaught error", {
+					errorMessage: error.message
+				});
+
+				httpError = new HttpError(
+					500,
+					ErrorMessage.INTERNAL_SERVER_ERROR,
+					context.state.requestId,
+					true
+				);
+			}
 
 			throwApiError(context, httpError);
 		}

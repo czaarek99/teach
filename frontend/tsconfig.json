@@ -19,7 +19,8 @@
 		"jsx": "preserve",
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
-		"isolatedModules": true
+		"isolatedModules": true,
+		"sourceMap": true
 	},
 	"include": [
 		"src"

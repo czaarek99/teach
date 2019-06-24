@@ -6,6 +6,13 @@ export async function authenticationMiddleware(context: ApiContext, next: Functi
 	if(context.state.session) {
 		await next();
 	} else {
-		throwApiError(context, new HttpError(401, ErrorMessage.UNAUTHORIZED, context.state.requestId));
+		throwApiError(
+			context,
+			new HttpError(
+				401,
+				ErrorMessage.UNAUTHORIZED,
+				context.state.requestId
+			)
+		);
 	}
 }

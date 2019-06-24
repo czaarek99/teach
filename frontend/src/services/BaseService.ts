@@ -1,5 +1,12 @@
 import Axios, { AxiosInstance, AxiosError } from "axios";
-import { IHttpError, HttpError, ErrorMessage } from "common-library";
+
+import {
+	IHttpError,
+	HttpError,
+	ErrorMessage,
+	SESSION_COOKIE_NAME,
+	SESSION_HEADER_NAME
+} from "common-library";
 
 export class BaseService {
 
@@ -9,7 +16,11 @@ export class BaseService {
 		const location = window.location;
 
 		this.axios = Axios.create({
-			baseURL: `${location.protocol}//api.${location.hostname}:5000`
+			baseURL: `${location.protocol}//api.${location.hostname}:5000`,
+			withCredentials: true,
+			headers: {
+				[SESSION_HEADER_NAME]: localStorage.getItem(SESSION_COOKIE_NAME),
+			}
 		});
 
 		this.axios.interceptors.response.use((response) => {

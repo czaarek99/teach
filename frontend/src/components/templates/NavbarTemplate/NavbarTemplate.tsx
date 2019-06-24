@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Skeleton from "react-loading-skeleton";
 import HomeIcon from "@material-ui/icons/Home"
 import MenuIcon from "@material-ui/icons/Menu";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -68,6 +68,8 @@ const styles = (theme: Theme) => createStyles({
 	toolbar: {
 		display: "flex",
 		alignItems: "center",
+		marginLeft: 16,
+		marginRight: 16,
 
 		...theme.mixins.toolbar
 	},
@@ -82,8 +84,13 @@ const styles = (theme: Theme) => createStyles({
 	},
 
 	avatar: {
-		marginLeft: 16,
 		marginRight: 16
+	},
+
+	contactDetails: {
+		flexGrow: 1,
+		flexShrink: 0,
+		paddingRight: 5
 	},
 
 	content: {
@@ -156,23 +163,56 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 	private renderDrawerContent() : React.ReactNode {
 
 		const {
-			classes
+			classes,
+			controller
 		} = this.props;
+
+		let avatarComponent : React.ReactNode;
+		let realNameComponent : React.ReactNode;
+		let emailComponent : React.ReactNode;
+
+		if(controller.isLoggedIn) {
+
+			if(controller.user === null) {
+				avatarComponent = (
+					<Skeleton width={40}
+						height={40}
+						circle={true}/>
+				);
+
+				realNameComponent = <Skeleton />;
+				emailComponent = <Skeleton />;
+			} else {
+				const user = controller.user;
+
+				avatarComponent = (
+					<Avatar>
+						{user.firstName[0]}
+					</Avatar>
+				);
+
+				realNameComponent = user.firstName;
+				emailComponent = user.email;
+			}
+		}
 
 		return (
 			<div>
 				<div className={classes.toolbar}>
-					<Avatar className={classes.avatar}>
-						R
-					</Avatar>
-					<div>
-						<Typography>
-							Real Name
+					<div className={classes.avatar}>
+						{avatarComponent}
+					</div>
+
+					<div className={classes.contactDetails}>
+						<Typography noWrap={true}>
+							{realNameComponent}
 						</Typography>
+
 						<Typography variant="body2"
+							noWrap={true}
 							color="textSecondary">
 
-							testemail@gmail.com
+							{emailComponent}
 						</Typography>
 					</div>
 				</div>
@@ -246,5 +286,4 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 	}
 
 }
-
 export default withStyles(styles)(injectIntl(NavbarTemplate));

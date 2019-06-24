@@ -38,6 +38,7 @@ import {
 	IResetPassword,
 	PHONE_NUMBER_MAX_LENGTH,
 	SESSION_COOKIE_NAME,
+	USER_ID_COOKIE_NAME,
 } from "common-library";
 
 import {
@@ -59,12 +60,19 @@ async function hashPassword(password: string) : Promise<string> {
 async function logIn(context: CustomContext, userId: number) : Promise<void> {
 	const sessionId = await randomBytes(128).toString("hex");
 
+	const newExpiration = getNewExpirationDate();
+
 	await context.state.redisClient.setJSONObject<IRedisSession>(sessionId, {
 		userId,
-		expirationDate: getNewExpirationDate()
+		expirationDate: newExpiration
 	});
 
-	context.cookies.set(SESSION_COOKIE_NAME, sessionId);
+	context.body = {
+		sessionId,
+		userId,
+		expirationDate: newExpiration
+	};
+
 	context.status = 200;
 }
 

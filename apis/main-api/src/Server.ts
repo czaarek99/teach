@@ -9,23 +9,23 @@ import * as serve from "koa-static";
 import auth from "./routes/auth";
 import ad from "./routes/ad";
 import image from "./routes/image";
+import user from "./routes/user";
 
 import { config } from "./config";
-import { HttpError, ErrorMessage } from "common-library";
 import { EmailClient } from "./email/EmailClient";
 import { connectToDatabase } from "./database/connection";
 
-import { 
-	Logger, 
-	RedisClient, 
-	requestIdMiddleware, 
-	getSessionMiddleware, 
-	authenticationMiddleware, 
-	loggerMiddleware, 
+import {
+	Logger,
+	RedisClient,
+	requestIdMiddleware,
+	getSessionMiddleware,
+	authenticationMiddleware,
+	loggerMiddleware,
 	IApiState,
 	getErrorHandler,
 	ApiContext
-} from "server-lib"; 
+} from "server-lib";
 
 interface IState extends IApiState {
 	emailClient: EmailClient
@@ -69,7 +69,9 @@ export class Server {
 		const app = new Koa();
 		app.keys = config.applicationKeys;
 
-		app.use(cors());
+		app.use(cors({
+			credentials: true
+		}));
 
 		app.use(bodyParser({
 			multipart: true
@@ -85,6 +87,7 @@ export class Server {
 		const openRouter = new Router();
 		openRouter.use("/auth", auth.middleware());
 		openRouter.use("/ad", ad.middleware());
+		openRouter.use("/user", user.middleware());
 		openRouter.use("/image", image.routes());
 		app.use(openRouter.routes());
 

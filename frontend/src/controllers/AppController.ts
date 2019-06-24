@@ -18,9 +18,12 @@ import { IBrowsePageController } from "../interfaces/controllers/pages/IBrowsePa
 import { BrowsePageController } from "./pages/BrowsePageController";
 import { NavbarController } from "./templates/NavbarController";
 import { INavbarController } from "../interfaces/controllers/templates/INavbarController";
+import { IUserService } from "../interfaces/services/IUserService";
+import { UserService } from "../services/UserService";
 
 interface IServices {
 	authenticationService: IAuthenticationService
+	userService: IUserService
 	adService: IAdService
 }
 
@@ -39,16 +42,21 @@ export class AppController implements IAppController {
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
-		this.navbarController = new NavbarController(routingStore);
+
+		this.services = {
+			authenticationService: new AuthenticationService(),
+			userService: new UserService(),
+			adService: new AdService()
+		}
+
+		this.navbarController = new NavbarController(
+			this.services.userService,
+			routingStore
+		);
 
 		const routes = Object.values(Routes);
 		if(!routes.includes(routingStore.location.pathname)) {
 			routingStore.push(DEFAULT_ROUTE);
-		}
-
-		this.services = {
-			authenticationService: new AuthenticationService(),
-			adService: new AdService()
 		}
 	}
 

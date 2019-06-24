@@ -15,7 +15,6 @@ export function getNewExpirationDate() : number {
 	return addDays(new Date(), DAYS_FOR_SESSION_TO_EXPIRE).getTime();
 }
 
-
 export function getSessionMiddleware(redisClient: RedisClient) : Koa.Middleware<IApiState> {
 	return async (context: ApiContext, next: Function) => {
 		const sessionId = context.cookies.get(SESSION_COOKIE_NAME);
@@ -31,7 +30,7 @@ export function getSessionMiddleware(redisClient: RedisClient) : Koa.Middleware<
 					const newExpirationDate = getNewExpirationDate();
 
 					await redisClient.setJSONValue<IRedisSession>(
-						sessionId, 
+						sessionId,
 						"expirationDate",
 						newExpirationDate
 					);
@@ -43,7 +42,7 @@ export function getSessionMiddleware(redisClient: RedisClient) : Koa.Middleware<
 					await this.redisClient.deleteJSONObject(sessionId);
 				}
 			}
-		} 
+		}
 
 		await next();
 	}

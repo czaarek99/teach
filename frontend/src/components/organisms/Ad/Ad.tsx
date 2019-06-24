@@ -7,12 +7,12 @@ import { IAdController } from "../../../interfaces/controllers/IAdController";
 import { getImageUrl } from "../../../util/imageAPI";
 import { observer } from "mobx-react";
 
-import { 
-	Card, 
-	CardHeader, 
-	Avatar, 
-	CardMedia, 
-	CardContent, 
+import {
+	Card,
+	CardHeader,
+	Avatar,
+	CardMedia,
+	CardContent,
 	Typography ,
 	createStyles,
 	Theme,
@@ -30,7 +30,7 @@ const MAX_DESCRIPTION_LINES = 8;
 
 width: 2000px
 height: 1000px
-aspect ratio: 2:1 
+aspect ratio: 2:1
 
 */
 
@@ -39,15 +39,15 @@ const styles = (theme: Theme) => createStyles({
 
 	root: {
 		width: "100%",
-		padding: 10,
 		cursor: "pointer",
+		padding: 10,
 
 		"@media screen and (min-width: 520px)": {
 			width: 500
 		}
 	},
 
-	image: { 
+	image: {
 		width: "100%",
 		objectFit: "contain",
 		maxHeight: 250,
@@ -63,14 +63,14 @@ const styles = (theme: Theme) => createStyles({
 	}
 });
 
-interface IAdProps { 
+interface IAdProps {
 	controller: IAdController
 }
 
 
 @observer
 export class Ad extends React.Component<
-	IAdProps & 
+	IAdProps &
 	InjectedIntlProps &
 	WithStyles<typeof styles>
 > {
@@ -105,8 +105,8 @@ export class Ad extends React.Component<
 			);
 
 			avatar = (
-				<Skeleton circle={true} 
-					height={30} 
+				<Skeleton circle={true}
+					height={30}
 					width={30}/>
 			);
 
@@ -115,7 +115,7 @@ export class Ad extends React.Component<
 			);
 		} else {
 			const date = intl.formatDate(model.publicationDate, {
-				month: "long",	
+				month: "long",
 				day: "numeric",
 				year: "2-digit"
 			});
@@ -129,7 +129,7 @@ export class Ad extends React.Component<
 			name = model.name;
 
 			description = (
-				<Truncate lines={8} 
+				<Truncate lines={8}
 					trimWhitespace={true}>
 
 					{model.description}
@@ -138,7 +138,7 @@ export class Ad extends React.Component<
 
 			image = (
 				<CardMedia component="img"
-					image={getImageUrl(model.imageFileName)} 
+					image={getImageUrl(model.imageFileName)}
 					className={classes.image}/>
 			);
 

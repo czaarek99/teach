@@ -4,7 +4,7 @@ import PersonalInformationContent from "./internal/PersonalInformationContent";
 import AccountDetailsContent from "./internal/AccountDetailsContent";
 import AddressContent from "./internal/AddressContent";
 
-import { observer, inject } from "mobx-react";
+import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { simpleFormat } from "../../../util/simpleFormat";
 import { InfoBox, LoadingButton } from "../../molecules";
