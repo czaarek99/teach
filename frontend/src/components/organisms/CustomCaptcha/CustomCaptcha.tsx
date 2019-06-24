@@ -69,6 +69,7 @@ export class CustomCaptcha extends React.Component<
 
 				<div className={classes.captchaContainer}>
 					<ReCAPTCHA onChange={onChange}
+						size="compact"
 						ref={this.captchaRef}
 						sitekey="6LfR7g8TAAAAADQnlcRjUoCobU6725fEXSItaNPe"/>
 				</div>

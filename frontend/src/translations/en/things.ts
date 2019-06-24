@@ -21,5 +21,8 @@ export default {
 	"things.pages.home": "Home",
 	"things.pages.browse": "Browse",
 	"things.pages.profile": "Profile",
-	"things.pages.settings": "Settings"
+	"things.pages.settings": "Settings",
+
+	"things.rowsPerPage": "Rows per page:",
+	"things.rowsPerPageIndex": "{from}-{to} of {count}"
 }

@@ -3,32 +3,42 @@ import React from 'react';
 import { Ad } from '../../organisms';
 import { observer } from 'mobx-react';
 import { NavbarTemplate } from '../../templates';
+import { LabelDisplayedRowsArgs } from "@material-ui/core/TablePagination";
+import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
+import { simpleFormat } from "../../../util/simpleFormat";
 
-import { 
-	createStyles, 
-	Theme, 
-	WithStyles, 
-	withStyles, 
+import {
+	createStyles,
+	Theme,
+	WithStyles,
+	withStyles,
 	TablePagination,
-	CircularProgress } from "@material-ui/core";
+	CircularProgress,
+	Typography} from "@material-ui/core";
 
-import { 
-	IBrowsePageController 
+import {
+	IBrowsePageController
 } from '../../../interfaces/controllers/pages/IBrowsePageController';
 
-import { 
-	INavbarController 
+import {
+	INavbarController
 } from '../../../interfaces/controllers/templates/INavbarController';
+import { InfoBox } from "../../molecules";
 
 
 const styles = (theme: Theme) => createStyles({
 
-	root: {
-		width: "100%"
+	paginatedContainer: {
+		minHeight: "100%"
+	},
+
+	messageContainer: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center"
 	},
 
 	progressContainer: {
-		height: "100vh",
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
@@ -47,8 +57,6 @@ const styles = (theme: Theme) => createStyles({
 		cursor: "not-allowed",
 		pointerEvents: "none"
 	},
-
-
 });
 
 interface IBrowsePageProps {
@@ -58,7 +66,8 @@ interface IBrowsePageProps {
 
 @observer
 export class BrowsePage extends React.Component<
-	IBrowsePageProps & 
+	IBrowsePageProps &
+	InjectedIntlProps &
 	WithStyles<typeof styles>
 > {
 
@@ -67,14 +76,9 @@ export class BrowsePage extends React.Component<
 		const {
 			classes,
 			controller,
-			navbarController
+			navbarController,
+			intl
 		} = this.props;
-
-		const ads = controller.activeAdControllers.map((controller) => {
-			return (
-				<Ad controller={controller} key={controller.controllerId}/>
-			)
-		});
 
 		let paginationClassName = "";
 		if(controller.listLoading) {
@@ -89,29 +93,57 @@ export class BrowsePage extends React.Component<
 					<CircularProgress size={50}/>
 				</div>
 			);
-		} else {
+		} else if(controller.activeAdControllers.length === 0)  {
 			content = (
-				<React.Fragment>
+				<div className={classes.messageContainer}>
+					<InfoBox type="default">
+						<Typography>
+							<FormattedMessage id="info.noAds"/>
+						</Typography>
+					</InfoBox>
+				</div>
+			);
+		} else {
+			const formatDisplayRows = (args: LabelDisplayedRowsArgs) : string => {
+				return intl.formatMessage({
+					id: "things.rowsPerPageIndex"
+				}, {
+					from: args.from.toString(),
+					to: args.to.toString(),
+					count: args.count.toString()
+				});
+			}
+
+			const adsContent = controller.activeAdControllers.map((controller) => {
+				return (
+					<Ad controller={controller} key={controller.controllerId}/>
+				)
+			});
+
+			const labelRowsPerPage = simpleFormat(this, "things.rowsPerPage");
+
+			content = (
+				<div className={classes.paginatedContainer}>
 					<div className={classes.adsContainer}>
-						{ads}
+						{adsContent}
 					</div>
 
-					<TablePagination component="div" 
+					<TablePagination component="div"
+						labelRowsPerPage={labelRowsPerPage}
+						labelDisplayedRows={formatDisplayRows}
 						className={paginationClassName}
 						rowsPerPage={controller.adsPerPage}
 						page={controller.pageNumber}
-						count={controller.totalAdCount} 
+						count={controller.totalAdCount}
 						onChangeRowsPerPage={controller.onChangeAdsPerPage}
 						onChangePage={controller.onChangePage}/>
-				</React.Fragment>
+				</div>
 			)
 		}
 
 		return (
 			<NavbarTemplate controller={navbarController}>
-				<div className={classes.root}>
-					{content}
-				</div>
+				{content}
 			</NavbarTemplate>
 
 		)
@@ -119,4 +151,4 @@ export class BrowsePage extends React.Component<
 
 }
 
-export default withStyles(styles)(BrowsePage);
+export default withStyles(styles)(injectIntl(BrowsePage));

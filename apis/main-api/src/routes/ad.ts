@@ -8,31 +8,17 @@ import { differenceInYears } from "date-fns";
 import { throwApiError } from "server-lib";
 import { Image } from "../database/models/Image";
 import { Address } from "../database/models/Address";
+import { resolveTeacher } from "../util/resolveTeacher";
 
 const router = Router();
 
 function resolveDatabaseAd(ad: Ad) : IAd {
 	const user = ad.user;
 
-	const now = new Date();
-
-	const age = differenceInYears(now, user.birthDate);
-
-	let avatarFileName = null;
-	if(user.profilePicture) {
-		avatarFileName = user.profilePicture.imageFileName;
-	}
+	const teacher = resolveTeacher(user);
 
 	return {
-		teacher: {
-			firstName: user.firstName,
-			lastName: user.lastName,
-			phoneNumber: user.phoneNumber,
-			email: user.email,
-			city: user.address.city,
-			age,
-			avatarFileName
-		},
+		teacher,
 		id: ad.id,
 		name: ad.name,
 		description: ad.description,
@@ -51,7 +37,7 @@ router.get("/list", {
 	}
 }, async (context: CustomContext) => {
 
-	const query = context.query; 
+	const query = context.query;
 	const [ads, count] : [Ad[], number] = await Promise.all([
 		Ad.findAll<Ad>({
 			limit: query.limit,

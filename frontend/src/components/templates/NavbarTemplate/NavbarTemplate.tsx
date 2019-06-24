@@ -7,26 +7,22 @@ import PersonIcon from "@material-ui/icons/Person";
 import BrowseIcon from "@material-ui/icons/Search";
 
 import { InjectedIntlProps, injectIntl } from 'react-intl';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { simpleFormat } from '../../../util/simpleFormat';
 import { Routes } from '../../../interfaces/Routes';
 import { PRODUCT_NAME } from 'common-library';
 
-import { 
-	INavbarController 
+import {
+	INavbarController
 } from '../../../interfaces/controllers/templates/INavbarController';
 
-import { 
-	IRoutingStoreProps 
-} from '../../../interfaces/props/IRoutingStoreProps';
-
-import { 
-	ListItem, 
-	ListItemIcon, 
-	ListItemText, 
-	List, 
-	AppBar, 
-	Toolbar, 
+import {
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	List,
+	AppBar,
+	Toolbar,
 	IconButton,
 	Typography,
 	Hidden,
@@ -43,30 +39,31 @@ const drawerWidth = 280;
 
 const styles = (theme: Theme) => createStyles({
 	root: {
-		display: 'flex',
-    },
+		display: "flex",
+		minHeight: "100vh"
+	},
 
-    drawer: {
-    	[theme.breakpoints.up('sm')]: {
+	drawer: {
+		[theme.breakpoints.up("sm")]: {
 			width: drawerWidth,
 			flexShrink: 0,
-	  	},
-    },
+		},
+	},
 
-    appBar: {
-    	marginLeft: drawerWidth,
+	appBar: {
+		marginLeft: drawerWidth,
 
-    	[theme.breakpoints.up('sm')]: {
-     		width: `calc(100% - ${drawerWidth}px)`,
-      	},
-    },
+		[theme.breakpoints.up("sm")]: {
+			width: `calc(100% - ${drawerWidth}px)`,
+		},
+	},
 
-    menuButton: {
+	menuButton: {
 		marginRight: theme.spacing(2),
-      	[theme.breakpoints.up('sm')]: {
-       		display: 'none',
-    	},
-    },
+		[theme.breakpoints.up("sm")]: {
+			display: "none",
+		},
+	},
 
 	toolbar: {
 		display: "flex",
@@ -75,11 +72,11 @@ const styles = (theme: Theme) => createStyles({
 		...theme.mixins.toolbar
 	},
 
-    drawerPaper: {
-    	width: drawerWidth,
-    },
+	drawerPaper: {
+		width: drawerWidth,
+	},
 
-	content: {
+	main: {
 		flexGrow: 1,
 		padding: 10,
 	},
@@ -89,27 +86,37 @@ const styles = (theme: Theme) => createStyles({
 		marginRight: 16
 	},
 
-	userInfo: {
+	content: {
+		minHeight: `calc(100% - 48px)`,
 
+		[theme.breakpoints.up("sm")]: {
+			minHeight: `calc(100% - 64px)`,
+		},
+
+		display: "flex",
+		flexDirection: "column",
+
+		"& > *": {
+			flex: 1
+		}
 	}
-    
 });
 
 interface INavbarTemplateProps {
 	controller: INavbarController
 }
 
-type ExternalProps = 
-	INavbarTemplateProps & 
-	InjectedIntlProps & 
+type ExternalProps =
+	INavbarTemplateProps &
+	InjectedIntlProps &
 	WithStyles<typeof styles>;
 
 @observer
 class NavbarTemplate extends React.Component<ExternalProps> {
 
 	private renderNavigationItem(
-		text: string, 
-		icon: React.ReactElement, 
+		text: string,
+		icon: React.ReactElement,
 		route: Routes
 	) : React.ReactNode {
 
@@ -120,7 +127,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		} = this.props;
 
 		return (
-			<ListItem button={true} 
+			<ListItem button={true}
 				selected={controller.isSelected(route)}
 				onClick={() => controller.onNavItemClick(route)}
 				key={text}>
@@ -162,7 +169,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 						<Typography>
 							Real Name
 						</Typography>
-						<Typography variant="body2" 
+						<Typography variant="body2"
 							color="textSecondary">
 
 							testemail@gmail.com
@@ -204,8 +211,8 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 				</AppBar>
 				<nav className={classes.drawer}>
 					<Hidden smUp={true} implementation="css">
-						<Drawer variant="temporary" 
-							anchor="left" 
+						<Drawer variant="temporary"
+							anchor="left"
 							onClose={() => controller.onToggleDrawer()}
 							classes={{
 								paper: classes.drawerPaper,
@@ -219,7 +226,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 						</Drawer>
 					</Hidden>
 					<Hidden xsDown={true}>
-						<Drawer variant="permanent" 
+						<Drawer variant="permanent"
 							classes={{
 								paper: classes.drawerPaper,
 							}}
@@ -228,9 +235,11 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 						</Drawer>
 					</Hidden>
 				</nav>
-				<main className={classes.content}>
+				<main className={classes.main}>
 					<div className={classes.toolbar}/>
-					{children}
+					<div className={classes.content}>
+						{children}
+					</div>
 				</main>
 			</div>
 		)

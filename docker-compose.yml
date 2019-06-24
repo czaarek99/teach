@@ -13,6 +13,9 @@ services:
       MYSQL_PASSWORD: test
     volumes:
       - ./mysql_data:/var/lib/mysql
+      - ./mysql.cnf:/etc/mysql/conf.d/local.cnf
+    command:
+      mysqld --innodb-flush-method=littlesync --innodb-use-native-aio=OFF --log_bin=ON
   redis_db:
     image: redislabs/rejson
     restart: always

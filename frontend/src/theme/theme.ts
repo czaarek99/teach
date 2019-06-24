@@ -2,6 +2,16 @@ import { createMuiTheme } from "@material-ui/core";
 import { pink, cyan } from "@material-ui/core/colors";
 
 export default createMuiTheme({
+	breakpoints: {
+		values: {
+			xs: 0,
+			sm: 768,
+			md: 992,
+			lg: 1200,
+			xl: 1600
+		}
+	},
+
 	palette: {
 		success: {
 			light: "#66BB6A",
