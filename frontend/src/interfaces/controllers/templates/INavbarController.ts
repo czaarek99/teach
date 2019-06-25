@@ -1,10 +1,9 @@
 import { Routes } from "../../Routes";
-import { ITeacher } from "common-library";
+import { IUserCache } from "../../../util/UserCache";
 
 export interface INavbarController {
 	readonly navigationDrawerIsOpen: boolean
-	readonly user: ITeacher | null
-	readonly isLoggedIn: boolean
+	readonly userCache: IUserCache
 
 	isSelected: (route: Routes) => boolean
 	onWindowResize: () => void

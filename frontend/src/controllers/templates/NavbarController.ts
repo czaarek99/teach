@@ -1,36 +1,18 @@
-import Cookies from "js-cookie"
-
 import { INavbarController } from "../../interfaces/controllers/templates/INavbarController";
 import { RouterStore } from "mobx-react-router";
 import { observable } from "mobx";
 import { Routes } from "../../interfaces/Routes";
-import { ITeacher, SESSION_COOKIE_NAME } from "common-library";
-import { IUserService } from "../../interfaces/services/IUserService";
+import { IUserCache } from "../../util/UserCache";
 
 export class NavbarController implements INavbarController {
 
 	private readonly routingStore: RouterStore;
-	private readonly userService: IUserService;
-
+	@observable public readonly userCache: IUserCache;
 	@observable public navigationDrawerIsOpen = false;
-	@observable public user: ITeacher | null = null;
-	@observable public isLoggedIn = false;
 
-	constructor(userService: IUserService, routingStore: RouterStore) {
-		this.userService = userService;
+	constructor(routingStore: RouterStore, userCache: IUserCache) {
 		this.routingStore = routingStore;
-
-		const session = localStorage.getItem(SESSION_COOKIE_NAME);
-
-		this.isLoggedIn =  session !== undefined;
-		this.load();
-	}
-
-	private async load() : Promise<void> {
-		if(this.isLoggedIn) {
-			const user = await this.userService.getSelf();
-			this.user = user;
-		}
+		this.userCache = userCache;
 	}
 
 	public onToggleDrawer() : void {

@@ -171,9 +171,20 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		let realNameComponent : React.ReactNode;
 		let emailComponent : React.ReactNode;
 
-		if(controller.isLoggedIn) {
+		const cache = controller.userCache;
 
-			if(controller.user === null) {
+		if(cache.isLoggedIn) {
+
+			if(cache.hasCached) {
+				avatarComponent = (
+					<Avatar>
+						{cache.firstName && cache.firstName[0]}
+					</Avatar>
+				);
+
+				realNameComponent = cache.firstName;
+				emailComponent = cache.email;
+			} else if(cache.loading){
 				avatarComponent = (
 					<Skeleton width={40}
 						height={40}
@@ -182,17 +193,6 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 
 				realNameComponent = <Skeleton />;
 				emailComponent = <Skeleton />;
-			} else {
-				const user = controller.user;
-
-				avatarComponent = (
-					<Avatar>
-						{user.firstName[0]}
-					</Avatar>
-				);
-
-				realNameComponent = user.firstName;
-				emailComponent = user.email;
 			}
 		}
 

@@ -20,6 +20,7 @@ import { NavbarController } from "./templates/NavbarController";
 import { INavbarController } from "../interfaces/controllers/templates/INavbarController";
 import { IUserService } from "../interfaces/services/IUserService";
 import { UserService } from "../services/UserService";
+import { IUserCache, UserCache } from "../util/UserCache";
 
 interface IServices {
 	authenticationService: IAuthenticationService
@@ -29,11 +30,12 @@ interface IServices {
 
 export class AppController implements IAppController {
 
+	public readonly navbarController: INavbarController;
+
 	private readonly routingStore: RouterStore;
 	private readonly services: IServices;
 
-	public readonly navbarController: INavbarController;
-
+	@observable private readonly userCache: IUserCache;
 	@observable private _loginPageController: ILoginPageController | null = null;
 	@observable private _registrationPageController: IRegistrationPageController | null = null;
 	@observable private _forgotPageController: IForgotPageController | null = null;
@@ -47,12 +49,15 @@ export class AppController implements IAppController {
 			authenticationService: new AuthenticationService(),
 			userService: new UserService(),
 			adService: new AdService()
-		}
+		};
+
+		this.userCache = new UserCache(this.services.userService);
 
 		this.navbarController = new NavbarController(
-			this.services.userService,
-			routingStore
+			routingStore,
+			this.userCache
 		);
+
 
 		const routes = Object.values(Routes);
 		if(!routes.includes(routingStore.location.pathname)) {
