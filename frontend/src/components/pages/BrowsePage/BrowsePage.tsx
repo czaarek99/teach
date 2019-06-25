@@ -6,6 +6,7 @@ import { NavbarTemplate } from '../../templates';
 import { LabelDisplayedRowsArgs } from "@material-ui/core/TablePagination";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { simpleFormat } from "../../../util/simpleFormat";
+import { InfoBox } from "../../molecules";
 
 import {
 	createStyles,
@@ -23,7 +24,6 @@ import {
 import {
 	INavbarController
 } from '../../../interfaces/controllers/templates/INavbarController';
-import { InfoBox } from "../../molecules";
 
 
 const styles = (theme: Theme) => createStyles({
@@ -65,7 +65,7 @@ interface IBrowsePageProps {
 }
 
 @observer
-export class BrowsePage extends React.Component<
+class BrowsePage extends React.Component<
 	IBrowsePageProps &
 	InjectedIntlProps &
 	WithStyles<typeof styles>

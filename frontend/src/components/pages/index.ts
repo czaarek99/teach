@@ -4,3 +4,4 @@ export * from "./ForgotPage";
 export * from "./ResetPasswordPage";
 export * from "./HomePage";
 export * from "./BrowsePage";
+export * from "./AdPage";

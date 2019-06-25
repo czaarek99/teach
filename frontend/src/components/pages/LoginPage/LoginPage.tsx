@@ -8,7 +8,7 @@ import { simpleFormat } from "../../../util/simpleFormat";
 import { observer } from "mobx-react";
 import { PASSWORD_MAX_LENGTH, EMAIL_MAX_LENGTH } from "common-library";
 import { InfoBox, CustomTextField, LoadingButton } from "../../molecules";
-import { Routes } from "../../../interfaces/Routes";
+import { Route } from "../../../interfaces/Routes";
 import { AuthenticationTemplate, AUTHENTICATION_MARGIN } from "../../templates";
 
 import {
@@ -122,7 +122,7 @@ class LoginPage extends React.Component<
 					}}
 				/>
 
-				<Link href={Routes.FORGOT_PASSWORD} >
+				<Link href={Route.FORGOT_PASSWORD} >
 					<Typography>
 						<FormattedMessage id="actions.forgotPassword"/>
 					</Typography>

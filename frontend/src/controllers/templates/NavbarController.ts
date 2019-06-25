@@ -1,7 +1,7 @@
 import { INavbarController } from "../../interfaces/controllers/templates/INavbarController";
 import { RouterStore } from "mobx-react-router";
 import { observable } from "mobx";
-import { Routes } from "../../interfaces/Routes";
+import { Route } from "../../interfaces/Routes";
 import { IUserCache } from "../../util/UserCache";
 
 export class NavbarController implements INavbarController {
@@ -23,11 +23,11 @@ export class NavbarController implements INavbarController {
 		this.navigationDrawerIsOpen = false;
 	}
 
-	public onNavItemClick(route: Routes) : void {
+	public onNavItemClick(route: Route) : void {
 		this.routingStore.push(route);
 	}
 
-	public isSelected(route: Routes) : boolean {
+	public isSelected(route: Route) : boolean {
 		return this.routingStore.location.pathname === route;
 	}
 }

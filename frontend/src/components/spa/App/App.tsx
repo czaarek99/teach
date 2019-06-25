@@ -2,17 +2,18 @@ import React from 'react';
 
 import { IAppController } from '../../../interfaces/controllers/IAppController';
 import { observer, inject } from 'mobx-react';
-import { Routes } from '../../../interfaces/Routes';
+import { Route } from '../../../interfaces/Routes';
 import { IRoutingStoreProps } from '../../../interfaces/props/IRoutingStoreProps';
 import { CssBaseline } from '@material-ui/core';
 
-import { 
-	LoginPage, 
-	RegistrationPage, 
-	ForgotPage, 
-	ResetPasswordPage, 
-	BrowsePage, 
-	HomePage 
+import {
+	LoginPage,
+	RegistrationPage,
+	ForgotPage,
+	ResetPasswordPage,
+	BrowsePage,
+	HomePage,
+	AdPage
 } from '../../pages';
 
 interface IAppProps {
@@ -37,20 +38,29 @@ class App extends React.Component<IAppProps> {
 		} = this.props as AllProps;
 
 		const pages : IPages = {
-			[Routes.LOGIN]: () =>
-				<LoginPage controller={controller.loginPageController} />,
-			[Routes.REGISTRATION]: () =>
-				<RegistrationPage controller={controller.registrationPageController} />,
-			[Routes.FORGOT_PASSWORD]: () =>
-				<ForgotPage controller={controller.forgotPageController} />,
-			[Routes.RESET_PASSWORD]: () =>
-				<ResetPasswordPage controller={controller.resetPasswordPageController}/>,
-			[Routes.BROWSE]: () => (
-				<BrowsePage controller={controller.browsePageController} 
+			[Route.LOGIN]: () => (
+				<LoginPage controller={controller.loginPageController} />
+			),
+			[Route.REGISTRATION]: () => (
+				<RegistrationPage controller={controller.registrationPageController} />
+			),
+			[Route.FORGOT_PASSWORD]: () => (
+				<ForgotPage controller={controller.forgotPageController} />
+			),
+			[Route.RESET_PASSWORD]: () => (
+				<ResetPasswordPage controller={controller.resetPasswordPageController}/>
+			),
+			[Route.BROWSE]: () => (
+				<BrowsePage controller={controller.browsePageController}
 					navbarController={controller.navbarController}/>
 			),
-			[Routes.HOME]: () =>
+			[Route.AD]: () => (
+				<AdPage controller={controller.adPageController}
+					navbarController={controller.navbarController}/>
+			),
+			[Route.HOME]: () => (
 				<HomePage />
+			)
 		};
 
 		const pathName = routingStore.location.pathname;

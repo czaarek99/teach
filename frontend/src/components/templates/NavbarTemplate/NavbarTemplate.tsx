@@ -9,7 +9,7 @@ import BrowseIcon from "@material-ui/icons/Search";
 import { InjectedIntlProps, injectIntl } from 'react-intl';
 import { observer } from 'mobx-react';
 import { simpleFormat } from '../../../util/simpleFormat';
-import { Routes } from '../../../interfaces/Routes';
+import { Route } from '../../../interfaces/Routes';
 import { PRODUCT_NAME } from 'common-library';
 
 import {
@@ -124,7 +124,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 	private renderNavigationItem(
 		text: string,
 		icon: React.ReactElement,
-		route: Routes
+		route: Route
 	) : React.ReactNode {
 
 		const translation = simpleFormat(this, text);
@@ -172,7 +172,6 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		let emailComponent : React.ReactNode;
 
 		const cache = controller.userCache;
-
 		if(cache.isLoggedIn) {
 
 			if(cache.hasCached) {
@@ -220,10 +219,10 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 				<Divider />
 
 				<List>
-					{this.renderNavigationItem("things.pages.home", <HomeIcon />, Routes.HOME)}
-					{this.renderNavigationItem("things.pages.browse", <BrowseIcon />, Routes.BROWSE)}
-					{this.renderNavigationItem("things.pages.profile", <PersonIcon />, Routes.PROFILE)}
-					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Routes.SETTINGS)}
+					{this.renderNavigationItem("things.pages.home", <HomeIcon />, Route.HOME)}
+					{this.renderNavigationItem("things.pages.browse", <BrowseIcon />, Route.BROWSE)}
+					{this.renderNavigationItem("things.pages.profile", <PersonIcon />, Route.PROFILE)}
+					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Route.SETTINGS)}
 				</List>
 			</div>
 		)

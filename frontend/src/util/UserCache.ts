@@ -28,7 +28,7 @@ export class UserCache implements IUserCache {
 		this.userService = userService;
 
 		const session = localStorage.getItem(SESSION_COOKIE_NAME);
-		this.isLoggedIn =  session !== undefined;
+		this.isLoggedIn =  session !== null;
 
 		this.hasCached = localStorage.getItem("user.cache") === "true";
 

@@ -50,7 +50,7 @@ const styles = (theme: Theme) => createStyles({
 	image: {
 		width: "100%",
 		objectFit: "contain",
-		maxHeight: 250,
+		maxHeight: AD_COVER_IMAGE_HEIGHT,
 	},
 
 	card: {
@@ -156,7 +156,8 @@ export class Ad extends React.Component<
 		}
 
 		return (
-			<div className={classes.root}>
+			<div className={classes.root}
+				onClick={() => controller.onClick()}>
 				<Card className={classes.card}>
 					<CardHeader title={name}
 						subheader={subHeader}

@@ -1,4 +1,4 @@
-export enum Routes {
+export enum Route {
 	LOGIN = "/auth/login",
 	REGISTRATION = "/auth/register",
 	FORGOT_PASSWORD = "/auth/forgot",
@@ -8,7 +8,8 @@ export enum Routes {
 	SETTINGS = "/settings",
 
 	BROWSE = "/browse",
+	AD = "/ad",
 	HOME = "/"
 }
 
-export const DEFAULT_ROUTE = Routes.HOME;
+export const DEFAULT_ROUTE = Route.HOME;

@@ -9,7 +9,7 @@ import { RouterStore } from "mobx-react-router";
 import { IForgotPageController } from "../interfaces/controllers/pages/IForgotPageController";
 import { ForgotPageController } from "./pages/ForgotPageController";
 import { observable, computed } from "mobx";
-import { Routes, DEFAULT_ROUTE } from "../interfaces/Routes";
+import { Route, DEFAULT_ROUTE } from "../interfaces/Routes";
 import { IResetPasswordPageController } from "../interfaces/controllers/pages/IResetPasswordPageController";
 import { ResetPasswordPageController } from "./pages/ResetPasswordPageController";
 import { IAdService } from "../interfaces/services/IAdService";
@@ -21,6 +21,8 @@ import { INavbarController } from "../interfaces/controllers/templates/INavbarCo
 import { IUserService } from "../interfaces/services/IUserService";
 import { UserService } from "../services/UserService";
 import { IUserCache, UserCache } from "../util/UserCache";
+import { IAdPageController } from "../interfaces/controllers/pages/IAdPageController";
+import { AdPageController } from "./pages/AdPageController";
 
 interface IServices {
 	authenticationService: IAuthenticationService
@@ -41,6 +43,7 @@ export class AppController implements IAppController {
 	@observable private _forgotPageController: IForgotPageController | null = null;
 	@observable private _resetPasswordPageController: IResetPasswordPageController | null = null;
 	@observable private _browsePageController: IBrowsePageController | null = null;
+	@observable private _adPageController: IAdPageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -59,7 +62,7 @@ export class AppController implements IAppController {
 		);
 
 
-		const routes = Object.values(Routes);
+		const routes = Object.values(Route);
 		if(!routes.includes(routingStore.location.pathname)) {
 			routingStore.push(DEFAULT_ROUTE);
 		}
@@ -110,11 +113,20 @@ export class AppController implements IAppController {
 	@computed public get browsePageController() : IBrowsePageController {
 		if(this._browsePageController === null) {
 			this._browsePageController = new BrowsePageController(
-				this.services.adService
+				this.services.adService,
+				this.routingStore
 			);
 		}
 
 		return this._browsePageController;
+	}
+
+	@computed public get adPageController() : IAdPageController {
+		if(this._adPageController === null) {
+			this._adPageController = new AdPageController();
+		}
+
+		return this._adPageController;
 	}
 
 }
