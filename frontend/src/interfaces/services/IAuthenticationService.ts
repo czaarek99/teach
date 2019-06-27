@@ -1,10 +1,8 @@
-import { IUser, IForgot, IResetPassword } from "common-library";
-
-export type LoginData = Pick<IUser, "email" | "password">;
+import { ILoginInput, IRegistrationInput, IForgotInput, IResetPasswordInput } from "common-library";
 
 export interface IAuthenticationService {
-	logIn: (data: LoginData) => Promise<void>
-	register: (data: IUser) => Promise<void>
-	forgot: (email: IForgot) => Promise<void>
-	resetPassword: (reset: IResetPassword) => Promise<void>
+	logIn: (data: ILoginInput) => Promise<void>
+	register: (data: IRegistrationInput) => Promise<void>
+	forgot: (email: IForgotInput) => Promise<void>
+	resetPassword: (reset: IResetPasswordInput) => Promise<void>
 }

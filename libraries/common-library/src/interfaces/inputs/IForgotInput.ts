@@ -1,4 +1,4 @@
-export interface IForgot {
+export interface IForgotInput {
 	email: string
 	captcha: string | null
 }

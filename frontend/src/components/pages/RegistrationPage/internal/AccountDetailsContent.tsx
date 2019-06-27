@@ -53,14 +53,14 @@ class AccountDetailsContent extends React.Component<
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						type="email"
-						value={controller.registrationModel.email}
+						value={controller.model.email}
 						minLength={EMAIL_MIN_LENGTH}
 						maxLength={EMAIL_MAX_LENGTH}
 						label={emailLabel}
 						required={true}
 						onChange={event => controller.onChange("email", event.target.value)}
 						startAdornment={ <MailIcon /> }
-						errorModel={controller.registrationErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="email"
 						errorTranslationValues={{
 							value: emailLabel,
@@ -73,12 +73,12 @@ class AccountDetailsContent extends React.Component<
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						type="tel"
-						value={controller.registrationModel.phoneNumber}
+						value={controller.model.phoneNumber}
 						maxLength={PHONE_NUMBER_MAX_LENGTH}
 						label={phoneNumberLabel}
 						onChange={event => controller.onChange("phoneNumber", event.target.value)}
 						startAdornment={ <PhoneIcon /> }
-						errorModel={controller.registrationErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="phoneNumber"
 						errorTranslationValues={{
 							value: phoneNumberLabel,
@@ -90,14 +90,14 @@ class AccountDetailsContent extends React.Component<
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						type="password"
-						value={controller.registrationModel.password}
+						value={controller.model.password}
 						minLength={PASSWORD_MIN_LENGTH}
 						maxLength={PASSWORD_MAX_LENGTH}
 						label={passwordLabel}
 						required={true}
 						onChange={event => controller.onChange("password", event.target.value)}
 						startAdornment={ <KeyIcon /> }
-						errorModel={controller.registrationErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="password"
 						errorTranslationValues={{
 							value: passwordLabel,
@@ -110,14 +110,14 @@ class AccountDetailsContent extends React.Component<
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						type="password"
-						value={controller.registrationModel.repeatPassword}
+						value={controller.model.repeatPassword}
 						minLength={PASSWORD_MIN_LENGTH}
 						maxLength={PASSWORD_MAX_LENGTH}
 						label={repeatPasswordLabel}
 						required={true}
 						onChange={event => controller.onChange("repeatPassword", event.target.value)}
 						startAdornment={ <KeyIcon /> }
-						errorModel={controller.registrationErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="repeatPassword"
 						errorTranslationValues={{
 							value: passwordLabel

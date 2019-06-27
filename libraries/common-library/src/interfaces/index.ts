@@ -1,4 +1,6 @@
-export * from "./ErrorMessage";
+export * from "./inputs"
 export * from "./models";
-export * from "./IEdge";
+
+export * from "./ErrorMessage";
 export * from "./IPagination";
+export * from "./IEdge";

@@ -93,9 +93,7 @@ export class ResetPasswordPageController implements IResetPasswordPageController
 	public async onSubmit() : Promise<void> {
 
 		if(!this.disabled) {
-			const model = this.model.toJson();
-
-			for(const key of objectKeys(model)) {
+			for(const key of objectKeys(this.model.toValidate())) {
 				this.validate(key);
 			}
 
@@ -104,7 +102,7 @@ export class ResetPasswordPageController implements IResetPasswordPageController
 				this.resetPasswordButtonState = "loading";
 
 				try {
-					await this.authenticationService.resetPassword(model);
+					await this.authenticationService.resetPassword(this.model.toInput());
 
 					this.infoBoxType = "success";
 					this.infoBoxMessage = "actions.passwordIsReset";

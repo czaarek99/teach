@@ -101,7 +101,7 @@ export class Ad extends React.Component<
 			intl,
 		} = this.props;
 
-		const model = controller.model;
+		const ad = controller.ad;
 
 		let subHeader;
 		let description;
@@ -109,7 +109,7 @@ export class Ad extends React.Component<
 		let image;
 		let name;
 
-		if(model === null) {
+		if(ad === null) {
 			name = (
 				<Skeleton />
 			);
@@ -134,7 +134,7 @@ export class Ad extends React.Component<
 				</div>
 			);
 		} else {
-			const date = intl.formatDate(model.publicationDate, {
+			const date = intl.formatDate(ad.publicationDate, {
 				month: "long",
 				day: "numeric",
 				year: "2-digit"
@@ -146,23 +146,23 @@ export class Ad extends React.Component<
 				date
 			});
 
-			name = model.name;
-			description = model.description;
+			name = ad.name;
+			description = ad.description;
 
 			image = (
 				<CardMedia component="img"
-					image={getImageUrl(model.imageFileName)}
+					image={getImageUrl(ad.imageFileName)}
 					className={classes.image}/>
 			);
 
-			if(model.teacher.avatarFileName) {
+			if(ad.teacher.avatarFileName) {
 				avatar = (
-					<Avatar src={getImageUrl(model.teacher.avatarFileName)}/>
+					<Avatar src={getImageUrl(ad.teacher.avatarFileName)}/>
 				);
 			} else {
 				avatar = (
 					<Avatar>
-						{model.teacher.firstName[0]}
+						{ad.teacher.firstName[0]}
 					</Avatar>
 				)
 			}

@@ -10,6 +10,7 @@ import auth from "./routes/auth";
 import ad from "./routes/ad";
 import image from "./routes/image";
 import user from "./routes/user";
+import teacher from "./routes/teacher";
 
 import { config } from "./config";
 import { EmailClient } from "./email/EmailClient";
@@ -88,11 +89,13 @@ export class Server {
 		openRouter.use("/auth", auth.middleware());
 		openRouter.use("/ad", ad.middleware());
 		openRouter.use("/user", user.middleware());
+		openRouter.use("/teacher", teacher.middleware())
 		openRouter.use("/image", image.routes());
-		app.use(openRouter.routes());
 
 		const protectedRouter = new Router();
 		protectedRouter.use(authenticationMiddleware);
+
+		app.use(openRouter.routes());
 		app.use(protectedRouter.routes());
 
 		app.use(mount("/images", serve(config.staticImagesPath)))

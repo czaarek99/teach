@@ -1,5 +1,5 @@
-import { IAdModel } from "../../models/IAdModel";
+import { IAd } from "common-library";
 
 export interface IAdPageController {
-	readonly model: IAdModel | null;
+	readonly ad: IAd | null;
 }

@@ -1,12 +1,12 @@
 import { IAddress } from "./IAddress";
 
 export interface IUser {
-	id?: number
+	id: number
 	firstName: string
 	lastName: string
-	email: string
-	password?: string
 	birthDate: Date
-	address?: IAddress
+	email: string
+	address: IAddress
 	phoneNumber?: string
+	avatarFileName?: string
 }

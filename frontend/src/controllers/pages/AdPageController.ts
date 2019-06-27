@@ -1,13 +1,13 @@
 import { IAdPageController } from "../../interfaces/controllers/pages/IAdPageController";
 import { observable } from "mobx";
-import { IAdModel } from "../../interfaces/models/IAdModel";
 import { IAdService } from "../../interfaces/services/IAdService";
+import { IAd } from "common-library";
 
 export class AdPageController implements IAdPageController {
 
 	private readonly adService: IAdService;
 
-	@observable public model: IAdModel | null = null;
+	@observable public ad: IAd | null = null;
 
 	constructor(adService: IAdService) {
 		this.adService = adService;
@@ -23,7 +23,7 @@ export class AdPageController implements IAdPageController {
 			const adId = parseInt(idString);
 
 			const ad = await this.adService.getAd(adId);
-			this.model = ad;
+			this.ad = ad;
 		} else {
 
 		}

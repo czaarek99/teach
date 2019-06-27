@@ -67,7 +67,7 @@ export class ForgotPageController implements IForgotPageController {
 
 	public async onSubmit() : Promise<void> {
 		if(!this.done) {
-			for(const key of objectKeys(this.model.toJson())) {
+			for(const key of objectKeys(this.model.toInput())) {
 				this.validate(key);
 			}
 
@@ -75,7 +75,7 @@ export class ForgotPageController implements IForgotPageController {
 				this.loading = true;
 
 				try {
-					await this.authenticationService.forgot(this.model.toJson());
+					await this.authenticationService.forgot(this.model.toInput());
 
 					this.infoBoxType = "success";
 					this.forgotButtonState = "success";

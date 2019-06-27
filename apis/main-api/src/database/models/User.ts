@@ -17,18 +17,16 @@ import {
 } from "sequelize-typescript";
 
 import {
-	IUser,
 	FIRST_NAME_MAX_LENGTH,
 	LAST_NAME_MAX_LENGTH,
 	EMAIL_MAX_LENGTH,
 	PHONE_NUMBER_MAX_LENGTH,
-	UUID_V4_LENGTH
 } from "common-library";
 
 const PASSWORD_HASH_MAX_LENGTH = 60;
 
 @Table
-export class User extends Model<User> implements IUser {
+export class User extends Model<User> {
 
 	@Unique
 	@PrimaryKey

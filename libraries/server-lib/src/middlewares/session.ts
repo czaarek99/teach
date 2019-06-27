@@ -1,7 +1,7 @@
 import * as Koa from "koa";
 
 import { RedisClient } from "../RedisClient";
-import { SESSION_COOKIE_NAME, SESSION_HEADER_NAME } from "common-library"
+import { SESSION_HEADER_NAME } from "common-library"
 import { isAfter, addDays } from "date-fns";
 import { ApiContext, IApiState } from "../interfaces";
 

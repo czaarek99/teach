@@ -51,14 +51,14 @@ class PersonalInformationContent extends React.Component<
 
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
-						value={controller.registrationModel.firstName}
+						value={controller.model.firstName}
 						minLength={FIRST_NAME_MIN_LENGTH}
 						maxLength={FIRST_NAME_MAX_LENGTH}
 						label={firstNameLabel}
 						required={true}
 						onChange={event => controller.onChange("firstName", event.target.value)}
 						startAdornment={ <UserIcon /> }
-						errorModel={controller.registrationErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="firstName"
 						errorTranslationValues={{
 							value: firstNameLabel,
@@ -71,14 +71,14 @@ class PersonalInformationContent extends React.Component<
 
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
-						value={controller.registrationModel.lastName}
+						value={controller.model.lastName}
 						minLength={LAST_NAME_MIN_LENGTH}
 						maxLength={LAST_NAME_MAX_LENGTH}
 						label={lastNameLabel}
 						required={true}
 						onChange={event => controller.onChange("lastName", event.target.value)}
 						startAdornment={ <UserIcon /> }
-						errorModel={controller.registrationErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="lastName"
 						errorTranslationValues={{
 							value: lastNameLabel,
@@ -93,7 +93,7 @@ class PersonalInformationContent extends React.Component<
 					display="flex"
 					justifyContent="center">
 
-					<CustomDatePicker value={controller.registrationModel.birthDate}
+					<CustomDatePicker value={controller.model.birthDate}
 						disabled={isDisabled}
 						required={true}
 						label={birthDateLabel}

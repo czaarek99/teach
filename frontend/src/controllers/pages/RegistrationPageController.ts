@@ -1,10 +1,8 @@
 import { observable } from "mobx";
 import { RegistrationModel } from "../../models/RegistrationModel";
 import { ErrorModel } from "../../validation/ErrorModel";
-import { AddressModel } from "../../models/AddressModel";
 import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
 import { IRegistrationModel } from "../../interfaces/models/IRegistrationModel";
-import { IAddressModel } from "../../interfaces/models/IAddressModel";
 import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
 import { ValidatorMap, validate } from "../../validation/validate";
 import { email, minLength, maxLength, password, notSet } from "../../validation/validators";
@@ -33,7 +31,6 @@ import {
 import {
 	IRegistrationPageController,
 	IRegistrationPageErrorState,
-	IAddressErrorState
 } from "../../interfaces/controllers/pages/IRegistrationPageController";
 
 const validators : ValidatorMap<IRegistrationModel> = {
@@ -56,10 +53,7 @@ const validators : ValidatorMap<IRegistrationModel> = {
 	],
 	phoneNumber: [
 		maxLength(PHONE_NUMBER_MAX_LENGTH)
-	]
-}
-
-const addressValidators : ValidatorMap<IAddressModel> = {
+	],
 	city: [
 		minLength(CITY_MIN_LENGTH),
 		maxLength(CITY_MAX_LENGTH)
@@ -86,23 +80,19 @@ export class RegistrationPageController implements IRegistrationPageController {
 	private isLoggedIn = false;
 	private captchaFunctions?: IRecaptchaFunctions;
 
-	@observable public registrationModel = new RegistrationModel();
-	@observable public addressModel = new AddressModel();
+	@observable public model = new RegistrationModel();
 	@observable public loading = false;
 	@observable public errorMessage : string | null = null;
 	@observable public registerButtonState: LoadingButtonState = "default";
 
-	@observable public registrationErrorModel = new ErrorModel<IRegistrationPageErrorState>({
+	@observable public errorModel = new ErrorModel<IRegistrationPageErrorState>({
 		email: [],
-		password: [],
-		repeatPassword: [],
 		firstName: [],
 		lastName: [],
+		password: [],
+		repeatPassword: [],
 		captcha: [],
-		phoneNumber: []
-	});
-
-	@observable public addressErrorModel = new ErrorModel<IAddressErrorState>({
+		phoneNumber: [],
 		city: [],
 		zipCode: [],
 		street: [],
@@ -119,21 +109,9 @@ export class RegistrationPageController implements IRegistrationPageController {
 			const keyValidators = validators[key];
 
 			if(keyValidators !== undefined) {
-				const value = this.registrationModel[key as (keyof RegistrationModel)];
+				const value = this.model[key as (keyof RegistrationModel)];
 
-				this.registrationErrorModel.setErrors(key, validate(value, keyValidators));
-			}
-		}
-	}
-
-	private validateAddress(key: keyof IAddressModel) : void {
-		if(this.shouldValidate) {
-			const keyValidators = addressValidators[key];
-
-			if(keyValidators !== undefined) {
-				const value = this.addressModel[key];
-
-				this.addressErrorModel.setErrors(key, validate(value, keyValidators));
+				this.errorModel.setErrors(key, validate(value, keyValidators));
 			}
 		}
 	}
@@ -143,7 +121,7 @@ export class RegistrationPageController implements IRegistrationPageController {
 			return;
 		}
 
-		this.registrationModel[key as (keyof RegistrationModel)] = value;
+		this.model[key as (keyof RegistrationModel)] = value;
 
 		if(key === "password") {
 			this.shouldValidatePassword = true;
@@ -152,24 +130,15 @@ export class RegistrationPageController implements IRegistrationPageController {
 		this.validate(key);
 
 		if(this.shouldValidatePassword &&
-			this.registrationModel.password !== this.registrationModel.repeatPassword &&
+			this.model.password !== this.model.repeatPassword &&
 			(key === "repeatPassword" || key === "password")) {
 
-			this.registrationErrorModel.setErrors("repeatPassword", [
+			this.errorModel.setErrors("repeatPassword", [
 				ErrorMessage.PASSWORDS_DONT_MATCH
 			]);
 		} else {
-			this.registrationErrorModel.setErrors("repeatPassword", []);
+			this.errorModel.setErrors("repeatPassword", []);
 		}
-	}
-
-	public onAddressChange(key: keyof IAddressModel, value: string) : void {
-		if(this.isLoggedIn) {
-			return;
-		}
-
-		this.addressModel[key] = value;
-		this.validateAddress(key);
 	}
 
 	public onFunctions(functions: IRecaptchaFunctions) : void {
@@ -183,40 +152,31 @@ export class RegistrationPageController implements IRegistrationPageController {
 
 		this.shouldValidate = true;
 
-		for(const key of objectKeys(this.registrationModel.toJson())) {
+		for(const key of objectKeys(this.model.toValidate())) {
 			this.validate(key);
 		}
 
-		for(const key of objectKeys(this.addressModel.toJson())) {
-			this.validateAddress(key);
-		}
-
-		if(this.registrationModel.password === this.registrationModel.email) {
-			this.registrationErrorModel.setErrors("password", [
+		if(this.model.password === this.model.email) {
+			this.errorModel.setErrors("password", [
 				ErrorMessage.PASSWORD_AND_EMAIL_SAME
 			]);
 
-			this.registrationErrorModel.setErrors("email", [
+			this.errorModel.setErrors("email", [
 				ErrorMessage.PASSWORD_AND_EMAIL_SAME
 			]);
 		}
 
-		if(!this.registrationErrorModel.hasErrors() && !this.addressErrorModel.hasErrors()) {
+		if(!this.errorModel.hasErrors()) {
 			this.loading = true;
 
 			try  {
-				const toSend = {
-					...this.registrationModel.toJson(),
-					address: this.addressModel.toJson()
-				};
-
-				await this.authenticationService.register(toSend);
+				await this.authenticationService.register(this.model.toJson());
 
 				this.errorMessage = null;
 				this.registerButtonState = "success";
 				logIn(this.routingStore);
 			} catch(error) {
-				this.registrationModel.captcha = null;
+				this.model.captcha = null;
 
 				if(this.captchaFunctions) {
 					this.captchaFunctions.reset();

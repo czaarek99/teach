@@ -1,3 +1,0 @@
-* Start using yup on frontend + backend
-* Use graphql+apollo
-* Make more sense of data and models

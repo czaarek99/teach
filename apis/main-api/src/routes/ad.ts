@@ -1,14 +1,21 @@
 import * as Router from "koa-joi-router";
+
 import { Joi } from "koa-joi-router";
 import { CustomContext } from "../Server";
 import { Ad } from "../database/models/Ad";
 import { User } from "../database/models/User";
-import { IAd, IEdge, HttpError } from "common-library";
-import { differenceInYears } from "date-fns";
 import { throwApiError } from "server-lib";
 import { Image } from "../database/models/Image";
 import { Address } from "../database/models/Address";
 import { resolveTeacher } from "../util/resolveTeacher";
+
+import {
+	IAd,
+	IEdge,
+	HttpError,
+	IAdListInput,
+	ISimpleGetInput,
+} from "common-library";
 
 const router = Router();
 
@@ -37,7 +44,8 @@ router.get("/list", {
 	}
 }, async (context: CustomContext) => {
 
-	const query = context.query;
+	const query = context.query as IAdListInput;
+
 	const [ads, count] : [Ad[], number] = await Promise.all([
 		Ad.findAll<Ad>({
 			limit: query.limit,
@@ -79,10 +87,26 @@ router.get("/:id", {
 	}
 }, async (context: CustomContext) => {
 
+	const get = context.params as ISimpleGetInput;
+
 	const ad = await Ad.findOne({
 		where: {
-			id: context.params.id
-		}
+			id: get.id
+		},
+		include: [
+			{
+				model: Image
+			},
+			{
+				model: User,
+				include: [
+					Address
+				]
+			},
+			{
+				model: Image
+			}
+		]
 	});
 
 	if(!ad) {

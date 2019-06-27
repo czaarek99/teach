@@ -1,19 +1,18 @@
 import * as Router from "koa-joi-router";
-import { Joi } from "koa-joi-router";
 import { CustomContext } from "../Server";
 import { User } from "../database/models/User";
-import { resolveTeacher } from "../util/resolveTeacher";
 import { Address } from "../database/models/Address";
 import { Image } from "../database/models/Image";
 import { authenticationMiddleware } from "server-lib";
-import { ITeacher } from "common-library";
+import { IUser } from "common-library";
 
 const router = Router();
 
-async function getTeacher(id: number) : Promise<ITeacher> {
-	const user = await User.findOne<User>({
+router.get("/self", authenticationMiddleware, async (context: CustomContext) => {
+
+	const user : User = await User.findOne<User>({
 		where: {
-			id
+			id: context.state.session.userId
 		},
 		include: [
 			Address,
@@ -21,22 +20,29 @@ async function getTeacher(id: number) : Promise<ITeacher> {
 		]
 	});
 
-	return resolveTeacher(user);
-}
+	const address = user.address;
 
-router.get("/self", {}, authenticationMiddleware, async (context: CustomContext) => {
-	context.body = await getTeacher(context.state.session.userId);
-	context.status = 200;
-});
-
-router.get("/:id", {
-	validate: {
-		params: {
-			id: Joi.number().min(0).required()
-		}
+	const response : IUser = {
+		id: user.id,
+		firstName: user.firstName,
+		lastName: user.lastName,
+		birthDate: user.birthDate,
+		email: user.email,
+		phoneNumber: user.phoneNumber,
+		address: {
+			street: address.street,
+			zipCode: address.zipCode,
+			city: address.city,
+			countryCode: address.countryCode,
+			state: address.state
+		},
 	}
-}, async(context: CustomContext) => {
-	context.body = await getTeacher(context.params.id);
+
+	if(user.profilePicture) {
+		response.avatarFileName = user.profilePicture.imageFileName;
+	}
+
+	context.body = response;
 	context.status = 200;
 });
 

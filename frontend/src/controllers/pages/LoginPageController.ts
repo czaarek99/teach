@@ -67,7 +67,7 @@ export class LoginPageController implements ILoginPageController {
 
 		this.shouldValidate = true;
 
-		for(const key of objectKeys(this.model.toJson())) {
+		for(const key of objectKeys(this.model.toInput())) {
 			this.validate(key as (keyof ILoginModel));
 		}
 
@@ -76,7 +76,7 @@ export class LoginPageController implements ILoginPageController {
 			this.loginButtonState = "loading";
 
 			try {
-				await this.authenticationService.logIn(this.model.toJson());
+				await this.authenticationService.logIn(this.model.toInput());
 
 				this.isLoggedIn = true;
 				this.errorMessage = null;

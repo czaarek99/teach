@@ -9,7 +9,6 @@ import { User } from "./User"; import {
 } from "sequelize-typescript";
 
 import {
-	IAddress,
 	STREET_MAX_LENGTH,
 	ZIP_CODE_MAX_LENGTH,
 	CITY_MAX_LENGTH,
@@ -18,7 +17,7 @@ import {
 } from "common-library";
 
 @Table
-export class Address extends Model<Address> implements IAddress {
+export class Address extends Model<Address> {
 
 	@BelongsTo(() => User, "userId")
 	public user: User;
@@ -46,6 +45,6 @@ export class Address extends Model<Address> implements IAddress {
 
 	@AllowNull(true)
 	@Column(DataType.STRING(STATE_MAX_LENGTH))
-	public state: string;
+	public state?: string;
 
 }

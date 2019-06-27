@@ -101,7 +101,7 @@ class AdPage extends React.Component<
 			classes
 		} = this.props;
 
-		const model = controller.model;
+		const model = controller.ad;
 
 		let imageComponent;
 		let titleComponent;

@@ -1,3 +1,4 @@
-import { IForgot } from "common-library";
-
-export type IForgotModel = Readonly<IForgot>
+export interface IForgotModel {
+	email: string
+	captcha: string | null
+}

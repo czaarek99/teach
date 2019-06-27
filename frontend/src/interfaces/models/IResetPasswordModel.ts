@@ -1,3 +1,5 @@
-import { IResetPassword } from "common-library";
-
-export type IResetPasswordModel = Readonly<IResetPassword>;
+export interface IResetPasswordModel {
+	password: string
+	repeatPassword: string
+	resetKey: string
+}

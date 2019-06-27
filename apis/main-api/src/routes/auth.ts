@@ -34,11 +34,11 @@ import {
 	STATE_MAX_LENGTH,
 	getUserMaxDate,
 	DOMAIN,
-	IForgot,
-	IResetPassword,
 	PHONE_NUMBER_MAX_LENGTH,
-	SESSION_COOKIE_NAME,
-	USER_ID_COOKIE_NAME,
+	IRegistrationInput,
+	ILoginInput,
+	IForgotInput,
+	IResetPasswordInput,
 } from "common-library";
 
 import {
@@ -47,14 +47,12 @@ import {
 	PASSWORD_RESET_HELP_TEMPLATE
 } from "../email/templates/templates";
 
-const router = Router();
-
-const SALT_ROUNDS = 10;
 const SIMPLE_EMAIL_VALIDATOR = Joi.string().min(EMAIL_MIN_LENGTH).max(EMAIL_MAX_LENGTH).required();
 const PASSWORD_VALIDATOR = Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).required();
 
 async function hashPassword(password: string) : Promise<string> {
-	return await bcrypt.hash(password, SALT_ROUNDS);
+	const saltRounds = 10;
+	return await bcrypt.hash(password, saltRounds);
 }
 
 async function logIn(context: CustomContext, userId: number) : Promise<void> {
@@ -93,83 +91,98 @@ function validateEmail(context: CustomContext, email: string) : boolean {
 	return true;
 }
 
+function throwNoSuchUserError(context: CustomContext) {
+	throwApiError(context, new HttpError(
+			404,
+			ErrorMessage.USER_NOT_FOUND,
+			context.state.requestId
+		)
+	);
+}
+
+const router = Router();
+
 router.post("/register", {
 	validate: {
 		body: {
-			email: SIMPLE_EMAIL_VALIDATOR,
+			user: Joi.object({
+				email: SIMPLE_EMAIL_VALIDATOR,
+				firstName: Joi.string().min(FIRST_NAME_MIN_LENGTH).max(FIRST_NAME_MAX_LENGTH).required(),
+				lastName: Joi.string().min(LAST_NAME_MIN_LENGTH).max(LAST_NAME_MAX_LENGTH).required(),
+				birthDate: Joi.date().max(addDays(getUserMaxDate(), 3)).required(),
+				phoneNumber: Joi.string().max(PHONE_NUMBER_MAX_LENGTH).optional(),
+				address: Joi.object({
+					street: Joi.string().min(STREET_MIN_LENGTH).max(STREET_MAX_LENGTH).required(),
+					zipCode: Joi.string().min(ZIP_CODE_MIN_LENGTH).max(ZIP_CODE_MAX_LENGTH).required(),
+					city: Joi.string().min(CITY_MIN_LENGTH).max(CITY_MAX_LENGTH).required(),
+					countryCode: Joi.string().length(COUNTRY_CODE_LENGTH).required(),
+					state: Joi.string().max(STATE_MAX_LENGTH).allow("").optional()
+				}).requiredKeys("street", "zipCode", "city", "countryCode").optionalKeys("state")
+
+			}).required(),
+
 			captcha: Joi.string(),
 			password: PASSWORD_VALIDATOR,
-			repeatPassword: Joi.string(),
-			firstName: Joi.string().min(FIRST_NAME_MIN_LENGTH).max(FIRST_NAME_MAX_LENGTH).required(),
-			lastName: Joi.string().min(LAST_NAME_MIN_LENGTH).max(LAST_NAME_MAX_LENGTH).required(),
-			birthDate: Joi.date().max(addDays(getUserMaxDate(), 3)).required(),
-			phoneNumber: Joi.string().max(PHONE_NUMBER_MAX_LENGTH).optional(),
-			address: Joi.object({
-				street: Joi.string().min(STREET_MIN_LENGTH).max(STREET_MAX_LENGTH).required(),
-				zipCode: Joi.string().min(ZIP_CODE_MIN_LENGTH).max(ZIP_CODE_MAX_LENGTH).required(),
-				city: Joi.string().min(CITY_MIN_LENGTH).max(CITY_MAX_LENGTH).required(),
-				countryCode: Joi.string().length(COUNTRY_CODE_LENGTH).required(),
-				state: Joi.string().max(STATE_MAX_LENGTH).allow("").optional()
-			}).requiredKeys("street", "zipCode", "city", "countryCode").optionalKeys("state")
 		},
 		type: "json"
 	}
 }, async (context: CustomContext) => {
 
-	const body = context.request.body;
+	const body = context.request.body as IRegistrationInput;
 
 	const captchaResult = await verifyRecaptcha(context, body.captcha);
 	if(!captchaResult) {
 		return;
 	}
 
-	if(!validateEmail(context, body.email)) {
+	if(!validateEmail(context, body.user.email)) {
 		return;
 	}
 
-	if(body.password === body.email) {
-		throwApiError(context, new HttpError(
+	if(body.password === body.user.email) {
+		throwApiError(
+			context,
+			new HttpError(
 				400,
 				ErrorMessage.PASSWORD_AND_EMAIL_SAME,
 				context.state.requestId
 			)
-		)
+		);
+
 		return;
 	}
 
 	const oldUser = await User.findOne({
 		where: {
-			email: body.email
+			email: body.user.email
 		}
 	});
 
 	if(oldUser) {
-		throwApiError(context, new HttpError(
+		throwApiError(
+			context,
+			new HttpError(
 				409,
 				ErrorMessage.EMAIL_EXISTS,
 				context.state.requestId
 			)
 		);
+
 		return;
 	}
 
 	const hashedPassword = await hashPassword(body.password);
 
-	const address = body.address;
+	const user = body.user;
 
-	const user = await User.create<User>({
-		email: body.email,
+	const newUser = await User.create<User>({
+		email: user.email,
 		password: hashedPassword,
-		firstName: body.firstName,
-		lastName: body.lastName,
-		birthDate: body.birthDate,
-		phoneNumber: body.phoneNumber,
-		address: {
-			street: address.street,
-			zipCode: address.zipCode,
-			city: address.city,
-			countryCode: address.countryCode
-		}
+		firstName: user.firstName,
+		lastName: user.lastName,
+		birthDate: user.birthDate,
+		phoneNumber: user.phoneNumber,
+		address: user.address
 	}, {
 		include: [
 			Address
@@ -177,15 +190,11 @@ router.post("/register", {
 	});
 
 	context.state.logger.info("User registration",  {
-		userId: user.id
+		userId: newUser.id
 	});
 
-	await logIn(context, user.id);
+	await logIn(context, newUser.id);
 });
-
-function throwNoSuchUserError(context: CustomContext) {
-	throwApiError(context, new HttpError(404, ErrorMessage.USER_NOT_FOUND, context.state.requestId));
-}
 
 router.post("/login", {
 	validate: {
@@ -197,7 +206,7 @@ router.post("/login", {
 	}
 }, async (context: CustomContext) => {
 
-	const body = context.request.body;
+	const body = context.request.body as ILoginInput;
 
 	const user = await User.findOne<User>({
 		where: {
@@ -223,7 +232,6 @@ router.post("/login", {
 
 
 	await logIn(context, user.id);
-
 });
 
 router.post("/forgot", {
@@ -236,7 +244,7 @@ router.post("/forgot", {
 	}
 }, async (context: CustomContext) => {
 
-	const body = context.request.body as IForgot;
+	const body = context.request.body as IForgotInput;
 
 	if(!validateEmail(context, body.email)) {
 		return;
@@ -274,7 +282,6 @@ router.post("/forgot", {
 	}
 
 	await context.state.emailClient.sendMail(body.email, "Password Reset", html);
-
 	context.status = 200;
 });
 
@@ -282,7 +289,6 @@ router.post("/reset", {
 	validate: {
 		body: {
 			password: PASSWORD_VALIDATOR,
-			repeatPassword: PASSWORD_VALIDATOR,
 			resetKey: Joi.string().uuid({
 				version: "uuidv4"
 			})
@@ -291,7 +297,7 @@ router.post("/reset", {
 	}
 }, async (context: CustomContext) => {
 
-	const body = context.request.body as IResetPassword;
+	const body = context.request.body as IResetPasswordInput;
 
 	const passwordReset = await PasswordReset.findOne<PasswordReset>({
 		where: {
@@ -300,7 +306,15 @@ router.post("/reset", {
 	});
 
 	if(!passwordReset) {
-		throwApiError(context, new HttpError(400, ErrorMessage.BAD_RESET_KEY));
+		throwApiError(
+			context,
+			new HttpError(
+				400,
+				ErrorMessage.BAD_RESET_KEY,
+				context.state.requestId
+			)
+		);
+
 		return;
 	}
 
@@ -314,19 +328,30 @@ router.post("/reset", {
 	const isOld = isBefore(passwordReset.createdAt, oneDayAgo);
 
 	if(isOld) {
-		throwApiError(context, new HttpError(400, ErrorMessage.EXPIRED_RESET_KEY));
+		throwApiError(
+			context,
+			new HttpError(
+				400,
+				ErrorMessage.EXPIRED_RESET_KEY,
+				context.state.requestId
+			)
+		);
+
 		return;
 	}
 
 	const hashedPassword = await hashPassword(body.password);
 
-	await User.update<User>({
+	await User.update<User>(
+		{
 			password: hashedPassword
-		}, {
+		},
+		{
 			where: {
 				id: passwordReset.userId
 			}
-	});
+		}
+	);
 
 	context.status = 200;
 });

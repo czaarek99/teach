@@ -88,14 +88,14 @@ class AddressContent extends React.Component<
 
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
-						value={controller.addressModel.street}
+						value={controller.model.street}
 						minLength={STREET_MIN_LENGTH}
 						maxLength={STREET_MAX_LENGTH}
 						label={streetLabel}
 						required={true}
-						onChange={event => controller.onAddressChange("street", event.target.value)}
+						onChange={event => controller.onChange("street", event.target.value)}
 						startAdornment={ <MapIcon/> }
-						errorModel={controller.addressErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="street"
 						errorTranslationValues={{
 							value: streetLabel,
@@ -107,14 +107,14 @@ class AddressContent extends React.Component<
 
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
-						value={controller.addressModel.city}
+						value={controller.model.city}
 						minLength={CITY_MIN_LENGTH}
 						maxLength={CITY_MAX_LENGTH}
 						label={cityLabel}
 						required={true}
-						onChange={event => controller.onAddressChange("city", event.target.value)}
+						onChange={event => controller.onChange("city", event.target.value)}
 						startAdornment={ <MapIcon/> }
-						errorModel={controller.addressErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="city"
 						errorTranslationValues={{
 							value: cityLabel,
@@ -127,14 +127,14 @@ class AddressContent extends React.Component<
 
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
-						value={controller.addressModel.zipCode}
+						value={controller.model.zipCode}
 						minLength={ZIP_CODE_MIN_LENGTH}
 						maxLength={ZIP_CODE_MAX_LENGTH}
 						label={zipCodeLabel}
 						required={true}
-						onChange={event => controller.onAddressChange("zipCode", event.target.value)}
+						onChange={event => controller.onChange("zipCode", event.target.value)}
 						startAdornment={ <MapIcon/> }
-						errorModel={controller.addressErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="zipCode"
 						errorTranslationValues={{
 							value: zipCodeLabel,
@@ -146,12 +146,12 @@ class AddressContent extends React.Component<
 
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
-						value={controller.addressModel.state}
+						value={controller.model.state}
 						maxLength={STATE_MAX_LENGTH}
 						label={stateLabel}
-						onChange={event => controller.onAddressChange("state", event.target.value)}
+						onChange={event => controller.onChange("state", event.target.value)}
 						startAdornment={ <MapIcon/> }
-						errorModel={controller.addressErrorModel}
+						errorModel={controller.errorModel}
 						validationKey="state"
 						errorTranslationValues={{
 							value: stateLabel,
@@ -171,14 +171,14 @@ class AddressContent extends React.Component<
 							<FormattedMessage id="things.country"/>
 						</InputLabel>
 
-						<NativeSelect value={controller.addressModel.countryCode}
+						<NativeSelect value={controller.model.countryCode}
 							fullWidth={true}
 							input={(
 								<OutlinedInput id={SELECT_INPUT_ID}
 									fullWidth={true}
 									labelWidth={this.selectLabelWidth} />
 							)}
-							onChange={event => controller.onAddressChange("countryCode", event.target.value)}>
+							onChange={event => controller.onChange("countryCode", event.target.value)}>
 							{this.selectOptions}
 						</NativeSelect>
 					</FormControl>

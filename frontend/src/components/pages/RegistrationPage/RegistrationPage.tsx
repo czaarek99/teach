@@ -78,7 +78,7 @@ class RegistrationPage extends React.Component<
 			);
 		}
 
-		const captchaError = controller.registrationErrorModel.getFirstKeyError("captcha");
+		const captchaError = controller.errorModel.getFirstKeyError("captcha");
 		let translatedCaptchaError;
 
 		if(captchaError) {
