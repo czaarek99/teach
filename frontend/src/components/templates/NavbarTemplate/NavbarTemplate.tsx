@@ -35,7 +35,7 @@ import {
 	Avatar
 } from '@material-ui/core';
 
-const drawerWidth = 280;
+const drawerWidth = 270;
 
 const styles = (theme: Theme) => createStyles({
 	root: {
@@ -59,7 +59,6 @@ const styles = (theme: Theme) => createStyles({
 	},
 
 	menuButton: {
-		marginRight: theme.spacing(2),
 		[theme.breakpoints.up("sm")]: {
 			display: "none",
 		},

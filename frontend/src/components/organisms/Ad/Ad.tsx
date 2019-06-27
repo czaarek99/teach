@@ -1,5 +1,4 @@
 import React from "react";
-import Truncate from "react-truncate";
 import Skeleton from "react-loading-skeleton";
 
 import { injectIntl, InjectedIntlProps } from "react-intl";
@@ -20,12 +19,6 @@ import {
 	WithStyles
 } from "@material-ui/core";
 
-export const AD_MIN_WIDTH = 300;
-export const AD_MAX_WIDTH = 500;
-export const AD_COVER_IMAGE_HEIGHT = 250;
-
-const MAX_DESCRIPTION_LINES = 8;
-
 /*
 
 width: 2000px
@@ -34,23 +27,40 @@ aspect ratio: 2:1
 
 */
 
+const MAX_DESCRIPTION_LINES = 8;
+const LINE_HEIGHT = "1.5em";
+
+const MEDIUM_BREAKPOINT = "@media screen and (min-width: 400px)";
+const LARGE_BREAKPOINT = "@media screen and (min-width: 560px)";
 
 const styles = (theme: Theme) => createStyles({
 
 	root: {
-		width: "100%",
 		cursor: "pointer",
 		padding: 10,
 
-		"@media screen and (min-width: 520px)": {
-			width: 500
+		width: 300,
+
+		[MEDIUM_BREAKPOINT]: {
+			width: 380
+		},
+
+		[LARGE_BREAKPOINT]: {
+			width: 460
 		}
 	},
 
 	image: {
-		width: "100%",
+		height: 150,
 		objectFit: "contain",
-		maxHeight: AD_COVER_IMAGE_HEIGHT,
+
+		[MEDIUM_BREAKPOINT]: {
+			height: 190
+		},
+
+		[LARGE_BREAKPOINT]: {
+			height: 230
+		}
 	},
 
 	card: {
@@ -60,6 +70,14 @@ const styles = (theme: Theme) => createStyles({
 		"&:hover": {
 			boxShadow: theme.shadows[20]
 		}
+	},
+
+	description: {
+		lineHeight: LINE_HEIGHT,
+		height: `calc(${LINE_HEIGHT} * ${MAX_DESCRIPTION_LINES})`,
+		lineClamp: MAX_DESCRIPTION_LINES,
+		overflow: "hidden",
+		textOverflow: "ellipsis",
 	}
 });
 
@@ -111,7 +129,9 @@ export class Ad extends React.Component<
 			);
 
 			image = (
-				<Skeleton height={AD_COVER_IMAGE_HEIGHT} />
+				<div className={classes.image}>
+					<Skeleton height="100%" />
+				</div>
 			);
 		} else {
 			const date = intl.formatDate(model.publicationDate, {
@@ -127,14 +147,7 @@ export class Ad extends React.Component<
 			});
 
 			name = model.name;
-
-			description = (
-				<Truncate lines={8}
-					trimWhitespace={true}>
-
-					{model.description}
-				</Truncate>
-			);
+			description = model.description;
 
 			image = (
 				<CardMedia component="img"
@@ -167,7 +180,7 @@ export class Ad extends React.Component<
 					{image}
 
 					<CardContent>
-						<Typography>
+						<Typography className={classes.description}>
 							{description}
 						</Typography>
 					</CardContent>

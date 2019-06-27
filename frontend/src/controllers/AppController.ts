@@ -123,7 +123,9 @@ export class AppController implements IAppController {
 
 	@computed public get adPageController() : IAdPageController {
 		if(this._adPageController === null) {
-			this._adPageController = new AdPageController();
+			this._adPageController = new AdPageController(
+				this.services.adService
+			);
 		}
 
 		return this._adPageController;

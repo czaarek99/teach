@@ -19,6 +19,7 @@ export function resolveTeacher(user: User) : ITeacher {
 		email: user.email,
 		city: user.address.city,
 		age,
-		avatarFileName
+		//avatarFileName
+		avatarFileName: "avatar.jpg"
 	}
 }

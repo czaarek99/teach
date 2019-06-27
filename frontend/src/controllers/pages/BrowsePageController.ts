@@ -89,7 +89,4 @@ export class BrowsePageController implements IBrowsePageController {
 			this.activeAdControllers.length = newAdsPerPage;
 		}
 	}
-
-
-
 }
