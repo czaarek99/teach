@@ -7,7 +7,7 @@ import { User } from "../database/models/User";
 import { Address } from "../database/models/Address";
 import { Image } from "../database/models/Image";
 import { throwApiError } from "server-lib";
-import { resolveTeacher } from "../util/resolveTeacher";
+import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 
 const router = Router();
 

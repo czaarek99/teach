@@ -9,6 +9,7 @@ import { email, minLength, maxLength, password, notSet } from "../../validation/
 import { RouterStore } from "mobx-react-router";
 import { logIn } from "../../util/logIn";
 import { objectKeys } from "../../util/objectKeys";
+import { IUserCache } from "../../util/UserCache";
 import { IRecaptchaFunctions } from "../../components";
 
 import {
@@ -32,6 +33,7 @@ import {
 	IRegistrationPageController,
 	IRegistrationPageErrorState,
 } from "../../interfaces/controllers/pages/IRegistrationPageController";
+import { Route } from "../../interfaces/Routes";
 
 const validators : ValidatorMap<IRegistrationModel> = {
 	email: [
@@ -75,13 +77,15 @@ export class RegistrationPageController implements IRegistrationPageController {
 
 	private readonly routingStore: RouterStore;
 	private readonly authenticationService: IAuthenticationService;
+	private readonly userCache: IUserCache;
+
 	private shouldValidate = false;
 	private shouldValidatePassword = false;
 	private isLoggedIn = false;
 	private captchaFunctions?: IRecaptchaFunctions;
 
 	@observable public model = new RegistrationModel();
-	@observable public loading = false;
+	@observable public loading = true;
 	@observable public errorMessage : string | null = null;
 	@observable public registerButtonState: LoadingButtonState = "default";
 
@@ -99,9 +103,26 @@ export class RegistrationPageController implements IRegistrationPageController {
 		state: []
 	});
 
-	constructor(authenticationService: IAuthenticationService, routingStore: RouterStore) {
+	constructor(
+		authenticationService: IAuthenticationService,
+		routingStore: RouterStore,
+		userCache: IUserCache
+	) {
 		this.routingStore = routingStore;
 		this.authenticationService = authenticationService;
+		this.userCache = userCache;
+
+		this.load();
+	}
+
+	private async load() : Promise<void> {
+		await this.userCache.recache();
+
+		if(this.userCache.isLoggedIn) {
+			this.routingStore.push(Route.BROWSE);
+		}
+
+		this.loading = false;
 	}
 
 	private validate(key: keyof IRegistrationModel) : void {
@@ -141,7 +162,7 @@ export class RegistrationPageController implements IRegistrationPageController {
 		}
 	}
 
-	public onFunctions(functions: IRecaptchaFunctions) : void {
+	public onFunctions = (functions: IRecaptchaFunctions) : void => {
 		this.captchaFunctions = functions;
 	}
 
@@ -166,15 +187,17 @@ export class RegistrationPageController implements IRegistrationPageController {
 			]);
 		}
 
-		if(!this.errorModel.hasErrors()) {
+		if(this.errorModel.hasErrors()) {
+			this.registerButtonState = "error";
+		} else {
 			this.loading = true;
 
 			try  {
-				await this.authenticationService.register(this.model.toJson());
+				const response = await this.authenticationService.register(this.model.toJson());
 
 				this.errorMessage = null;
 				this.registerButtonState = "success";
-				logIn(this.routingStore);
+				await logIn(this.routingStore, response, this.userCache);
 			} catch(error) {
 				this.model.captcha = null;
 

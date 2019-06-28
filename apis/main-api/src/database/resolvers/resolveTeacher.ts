@@ -1,4 +1,4 @@
-import { User } from "../database/models/User";
+import { User } from "../models/User";
 import { ITeacher } from "common-library";
 import { differenceInYears } from "date-fns";
 

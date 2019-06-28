@@ -5,6 +5,7 @@ import { Address } from "../database/models/Address";
 import { Image } from "../database/models/Image";
 import { authenticationMiddleware } from "server-lib";
 import { IUser } from "common-library";
+import { resolveUser } from "../database/resolvers/resolveUser";
 
 const router = Router();
 
@@ -20,29 +21,7 @@ router.get("/self", authenticationMiddleware, async (context: CustomContext) => 
 		]
 	});
 
-	const address = user.address;
-
-	const response : IUser = {
-		id: user.id,
-		firstName: user.firstName,
-		lastName: user.lastName,
-		birthDate: user.birthDate,
-		email: user.email,
-		phoneNumber: user.phoneNumber,
-		address: {
-			street: address.street,
-			zipCode: address.zipCode,
-			city: address.city,
-			countryCode: address.countryCode,
-			state: address.state
-		},
-	}
-
-	if(user.profilePicture) {
-		response.avatarFileName = user.profilePicture.imageFileName;
-	}
-
-	context.body = response;
+	context.body = resolveUser(user);
 	context.status = 200;
 });
 

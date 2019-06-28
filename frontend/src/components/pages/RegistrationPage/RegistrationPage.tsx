@@ -105,6 +105,7 @@ class RegistrationPage extends React.Component<
 
 				<div>
 					<CustomCaptcha onChange={value => controller.onChange("captcha", value)}
+						onFunctions={controller.onFunctions}
 						error={translatedCaptchaError}/>
 				</div>
 

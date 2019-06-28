@@ -12,6 +12,7 @@ import { isBefore, subDays } from "date-fns";
 import { randomBytes } from "crypto";
 import { IRedisSession, getNewExpirationDate, throwApiError } from "server-lib";
 import { verifyRecaptcha } from "../util/verifyRecaptcha";
+import { resolveUser } from "../database/resolvers/resolveUser";
 
 import {
 	HttpError,
@@ -39,6 +40,7 @@ import {
 	ILoginInput,
 	IForgotInput,
 	IResetPasswordInput,
+	IAuthOutput,
 } from "common-library";
 
 import {
@@ -55,22 +57,23 @@ async function hashPassword(password: string) : Promise<string> {
 	return await bcrypt.hash(password, saltRounds);
 }
 
-async function logIn(context: CustomContext, userId: number) : Promise<void> {
+async function logIn(context: CustomContext, user: User) : Promise<void> {
 	const sessionId = await randomBytes(128).toString("hex");
 
 	const newExpiration = getNewExpirationDate();
 
 	await context.state.redisClient.setJSONObject<IRedisSession>(sessionId, {
-		userId,
+		userId: user.id,
 		expirationDate: newExpiration
 	});
 
-	context.body = {
+	const response : IAuthOutput = {
 		sessionId,
-		userId,
-		expirationDate: newExpiration
-	};
+		expirationDate: newExpiration,
+		user: resolveUser(user),
+	}
 
+	context.body = response;
 	context.status = 200;
 }
 
@@ -175,7 +178,7 @@ router.post("/register", {
 
 	const user = body.user;
 
-	const newUser = await User.create<User>({
+	const newUser : User = await User.create<User>({
 		email: user.email,
 		password: hashedPassword,
 		firstName: user.firstName,
@@ -193,7 +196,7 @@ router.post("/register", {
 		userId: newUser.id
 	});
 
-	await logIn(context, newUser.id);
+	await logIn(context, newUser);
 });
 
 router.post("/login", {
@@ -208,7 +211,7 @@ router.post("/login", {
 
 	const body = context.request.body as ILoginInput;
 
-	const user = await User.findOne<User>({
+	const user : User = await User.findOne<User>({
 		where: {
 			email: body.email
 		}
@@ -231,7 +234,7 @@ router.post("/login", {
 	});
 
 
-	await logIn(context, user.id);
+	await logIn(context, user);
 });
 
 router.post("/forgot", {
@@ -255,7 +258,7 @@ router.post("/forgot", {
 		return;
 	}
 
-	const user = await User.findOne<User>({
+	const user : User = await User.findOne<User>({
 		where: {
 			email: body.email
 		}

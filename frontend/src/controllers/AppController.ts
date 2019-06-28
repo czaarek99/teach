@@ -72,7 +72,8 @@ export class AppController implements IAppController {
 		if(this._loginPageController === null) {
 			this._loginPageController = new LoginPageController(
 				this.services.authenticationService,
-				this.routingStore
+				this.routingStore,
+				this.userCache
 			);
 		}
 
@@ -83,7 +84,8 @@ export class AppController implements IAppController {
 		if(this._registrationPageController === null) {
 			this._registrationPageController = new RegistrationPageController(
 				this.services.authenticationService,
-				this.routingStore
+				this.routingStore,
+				this.userCache
 			);
 		}
 

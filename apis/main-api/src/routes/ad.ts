@@ -7,7 +7,7 @@ import { User } from "../database/models/User";
 import { throwApiError } from "server-lib";
 import { Image } from "../database/models/Image";
 import { Address } from "../database/models/Address";
-import { resolveTeacher } from "../util/resolveTeacher";
+import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 
 import {
 	IAd,

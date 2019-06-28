@@ -4,8 +4,8 @@ import {
 	IHttpError,
 	HttpError,
 	ErrorMessage,
-	SESSION_COOKIE_NAME,
-	SESSION_HEADER_NAME
+	SESSION_HEADER_NAME,
+	SESSION_KEY_NAME
 } from "common-library";
 
 export class BaseService {
@@ -17,11 +17,16 @@ export class BaseService {
 
 		this.axios = Axios.create({
 			baseURL: `${location.protocol}//api.${location.hostname}:5000`,
-			withCredentials: true,
-			headers: {
-				[SESSION_HEADER_NAME]: localStorage.getItem(SESSION_COOKIE_NAME),
-			}
+			withCredentials: true
 		});
+
+		this.axios.interceptors.request.use((config) => {
+			config.headers[SESSION_HEADER_NAME] = localStorage.getItem(SESSION_KEY_NAME);
+
+			return config;
+		}, (error) => {
+			return Promise.reject(error);
+		})
 
 		this.axios.interceptors.response.use((response) => {
 			return response;

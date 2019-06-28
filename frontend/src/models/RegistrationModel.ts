@@ -16,7 +16,7 @@ export class RegistrationModel implements IRegistrationModel {
 	@observable public street = "";
 	@observable public zipCode = "";
 	@observable public city = "";
-	@observable public countryCode = "";
+	@observable public countryCode = "SE";
 	@observable public state = "";
 
 	public toValidate() : IRegistrationModel {

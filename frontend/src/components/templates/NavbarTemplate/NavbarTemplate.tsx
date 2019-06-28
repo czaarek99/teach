@@ -105,7 +105,8 @@ const styles = (theme: Theme) => createStyles({
 		"& > *": {
 			flex: 1
 		}
-	}
+	},
+
 });
 
 interface INavbarTemplateProps {
