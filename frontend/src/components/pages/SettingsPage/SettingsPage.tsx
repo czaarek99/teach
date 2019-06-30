@@ -1,13 +1,14 @@
 import React from 'react';
 import UserIcon from "@material-ui/icons/AccountBox";
 import MapIcon from "@material-ui/icons/Map";
+import PhoneIcon from "@material-ui/icons/Phone";
 
 import { observer } from "mobx-react";
 import { WithStyles } from "@material-ui/styles";
 import { injectIntl, InjectedIntlProps, FormattedMessage } from "react-intl";
 import { NavbarTemplate } from "../../templates";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
-import { CustomTextField } from "../../molecules";
+import { CustomTextField, LoadingButton, LoadingButtonState } from "../../molecules";
 import { simpleFormat } from "../../../util/simpleFormat";
 import { CustomDatePicker, CountrySelect } from "../../organisms";
 
@@ -27,7 +28,8 @@ import {
 	ZIP_CODE_MAX_LENGTH,
 	CITY_MIN_LENGTH,
 	CITY_MAX_LENGTH,
-	ZIP_CODE_MIN_LENGTH
+	ZIP_CODE_MIN_LENGTH,
+	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
 
 import {
@@ -80,9 +82,14 @@ class SettingsPage extends React.Component<
 	WithStyles<typeof styles>
 > {
 
-	private renderActionButtons(onSave: () => void, onReset: () => void) : React.ReactNode {
+	private renderActionButtons(
+		onSave: () => void,
+		onReset: () => void,
+		saveButtonSate: LoadingButtonState
+	) : React.ReactNode {
+
 		const {
-			classes
+			classes,
 		} = this.props;
 
 		return (
@@ -93,11 +100,11 @@ class SettingsPage extends React.Component<
 
 					<FormattedMessage id="actions.reset"/>
 				</Button>
-				<Button variant="contained"
+				<LoadingButton state={saveButtonSate}
 					onClick={() => onSave()}>
 
 					<FormattedMessage id="actions.save"/>
-				</Button>
+				</LoadingButton>
 			</div>
 		)
 	}
@@ -115,6 +122,7 @@ class SettingsPage extends React.Component<
 		const firstNameLabel = simpleFormat(this, "things.firstName");
 		const lastNameLabel = simpleFormat(this, "things.lastName");
 		const birthDateLabel = simpleFormat(this, "things.birthDate");
+		const phoneNumberLabel = simpleFormat(this, "things.phoneNumber");
 
 		const cityLabel = simpleFormat(this, "things.city");
 		const zipCodeLabel = simpleFormat(this, "things.zipCode");
@@ -132,19 +140,19 @@ class SettingsPage extends React.Component<
 
 					<Paper className={classes.normalPaper}>
 						<Typography variant="h5">
-							<FormattedMessage id="things.account" />
+							<FormattedMessage id="things.personalInformation" />
 						</Typography>
 
 						<div className={classes.fieldContainer}>
 							<CustomTextField disabled={isDisabled}
-								value={controller.accountViewModel.firstName}
+								value={controller.personalViewModel.firstName}
 								minLength={FIRST_NAME_MIN_LENGTH}
 								maxLength={FIRST_NAME_MAX_LENGTH}
 								label={firstNameLabel}
 								required={true}
-								onChange={event => controller.onAccountChange("firstName", event.target.value)}
+								onChange={event => controller.onPersonalChange("firstName", event.target.value)}
 								startAdornment={ <UserIcon /> }
-								errorModel={controller.accountErrorModel}
+								errorModel={controller.personalErrorModel}
 								validationKey="firstName"
 								errorTranslationValues={{
 									value: firstNameLabel,
@@ -154,14 +162,14 @@ class SettingsPage extends React.Component<
 							/>
 
 							<CustomTextField disabled={isDisabled}
-								value={controller.accountViewModel.lastName}
+								value={controller.personalViewModel.lastName}
 								minLength={LAST_NAME_MIN_LENGTH}
 								maxLength={LAST_NAME_MAX_LENGTH}
 								label={lastNameLabel}
 								required={true}
-								onChange={event => controller.onAccountChange("lastName", event.target.value)}
+								onChange={event => controller.onPersonalChange("lastName", event.target.value)}
 								startAdornment={ <UserIcon /> }
-								errorModel={controller.accountErrorModel}
+								errorModel={controller.personalErrorModel}
 								validationKey="lastName"
 								errorTranslationValues={{
 									value: firstNameLabel,
@@ -170,18 +178,34 @@ class SettingsPage extends React.Component<
 								}}
 							/>
 
-							<CustomDatePicker value={controller.accountViewModel.birthDate}
+							<CustomTextField disabled={isDisabled}
+								type="tel"
+								value={controller.personalViewModel.phoneNumber}
+								maxLength={PHONE_NUMBER_MAX_LENGTH}
+								label={phoneNumberLabel}
+								onChange={event => controller.onPersonalChange("phoneNumber", event.target.value)}
+								startAdornment={ <PhoneIcon /> }
+								errorModel={controller.personalErrorModel}
+								validationKey="phoneNumber"
+								errorTranslationValues={{
+									value: phoneNumberLabel,
+									maxLength: PHONE_NUMBER_MAX_LENGTH
+								}}
+							/>
+
+							<CustomDatePicker value={controller.personalViewModel.birthDate}
 								disabled={isDisabled}
 								required={true}
 								label={birthDateLabel}
 								maxDate={getUserMaxDate()}
-								onChange={date => controller.onAccountChange("birthDate", date)}
+								onChange={date => controller.onPersonalChange("birthDate", date)}
 							/>
 
 							{
 								this.renderActionButtons(
-									controller.onAccountSave,
-									controller.onAccountReset
+									controller.onPersonalSave,
+									controller.onPersonalReset,
+									controller.personalSaveButtonState
 								)
 							}
 						</div>
@@ -265,8 +289,9 @@ class SettingsPage extends React.Component<
 
 							{
 								this.renderActionButtons(
-									controller.onAccountSave,
-									controller.onAddressReset
+									controller.onAddressSave,
+									controller.onAddressReset,
+									controller.addressSaveButtonState
 								)
 							}
 						</div>

@@ -4,3 +4,4 @@ export * from "./IRegistrationInput";
 export * from "./IResetPasswordInput";
 export * from "./IAdListInput";
 export * from "./ISimpleGetInput";
+export * from "./IPersonalInput";

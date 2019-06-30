@@ -1,7 +1,14 @@
 import { observable, action } from "mobx";
-import { IUser, SESSION_KEY_NAME, USER_KEY_NAME, EXPIRATION_DATE_KEY_NAME } from "common-library";
 import { IUserService } from "../interfaces/services/IUserService";
 import { isAfter } from "date-fns";
+
+import {
+	IUser,
+	SESSION_KEY_NAME,
+	USER_KEY_NAME,
+	EXPIRATION_DATE_KEY_NAME,
+	IPersonalInput
+} from "common-library";
 
 export interface IUserCache {
 	readonly loading: boolean
@@ -10,6 +17,7 @@ export interface IUserCache {
 	readonly user?: IUser
 
 	recache: () => Promise<void>
+	updatePersonalInfo: (input: IPersonalInput) => void
 }
 
 export class UserCache implements IUserCache {
@@ -24,6 +32,17 @@ export class UserCache implements IUserCache {
 		this.userService = userService;
 
 		this.recache();
+	}
+
+	public updatePersonalInfo(input: IPersonalInput) : void {
+		if(this.user) {
+			this.user.lastName = input.lastName;
+			this.user.firstName = input.firstName;
+			this.user.lastName = input.lastName;
+			this.user.phoneNumber = input.phoneNumber;
+
+			localStorage.setItem(USER_KEY_NAME, JSON.stringify(this.user));
+		}
 	}
 
 	@action

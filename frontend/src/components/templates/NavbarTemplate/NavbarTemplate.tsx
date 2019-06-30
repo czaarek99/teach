@@ -3,7 +3,6 @@ import Skeleton from "react-loading-skeleton";
 import HomeIcon from "@material-ui/icons/Home"
 import MenuIcon from "@material-ui/icons/Menu";
 import SettingsIcon from "@material-ui/icons/Settings";
-import PersonIcon from "@material-ui/icons/Person";
 import BrowseIcon from "@material-ui/icons/Search";
 
 import { InjectedIntlProps, injectIntl } from 'react-intl';
@@ -206,7 +205,6 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		if(controller.userCache.isLoggedIn) {
 			protectedRoutes = (
 				<React.Fragment>
-					{this.renderNavigationItem("things.pages.profile", <PersonIcon />, Route.PROFILE)}
 					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Route.SETTINGS)}
 				</React.Fragment>
 			)

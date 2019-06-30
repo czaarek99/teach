@@ -1,1 +1,2 @@
-* fix scroll in navbar
+* split settingspage into multiple .tsx files
+* split settingscontroller into subcontrollers

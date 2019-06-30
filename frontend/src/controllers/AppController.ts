@@ -8,7 +8,7 @@ import { RegistrationPageController } from "./pages/RegistrationPageController";
 import { RouterStore } from "mobx-react-router";
 import { IForgotPageController } from "../interfaces/controllers/pages/IForgotPageController";
 import { ForgotPageController } from "./pages/ForgotPageController";
-import { observable, computed } from "mobx";
+import { observable } from "mobx";
 import { Route, DEFAULT_ROUTE } from "../interfaces/Routes";
 import { IResetPasswordPageController } from "../interfaces/controllers/pages/IResetPasswordPageController";
 import { ResetPasswordPageController } from "./pages/ResetPasswordPageController";
@@ -40,13 +40,13 @@ export class AppController implements IAppController {
 	private readonly services: IServices;
 
 	@observable private readonly userCache: IUserCache;
-	@observable private _loginPageController: ILoginPageController | null = null;
-	@observable private _registrationPageController: IRegistrationPageController | null = null;
-	@observable private _forgotPageController: IForgotPageController | null = null;
-	@observable private _resetPasswordPageController: IResetPasswordPageController | null = null;
-	@observable private _browsePageController: IBrowsePageController | null = null;
-	@observable private _adPageController: IAdPageController | null = null;
-	@observable private _settingsPageController: ISettingsPageController | null = null;
+	private _loginPageController: ILoginPageController | null = null;
+	private _registrationPageController: IRegistrationPageController | null = null;
+	private _forgotPageController: IForgotPageController | null = null;
+	private _resetPasswordPageController: IResetPasswordPageController | null = null;
+	private _browsePageController: IBrowsePageController | null = null;
+	private _adPageController: IAdPageController | null = null;
+	private _settingsPageController: ISettingsPageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -140,6 +140,7 @@ export class AppController implements IAppController {
 	public get settingsPageController() : ISettingsPageController {
 		if(this._settingsPageController === null) {
 			this._settingsPageController = new SettingsPageController(
+				this.services.userService,
 				this.routingStore,
 				this.userCache
 			);

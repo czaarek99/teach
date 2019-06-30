@@ -3,10 +3,7 @@ export enum Route {
 	REGISTRATION = "/auth/register",
 	FORGOT_PASSWORD = "/auth/forgot",
 	RESET_PASSWORD = "/auth/reset",
-
-	PROFILE = "/profile",
 	SETTINGS = "/settings",
-
 	BROWSE = "/browse",
 	AD = "/ad",
 	HOME = "/"

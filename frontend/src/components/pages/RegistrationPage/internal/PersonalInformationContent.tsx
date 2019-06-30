@@ -1,5 +1,6 @@
 import React from 'react';
 import UserIcon from "@material-ui/icons/AccountBox";
+import PhoneIcon from "@material-ui/icons/Phone";
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
@@ -14,7 +15,8 @@ import {
 	FIRST_NAME_MAX_LENGTH,
 	LAST_NAME_MIN_LENGTH,
 	LAST_NAME_MAX_LENGTH,
-	getUserMaxDate
+	getUserMaxDate,
+	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
 
 
@@ -35,6 +37,7 @@ class PersonalInformationContent extends React.Component<
 		const firstNameLabel = simpleFormat(this, "things.firstName");
 		const lastNameLabel = simpleFormat(this, "things.lastName");
 		const birthDateLabel = simpleFormat(this, "things.birthDate");
+		const phoneNumberLabel = simpleFormat(this, "things.phoneNumber");
 
 		return (
 			<Box>
@@ -86,6 +89,23 @@ class PersonalInformationContent extends React.Component<
 						}}
 					/>
 
+				</Box>
+
+				<Box mb={margin}>
+					<CustomTextField disabled={isDisabled}
+						type="tel"
+						value={controller.model.phoneNumber}
+						maxLength={PHONE_NUMBER_MAX_LENGTH}
+						label={phoneNumberLabel}
+						onChange={event => controller.onChange("phoneNumber", event.target.value)}
+						startAdornment={ <PhoneIcon /> }
+						errorModel={controller.errorModel}
+						validationKey="phoneNumber"
+						errorTranslationValues={{
+							value: phoneNumberLabel,
+							maxLength: PHONE_NUMBER_MAX_LENGTH
+						}}
+					/>
 				</Box>
 
 				<Box mb={margin}

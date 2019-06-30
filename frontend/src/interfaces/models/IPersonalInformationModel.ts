@@ -1,4 +1,4 @@
-export interface IAccountModel {
+export interface IPersonalInformationModel {
 	readonly firstName: string
 	readonly lastName: string
 	readonly birthDate: Date

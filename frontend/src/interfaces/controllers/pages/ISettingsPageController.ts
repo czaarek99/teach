@@ -1,9 +1,10 @@
-import { IAccountModel } from "../../models/IAccountModel";
+import { IPersonalInformationModel } from "../../models/IPersonalInformationModel";
 import { IAddressModel } from "../../models/IAddressModel";
 import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
 import { ViewModel } from "../../ViewModel";
+import { LoadingButtonState } from "../../../components";
 
-export interface IAccountErrorState extends ErrorState {
+export interface IPersonalErrorState extends ErrorState {
 	firstName: string[]
 	lastName: string[]
 	phoneNumber: string[]
@@ -17,16 +18,17 @@ export interface IAddressErrorState extends ErrorState {
 }
 
 export interface ISettingsPageController {
-	readonly accountViewModel: ViewModel<IAccountModel>
-	readonly accountErrorModel: ErrorModel<IAccountErrorState>
-
+	readonly personalViewModel: ViewModel<IPersonalInformationModel>
+	readonly personalErrorModel: ErrorModel<IPersonalErrorState>
 	readonly addressViewModel: ViewModel<IAddressModel>
 	readonly addressErrorModel: ErrorModel<IAddressErrorState>
+	readonly personalSaveButtonState: LoadingButtonState
+	readonly addressSaveButtonState: LoadingButtonState
 	readonly loading: boolean
 
-	onAccountChange: (key: keyof IAccountModel, value: any) => void
-	onAccountSave: () => Promise<void>
-	onAccountReset: () => void
+	onPersonalChange: (key: keyof IPersonalInformationModel, value: any) => void
+	onPersonalSave: () => Promise<void>
+	onPersonalReset: () => void
 
 	onAddressChange: (key: keyof IAddressModel, value: string) => void
 	onAddressSave: () => Promise<void>

@@ -2,7 +2,6 @@ import * as React from "react";
 
 import MailIcon from "@material-ui/icons/Mail";
 import KeyIcon from "@material-ui/icons/VpnKey";
-import PhoneIcon from "@material-ui/icons/Phone";
 
 import { observer } from "mobx-react";
 import { IRegistrationContentProps } from "../RegistrationPage";
@@ -16,7 +15,6 @@ import {
 	EMAIL_MAX_LENGTH,
 	PASSWORD_MIN_LENGTH,
 	PASSWORD_MAX_LENGTH,
-	PHONE_NUMBER_MAX_LENGTH,
 } from "common-library";
 
 @observer
@@ -36,14 +34,12 @@ class AccountDetailsContent extends React.Component<
 		const emailLabel = simpleFormat(this, "things.email");
 		const passwordLabel = simpleFormat(this, "things.password");
 		const repeatPasswordLabel = simpleFormat(this, "actions.repeatPassword");
-		const phoneNumberLabel = simpleFormat(this, "things.phoneNumber");
 
 		return (
 			<Box>
 				<Box mb={margin}
 					display="flex"
 					justifyContent="center">
-
 
 					<Typography variant="h6">
 						<FormattedMessage id="things.accountDetails"/>
@@ -66,23 +62,6 @@ class AccountDetailsContent extends React.Component<
 							value: emailLabel,
 							minLength: EMAIL_MIN_LENGTH,
 							maxLength: EMAIL_MAX_LENGTH
-						}}
-					/>
-				</Box>
-
-				<Box mb={margin}>
-					<CustomTextField disabled={isDisabled}
-						type="tel"
-						value={controller.model.phoneNumber}
-						maxLength={PHONE_NUMBER_MAX_LENGTH}
-						label={phoneNumberLabel}
-						onChange={event => controller.onChange("phoneNumber", event.target.value)}
-						startAdornment={ <PhoneIcon /> }
-						errorModel={controller.errorModel}
-						validationKey="phoneNumber"
-						errorTranslationValues={{
-							value: phoneNumberLabel,
-							maxLength: PHONE_NUMBER_MAX_LENGTH
 						}}
 					/>
 				</Box>

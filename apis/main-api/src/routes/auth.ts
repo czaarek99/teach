@@ -4,7 +4,6 @@ import * as bcrypt from "bcrypt";
 import { Joi } from "koa-joi-router";
 import { User } from "../database/models/User";
 import { CustomContext } from "../Server";
-import { addDays } from "date-fns";
 import { Address } from "../database/models/Address";
 import { PasswordReset } from "../database/models/PasswordReset";
 import { v4 } from "uuid";
@@ -12,6 +11,7 @@ import { isBefore, subDays } from "date-fns";
 import { randomBytes } from "crypto";
 import { IRedisSession, getNewExpirationDate, throwApiError } from "server-lib";
 import { verifyRecaptcha } from "../util/verifyRecaptcha";
+import { Image } from "../database/models/Image";
 import { resolveUser } from "../database/resolvers/resolveUser";
 
 import {
@@ -19,10 +19,6 @@ import {
 	ErrorMessage,
 	PASSWORD_MIN_LENGTH,
 	PASSWORD_MAX_LENGTH,
-	FIRST_NAME_MIN_LENGTH,
-	FIRST_NAME_MAX_LENGTH,
-	LAST_NAME_MIN_LENGTH,
-	LAST_NAME_MAX_LENGTH,
 	STREET_MIN_LENGTH,
 	STREET_MAX_LENGTH,
 	ZIP_CODE_MIN_LENGTH,
@@ -33,9 +29,7 @@ import {
 	EMAIL_MAX_LENGTH,
 	EMAIL_MIN_LENGTH,
 	STATE_MAX_LENGTH,
-	getUserMaxDate,
 	DOMAIN,
-	PHONE_NUMBER_MAX_LENGTH,
 	IRegistrationInput,
 	ILoginInput,
 	IForgotInput,
@@ -48,10 +42,16 @@ import {
 	renderTemplate,
 	PASSWORD_RESET_HELP_TEMPLATE
 } from "../email/templates/templates";
-import { Image } from "../database/models/Image";
 
-const SIMPLE_EMAIL_VALIDATOR = Joi.string().min(EMAIL_MIN_LENGTH).max(EMAIL_MAX_LENGTH).required();
-const PASSWORD_VALIDATOR = Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).required();
+import {
+	FIRST_NAME_VALIDATOR,
+	LAST_NAME_VALIDATOR,
+	BIRTH_DATE_VALIDATOR,
+	PHONE_NUMBER_VALIDATOR,
+	SIMPLE_EMAIL_VALIDATOR,
+	PASSWORD_VALIDATOR,
+	ADDRESS_VALIDATOR
+} from "../validators";
 
 async function hashPassword(password: string) : Promise<string> {
 	const saltRounds = 10;
@@ -111,18 +111,11 @@ router.post("/register", {
 		body: {
 			user: Joi.object({
 				email: SIMPLE_EMAIL_VALIDATOR,
-				firstName: Joi.string().min(FIRST_NAME_MIN_LENGTH).max(FIRST_NAME_MAX_LENGTH).required(),
-				lastName: Joi.string().min(LAST_NAME_MIN_LENGTH).max(LAST_NAME_MAX_LENGTH).required(),
-				birthDate: Joi.date().max(addDays(getUserMaxDate(), 3)).required(),
-				phoneNumber: Joi.string().max(PHONE_NUMBER_MAX_LENGTH).optional(),
-				address: Joi.object({
-					street: Joi.string().min(STREET_MIN_LENGTH).max(STREET_MAX_LENGTH).required(),
-					zipCode: Joi.string().min(ZIP_CODE_MIN_LENGTH).max(ZIP_CODE_MAX_LENGTH).required(),
-					city: Joi.string().min(CITY_MIN_LENGTH).max(CITY_MAX_LENGTH).required(),
-					countryCode: Joi.string().length(COUNTRY_CODE_LENGTH).required(),
-					state: Joi.string().max(STATE_MAX_LENGTH).allow("").optional()
-				}).requiredKeys("street", "zipCode", "city", "countryCode").optionalKeys("state")
-
+				firstName: FIRST_NAME_VALIDATOR,
+				lastName: LAST_NAME_VALIDATOR,
+				birthDate: BIRTH_DATE_VALIDATOR,
+				phoneNumber: PHONE_NUMBER_VALIDATOR,
+				address: ADDRESS_VALIDATOR
 			}).required(),
 
 			captcha: Joi.string(),
