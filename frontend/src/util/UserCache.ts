@@ -47,11 +47,19 @@ export class UserCache implements IUserCache {
 				this.user = JSON.parse(cachedUser);
 			}
 
-			this.user = await this.userService.getSelf();
-			localStorage.setItem(USER_KEY_NAME, JSON.stringify(this.user));
+			try {
+				this.user = await this.userService.getSelf();
+				localStorage.setItem(USER_KEY_NAME, JSON.stringify(this.user));
+			} catch(error) {
+				localStorage.removeItem(USER_KEY_NAME);
+				localStorage.removeItem(SESSION_KEY_NAME);
+				localStorage.removeItem(EXPIRATION_DATE_KEY_NAME);
+
+				this.isLoggedIn = false;
+			}
+
 		}
 
 		this.loading = false;
 	}
-
 }

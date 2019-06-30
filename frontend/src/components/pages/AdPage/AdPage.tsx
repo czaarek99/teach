@@ -1,11 +1,13 @@
 import React from 'react';
 import Skeleton from "react-loading-skeleton";
+import clsx from "clsx";
 
 import { IAdPageController } from "../../../interfaces/controllers/pages/IAdPageController";
 import { NavbarTemplate } from "../../templates";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { getImageUrl } from "../../../util/imageAPI";
 import { FormattedMessage } from "react-intl";
+import { observer } from "mobx-react";
 
 import {
 	Card,
@@ -79,6 +81,14 @@ const styles = (theme: Theme) => createStyles({
 		flexGrow: 1
 	},
 
+	boldText: {
+		fontWeight: "bold"
+	},
+
+	section: {
+		marginBottom: 15
+	},
+
 	description: {}
 
 });
@@ -88,6 +98,7 @@ interface IAdPageProps {
 	navbarController: INavbarController
 }
 
+@observer
 class AdPage extends React.Component<
 	IAdPageProps &
 	WithStyles<typeof styles>
@@ -103,13 +114,14 @@ class AdPage extends React.Component<
 
 		const model = controller.ad;
 
-		let imageComponent;
-		let titleComponent;
-		let realNameComponent;
-		let emailComponent;
-		let phoneComponent;
+		let titleComponent: React.ReactNode = <Skeleton />;
+		let realNameComponent: React.ReactNode = <Skeleton />;
+		let emailComponent: React.ReactNode = <Skeleton/> ;
+		let phoneComponent: React.ReactNode = <Skeleton />;
+		let cityComponent: React.ReactNode = <Skeleton />;
+
 		let avatarComponent;
-		let cityComponent;
+		let imageComponent;
 		let descriptionComponent;
 
 		if(model === null) {
@@ -117,26 +129,6 @@ class AdPage extends React.Component<
 				<div className={classes.image}>
 					<Skeleton height="100%"/>
 				</div>
-			);
-
-			titleComponent = (
-				<Skeleton />
-			);
-
-			realNameComponent = (
-				<Skeleton />
-			);
-
-			emailComponent = (
-				<Skeleton />
-			);
-
-			phoneComponent = (
-				<Skeleton />
-			);
-
-			cityComponent = (
-				<Skeleton />
 			);
 
 			avatarComponent = (
@@ -179,16 +171,20 @@ class AdPage extends React.Component<
 			<NavbarTemplate controller={navbarController}>
 				<div className={classes.root}>
 					<Card className={classes.card}>
-						<Typography variant="h4">
-							<FormattedMessage id="things.ad"/>
-						</Typography>
+						<section className={classes.section}>
+							<Typography variant="h4">
+								<FormattedMessage id="things.ad"/>
+							</Typography>
+						</section>
 
-						<Typography variant="h5" noWrap={true}>
-							{titleComponent}
-						</Typography>
-						{imageComponent}
+						<section className={classes.section}>
+							<Typography variant="h5" noWrap={true}>
+								{titleComponent}
+							</Typography>
+							{imageComponent}
+						</section>
 
-						<div className={classes.teacherDetails}>
+						<section className={classes.section}>
 							<Typography variant="h6">
 								<FormattedMessage id="things.teacher"/>
 							</Typography>
@@ -200,24 +196,40 @@ class AdPage extends React.Component<
 								</Typography>
 							</div>
 
-							<Typography>
+							<Typography noWrap={true}>
+								<span className={classes.boldText}>
+									<FormattedMessage id="things.city"/>
+								</span>
+								<span>: </span>
 								{cityComponent}
 							</Typography>
-							<Typography>
+							<Typography noWrap={true}>
+								<span className={classes.boldText}>
+									<FormattedMessage id="things.email"/>
+								</span>
+								<span>: </span>
+
 								{emailComponent}
 							</Typography>
-							<Typography>
+							<Typography noWrap={true}>
+								<span className={classes.boldText}>
+									<FormattedMessage id="things.phoneNumber"/>
+								</span>
+								<span>: </span>
+
 								{phoneComponent}
 							</Typography>
-						</div>
+						</section>
 
-						<Typography variant="h6">
-							<FormattedMessage id="things.description"/>
-						</Typography>
+						<section className={classes.section}>
+							<Typography variant="h6">
+								<FormattedMessage id="things.description"/>
+							</Typography>
 
-						<Typography className={classes.description}>
-							{descriptionComponent}
-						</Typography>
+							<Typography className={classes.description}>
+								{descriptionComponent}
+							</Typography>
+						</section>
 					</Card>
 				</div>
 			</NavbarTemplate>

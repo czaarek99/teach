@@ -69,6 +69,7 @@ const styles = (theme: Theme) => createStyles({
 		alignItems: "center",
 		marginLeft: 16,
 		marginRight: 16,
+		overflow: "hidden",
 
 		...theme.mixins.toolbar
 	},
@@ -106,6 +107,10 @@ const styles = (theme: Theme) => createStyles({
 			flex: 1
 		}
 	},
+
+	accountText: {
+		minWidth: 0
+	}
 
 });
 
@@ -205,12 +210,14 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 					</div>
 
 					<div className={classes.contactDetails}>
-						<Typography noWrap={true}>
+						<Typography noWrap={true}
+							className={classes.accountText}>
 							{realNameComponent}
 						</Typography>
 
 						<Typography variant="body2"
 							noWrap={true}
+							className={classes.accountText}
 							color="textSecondary">
 
 							{emailComponent}
