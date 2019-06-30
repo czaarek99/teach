@@ -18,6 +18,8 @@ import {
 	withStyles,
 	Typography,
 	Avatar,
+	Snackbar,
+	Button,
 } from "@material-ui/core";
 
 const SMALL_BREAKPOINT = "@media screen and (min-width: 400px)";
@@ -87,6 +89,10 @@ const styles = (theme: Theme) => createStyles({
 
 	section: {
 		marginBottom: 15
+	},
+
+	errorSnackbarContent: {
+		backgroundColor: theme.palette.error.dark
 	},
 
 	description: {}
@@ -167,8 +173,34 @@ class AdPage extends React.Component<
 			cityComponent = model.teacher.city;
 		}
 
+		let snackbar;
+		if(controller.errorMessage) {
+			snackbar = (
+				<Snackbar open={true}
+					key={controller.errorMessage}
+					ContentProps={{
+						"className": classes.errorSnackbarContent
+					}}
+					action={
+						<Button onClick={() => controller.goBackToBrowse()}>
+							<FormattedMessage id="actions.goBackToBrowse"/>
+						</Button>
+					}
+					message={
+						<FormattedMessage id={controller.errorMessage}/>
+					}
+					anchorOrigin={{
+						vertical: "bottom",
+						horizontal: "center"
+					}}
+					onClose={() => controller.closeSnackbar()}/>
+			)
+		}
+
 		return (
 			<NavbarTemplate controller={navbarController}>
+				{snackbar}
+
 				<div className={classes.root}>
 					<Card className={classes.card}>
 						<section className={classes.section}>

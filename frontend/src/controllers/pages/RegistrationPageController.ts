@@ -11,6 +11,7 @@ import { logIn } from "../../util/logIn";
 import { objectKeys } from "../../util/objectKeys";
 import { IUserCache } from "../../util/UserCache";
 import { IRecaptchaFunctions } from "../../components";
+import { Route } from "../../interfaces/Routes";
 
 import {
 	FIRST_NAME_MIN_LENGTH,
@@ -33,7 +34,6 @@ import {
 	IRegistrationPageController,
 	IRegistrationPageErrorState,
 } from "../../interfaces/controllers/pages/IRegistrationPageController";
-import { Route } from "../../interfaces/Routes";
 
 const validators : ValidatorMap<IRegistrationModel> = {
 	email: [

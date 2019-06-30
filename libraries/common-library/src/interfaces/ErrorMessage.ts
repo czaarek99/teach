@@ -20,5 +20,6 @@ export enum ErrorMessage {
 	BAD_RESET_KEY = "error.badResetKey",
 	EXPIRED_RESET_KEY = "error.expiredResetKey",
 	BAD_UUID = "error.badUUID",
-	INVALID_IMAGE = "error.invalidImage"
+	INVALID_IMAGE = "error.invalidImage",
+	AD_NOT_FOUND = "error.adNotFound"
 }
