@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import React from 'react';
 import UserIcon from "@material-ui/icons/AccountBox";
 
 import { observer } from "mobx-react";

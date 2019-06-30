@@ -202,6 +202,16 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 			}
 		}
 
+		let protectedRoutes;
+		if(controller.userCache.isLoggedIn) {
+			protectedRoutes = (
+				<React.Fragment>
+					{this.renderNavigationItem("things.pages.profile", <PersonIcon />, Route.PROFILE)}
+					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Route.SETTINGS)}
+				</React.Fragment>
+			)
+		}
+
 		return (
 			<div>
 				<div className={classes.toolbar}>
@@ -230,8 +240,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 				<List>
 					{this.renderNavigationItem("things.pages.home", <HomeIcon />, Route.HOME)}
 					{this.renderNavigationItem("things.pages.browse", <BrowseIcon />, Route.BROWSE)}
-					{this.renderNavigationItem("things.pages.profile", <PersonIcon />, Route.PROFILE)}
-					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Route.SETTINGS)}
+					{protectedRoutes}
 				</List>
 			</div>
 		)

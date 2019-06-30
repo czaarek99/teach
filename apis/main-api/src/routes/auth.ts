@@ -48,6 +48,7 @@ import {
 	renderTemplate,
 	PASSWORD_RESET_HELP_TEMPLATE
 } from "../email/templates/templates";
+import { Image } from "../database/models/Image";
 
 const SIMPLE_EMAIL_VALIDATOR = Joi.string().min(EMAIL_MIN_LENGTH).max(EMAIL_MAX_LENGTH).required();
 const PASSWORD_VALIDATOR = Joi.string().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).required();
@@ -214,7 +215,11 @@ router.post("/login", {
 	const user : User = await User.findOne<User>({
 		where: {
 			email: body.email
-		}
+		},
+		include: [
+			Address,
+			Image
+		]
 	});
 
 	if(!user) {

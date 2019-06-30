@@ -39,35 +39,44 @@ const validators : ValidatorMap<IRegistrationModel> = {
 	email: [
 		email
 	],
+
 	firstName: [
 		minLength(FIRST_NAME_MIN_LENGTH),
 		maxLength(FIRST_NAME_MAX_LENGTH)
 	],
+
 	lastName: [
 		minLength(LAST_NAME_MIN_LENGTH),
 		maxLength(LAST_NAME_MAX_LENGTH)
 	],
+
 	password: [
 		password
 	],
+
 	captcha: [
 		notSet
 	],
+
 	phoneNumber: [
 		maxLength(PHONE_NUMBER_MAX_LENGTH)
 	],
+
 	city: [
 		minLength(CITY_MIN_LENGTH),
 		maxLength(CITY_MAX_LENGTH)
 	],
+
 	zipCode: [
 		minLength(ZIP_CODE_MIN_LENGTH),
 		maxLength(ZIP_CODE_MAX_LENGTH)
 	],
+
 	street: [
 		minLength(STREET_MIN_LENGTH),
 		maxLength(STREET_MAX_LENGTH)
 	],
+
 	state: [
 		maxLength(STATE_MAX_LENGTH)
 	]

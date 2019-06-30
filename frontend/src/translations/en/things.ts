@@ -15,6 +15,7 @@ export default {
 	"things.state": "State",
 	"things.personalInformation": "Personal information",
 	"things.accountDetails": "Account details",
+	"things.account": "Account",
 	"things.newPassword": "New password",
 	"things.phoneNumber": "Phone number",
 	"things.teacher": "Teacher",

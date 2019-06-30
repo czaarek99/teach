@@ -13,7 +13,8 @@ import {
 	ResetPasswordPage,
 	BrowsePage,
 	HomePage,
-	AdPage
+	AdPage,
+	SettingsPage
 } from '../../pages';
 
 interface IAppProps {
@@ -60,6 +61,10 @@ class App extends React.Component<IAppProps> {
 			),
 			[Route.HOME]: () => (
 				<HomePage />
+			),
+			[Route.SETTINGS]: () => (
+				<SettingsPage controller={controller.settingsPageController}
+					navbarController={controller.navbarController}/>
 			)
 		};
 

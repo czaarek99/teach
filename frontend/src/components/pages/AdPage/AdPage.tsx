@@ -1,12 +1,11 @@
 import React from 'react';
 import Skeleton from "react-loading-skeleton";
-import clsx from "clsx";
 
 import { IAdPageController } from "../../../interfaces/controllers/pages/IAdPageController";
 import { NavbarTemplate } from "../../templates";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { getImageUrl } from "../../../util/imageAPI";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 import { observer } from "mobx-react";
 
 import {
@@ -107,6 +106,7 @@ interface IAdPageProps {
 @observer
 class AdPage extends React.Component<
 	IAdPageProps &
+	InjectedIntlProps &
 	WithStyles<typeof styles>
 > {
 
@@ -270,4 +270,4 @@ class AdPage extends React.Component<
 
 }
 
-export default withStyles(styles)(AdPage);
+export default withStyles(styles)(injectIntl(AdPage));

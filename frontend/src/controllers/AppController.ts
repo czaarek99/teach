@@ -23,6 +23,8 @@ import { UserService } from "../services/UserService";
 import { IUserCache, UserCache } from "../util/UserCache";
 import { IAdPageController } from "../interfaces/controllers/pages/IAdPageController";
 import { AdPageController } from "./pages/AdPageController";
+import { ISettingsPageController } from "../interfaces/controllers/pages/ISettingsPageController";
+import { SettingsPageController } from "./pages/SettingsPageController";
 
 interface IServices {
 	authenticationService: IAuthenticationService
@@ -44,6 +46,7 @@ export class AppController implements IAppController {
 	@observable private _resetPasswordPageController: IResetPasswordPageController | null = null;
 	@observable private _browsePageController: IBrowsePageController | null = null;
 	@observable private _adPageController: IAdPageController | null = null;
+	@observable private _settingsPageController: ISettingsPageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -68,7 +71,7 @@ export class AppController implements IAppController {
 		}
 	}
 
-	@computed public get loginPageController() : ILoginPageController {
+	public get loginPageController() : ILoginPageController {
 		if(this._loginPageController === null) {
 			this._loginPageController = new LoginPageController(
 				this.services.authenticationService,
@@ -80,7 +83,7 @@ export class AppController implements IAppController {
 		return this._loginPageController;
 	}
 
-	@computed public get registrationPageController() : IRegistrationPageController {
+	public get registrationPageController() : IRegistrationPageController {
 		if(this._registrationPageController === null) {
 			this._registrationPageController = new RegistrationPageController(
 				this.services.authenticationService,
@@ -92,7 +95,7 @@ export class AppController implements IAppController {
 		return this._registrationPageController;
 	}
 
-	@computed public get forgotPageController() : IForgotPageController {
+	public get forgotPageController() : IForgotPageController {
 		if(this._forgotPageController === null) {
 			this._forgotPageController = new ForgotPageController(
 				this.services.authenticationService
@@ -102,7 +105,7 @@ export class AppController implements IAppController {
 		return this._forgotPageController;
 	}
 
-	@computed public get resetPasswordPageController() : IResetPasswordPageController {
+	public get resetPasswordPageController() : IResetPasswordPageController {
 		if(this._resetPasswordPageController === null) {
 			this._resetPasswordPageController = new ResetPasswordPageController(
 				this.services.authenticationService
@@ -112,7 +115,7 @@ export class AppController implements IAppController {
 		return this._resetPasswordPageController;
 	}
 
-	@computed public get browsePageController() : IBrowsePageController {
+	public get browsePageController() : IBrowsePageController {
 		if(this._browsePageController === null) {
 			this._browsePageController = new BrowsePageController(
 				this.services.adService,
@@ -123,7 +126,7 @@ export class AppController implements IAppController {
 		return this._browsePageController;
 	}
 
-	@computed public get adPageController() : IAdPageController {
+	public get adPageController() : IAdPageController {
 		if(this._adPageController === null) {
 			this._adPageController = new AdPageController(
 				this.services.adService,
@@ -132,6 +135,17 @@ export class AppController implements IAppController {
 		}
 
 		return this._adPageController;
+	}
+
+	public get settingsPageController() : ISettingsPageController {
+		if(this._settingsPageController === null) {
+			this._settingsPageController = new SettingsPageController(
+				this.routingStore,
+				this.userCache
+			);
+		}
+
+		return this._settingsPageController;
 	}
 
 }

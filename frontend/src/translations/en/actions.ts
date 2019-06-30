@@ -7,6 +7,8 @@ export default {
 	"actions.resetPassword": "Reset password",
 	"actions.forgotPassword": "Forgot password?",
 	"actions.goBackToBrowse": "Go back to browsing",
+	"actions.save": "Save",
+	"actions.reset": "Reset",
 	"actions.resetEmailSent": `
 		An email with instructions on how to reset your password has been sent to
 		{email}.

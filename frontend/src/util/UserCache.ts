@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { IUser, SESSION_KEY_NAME, USER_KEY_NAME, EXPIRATION_DATE_KEY_NAME } from "common-library";
 import { IUserService } from "../interfaces/services/IUserService";
 import { isAfter } from "date-fns";
@@ -26,7 +26,8 @@ export class UserCache implements IUserCache {
 		this.recache();
 	}
 
-	public async recache() {
+	@action
+	public async recache() : Promise<void> {
 		this.loading = true;
 
 		const session = localStorage.getItem(SESSION_KEY_NAME);
