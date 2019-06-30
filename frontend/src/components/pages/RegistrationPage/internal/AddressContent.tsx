@@ -7,16 +7,11 @@ import { IRegistrationContentProps } from "../RegistrationPage";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { simpleFormat } from "../../../../util/simpleFormat";
 import { CustomTextField } from "../../../molecules";
-import { computed, observable } from "mobx";
-import { getNames } from "i18n-iso-countries";
+import { CountrySelect } from "../../../organisms";
 
 import {
 	Box,
 	Typography,
-	FormControl,
-	InputLabel,
-	NativeSelect,
-	OutlinedInput
 } from "@material-ui/core";
 
 import {
@@ -29,37 +24,12 @@ import {
 	ZIP_CODE_MAX_LENGTH
 } from "common-library";
 
-const SELECT_INPUT_ID = "countrySelectInput";
 
 @observer
 class AddressContent extends React.Component<
 	IRegistrationContentProps &
 	InjectedIntlProps
 > {
-
-	@observable private selectLabelWidth = 0;
-	private readonly selectLabelRef = React.createRef<HTMLLabelElement>();
-
-	@computed private get selectOptions() : React.ReactNodeArray {
-		const locale = this.props.intl.locale;
-		const countries = getNames(locale);
-
-		return Object.entries(countries).map(([code, name]) => {
-			return (
-				<option value={code}
-					key={code}>
-
-					{name}
-				</option>
-			)
-		})
-	}
-
-	public componentDidMount() : void {
-		if(this.selectLabelRef.current) {
-			this.selectLabelWidth = this.selectLabelRef.current.offsetWidth;
-		}
-	}
 
 	public render() : React.ReactNode {
 
@@ -124,7 +94,6 @@ class AddressContent extends React.Component<
 					/>
 				</Box>
 
-
 				<Box mb={margin}>
 					<CustomTextField disabled={isDisabled}
 						value={controller.model.zipCode}
@@ -161,27 +130,8 @@ class AddressContent extends React.Component<
 
 
 				<Box mb={margin}>
-					<FormControl fullWidth={true}
-						variant="outlined">
-
-						<InputLabel htmlFor={SELECT_INPUT_ID}
-							required={true}
-							ref={this.selectLabelRef}>
-
-							<FormattedMessage id="things.country"/>
-						</InputLabel>
-
-						<NativeSelect value={controller.model.countryCode}
-							fullWidth={true}
-							input={(
-								<OutlinedInput id={SELECT_INPUT_ID}
-									fullWidth={true}
-									labelWidth={this.selectLabelWidth} />
-							)}
-							onChange={event => controller.onChange("countryCode", event.target.value)}>
-							{this.selectOptions}
-						</NativeSelect>
-					</FormControl>
+					<CountrySelect value={controller.model.countryCode}
+						onChange={value => controller.onChange("countryCode", value)}/>
 				</Box>
 
 			</Box>

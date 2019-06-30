@@ -1,6 +1,7 @@
 import { IAccountModel } from "../../models/IAccountModel";
 import { IAddressModel } from "../../models/IAddressModel";
 import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
+import { ViewModel } from "../../ViewModel";
 
 export interface IAccountErrorState extends ErrorState {
 	firstName: string[]
@@ -8,12 +9,26 @@ export interface IAccountErrorState extends ErrorState {
 	phoneNumber: string[]
 }
 
+export interface IAddressErrorState extends ErrorState {
+	city: string[]
+	zipCode: string[]
+	street: string[]
+	state: string[]
+}
+
 export interface ISettingsPageController {
-	readonly accountModel: IAccountModel
+	readonly accountViewModel: ViewModel<IAccountModel>
 	readonly accountErrorModel: ErrorModel<IAccountErrorState>
 
-	readonly addressModel: IAddressModel
+	readonly addressViewModel: ViewModel<IAddressModel>
+	readonly addressErrorModel: ErrorModel<IAddressErrorState>
 	readonly loading: boolean
 
 	onAccountChange: (key: keyof IAccountModel, value: any) => void
+	onAccountSave: () => Promise<void>
+	onAccountReset: () => void
+
+	onAddressChange: (key: keyof IAddressModel, value: string) => void
+	onAddressSave: () => Promise<void>
+	onAddressReset: () => void
 }

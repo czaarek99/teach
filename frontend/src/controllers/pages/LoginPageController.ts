@@ -89,7 +89,7 @@ export class LoginPageController implements ILoginPageController {
 		this.shouldValidate = true;
 
 		for(const key of objectKeys(this.model.toInput())) {
-			this.validate(key as (keyof ILoginModel));
+			this.validate(key);
 		}
 
 		if(this.errorModel.hasErrors()) {

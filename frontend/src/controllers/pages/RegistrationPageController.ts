@@ -139,7 +139,7 @@ export class RegistrationPageController implements IRegistrationPageController {
 			const keyValidators = validators[key];
 
 			if(keyValidators !== undefined) {
-				const value = this.model[key as (keyof RegistrationModel)];
+				const value = this.model[key];
 
 				this.errorModel.setErrors(key, validate(value, keyValidators));
 			}
@@ -151,7 +151,7 @@ export class RegistrationPageController implements IRegistrationPageController {
 			return;
 		}
 
-		this.model[key as (keyof RegistrationModel)] = value;
+		this.model[key] = value;
 
 		if(key === "password") {
 			this.shouldValidatePassword = true;
