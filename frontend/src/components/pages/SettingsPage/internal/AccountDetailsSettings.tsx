@@ -5,7 +5,7 @@ import KeyIcon from "@material-ui/icons/VpnKey";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { observer } from "mobx-react";
 import { simpleFormat } from "../../../../util/simpleFormat";
-import { CustomTextField, LoadingButton } from "../../../molecules";
+import { CustomTextField, LoadingButton, InfoBox } from "../../../molecules";
 import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "common-library";
 
 import {
@@ -38,6 +38,10 @@ const styles = (theme: Theme) => createStyles({
 
 	changePasswordButton: {
 		marginRight: 10
+	},
+
+	errorBox: {
+		marginBottom: 10
 	}
 });
 
@@ -70,6 +74,18 @@ class AccountDetailsSettings extends React.Component<
 		let changePasswordContent;
 
 		if(controller.isChangingPassword) {
+			let errorMessage;
+
+			if(controller.errorMessage) {
+				errorMessage = (
+					<InfoBox type="error"
+						className={classes.errorBox}>
+
+						<FormattedMessage id={controller.errorMessage}/>
+					</InfoBox>
+				)
+			}
+
 			changePasswordContent = (
 				<React.Fragment>
 					<CustomTextField disabled={isDisabled}
@@ -120,6 +136,8 @@ class AccountDetailsSettings extends React.Component<
 						}}
 					/>
 
+					{errorMessage}
+
 					<div>
 						<LoadingButton onClick={() => controller.onSave()}
 							className={classes.changePasswordButton}
@@ -165,6 +183,7 @@ class AccountDetailsSettings extends React.Component<
 					<Typography>
 						{passwordLabel}
 					</Typography>
+
 					{changePasswordContent}
 				</div>
 			</Paper>

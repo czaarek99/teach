@@ -2,6 +2,7 @@ import { Address } from "./Address";
 import { PasswordReset } from "./PasswordReset";
 import { Ad } from "./Ad";
 import { Image } from "./Image";
+import { UserSetting } from "./UserSetting";
 
 import {
 	Table,
@@ -70,4 +71,7 @@ export class User extends Model<User> {
 
 	@HasMany(() => Ad, "userId")
 	public ads?: Ad[]
+
+	@HasMany(() => UserSetting, "userId")
+	public settings: UserSetting;
 }

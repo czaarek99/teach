@@ -1,4 +1,5 @@
 import * as Router from "koa-joi-router";
+import * as bcrypt from "bcrypt";
 
 import { CustomContext } from "../Server";
 import { User } from "../database/models/User";
@@ -8,6 +9,7 @@ import { authenticationMiddleware, throwApiError } from "server-lib";
 import { resolveUser } from "../database/resolvers/resolveUser";
 import { IPersonalInput, IAddress, IPasswordInput, HttpError, ErrorMessage } from "common-library";
 import { Joi } from "koa-joi-router";
+import { hashPassword } from "../util/hashPassword";
 
 import {
 	FIRST_NAME_VALIDATOR,
@@ -17,7 +19,6 @@ import {
 	ADDRESS_VALIDATOR,
 	PASSWORD_VALIDATOR
 } from "../validators";
-import { hashPassword } from "../util/hashPassword";
 
 const router = Router();
 
@@ -102,16 +103,15 @@ router.patch("/password", {
 
 	const input = context.request.body as IPasswordInput;
 
-	const currentHash = await hashPassword(input.currentPassword);
-
 	const user : User = await User.findOne<User>({
 		where: {
-			id: context.state.session.userId,
-			password: currentHash
+			id: context.state.session.userId
 		}
 	});
 
-	if(!user) {
+	const isPasswordValid = await bcrypt.compare(input.currentPassword, user.password);
+
+	if(!isPasswordValid) {
 		throwApiError(
 			context,
 			new HttpError(

@@ -7,7 +7,7 @@ import { IUserCache } from "../../util/UserCache";
 import { IUserService } from "../../interfaces/services/IUserService";
 import { ValidatorMap, validate } from "../../validation/validate";
 import { password } from "../../validation/validators";
-import { ErrorMessage } from "common-library";
+import { ErrorMessage, HttpError } from "common-library";
 import { objectKeys } from "../../util/objectKeys";
 
 import {
@@ -28,6 +28,7 @@ export class AccountDetailsSettingsController implements IAccountDetailsSettings
 	private saveButtonStateTimeout?: number;
 
 	@observable private justChangedPassword = false;
+	@observable public errorMessage = "";
 	@observable public model = new AccountDetailsModel();
 	@observable public saveButtonState : LoadingButtonState = "default";
 	@observable public email = "";
@@ -55,7 +56,7 @@ export class AccountDetailsSettingsController implements IAccountDetailsSettings
 			this.errorModel.setErrors(key, validate(value, keyValidators));
 		}
 
-		if(key === "repeatPassword") {
+		if(key === "newPassword" || key === "repeatPassword") {
 			const errors = [];
 
 			if(this.model["newPassword"] !== this.model["repeatPassword"]) {
@@ -115,6 +116,7 @@ export class AccountDetailsSettingsController implements IAccountDetailsSettings
 					await this.userService.updatePassword(input);
 					this.saveButtonState = "success";
 					this.justChangedPassword = true;
+					this.errorMessage = "";
 
 					this.saveButtonStateTimeout = window.setTimeout(() => {
 						this.model = new AccountDetailsModel();
@@ -122,8 +124,15 @@ export class AccountDetailsSettingsController implements IAccountDetailsSettings
 						this.saveButtonState = "default";
 						this.isChangingPassword = false;
 						this.justChangedPassword = false;
-					});
+					}, 3000);
 				} catch(error) {
+					if(error instanceof HttpError) {
+						this.errorMessage = error.error;
+					} else {
+						console.error(error);
+						this.errorMessage = ErrorMessage.COMPONENT;
+					}
+
 					this.saveButtonState = "error";
 				}
 			}

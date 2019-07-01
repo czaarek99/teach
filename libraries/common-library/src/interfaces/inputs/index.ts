@@ -6,3 +6,5 @@ export * from "./IAdListInput";
 export * from "./ISimpleGetInput";
 export * from "./IPersonalInput";
 export * from "./IPasswordInput";
+export * from "./ISettingsInput";
+export * from "./IManySettingsInput";

@@ -19,5 +19,6 @@ export default {
 	[ErrorMessage.BAD_RESET_KEY]: "The reset key you provided is invalid.",
 	[ErrorMessage.BAD_UUID]: "{value} is not a valid uuid",
 	[ErrorMessage.EXPIRED_RESET_KEY]: "This password reset link has expired.",
-	[ErrorMessage.AD_NOT_FOUND]: "Can not find an ad with that id"
+	[ErrorMessage.AD_NOT_FOUND]: "Can not find an ad with that id",
+	[ErrorMessage.WRONG_CURRENT_PASSWORD]: "Old password is wrong"
 }

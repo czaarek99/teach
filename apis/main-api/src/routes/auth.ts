@@ -1,6 +1,7 @@
 import * as Router from "koa-joi-router";
 import * as bcrypt from "bcrypt";
 
+import { hashPassword } from "../util/hashPassword";
 import { Joi } from "koa-joi-router";
 import { User } from "../database/models/User";
 import { CustomContext } from "../Server";
@@ -43,7 +44,6 @@ import {
 	PASSWORD_VALIDATOR,
 	ADDRESS_VALIDATOR
 } from "../validators";
-import { hashPassword } from "../util/hashPassword";
 
 async function logIn(context: CustomContext, user: User) : Promise<void> {
 	const sessionId = await randomBytes(128).toString("hex");

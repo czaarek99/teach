@@ -14,6 +14,7 @@ export interface IAccountDetailsSettingsController {
 	readonly loading: boolean
 	readonly email: string
 	readonly isChangingPassword: boolean
+	readonly errorMessage: string
 
 	changePassword: () => void
 	cancelChangePassword: () => void

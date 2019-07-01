@@ -11,6 +11,7 @@ import ad from "./routes/ad";
 import image from "./routes/image";
 import user from "./routes/user";
 import teacher from "./routes/teacher";
+import settings from "./routes/settings";
 
 import { config } from "./config";
 import { EmailClient } from "./email/EmailClient";
@@ -94,6 +95,7 @@ export class Server {
 
 		const protectedRouter = new Router();
 		protectedRouter.use(authenticationMiddleware);
+		protectedRouter.use("/settings", settings.middleware());
 
 		app.use(openRouter.routes());
 		app.use(protectedRouter.routes());
