@@ -9,7 +9,7 @@ import { PasswordReset } from "../database/models/PasswordReset";
 import { v4 } from "uuid";
 import { isBefore, subDays } from "date-fns";
 import { randomBytes } from "crypto";
-import { IRedisSession, getNewExpirationDate, throwApiError } from "server-lib";
+import { IRedisSession, getNewExpirationDate, throwApiError, authenticationMiddleware } from "server-lib";
 import { verifyRecaptcha } from "../util/verifyRecaptcha";
 import { Image } from "../database/models/Image";
 import { resolveUser } from "../database/resolvers/resolveUser";
@@ -25,6 +25,7 @@ import {
 	IForgotInput,
 	IResetPasswordInput,
 	IAuthOutput,
+	SESSION_HEADER_NAME,
 } from "common-library";
 
 import {
@@ -219,6 +220,11 @@ router.post("/login", {
 
 
 	await logIn(context, user);
+});
+
+router.post("/logout", authenticationMiddleware, async (context: CustomContext) => {
+	await context.state.redisClient.deleteJSONObject(context.headers[SESSION_HEADER_NAME]);
+	context.status = 200;
 });
 
 router.post("/forgot", {

@@ -13,7 +13,10 @@ export interface IAccountDetailsSettingsController {
 	readonly saveButtonState: LoadingButtonState
 	readonly loading: boolean
 	readonly email: string
+	readonly isChangingPassword: boolean
 
+	changePassword: () => void
+	cancelChangePassword: () => void
 	onChange: (key: keyof IAccountDetailsModel, value: string) => void
 	onSave: () => Promise<void>
 }

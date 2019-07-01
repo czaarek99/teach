@@ -7,6 +7,13 @@ import { IUserCache } from "../../util/UserCache";
 import { IUserService } from "../../interfaces/services/IUserService";
 import { ValidatorMap, validate } from "../../validation/validate";
 import { password } from "../../validation/validators";
+import { ErrorMessage } from "common-library";
+import { objectKeys } from "../../util/objectKeys";
+
+import {
+	IAccountDetailsSettingsController,
+	IAccountDetailsErrorState
+} from "../../interfaces/controllers/settings/IAccountDetailsSettingsController";
 
 const validators : ValidatorMap<IAccountDetailsModel> = {
 	newPassword: [
@@ -14,34 +21,29 @@ const validators : ValidatorMap<IAccountDetailsModel> = {
 	]
 }
 
-import {
-	IAccountDetailsSettingsController,
-	IAccountDetailsErrorState
-} from "../../interfaces/controllers/settings/IAccountDetailsSettingsController";
-import { ErrorMessage } from "common-library";
-import { objectKeys } from "../../util/objectKeys";
-
 export class AccountDetailsSettingsController implements IAccountDetailsSettingsController {
 
-	private readonly userService: IUserService;
 	private readonly userCache: IUserCache;
+	private readonly userService: IUserService;
 	private saveButtonStateTimeout?: number;
 
+	@observable private justChangedPassword = false;
 	@observable public model = new AccountDetailsModel();
 	@observable public saveButtonState : LoadingButtonState = "default";
 	@observable public email = "";
 	@observable public loading = true;
+	@observable public isChangingPassword = false;
 	@observable public errorModel = new ErrorModel<IAccountDetailsErrorState>({
 		password: [],
 		repeatPassword: []
 	});
 
 	constructor(
+		userCache: IUserCache,
 		userService: IUserService,
-		userCache: IUserCache
 	) {
-		this.userService = userService;
 		this.userCache = userCache;
+		this.userService = userService;
 	}
 
 	private validate(key: keyof IAccountDetailsModel) : void {
@@ -82,20 +84,49 @@ export class AccountDetailsSettingsController implements IAccountDetailsSettings
 
 	public onChange(key: keyof IAccountDetailsModel, value: string) : void {
 		this.model[key]	= value;
+
+		this.validate(key);
+	}
+
+	public changePassword() : void {
+		this.isChangingPassword = true;
+	}
+
+	public cancelChangePassword() {
+		this.isChangingPassword = false;
 	}
 
 	public onSave = async() : Promise<void> => {
-		clearTimeout(this.saveButtonStateTimeout);
+		if(!this.justChangedPassword) {
+			clearTimeout(this.saveButtonStateTimeout);
 
-		for(const key of objectKeys(this.model.toValidate())) {
-			this.validate(key);
+			for(const key of objectKeys(this.model.toValidate())) {
+				this.validate(key);
+			}
+
+			if(this.errorModel.hasErrors()) {
+				this.saveButtonState = "error";
+			} else {
+				this.saveButtonState = "loading";
+
+				const input = this.model.toInput();
+
+				try {
+					await this.userService.updatePassword(input);
+					this.saveButtonState = "success";
+					this.justChangedPassword = true;
+
+					this.saveButtonStateTimeout = window.setTimeout(() => {
+						this.model = new AccountDetailsModel();
+
+						this.saveButtonState = "default";
+						this.isChangingPassword = false;
+						this.justChangedPassword = false;
+					});
+				} catch(error) {
+					this.saveButtonState = "error";
+				}
+			}
 		}
-
-		if(this.errorModel.hasErrors()) {
-			this.saveButtonState = "error";
-		} else {
-			this.saveButtonState = "loading";
-		}
-
 	}
 }

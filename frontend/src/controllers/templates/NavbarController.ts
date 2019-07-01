@@ -3,16 +3,26 @@ import { RouterStore } from "mobx-react-router";
 import { observable } from "mobx";
 import { Route } from "../../interfaces/Routes";
 import { IUserCache } from "../../util/UserCache";
+import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
+import { LoadingButtonState } from "../../components";
 
 export class NavbarController implements INavbarController {
 
 	private readonly routingStore: RouterStore;
+	private readonly authService: IAuthenticationService;
+
 	@observable public readonly userCache: IUserCache;
 	@observable public navigationDrawerIsOpen = false;
+	@observable public logoutButtonState : LoadingButtonState = "default";
 
-	constructor(routingStore: RouterStore, userCache: IUserCache) {
+	constructor(
+		routingStore: RouterStore,
+		userCache: IUserCache,
+		authService: IAuthenticationService
+	) {
 		this.routingStore = routingStore;
 		this.userCache = userCache;
+		this.authService = authService;
 	}
 
 	public onToggleDrawer() : void {
@@ -29,5 +39,19 @@ export class NavbarController implements INavbarController {
 
 	public isSelected(route: Route) : boolean {
 		return this.routingStore.location.pathname === route;
+	}
+
+	public async logOut() : Promise<void> {
+		this.logoutButtonState = "loading";
+		await this.authService.logOut();
+
+		this.userCache.logOut();
+
+		this.routingStore.push(Route.BROWSE);
+		this.logoutButtonState = "success";
+	}
+
+	public logIn() : void {
+		this.routingStore.push(Route.LOGIN);
 	}
 }

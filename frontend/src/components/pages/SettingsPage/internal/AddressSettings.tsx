@@ -35,8 +35,8 @@ const styles = (theme: Theme) => createStyles({
 		maxWidth: 300
 	},
 
-	countrySelectContainer: {
-		marginTop: 10
+	field: {
+		marginBottom: 8
 	}
 
 });
@@ -75,6 +75,7 @@ class AddressSettings extends React.Component<
 				<div className={classes.fieldContainer}>
 
 					<CustomTextField disabled={isDisabled}
+						className={classes.field}
 						value={controller.viewModel.street}
 						minLength={STREET_MIN_LENGTH}
 						maxLength={STREET_MAX_LENGTH}
@@ -92,6 +93,7 @@ class AddressSettings extends React.Component<
 					/>
 
 					<CustomTextField disabled={isDisabled}
+						className={classes.field}
 						value={controller.viewModel.city}
 						minLength={CITY_MIN_LENGTH}
 						maxLength={CITY_MAX_LENGTH}
@@ -109,6 +111,7 @@ class AddressSettings extends React.Component<
 					/>
 
 					<CustomTextField disabled={isDisabled}
+						className={classes.field}
 						value={controller.viewModel.zipCode}
 						minLength={ZIP_CODE_MIN_LENGTH}
 						maxLength={ZIP_CODE_MAX_LENGTH}
@@ -126,6 +129,7 @@ class AddressSettings extends React.Component<
 					/>
 
 					<CustomTextField disabled={isDisabled}
+						className={classes.field}
 						value={controller.viewModel.state}
 						maxLength={STATE_MAX_LENGTH}
 						label={stateLabel}
@@ -138,10 +142,8 @@ class AddressSettings extends React.Component<
 						}}
 					/>
 
-					<div className={classes.countrySelectContainer}>
-						<CountrySelect value={controller.viewModel.countryCode}
-							onChange={value => controller.onChange("countryCode", value)}/>
-					</div>
+					<CountrySelect value={controller.viewModel.countryCode}
+						onChange={value => controller.onChange("countryCode", value)}/>
 
 					<ActionButtons onSave={() => controller.onSave()}
 						onReset={() => controller.onReset()}

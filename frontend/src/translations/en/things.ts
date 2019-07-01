@@ -17,6 +17,7 @@ export default {
 	"things.accountDetails": "Account details",
 	"things.account": "Account",
 	"things.newPassword": "New password",
+	"things.currentPassword": "Old password",
 	"things.phoneNumber": "Phone number",
 	"things.teacher": "Teacher",
 	"things.description": "Description",

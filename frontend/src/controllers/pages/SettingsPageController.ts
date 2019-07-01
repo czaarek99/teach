@@ -5,6 +5,7 @@ import { observable } from "mobx";
 import { IUserService } from "../../interfaces/services/IUserService";
 import { PersonalInformationSettingsController } from "../settings/PersonalInformationSettingsController";
 import { AddressSettingsController } from "../settings/AddressSettingsController";
+import { AccountDetailsSettingsController } from "../settings/AccountDetailsSettingsController";
 
 import {
 	ISettingsPageController,
@@ -19,6 +20,7 @@ export class SettingsPageController implements ISettingsPageController {
 	@observable public loading = true;
 	@observable public personalController: PersonalInformationSettingsController;
 	@observable public addressController: AddressSettingsController;
+	@observable public accountDetailsController: AccountDetailsSettingsController;
 
 	constructor(
 		userService: IUserService,
@@ -37,7 +39,12 @@ export class SettingsPageController implements ISettingsPageController {
 		this.addressController = new AddressSettingsController(
 			userService,
 			userCache
-		)
+		);
+
+		this.accountDetailsController = new AccountDetailsSettingsController(
+			userCache,
+			userService,
+		);
 
 		this.load();
 	}
@@ -45,6 +52,7 @@ export class SettingsPageController implements ISettingsPageController {
 	private async load() : Promise<void> {
 		this.personalController.loadUserFromCache();
 		this.addressController.loadUserFromCache();
+		this.accountDetailsController.loadUserFromCache();
 
 		await this.userCache.recache();
 
@@ -54,8 +62,9 @@ export class SettingsPageController implements ISettingsPageController {
 
 		await Promise.all([
 			this.personalController.load(),
-			this.addressController.load()
-		])
+			this.addressController.load(),
+			this.accountDetailsController.load()
+		]);
 
 		this.loading = false;
 	}

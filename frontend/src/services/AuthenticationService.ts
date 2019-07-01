@@ -9,8 +9,6 @@ import {
 	IAuthOutput
 } from "common-library";
 
-
-
 export class AuthenticationService extends BaseService implements IAuthenticationService {
 
 	public async logIn(data: ILoginInput) : Promise<IAuthOutput> {
@@ -29,6 +27,10 @@ export class AuthenticationService extends BaseService implements IAuthenticatio
 
 	public async resetPassword(data: IResetPasswordInput) : Promise<void> {
 		await this.axios.post("/auth/reset", data);
+	}
+
+	public async logOut() : Promise<void> {
+		await this.axios.post("/auth/logout");
 	}
 
 }

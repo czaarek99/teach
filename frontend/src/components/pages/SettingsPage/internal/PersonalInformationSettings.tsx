@@ -36,6 +36,10 @@ const styles = (theme: Theme) => createStyles({
 	fieldContainer: {
 		maxWidth: 300
 	},
+
+	field: {
+		marginBottom: 8
+	}
 });
 
 @observer
@@ -67,6 +71,7 @@ class PersonalInformationSettings extends React.Component<
 
 				<div className={classes.fieldContainer}>
 					<CustomTextField disabled={isDisabled}
+						className={classes.field}
 						value={controller.viewModel.firstName}
 						minLength={FIRST_NAME_MIN_LENGTH}
 						maxLength={FIRST_NAME_MAX_LENGTH}
@@ -84,6 +89,7 @@ class PersonalInformationSettings extends React.Component<
 					/>
 
 					<CustomTextField disabled={isDisabled}
+						className={classes.field}
 						value={controller.viewModel.lastName}
 						minLength={LAST_NAME_MIN_LENGTH}
 						maxLength={LAST_NAME_MAX_LENGTH}
@@ -101,6 +107,7 @@ class PersonalInformationSettings extends React.Component<
 					/>
 
 					<CustomTextField disabled={isDisabled}
+						className={classes.field}
 						type="tel"
 						value={controller.viewModel.phoneNumber}
 						maxLength={PHONE_NUMBER_MAX_LENGTH}

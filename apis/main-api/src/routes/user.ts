@@ -120,8 +120,34 @@ router.patch("/password", {
 				context.state.requestId
 			)
 		);
+
+		return;
 	}
 
+	if(input.newPassword === user.email) {
+		throwApiError(
+			context,
+			new HttpError(
+				400,
+				ErrorMessage.PASSWORD_AND_EMAIL_SAME,
+				context.state.requestId
+			)
+		);
+
+		return;
+	}
+
+	const newPassword = await hashPassword(input.newPassword);
+
+	await User.update<User>({
+		password: newPassword
+	}, {
+		where: {
+			id: context.state.session.userId,
+		}
+	});
+
+	context.status = 200;
 });
 
 export default router;

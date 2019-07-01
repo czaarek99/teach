@@ -19,6 +19,7 @@ import {
 	Paper,
 	Typography,
 } from "@material-ui/core";
+import AccountDetailsSettings from "./internal/AccountDetailsSettings";
 
 const styles = (theme: Theme) => createStyles({
 	titlePaper: {
@@ -57,6 +58,7 @@ class SettingsPage extends React.Component<
 
 					<PersonalInformationSettings controller={controller.personalController}/>
 					<AddressSettings controller={controller.addressController}/>
+					<AccountDetailsSettings controller={controller.accountDetailsController}/>
 				</div>
 			</NavbarTemplate>
 		)

@@ -20,6 +20,7 @@ export interface IUserCache {
 	recache: () => Promise<void>
 	updatePersonalInfo: (input: IPersonalInput) => void
 	updateAddress: (address: IAddress) => void
+	logOut: () => void
 }
 
 export class UserCache implements IUserCache {
@@ -52,6 +53,15 @@ export class UserCache implements IUserCache {
 			this.user.address = address;
 			this.saveUserToLocalStorage();
 		}
+	}
+
+	public logOut() : void {
+		localStorage.removeItem(SESSION_KEY_NAME);
+		localStorage.removeItem(EXPIRATION_DATE_KEY_NAME);
+		localStorage.removeItem(USER_KEY_NAME);
+
+		this.user = undefined;
+		this.isLoggedIn = false;
 	}
 
 	private saveUserToLocalStorage() : void {

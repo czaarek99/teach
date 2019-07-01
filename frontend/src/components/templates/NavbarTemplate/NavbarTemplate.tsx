@@ -5,7 +5,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import SettingsIcon from "@material-ui/icons/Settings";
 import BrowseIcon from "@material-ui/icons/Search";
 
-import { InjectedIntlProps, injectIntl } from 'react-intl';
+import { InjectedIntlProps, injectIntl, FormattedMessage } from 'react-intl';
 import { observer } from 'mobx-react';
 import { simpleFormat } from '../../../util/simpleFormat';
 import { Route } from '../../../interfaces/Routes';
@@ -31,8 +31,10 @@ import {
 	WithStyles,
 	withStyles,
 	Divider,
-	Avatar
+	Avatar,
+	Button
 } from '@material-ui/core';
+import { LoadingButton } from "../../molecules";
 
 const drawerWidth = 270;
 
@@ -109,6 +111,11 @@ const styles = (theme: Theme) => createStyles({
 
 	accountText: {
 		minWidth: 0
+	},
+
+	logoutButtonContainer: {
+		display: "flex",
+		justifyContent: "center"
 	}
 
 });
@@ -201,12 +208,34 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 			}
 		}
 
-		let protectedRoutes;
+		let loggedInPages;
+		let loginLogoutButton;
+
 		if(controller.userCache.isLoggedIn) {
-			protectedRoutes = (
+			loggedInPages = (
 				<React.Fragment>
 					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Route.SETTINGS)}
 				</React.Fragment>
+			);
+
+			loginLogoutButton = (
+				<div className={classes.logoutButtonContainer}>
+					<LoadingButton state={controller.logoutButtonState}
+						onClick={() => controller.logOut()}>
+
+						<FormattedMessage id="actions.logOut" />
+					</LoadingButton>
+				</div>
+			);
+		} else {
+			loginLogoutButton = (
+				<div className={classes.logoutButtonContainer}>
+					<Button variant="contained"
+						onClick={() => controller.logIn()}>
+
+						<FormattedMessage id="actions.logIn" />
+					</Button>
+				</div>
 			)
 		}
 
@@ -238,8 +267,10 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 				<List>
 					{this.renderNavigationItem("things.pages.home", <HomeIcon />, Route.HOME)}
 					{this.renderNavigationItem("things.pages.browse", <BrowseIcon />, Route.BROWSE)}
-					{protectedRoutes}
+					{loggedInPages}
 				</List>
+
+				{loginLogoutButton}
 			</div>
 		)
 	}

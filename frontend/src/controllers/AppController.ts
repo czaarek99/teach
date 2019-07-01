@@ -61,7 +61,8 @@ export class AppController implements IAppController {
 
 		this.navbarController = new NavbarController(
 			routingStore,
-			this.userCache
+			this.userCache,
+			this.services.authenticationService
 		);
 
 
