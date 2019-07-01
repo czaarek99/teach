@@ -1,4 +1,6 @@
 import React from 'react';
+import PersonalInformationSettings from "./internal/PersonalInformationSettings";
+import AddressSettings from "./internal/AddressSettings";
 
 import { observer } from "mobx-react";
 import { WithStyles } from "@material-ui/styles";
@@ -17,8 +19,6 @@ import {
 	Paper,
 	Typography,
 } from "@material-ui/core";
-import PersonalInformationSettings from "./internal/PersonalInformationSettings";
-import AddressSettings from "./internal/AddressSettings";
 
 const styles = (theme: Theme) => createStyles({
 	titlePaper: {
@@ -45,9 +45,6 @@ class SettingsPage extends React.Component<
 			navbarController,
 			classes
 		} = this.props;
-
-
-
 
 		return (
 			<NavbarTemplate controller={navbarController}>

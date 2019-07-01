@@ -1,6 +1,7 @@
 import React from 'react';
 import UserIcon from "@material-ui/icons/AccountBox";
 import PhoneIcon from "@material-ui/icons/Phone";
+import ActionButtons from "./ActionButtons";
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
@@ -20,9 +21,7 @@ import {
 
 import {
 	IPersonalInformationSettingsController
-} from "../../../../interfaces/controllers/IPersonalInformationSettingsController";
-import ActionButtons from "./ActionButtons";
-
+} from "../../../../interfaces/controllers/settings/IPersonalInformationSettingsController";
 
 interface IPersonalInformationSettingsProps {
 	controller: IPersonalInformationSettingsController

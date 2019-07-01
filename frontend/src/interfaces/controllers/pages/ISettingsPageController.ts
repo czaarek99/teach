@@ -1,5 +1,5 @@
-import { IPersonalInformationSettingsController } from "../IPersonalInformationSettingsController";
-import { IAddressSettingsController } from "../IAddressSettingsController";
+import { IPersonalInformationSettingsController } from "../settings/IPersonalInformationSettingsController";
+import { IAddressSettingsController } from "../settings/IAddressSettingsController";
 
 export interface ISettingsPageController {
 	readonly loading: boolean

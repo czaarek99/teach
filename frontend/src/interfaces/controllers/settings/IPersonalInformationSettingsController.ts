@@ -1,7 +1,7 @@
-import { ErrorState, ErrorModel } from "../../validation/ErrorModel";
-import { ViewModel } from "../ViewModel";
-import { LoadingButtonState } from "../../components";
-import { IPersonalInformationModel } from "../models/IPersonalInformationModel";
+import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
+import { ViewModel } from "../../ViewModel";
+import { LoadingButtonState } from "../../../components";
+import { IPersonalInformationModel } from "../../models/IPersonalInformationModel";
 
 export interface IPersonalErrorState extends ErrorState {
 	firstName: string[]

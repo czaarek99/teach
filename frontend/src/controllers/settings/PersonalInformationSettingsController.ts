@@ -1,26 +1,26 @@
 import { observable } from "mobx";
-import { ErrorModel } from "../validation/ErrorModel";
-import { IPersonalInformationModel } from "../interfaces/models/IPersonalInformationModel";
-import { ViewModel } from "../interfaces/ViewModel";
-import { PersonalInformationModel } from "../models/PersonalInformationModel";
+import { ErrorModel } from "../../validation/ErrorModel";
+import { IPersonalInformationModel } from "../../interfaces/models/IPersonalInformationModel";
+import { ViewModel } from "../../interfaces/ViewModel";
+import { PersonalInformationModel } from "../../models/PersonalInformationModel";
 import { createViewModel } from "mobx-utils";
-import { IUserService } from "../interfaces/services/IUserService";
-import { IUserCache } from "../util/UserCache";
-import { minLength, maxLength } from "../validation/validators";
-import { ValidatorMap, validate } from "../validation/validate";
+import { IUserService } from "../../interfaces/services/IUserService";
+import { IUserCache } from "../../util/UserCache";
+import { minLength, maxLength } from "../../validation/validators";
+import { ValidatorMap, validate } from "../../validation/validate";
+import { LoadingButtonState } from "../../components";
 
 import {
 	IPersonalInformationSettingsController,
 	IPersonalErrorState
-} from "../interfaces/controllers/IPersonalInformationSettingsController";
-
+} from "../../interfaces/controllers/settings/IPersonalInformationSettingsController";
 
 import {
 	FIRST_NAME_MAX_LENGTH,
 	FIRST_NAME_MIN_LENGTH,
 	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
-import { LoadingButtonState } from "../components";
+import { objectKeys } from "../../util/objectKeys";
 
 const personalValidators : ValidatorMap<IPersonalInformationModel> = {
 	firstName: [
@@ -42,7 +42,7 @@ export class PersonalInformationSettingsController implements IPersonalInformati
 
 	private readonly userService: IUserService;
 	private readonly userCache: IUserCache;
-	private personalButtonStateTimeout?: number;
+	private saveButtonStateTimeout?: number;
 
 	@observable private _viewModel : ViewModel<PersonalInformationModel>;
 	@observable private model = new PersonalInformationModel();
@@ -80,36 +80,48 @@ export class PersonalInformationSettingsController implements IPersonalInformati
 	}
 
 	public onSave = async () : Promise<void> => {
-		clearTimeout(this.personalButtonStateTimeout);
-		this.saveButtonState = "loading";
+		clearTimeout(this.saveButtonStateTimeout);
+
 		this._viewModel.submit();
+		this.errorModel.submit();
 
-		const input = this.model.toInput();
+		for(const key of objectKeys(this.model.toInput())) {
+			this.validate(key);
+		}
 
-		try {
-			await this.userService.updatePersonalInfo(input);
-			this.saveButtonState = "success";
-
-			this.userCache.updatePersonalInfo(input);
-
-			this.personalButtonStateTimeout = window.setTimeout(() => {
-				this.saveButtonState = "default";
-			}, 3000);
-		} catch(error) {
+		if(this.errorModel.hasErrors()) {
 			this.saveButtonState = "error";
+		} else {
+			this.saveButtonState = "loading";
+
+			const input = this.model.toInput();
+
+			try {
+				await this.userService.updatePersonalInfo(input);
+				this.saveButtonState = "success";
+
+				this.userCache.updatePersonalInfo(input);
+
+				this.saveButtonStateTimeout = window.setTimeout(() => {
+					this.saveButtonState = "default";
+				}, 3000);
+			} catch(error) {
+				this.saveButtonState = "error";
+			}
 		}
 	}
 
 	public onChange(key: keyof IPersonalInformationModel, value: any) : void {
 		this._viewModel[key] = value;
-		this.validatePersonal(key);
+		this.validate(key);
 	}
 
 	public onReset = () : void => {
 		this._viewModel.reset();
+		this.errorModel.reset();
 	}
 
-	private validatePersonal(key: keyof IPersonalInformationModel) : void {
+	private validate(key: keyof IPersonalInformationModel) : void {
 		const keyValidators = personalValidators[key];
 
 		if(keyValidators !== undefined) {
@@ -117,11 +129,4 @@ export class PersonalInformationSettingsController implements IPersonalInformati
 			this.errorModel.setErrors(key, validate(value, keyValidators));
 		}
 	}
-
-
-
-
-
-
-
 }

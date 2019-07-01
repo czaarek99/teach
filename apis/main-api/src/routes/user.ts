@@ -4,17 +4,20 @@ import { CustomContext } from "../Server";
 import { User } from "../database/models/User";
 import { Address } from "../database/models/Address";
 import { Image } from "../database/models/Image";
-import { authenticationMiddleware } from "server-lib";
+import { authenticationMiddleware, throwApiError } from "server-lib";
 import { resolveUser } from "../database/resolvers/resolveUser";
-import { IPersonalInput, IAddress } from "common-library";
+import { IPersonalInput, IAddress, IPasswordInput, HttpError, ErrorMessage } from "common-library";
+import { Joi } from "koa-joi-router";
 
 import {
 	FIRST_NAME_VALIDATOR,
 	LAST_NAME_VALIDATOR,
 	BIRTH_DATE_VALIDATOR,
 	PHONE_NUMBER_VALIDATOR,
-	ADDRESS_VALIDATOR
+	ADDRESS_VALIDATOR,
+	PASSWORD_VALIDATOR
 } from "../validators";
+import { hashPassword } from "../util/hashPassword";
 
 const router = Router();
 
@@ -85,6 +88,40 @@ router.patch("/address", {
 	});
 
 	context.status = 200;
-})
+});
+
+router.patch("/password", {
+	validate: {
+		body: {
+			newPassword: PASSWORD_VALIDATOR,
+			currentPassword: Joi.string().min(1)
+		},
+		type: "json"
+	}
+}, async (context: CustomContext) => {
+
+	const input = context.request.body as IPasswordInput;
+
+	const currentHash = await hashPassword(input.currentPassword);
+
+	const user : User = await User.findOne<User>({
+		where: {
+			id: context.state.session.userId,
+			password: currentHash
+		}
+	});
+
+	if(!user) {
+		throwApiError(
+			context,
+			new HttpError(
+				401,
+				ErrorMessage.WRONG_CURRENT_PASSWORD,
+				context.state.requestId
+			)
+		);
+	}
+
+});
 
 export default router;

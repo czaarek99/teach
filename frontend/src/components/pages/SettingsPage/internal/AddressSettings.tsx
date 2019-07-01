@@ -22,9 +22,7 @@ import {
 
 import {
 	IAddressSettingsController
-} from "../../../../interfaces/controllers/IAddressSettingsController";
-
-
+} from "../../../../interfaces/controllers/settings/IAddressSettingsController";
 
 const styles = (theme: Theme) => createStyles({
 
@@ -60,7 +58,6 @@ class AddressSettings extends React.Component<
 			classes,
 			controller
 		} = this.props;
-
 
 		const isDisabled = controller.loading;
 
@@ -149,12 +146,10 @@ class AddressSettings extends React.Component<
 					<ActionButtons onSave={() => controller.onSave()}
 						onReset={() => controller.onReset()}
 						saveButtonState={controller.saveButtonState}/>
-
 				</div>
 			</Paper>
 		)
 	}
-
 }
 
 export default withStyles(styles)(injectIntl(AddressSettings));

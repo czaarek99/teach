@@ -17,18 +17,8 @@ import { resolveUser } from "../database/resolvers/resolveUser";
 import {
 	HttpError,
 	ErrorMessage,
-	PASSWORD_MIN_LENGTH,
 	PASSWORD_MAX_LENGTH,
-	STREET_MIN_LENGTH,
-	STREET_MAX_LENGTH,
-	ZIP_CODE_MIN_LENGTH,
-	ZIP_CODE_MAX_LENGTH,
-	CITY_MIN_LENGTH,
-	CITY_MAX_LENGTH,
-	COUNTRY_CODE_LENGTH,
 	EMAIL_MAX_LENGTH,
-	EMAIL_MIN_LENGTH,
-	STATE_MAX_LENGTH,
 	DOMAIN,
 	IRegistrationInput,
 	ILoginInput,
@@ -52,11 +42,7 @@ import {
 	PASSWORD_VALIDATOR,
 	ADDRESS_VALIDATOR
 } from "../validators";
-
-async function hashPassword(password: string) : Promise<string> {
-	const saltRounds = 10;
-	return await bcrypt.hash(password, saltRounds);
-}
+import { hashPassword } from "../util/hashPassword";
 
 async function logIn(context: CustomContext, user: User) : Promise<void> {
 	const sessionId = await randomBytes(128).toString("hex");

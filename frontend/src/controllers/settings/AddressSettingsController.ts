@@ -1,14 +1,14 @@
 import { observable } from "mobx";
-import { ErrorModel } from "../validation/ErrorModel";
-import { AddressModel } from "../models/AddressModel";
+import { ErrorModel } from "../../validation/ErrorModel";
+import { AddressModel } from "../../models/AddressModel";
 import { createViewModel } from "mobx-utils";
-import { IAddressModel } from "../interfaces/models/IAddressModel";
-import { LoadingButtonState } from "../components";
-import { minLength, maxLength } from "../validation/validators";
-import { validate, ValidatorMap } from "../validation/validate";
-import { IUserService } from "../interfaces/services/IUserService";
-import { ViewModel } from "../interfaces/ViewModel";
-import { IUserCache } from "../util/UserCache";
+import { IAddressModel } from "../../interfaces/models/IAddressModel";
+import { LoadingButtonState } from "../../components";
+import { minLength, maxLength } from "../../validation/validators";
+import { validate, ValidatorMap } from "../../validation/validate";
+import { IUserService } from "../../interfaces/services/IUserService";
+import { ViewModel } from "../../interfaces/ViewModel";
+import { IUserCache } from "../../util/UserCache";
 
 import {
 	CITY_MIN_LENGTH,
@@ -23,7 +23,7 @@ import {
 import {
 	IAddressSettingsController,
 	IAddressErrorState
-} from "../interfaces/controllers/IAddressSettingsController";
+} from "../../interfaces/controllers/settings/IAddressSettingsController";
 
 const addressValidators : ValidatorMap<AddressModel> = {
 	city: [
@@ -88,7 +88,7 @@ export class AddressSettingsController implements IAddressSettingsController {
 		this.saveButtonState = "default";
 	}
 
-	private validateAddress(key: keyof IAddressModel) : void {
+	private validate(key: keyof IAddressModel) : void {
 		const keyValidators = addressValidators[key];
 
 		if(keyValidators !== undefined) {
@@ -99,32 +99,36 @@ export class AddressSettingsController implements IAddressSettingsController {
 
 	public onReset = () : void => {
 		this._viewModel.reset();
+		this.errorModel.reset();
 	}
 
 	public onChange(key: keyof IAddressModel, value: string) : void {
 		this._viewModel[key] = value;
-		this.validateAddress(key);
+		this.validate(key);
 	}
 
 	public onSave = async () : Promise<void> => {
 		clearTimeout(this.addressButtonStateTimeout);
 
+		this.errorModel.submit();
+		this._viewModel.submit();
+
 		for(const [key] of this._viewModel.changedValues.keys()) {
-			this.validateAddress(key as (keyof IAddressModel));
+			this.validate(key as (keyof IAddressModel));
 		}
 
 		if(this.errorModel.hasErrors()) {
 			this.saveButtonState = "error";
 		} else {
-
 			this.saveButtonState = "loading";
-			this._viewModel.submit();
 
 			const address = this.model.toInput();
 
 			try {
 				await this.userService.updateAddress(address);
 				this.saveButtonState = "success";
+
+				this.userCache.updateAddress(address);
 
 				this.addressButtonStateTimeout = window.setTimeout(() => {
 					this.saveButtonState = "default";

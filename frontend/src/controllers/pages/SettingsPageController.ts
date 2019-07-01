@@ -3,8 +3,8 @@ import { IUserCache } from "../../util/UserCache";
 import { Route } from "../../interfaces/Routes";
 import { observable } from "mobx";
 import { IUserService } from "../../interfaces/services/IUserService";
-import { PersonalInformationSettingsController } from "../PersonalInformationSettingsController";
-import { AddressSettingsController } from "../AddressSettingsController";
+import { PersonalInformationSettingsController } from "../settings/PersonalInformationSettingsController";
+import { AddressSettingsController } from "../settings/AddressSettingsController";
 
 import {
 	ISettingsPageController,

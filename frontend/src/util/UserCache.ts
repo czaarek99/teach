@@ -7,7 +7,8 @@ import {
 	SESSION_KEY_NAME,
 	USER_KEY_NAME,
 	EXPIRATION_DATE_KEY_NAME,
-	IPersonalInput
+	IPersonalInput,
+	IAddress
 } from "common-library";
 
 export interface IUserCache {
@@ -18,6 +19,7 @@ export interface IUserCache {
 
 	recache: () => Promise<void>
 	updatePersonalInfo: (input: IPersonalInput) => void
+	updateAddress: (address: IAddress) => void
 }
 
 export class UserCache implements IUserCache {
@@ -41,8 +43,19 @@ export class UserCache implements IUserCache {
 			this.user.lastName = input.lastName;
 			this.user.phoneNumber = input.phoneNumber;
 
-			localStorage.setItem(USER_KEY_NAME, JSON.stringify(this.user));
+			this.saveUserToLocalStorage();
 		}
+	}
+
+	public updateAddress(address: IAddress) : void {
+		if(this.user) {
+			this.user.address = address;
+			this.saveUserToLocalStorage();
+		}
+	}
+
+	private saveUserToLocalStorage() : void {
+		localStorage.setItem(USER_KEY_NAME, JSON.stringify(this.user));
 	}
 
 	@action
@@ -69,7 +82,7 @@ export class UserCache implements IUserCache {
 
 			try {
 				this.user = await this.userService.getSelf();
-				localStorage.setItem(USER_KEY_NAME, JSON.stringify(this.user));
+				this.saveUserToLocalStorage();
 			} catch(error) {
 				localStorage.removeItem(USER_KEY_NAME);
 				localStorage.removeItem(SESSION_KEY_NAME);
