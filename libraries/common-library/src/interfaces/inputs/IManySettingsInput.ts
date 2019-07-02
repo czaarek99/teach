@@ -1,5 +1,5 @@
+import { ISetting } from "../models";
+
 export interface IManySettingsInput {
-	changes: {
-		[key: string]: string | number | boolean | null
-	}
+	changes: ISetting[]
 }

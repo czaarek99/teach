@@ -22,7 +22,6 @@ import {
 	STATE_MAX_LENGTH
 } from "common-library";
 
-
 export const FIRST_NAME_VALIDATOR = Joi.string()
 	.min(FIRST_NAME_MIN_LENGTH)
 	.max(FIRST_NAME_MAX_LENGTH)
@@ -51,7 +50,6 @@ export const PASSWORD_VALIDATOR = Joi.string()
 	.max(PASSWORD_MAX_LENGTH)
 	.required();
 
-
 export const ADDRESS_VALIDATOR = Joi.object({
 	street: Joi.string()
 		.min(STREET_MIN_LENGTH)
@@ -73,3 +71,4 @@ export const ADDRESS_VALIDATOR = Joi.object({
 		.allow("")
 		.optional()
 }).requiredKeys("street", "zipCode", "city", "countryCode").optionalKeys("state")
+
