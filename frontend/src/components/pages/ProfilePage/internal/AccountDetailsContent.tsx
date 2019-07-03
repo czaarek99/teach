@@ -19,8 +19,8 @@ import {
 } from "@material-ui/core";
 
 import {
-	IAccountDetailsSettingsController
-} from "../../../../interfaces/controllers/settings/IAccountDetailsSettingsController";
+	IAccountDetailsProfileController
+} from "../../../../interfaces/controllers/profile/IAccountDetailsProfileController";
 
 const styles = (theme: Theme) => createStyles({
 	normalPaper: {
@@ -45,15 +45,15 @@ const styles = (theme: Theme) => createStyles({
 	}
 });
 
-interface IAccountDetailsSettingsProps {
-	controller: IAccountDetailsSettingsController
+interface IAccountDetailsContentProps {
+	controller: IAccountDetailsProfileController
 }
 
 @observer
-class AccountDetailsSettings extends React.Component<
+class AccountDetailsContent extends React.Component<
 	InjectedIntlProps &
 	WithStyles<typeof styles> &
-	IAccountDetailsSettingsProps
+	IAccountDetailsContentProps
 > {
 
 	public render() : React.ReactNode {
@@ -192,4 +192,4 @@ class AccountDetailsSettings extends React.Component<
 
 }
 
-export default withStyles(styles)(injectIntl(AccountDetailsSettings));
+export default withStyles(styles)(injectIntl(AccountDetailsContent));

@@ -11,9 +11,9 @@ import { ValidatorMap, validate } from "../../validation/validate";
 import { LoadingButtonState } from "../../components";
 
 import {
-	IPersonalInformationSettingsController,
+	IPersonalInformationProfileController,
 	IPersonalErrorState
-} from "../../interfaces/controllers/settings/IPersonalInformationSettingsController";
+} from "../../interfaces/controllers/profile/IPersonalInformationProfileController";
 
 import {
 	FIRST_NAME_MAX_LENGTH,
@@ -38,7 +38,7 @@ const personalValidators : ValidatorMap<IPersonalInformationModel> = {
 	]
 };
 
-export class PersonalInformationSettingsController implements IPersonalInformationSettingsController {
+export class PersonalInformationProfileController implements IPersonalInformationProfileController {
 
 	private readonly userService: IUserService;
 	private readonly userCache: IUserCache;

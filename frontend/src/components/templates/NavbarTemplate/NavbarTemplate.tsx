@@ -2,6 +2,7 @@ import React from 'react';
 import Skeleton from "react-loading-skeleton";
 import HomeIcon from "@material-ui/icons/Home"
 import MenuIcon from "@material-ui/icons/Menu";
+import UserIcon from "@material-ui/icons/AccountBox";
 import SettingsIcon from "@material-ui/icons/Settings";
 import BrowseIcon from "@material-ui/icons/Search";
 
@@ -215,6 +216,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 			loggedInPages = (
 				<React.Fragment>
 					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Route.SETTINGS)}
+					{this.renderNavigationItem("things.pages.profile", <UserIcon />, Route.PROFILE)}
 				</React.Fragment>
 			);
 

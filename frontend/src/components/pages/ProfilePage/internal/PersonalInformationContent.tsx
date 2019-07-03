@@ -20,11 +20,11 @@ import {
 } from "common-library";
 
 import {
-	IPersonalInformationSettingsController
-} from "../../../../interfaces/controllers/settings/IPersonalInformationSettingsController";
+	IPersonalInformationProfileController
+} from "../../../../interfaces/controllers/profile/IPersonalInformationProfileController";
 
-interface IPersonalInformationSettingsProps {
-	controller: IPersonalInformationSettingsController
+interface IPersonalInformationContentProps {
+	controller: IPersonalInformationProfileController
 }
 
 const styles = (theme: Theme) => createStyles({
@@ -43,9 +43,9 @@ const styles = (theme: Theme) => createStyles({
 });
 
 @observer
-class PersonalInformationSettings extends React.Component<
+class PersonalInformationContent extends React.Component<
 	InjectedIntlProps &
-	IPersonalInformationSettingsProps &
+	IPersonalInformationContentProps &
 	WithStyles<typeof styles>
 > {
 
@@ -141,4 +141,4 @@ class PersonalInformationSettings extends React.Component<
 
 }
 
-export default withStyles(styles)(injectIntl(PersonalInformationSettings));
+export default withStyles(styles)(injectIntl(PersonalInformationContent));

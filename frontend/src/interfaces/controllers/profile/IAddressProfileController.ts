@@ -10,7 +10,7 @@ export interface IAddressErrorState extends ErrorState {
 	state: string[]
 }
 
-export interface IAddressSettingsController {
+export interface IAddressProfileController {
 	readonly viewModel: ViewModel<IAddressModel>
 	readonly errorModel: ErrorModel<IAddressErrorState>
 	readonly saveButtonState: LoadingButtonState

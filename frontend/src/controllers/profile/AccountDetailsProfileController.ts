@@ -11,9 +11,9 @@ import { ErrorMessage, HttpError } from "common-library";
 import { objectKeys } from "../../util/objectKeys";
 
 import {
-	IAccountDetailsSettingsController,
+	IAccountDetailsProfileController,
 	IAccountDetailsErrorState
-} from "../../interfaces/controllers/settings/IAccountDetailsSettingsController";
+} from "../../interfaces/controllers/profile/IAccountDetailsProfileController";
 
 const validators : ValidatorMap<IAccountDetailsModel> = {
 	newPassword: [
@@ -21,7 +21,7 @@ const validators : ValidatorMap<IAccountDetailsModel> = {
 	]
 }
 
-export class AccountDetailsSettingsController implements IAccountDetailsSettingsController {
+export class AccountDetailsProfileController implements IAccountDetailsProfileController {
 
 	private readonly userCache: IUserCache;
 	private readonly userService: IUserService;

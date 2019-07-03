@@ -5,7 +5,7 @@ import { IResetPasswordPageController } from "./pages/IResetPasswordPageControll
 import { IBrowsePageController } from "./pages/IBrowsePageController";
 import { INavbarController } from "./templates/INavbarController";
 import { IAdPageController } from "./pages/IAdPageController";
-import { ISettingsPageController } from "./pages/ISettingsPageController";
+import { IProfilePageController } from "./pages/IProfilePageController";
 
 export interface IAppController {
 	readonly navbarController: INavbarController
@@ -15,5 +15,5 @@ export interface IAppController {
 	readonly resetPasswordPageController: IResetPasswordPageController
 	readonly browsePageController: IBrowsePageController
 	readonly adPageController: IAdPageController;
-	readonly settingsPageController: ISettingsPageController
+	readonly profilePageController: IProfilePageController
 }

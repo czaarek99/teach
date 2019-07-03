@@ -21,8 +21,8 @@ import {
 } from "common-library";
 
 import {
-	IAddressSettingsController
-} from "../../../../interfaces/controllers/settings/IAddressSettingsController";
+	IAddressProfileController
+} from "../../../../interfaces/controllers/profile/IAddressProfileController";
 
 const styles = (theme: Theme) => createStyles({
 
@@ -41,13 +41,13 @@ const styles = (theme: Theme) => createStyles({
 
 });
 
-interface IAddressSettingsProps {
-	controller: IAddressSettingsController
+interface IAddressContentProps {
+	controller: IAddressProfileController
 }
 
 @observer
-class AddressSettings extends React.Component<
-	IAddressSettingsProps &
+class AddressContent extends React.Component<
+	IAddressContentProps &
 	InjectedIntlProps &
 	WithStyles<typeof styles>
 > {
@@ -154,4 +154,4 @@ class AddressSettings extends React.Component<
 	}
 }
 
-export default withStyles(styles)(injectIntl(AddressSettings));
+export default withStyles(styles)(injectIntl(AddressContent));

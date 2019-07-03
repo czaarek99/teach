@@ -9,7 +9,7 @@ export interface IPersonalErrorState extends ErrorState {
 	phoneNumber: string[]
 }
 
-export interface IPersonalInformationSettingsController {
+export interface IPersonalInformationProfileController {
 	readonly viewModel: ViewModel<IPersonalInformationModel>
 	readonly errorModel: ErrorModel<IPersonalErrorState>
 	readonly saveButtonState: LoadingButtonState

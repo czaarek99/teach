@@ -1,6 +1,8 @@
 import React from 'react';
-import PersonalInformationSettings from "./internal/PersonalInformationSettings";
-import AddressSettings from "./internal/AddressSettings";
+
+import PersonalInformationContent from "./internal/PersonalInformationContent";
+import AddressContent from "./internal/AddressContent";
+import AccountDetailsContent from "./internal/AccountDetailsContent";
 
 import { observer } from "mobx-react";
 import { WithStyles } from "@material-ui/styles";
@@ -9,8 +11,8 @@ import { NavbarTemplate } from "../../templates";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 
 import {
-	ISettingsPageController
-} from "../../../interfaces/controllers/pages/ISettingsPageController";
+	IProfilePageController
+} from "../../../interfaces/controllers/pages/IProfilePageController";
 
 import {
 	Theme,
@@ -19,7 +21,6 @@ import {
 	Paper,
 	Typography,
 } from "@material-ui/core";
-import AccountDetailsSettings from "./internal/AccountDetailsSettings";
 
 const styles = (theme: Theme) => createStyles({
 	titlePaper: {
@@ -27,15 +28,15 @@ const styles = (theme: Theme) => createStyles({
 	},
 });
 
-interface ISettingsPageProps {
-	controller: ISettingsPageController
+interface IProfilePageProps {
+	controller: IProfilePageController
 	navbarController: INavbarController
 }
 
 @observer
-class SettingsPage extends React.Component<
+class ProfilePage extends React.Component<
 	InjectedIntlProps &
-	ISettingsPageProps &
+	IProfilePageProps &
 	WithStyles<typeof styles>
 > {
 
@@ -52,13 +53,13 @@ class SettingsPage extends React.Component<
 				<div>
 					<Paper className={classes.titlePaper}>
 						<Typography variant="h4">
-							<FormattedMessage id="things.pages.settings"/>
+							<FormattedMessage id="things.pages.profile"/>
 						</Typography>
 					</Paper>
 
-					<PersonalInformationSettings controller={controller.personalController}/>
-					<AddressSettings controller={controller.addressController}/>
-					<AccountDetailsSettings controller={controller.accountDetailsController}/>
+					<PersonalInformationContent controller={controller.personalController}/>
+					<AddressContent controller={controller.addressController}/>
+					<AccountDetailsContent controller={controller.accountDetailsController}/>
 				</div>
 			</NavbarTemplate>
 		)
@@ -66,4 +67,4 @@ class SettingsPage extends React.Component<
 
 }
 
-export default withStyles(styles)(injectIntl(SettingsPage))
+export default withStyles(styles)(injectIntl(ProfilePage))

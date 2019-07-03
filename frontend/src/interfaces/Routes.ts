@@ -5,6 +5,7 @@ export enum Route {
 	RESET_PASSWORD = "/auth/reset",
 	SETTINGS = "/settings",
 	BROWSE = "/browse",
+	PROFILE = "/profile",
 	AD = "/ad",
 	HOME = "/"
 }

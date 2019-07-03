@@ -21,9 +21,9 @@ import {
 } from "common-library";
 
 import {
-	IAddressSettingsController,
+	IAddressProfileController,
 	IAddressErrorState
-} from "../../interfaces/controllers/settings/IAddressSettingsController";
+} from "../../interfaces/controllers/profile/IAddressProfileController";
 
 const addressValidators : ValidatorMap<AddressModel> = {
 	city: [
@@ -46,7 +46,7 @@ const addressValidators : ValidatorMap<AddressModel> = {
 	]
 }
 
-export class AddressSettingsController implements IAddressSettingsController {
+export class AddressProfileController implements IAddressProfileController {
 
 	private readonly userService: IUserService;
 	private readonly userCache: IUserCache;

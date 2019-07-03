@@ -14,7 +14,7 @@ import {
 	BrowsePage,
 	HomePage,
 	AdPage,
-	SettingsPage
+	ProfilePage
 } from '../../pages';
 
 interface IAppProps {
@@ -62,8 +62,8 @@ class App extends React.Component<IAppProps> {
 			[Route.HOME]: () => (
 				<HomePage />
 			),
-			[Route.SETTINGS]: () => (
-				<SettingsPage controller={controller.settingsPageController}
+			[Route.PROFILE]: () => (
+				<ProfilePage controller={controller.profilePageController}
 					navbarController={controller.navbarController}/>
 			)
 		};

@@ -5,4 +5,4 @@ export * from "./ResetPasswordPage";
 export * from "./HomePage";
 export * from "./BrowsePage";
 export * from "./AdPage";
-export * from "./SettingsPage";
+export * from "./ProfilePage";

@@ -23,8 +23,8 @@ import { UserService } from "../services/UserService";
 import { IUserCache, UserCache } from "../util/UserCache";
 import { IAdPageController } from "../interfaces/controllers/pages/IAdPageController";
 import { AdPageController } from "./pages/AdPageController";
-import { ISettingsPageController } from "../interfaces/controllers/pages/ISettingsPageController";
-import { SettingsPageController } from "./pages/SettingsPageController";
+import { IProfilePageController } from "../interfaces/controllers/pages/IProfilePageController";
+import { ProfilePageController } from "./pages/ProfilePageController";
 import { ISettingsService } from "../interfaces/services/ISettingsService";
 import { SettingsService } from "../services/SettingsService";
 
@@ -49,7 +49,7 @@ export class AppController implements IAppController {
 	private _resetPasswordPageController: IResetPasswordPageController | null = null;
 	private _browsePageController: IBrowsePageController | null = null;
 	private _adPageController: IAdPageController | null = null;
-	private _settingsPageController: ISettingsPageController | null = null;
+	private _settingsPageController: IProfilePageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -142,11 +142,10 @@ export class AppController implements IAppController {
 		return this._adPageController;
 	}
 
-	public get settingsPageController() : ISettingsPageController {
+	public get profilePageController() : IProfilePageController {
 		if(this._settingsPageController === null) {
-			this._settingsPageController = new SettingsPageController(
+			this._settingsPageController = new ProfilePageController(
 				this.services.userService,
-				this.services.settingsService,
 				this.routingStore,
 				this.userCache
 			);

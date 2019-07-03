@@ -7,7 +7,7 @@ export interface IAccountDetailsErrorState extends ErrorState {
 	repeatPassword: string[]
 }
 
-export interface IAccountDetailsSettingsController {
+export interface IAccountDetailsProfileController {
 	readonly model: IAccountDetailsModel
 	readonly errorModel: ErrorModel<IAccountDetailsErrorState>
 	readonly saveButtonState: LoadingButtonState
