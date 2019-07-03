@@ -1,10 +1,12 @@
 import React from 'react';
+import PrivacyContent from "./internal/PrivacyContent";
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { WithStyles } from "@material-ui/styles";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { NavbarTemplate } from "../../templates";
+import { LoadingButton } from "../../molecules";
 
 import {
 	ISettingsPageController
@@ -15,7 +17,8 @@ import {
 	createStyles,
 	withStyles,
 	Paper,
-	Typography
+	Typography,
+	Button
 } from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
@@ -44,6 +47,17 @@ class SettingsPage extends React.Component<
 			controller
 		} = this.props;
 
+		let resetButton = null;
+		if(controller.showReset) {
+			resetButton = (
+				<Button variant="contained"
+					onClick={() => controller.onReset()}>
+
+					<FormattedMessage id="actions.reset"/>
+				</Button>
+			)
+		}
+
 		return (
 			<NavbarTemplate controller={navbarController}>
 				<Paper className={classes.titlePaper}>
@@ -51,7 +65,16 @@ class SettingsPage extends React.Component<
 						<FormattedMessage id="things.pages.settings"/>
 					</Typography>
 
+					<PrivacyContent controller={controller}/>
 
+					<div>
+						<LoadingButton onClick={() => controller.onSave()}
+							state={controller.saveButtonState}>
+
+							<FormattedMessage id="actions.save"/>
+						</LoadingButton>
+						{resetButton}
+					</div>
 				</Paper>
 			</NavbarTemplate>
 		)

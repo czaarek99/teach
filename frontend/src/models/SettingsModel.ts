@@ -1,6 +1,6 @@
 import { observable, action } from "mobx";
 import { ISettingsModel } from "../interfaces/models/ISettingsModel";
-import { ISetting } from "common-library";
+import { ISetting, IManySettingsInput } from "common-library";
 
 export class SettingsModel implements ISettingsModel {
 
@@ -14,16 +14,18 @@ export class SettingsModel implements ISettingsModel {
 		}
 	}
 
-	public toJson() : ISetting[] {
-		return [
-			{
-				key: "showEmail",
-				value: this.showEmail
-			},
-			{
-				key: "showPhone",
-				value: this.showPhone
-			}
-		]
+	public toJson() : IManySettingsInput {
+		return {
+			changes: [
+				{
+					key: "showEmail",
+					value: this.showEmail
+				},
+				{
+					key: "showPhone",
+					value: this.showPhone
+				}
+			]
+		};
 	}
 }

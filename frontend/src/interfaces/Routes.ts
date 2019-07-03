@@ -1,11 +1,17 @@
 export enum Route {
+	//Auth
 	LOGIN = "/auth/login",
 	REGISTRATION = "/auth/register",
 	FORGOT_PASSWORD = "/auth/forgot",
 	RESET_PASSWORD = "/auth/reset",
+
+	//Restricted pages
 	SETTINGS = "/settings",
-	BROWSE = "/browse",
 	PROFILE = "/profile",
+	DMS = "/dms",
+
+	//Public pages
+	BROWSE = "/browse",
 	AD = "/ad",
 	HOME = "/"
 }

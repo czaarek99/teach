@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { RegistrationModel } from "../../models/RegistrationModel";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
@@ -124,6 +124,7 @@ export class RegistrationPageController implements IRegistrationPageController {
 		this.load();
 	}
 
+	@action
 	private async load() : Promise<void> {
 		await this.userCache.recache();
 
@@ -134,6 +135,7 @@ export class RegistrationPageController implements IRegistrationPageController {
 		this.loading = false;
 	}
 
+	@action
 	private validate(key: keyof IRegistrationModel) : void {
 		if(this.shouldValidate || (key === "password" && this.shouldValidatePassword)) {
 			const keyValidators = validators[key];
@@ -146,6 +148,7 @@ export class RegistrationPageController implements IRegistrationPageController {
 		}
 	}
 
+	@action
 	public onChange(key: keyof IRegistrationModel, value: any) : void {
 		if(this.isLoggedIn) {
 			return;
@@ -171,10 +174,12 @@ export class RegistrationPageController implements IRegistrationPageController {
 		}
 	}
 
+	@action
 	public onFunctions = (functions: IRecaptchaFunctions) : void => {
 		this.captchaFunctions = functions;
 	}
 
+	@action
 	public async onRegister() : Promise<void> {
 		if(this.isLoggedIn) {
 			return;
@@ -227,5 +232,4 @@ export class RegistrationPageController implements IRegistrationPageController {
 			}
 		}
 	}
-
 }

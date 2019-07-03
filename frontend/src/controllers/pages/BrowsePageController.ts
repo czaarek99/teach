@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { IAdController } from "../../interfaces/controllers/IAdController";
 import { IAdService } from "../../interfaces/services/IAdService";
 import { AdController } from "../AdController";
@@ -27,6 +27,7 @@ export class BrowsePageController implements IBrowsePageController {
 		this.load();
 	}
 
+	@action
 	private async load() : Promise<void> {
 		const info = await this.adService.getAds({
 			limit: 0,
@@ -38,6 +39,7 @@ export class BrowsePageController implements IBrowsePageController {
 		this.loadAds();
 	}
 
+	@action
 	private loadAds() : void {
 		this.listLoading = true;
 		this.activeAdControllers = [];
@@ -70,12 +72,14 @@ export class BrowsePageController implements IBrowsePageController {
 		window.scrollTo(0, 0);
 	}
 
+	@action
 	public onChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) : void => {
 		this.pageNumber = page;
 		this.resetScroll();
 		this.loadAds();
 	}
 
+	@action
 	public onChangeAdsPerPage = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) : void => {
 		const newAdsPerPage = parseInt(event.target.value);
 

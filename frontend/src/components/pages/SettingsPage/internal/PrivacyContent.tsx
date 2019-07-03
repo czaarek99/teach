@@ -2,6 +2,7 @@ import React from 'react';
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
+import { simpleFormat } from "../../../../util/simpleFormat";
 
 import {
 	ISettingsPageController
@@ -13,7 +14,8 @@ import {
 	createStyles,
 	withStyles,
 	Typography,
-	FormControlLabel
+	FormControlLabel,
+	Checkbox
 } from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
@@ -32,11 +34,35 @@ class PrivacyContent extends React.Component<
 > {
 
 	public render() : React.ReactNode {
+
+		const {
+			controller
+		} = this.props;
+
+		const showEmailLabel = simpleFormat(this, "things.settings.showEmail");
+		const showPhoneLabel = simpleFormat(this, "things.settings.showPhone");
+
+		const showEmailCheckbox = (
+			<Checkbox checked={controller.viewModel.showEmail}
+				onChange={(_, checked: boolean) => controller.onChange("showEmail", checked)}/>
+		);
+
+		const showPhoneCheckbox = (
+			<Checkbox checked={controller.viewModel.showPhone}
+				onChange={(_, checked: boolean) => controller.onChange("showPhone", checked)}/>
+		);
+
 		return (
 			<div>
 				<Typography variant="h6">
 					<FormattedMessage id="things.privacySettings"/>
 				</Typography>
+
+				<FormControlLabel control={showEmailCheckbox}
+					label={showEmailLabel} />
+
+				<FormControlLabel control={showPhoneCheckbox}
+					label={showPhoneLabel}/>
 
 			</div>
 		)

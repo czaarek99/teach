@@ -159,7 +159,9 @@ export class AppController implements IAppController {
 
 	public get settingsPageController() : ISettingsPageController {
 		if(this._settingsPageController === null) {
-			this._settingsPageController = new SettingsPageController();
+			this._settingsPageController = new SettingsPageController(
+				this.services.settingsService
+			);
 		}
 
 		return this._settingsPageController;

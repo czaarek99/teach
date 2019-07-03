@@ -24,6 +24,7 @@ import {
 	IAddressProfileController,
 	IAddressErrorState
 } from "../../interfaces/controllers/profile/IAddressProfileController";
+import { successTimeout } from "../../util/successTimeout";
 
 const addressValidators : ValidatorMap<AddressModel> = {
 	city: [
@@ -130,9 +131,9 @@ export class AddressProfileController implements IAddressProfileController {
 
 				this.userCache.updateAddress(address);
 
-				this.addressButtonStateTimeout = window.setTimeout(() => {
+				this.addressButtonStateTimeout = successTimeout(() => {
 					this.saveButtonState = "default";
-				}, 3000);
+				});
 			} catch(error) {
 				this.saveButtonState = "error";
 			}

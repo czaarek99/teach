@@ -1,7 +1,7 @@
 import {
 	IResetPasswordPageController, IResetPasswordPageErrorState
 } from "../../interfaces/controllers/pages/IResetPasswordPageController";
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { ResetPasswordModel } from "../../models/ResetPasswordModel";
 import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
 import { ErrorModel } from "../../validation/ErrorModel";
@@ -66,6 +66,7 @@ export class ResetPasswordPageController implements IResetPasswordPageController
 
 	}
 
+	@action
 	private validate(key: keyof IResetPasswordModel) : void {
 		const keyValidators = this.validators[key];
 
@@ -84,12 +85,13 @@ export class ResetPasswordPageController implements IResetPasswordPageController
 		return null;
 	}
 
+	@action
 	public onChange(key: keyof IResetPasswordModel, value: string) : void {
 		this.model[key] = value;
-
 		this.validate(key);
 	}
 
+	@action
 	public async onSubmit() : Promise<void> {
 
 		if(!this.disabled) {
@@ -123,12 +125,7 @@ export class ResetPasswordPageController implements IResetPasswordPageController
 						this.infoBoxMessage = ErrorMessage.COMPONENT;
 					}
 				}
-
 			}
 		}
-
-
-
 	}
-
 }

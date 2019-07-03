@@ -1,5 +1,5 @@
 import { IAdController } from "../interfaces/controllers/IAdController";
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { v4 } from "uuid";
 import { RouterStore } from "mobx-react-router";
 import { Route } from "../interfaces/Routes";
@@ -16,14 +16,12 @@ export class AdController implements IAdController {
 		this.routingStore = routingStore;
 	}
 
+	@action
 	public load(ad: IAd) : void {
 		this.ad = ad;
 	}
 
-	public get isLoading() : boolean {
-		return this.ad === null;
-	}
-
+	@action
 	public onClick() : void {
 		if(this.ad !== null) {
 			const params = new URLSearchParams();

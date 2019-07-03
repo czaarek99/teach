@@ -29,11 +29,8 @@ export default {
 	"things.pages.profile": "Profile",
 	"things.pages.settings": "Settings",
 
-	"things.setting.showEmail": "Show email",
-	"things.settings.showPhone": "Show phone",
-
-	"things.setting.showEmail.description": "Show email to other users on your ads",
-	"things.setting.showPhone.description": "Show phone to other users on your ads",
+	"things.settings.showEmail": "Show email to other users on your ads",
+	"things.settings.showPhone": "Show phone to other users on your ads",
 
 	"things.rowsPerPage": "Rows per page:",
 	"things.rowsPerPageIndex": "{from}-{to} of {count}"

@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { ForgotModel } from "../../models/ForgotModel";
 import { IForgotModel } from "../../interfaces/models/IForgotModel";
 import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
@@ -41,6 +41,7 @@ export class ForgotPageController implements IForgotPageController {
 		this.authenticationService = authenticationService;
 	}
 
+	@action
 	private validate(key: keyof IForgotModel) {
 		const keyValidators = validators[key];
 
@@ -51,6 +52,7 @@ export class ForgotPageController implements IForgotPageController {
 		}
 	}
 
+	@action
 	public onChange(key: keyof IForgotModel, value: string | null) : void {
 		if(key === "captcha") {
 			this.model["captcha"] = value;
@@ -65,6 +67,7 @@ export class ForgotPageController implements IForgotPageController {
 		this.captchaFunctions = functions;
 	}
 
+	@action
 	public async onSubmit() : Promise<void> {
 		if(!this.done) {
 			for(const key of objectKeys(this.model.toInput())) {
@@ -106,7 +109,5 @@ export class ForgotPageController implements IForgotPageController {
 				}
 			}
 		}
-
 	}
-
 }

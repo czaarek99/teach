@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { AccountDetailsModel } from "../../models/AccountDetailsModel";
 import { LoadingButtonState } from "../../components";
 import { ErrorModel } from "../../validation/ErrorModel";
@@ -14,6 +14,7 @@ import {
 	IAccountDetailsProfileController,
 	IAccountDetailsErrorState
 } from "../../interfaces/controllers/profile/IAccountDetailsProfileController";
+import { successTimeout } from "../../util/successTimeout";
 
 const validators : ValidatorMap<IAccountDetailsModel> = {
 	newPassword: [
@@ -47,6 +48,7 @@ export class AccountDetailsProfileController implements IAccountDetailsProfileCo
 		this.userService = userService;
 	}
 
+	@action
 	private validate(key: keyof IAccountDetailsModel) : void {
 		const keyValidators = validators[key];
 
@@ -71,6 +73,7 @@ export class AccountDetailsProfileController implements IAccountDetailsProfileCo
 		}
 	}
 
+	@action
 	public async loadUserFromCache() : Promise<void> {
 		const user = this.userCache.user;
 
@@ -79,24 +82,28 @@ export class AccountDetailsProfileController implements IAccountDetailsProfileCo
 		}
 	}
 
+	@action
 	public async load() : Promise<void> {
 		this.loading = false;
 	}
 
+	@action
 	public onChange(key: keyof IAccountDetailsModel, value: string) : void {
 		this.model[key]	= value;
-
 		this.validate(key);
 	}
 
+	@action
 	public changePassword() : void {
 		this.isChangingPassword = true;
 	}
 
+	@action
 	public cancelChangePassword() {
 		this.isChangingPassword = false;
 	}
 
+	@action
 	public onSave = async() : Promise<void> => {
 		if(!this.justChangedPassword) {
 			clearTimeout(this.saveButtonStateTimeout);
@@ -118,13 +125,13 @@ export class AccountDetailsProfileController implements IAccountDetailsProfileCo
 					this.justChangedPassword = true;
 					this.errorMessage = "";
 
-					this.saveButtonStateTimeout = window.setTimeout(() => {
+					this.saveButtonStateTimeout = successTimeout(() => {
 						this.model = new AccountDetailsModel();
 
 						this.saveButtonState = "default";
 						this.isChangingPassword = false;
 						this.justChangedPassword = false;
-					}, 3000);
+					});
 				} catch(error) {
 					if(error instanceof HttpError) {
 						this.errorMessage = error.error;

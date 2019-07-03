@@ -1,6 +1,6 @@
 import { ILoginPageController, ILoginPageErrorState } from "../../interfaces/controllers/pages/ILoginPageController";
 import { ILoginModel } from "../../interfaces/models/ILoginModel";
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { LoginModel } from "../../models/LoginModel";
 import { empty } from "../../validation/validators";
 import { ErrorModel } from "../../validation/ErrorModel";
@@ -49,6 +49,7 @@ export class LoginPageController implements ILoginPageController {
 		this.load();
 	}
 
+	@action
 	private async load() : Promise<void> {
 		await this.userCache.recache();
 
@@ -59,6 +60,7 @@ export class LoginPageController implements ILoginPageController {
 		this.loading = false;
 	}
 
+	@action
 	public onChange(key: keyof ILoginModel, value: string) : void {
 		if(this.isLoggedIn) {
 			return;
@@ -69,6 +71,7 @@ export class LoginPageController implements ILoginPageController {
 		this.loginButtonState = "default";
 	}
 
+	@action
 	private validate(key: keyof ILoginModel) : void {
 		if(this.shouldValidate) {
 			const keyValidators = validators[key];
@@ -81,6 +84,7 @@ export class LoginPageController implements ILoginPageController {
 		}
 	}
 
+	@action
 	public async onLogin() : Promise<void> {
 		if(this.isLoggedIn) {
 			return;
@@ -120,5 +124,4 @@ export class LoginPageController implements ILoginPageController {
 			}
 		}
 	}
-
 }

@@ -1,7 +1,7 @@
 import { RouterStore } from "mobx-react-router";
 import { IUserCache } from "../../util/UserCache";
 import { Route } from "../../interfaces/Routes";
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { IUserService } from "../../interfaces/services/IUserService";
 import { PersonalInformationProfileController } from "../profile/PersonalInformationProfileController";
 import { AddressProfileController } from "../profile/AddressProfileController";
@@ -10,7 +10,6 @@ import { AccountDetailsProfileController } from "../profile/AccountDetailsProfil
 import {
 	IProfilePageController,
 } from "../../interfaces/controllers/pages/IProfilePageController";
-
 
 export class ProfilePageController implements IProfilePageController {
 
@@ -48,6 +47,7 @@ export class ProfilePageController implements IProfilePageController {
 		this.load();
 	}
 
+	@action
 	private async load() : Promise<void> {
 		this.personalController.loadUserFromCache();
 		this.addressController.loadUserFromCache();

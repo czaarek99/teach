@@ -21,6 +21,7 @@ import {
 	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
 import { objectKeys } from "../../util/objectKeys";
+import { successTimeout } from "../../util/successTimeout";
 
 const personalValidators : ValidatorMap<IPersonalInformationModel> = {
 	firstName: [
@@ -102,9 +103,9 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 
 				this.userCache.updatePersonalInfo(input);
 
-				this.saveButtonStateTimeout = window.setTimeout(() => {
+				this.saveButtonStateTimeout = successTimeout(() => {
 					this.saveButtonState = "default";
-				}, 3000);
+				});
 			} catch(error) {
 				this.saveButtonState = "error";
 			}

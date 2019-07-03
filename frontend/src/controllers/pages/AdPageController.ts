@@ -1,5 +1,5 @@
 import { IAdPageController } from "../../interfaces/controllers/pages/IAdPageController";
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { IAdService } from "../../interfaces/services/IAdService";
 import { IAd, ErrorMessage } from "common-library";
 import { RouterStore } from "mobx-react-router";
@@ -20,6 +20,7 @@ export class AdPageController implements IAdPageController {
 		this.load();
 	}
 
+	@action
 	private async load() : Promise<void> {
 		const searchParams = new URLSearchParams(window.location.search);
 
@@ -44,14 +45,17 @@ export class AdPageController implements IAdPageController {
 		}
 	}
 
+	@action
 	public goBackToBrowse() : void {
 		this.routingStore.push(Route.BROWSE);
 	}
 
+	@action
 	private showAdNotFound() : void {
 		this.errorMessage = ErrorMessage.AD_NOT_FOUND;
 	}
 
+	@action
 	public closeSnackbar() : void {
 		this.errorMessage = "";
 	}

@@ -1,6 +1,6 @@
 import { INavbarController } from "../../interfaces/controllers/templates/INavbarController";
 import { RouterStore } from "mobx-react-router";
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { Route } from "../../interfaces/Routes";
 import { IUserCache } from "../../util/UserCache";
 import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
@@ -25,14 +25,17 @@ export class NavbarController implements INavbarController {
 		this.authService = authService;
 	}
 
+	@action
 	public onToggleDrawer() : void {
 		this.navigationDrawerIsOpen = !this.navigationDrawerIsOpen;
 	}
 
+	@action
 	public onWindowResize() : void {
 		this.navigationDrawerIsOpen = false;
 	}
 
+	@action
 	public onNavItemClick(route: Route) : void {
 		this.routingStore.push(route);
 	}
@@ -41,6 +44,7 @@ export class NavbarController implements INavbarController {
 		return this.routingStore.location.pathname === route;
 	}
 
+	@action
 	public async logOut() : Promise<void> {
 		this.logoutButtonState = "loading";
 		await this.authService.logOut();
@@ -51,6 +55,7 @@ export class NavbarController implements INavbarController {
 		this.logoutButtonState = "success";
 	}
 
+	@action
 	public logIn() : void {
 		this.routingStore.push(Route.LOGIN);
 	}
