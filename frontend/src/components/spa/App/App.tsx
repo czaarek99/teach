@@ -61,7 +61,7 @@ class App extends React.Component<IAppProps> {
 					navbarController={controller.navbarController}/>
 			),
 			[Route.HOME]: () => (
-				<HomePage />
+				<HomePage navbarController={controller.navbarController}/>
 			),
 			[Route.PROFILE]: () => (
 				<ProfilePage controller={controller.profilePageController}

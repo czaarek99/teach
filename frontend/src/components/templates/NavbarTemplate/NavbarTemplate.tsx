@@ -133,6 +133,18 @@ type ExternalProps =
 @observer
 class NavbarTemplate extends React.Component<ExternalProps> {
 
+	private onResize = () : void => {
+		this.props.controller.onWindowResize();
+	}
+
+	public componentDidMount() : void {
+		window.addEventListener("resize", this.onResize);
+	}
+
+	public componentWillUnmount() : void {
+		window.removeEventListener("resize", this.onResize);
+	}
+
 	private renderNavigationItem(
 		text: string,
 		icon: React.ReactElement,
@@ -158,18 +170,6 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 				<ListItemText primary={translation}/>
 			</ListItem>
 		)
-	}
-
-	private onResize = () : void => {
-		this.props.controller.onWindowResize();
-	}
-
-	public componentDidMount() : void {
-		window.addEventListener("resize", this.onResize);
-	}
-
-	public componentWillUnmount() : void {
-		window.removeEventListener("resize", this.onResize);
 	}
 
 	private renderDrawerContent() : React.ReactNode {
@@ -238,7 +238,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 						<FormattedMessage id="actions.logIn" />
 					</Button>
 				</div>
-			)
+			);
 		}
 
 		return (
