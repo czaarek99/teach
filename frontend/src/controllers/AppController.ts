@@ -25,11 +25,14 @@ import { IAdPageController } from "../interfaces/controllers/pages/IAdPageContro
 import { AdPageController } from "./pages/AdPageController";
 import { ISettingsPageController } from "../interfaces/controllers/pages/ISettingsPageController";
 import { SettingsPageController } from "./pages/SettingsPageController";
+import { ISettingsService } from "../interfaces/services/ISettingsService";
+import { SettingsService } from "../services/SettingsService";
 
 interface IServices {
 	authenticationService: IAuthenticationService
 	userService: IUserService
 	adService: IAdService
+	settingsService: ISettingsService
 }
 
 export class AppController implements IAppController {
@@ -52,6 +55,7 @@ export class AppController implements IAppController {
 		this.routingStore = routingStore;
 
 		this.services = {
+			settingsService: new SettingsService(),
 			authenticationService: new AuthenticationService(),
 			userService: new UserService(),
 			adService: new AdService()
@@ -142,6 +146,7 @@ export class AppController implements IAppController {
 		if(this._settingsPageController === null) {
 			this._settingsPageController = new SettingsPageController(
 				this.services.userService,
+				this.services.settingsService,
 				this.routingStore,
 				this.userCache
 			);

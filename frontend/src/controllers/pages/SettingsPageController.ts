@@ -10,10 +10,12 @@ import { AccountDetailsSettingsController } from "../settings/AccountDetailsSett
 import {
 	ISettingsPageController,
 } from "../../interfaces/controllers/pages/ISettingsPageController";
+import { ISettingsService } from "../../interfaces/services/ISettingsService";
 
 export class SettingsPageController implements ISettingsPageController {
 
 	private readonly userService: IUserService;
+	private readonly settingsService: ISettingsService;
 	private readonly routingStore: RouterStore;
 	private readonly userCache: IUserCache;
 
@@ -24,10 +26,12 @@ export class SettingsPageController implements ISettingsPageController {
 
 	constructor(
 		userService: IUserService,
+		settingsService: ISettingsService,
 		routingStore: RouterStore,
 		userCache: IUserCache
 	) {
 		this.userService = userService;
+		this.settingsService = settingsService;
 		this.routingStore = routingStore;
 		this.userCache = userCache;
 

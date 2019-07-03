@@ -4,6 +4,9 @@ import { IPagination, IEdge, IAd } from "common-library";
 
 export class AdService extends BaseService implements IAdService {
 
+	constructor() {
+		super("/ad")
+	}
 
 	public async getAds(pagination: IPagination) : Promise<IEdge<IAd>> {
 		const params = new URLSearchParams();
@@ -11,14 +14,14 @@ export class AdService extends BaseService implements IAdService {
 		params.set("limit", pagination.limit.toString());
 
 		const response = await this.axios.get<IEdge<IAd>>(
-			`/ad/list?${params.toString()}`
+			`/list?${params.toString()}`
 		);
 
 		return response.data;
 	}
 
 	public async getAd(id: number) : Promise<IAd> {
-		const response = await this.axios.get<IAd>(`/ad/${id}`);
+		const response = await this.axios.get<IAd>(`/${id}`);
 		return response.data;
 	}
 

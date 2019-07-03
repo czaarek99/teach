@@ -12,11 +12,11 @@ export class BaseService {
 
 	protected readonly axios: AxiosInstance;
 
-	constructor() {
+	constructor(prefix: string) {
 		const location = window.location;
 
 		this.axios = Axios.create({
-			baseURL: `${location.protocol}//api.${location.hostname}:5000`,
+			baseURL: `${location.protocol}//api.${location.hostname}:5000${prefix}`,
 			withCredentials: true
 		});
 
