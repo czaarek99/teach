@@ -1,6 +1,13 @@
-import * as React from "react";
-import { WithStyles, Theme, createStyles, withStyles, Typography } from "@material-ui/core";
+import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+
+import {
+	WithStyles,
+	Theme,
+	createStyles,
+	withStyles,
+	Typography
+} from "@material-ui/core";
 
 export type OnFunctions = (functions: IRecaptchaFunctions) => void
 

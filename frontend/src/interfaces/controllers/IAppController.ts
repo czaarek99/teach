@@ -6,6 +6,7 @@ import { IBrowsePageController } from "./pages/IBrowsePageController";
 import { INavbarController } from "./templates/INavbarController";
 import { IAdPageController } from "./pages/IAdPageController";
 import { IProfilePageController } from "./pages/IProfilePageController";
+import { ISettingsPageController } from "./pages/ISettingsPageController";
 
 export interface IAppController {
 	readonly navbarController: INavbarController
@@ -14,6 +15,7 @@ export interface IAppController {
 	readonly forgotPageController: IForgotPageController
 	readonly resetPasswordPageController: IResetPasswordPageController
 	readonly browsePageController: IBrowsePageController
-	readonly adPageController: IAdPageController;
+	readonly adPageController: IAdPageController
 	readonly profilePageController: IProfilePageController
+	readonly settingsPageController: ISettingsPageController
 }

@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import React from "react";
 import MailIcon from "@material-ui/icons/Mail";
 
 import { IForgotPageController } from "../../../interfaces/controllers/pages/IForgotPageController";

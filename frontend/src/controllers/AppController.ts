@@ -27,6 +27,8 @@ import { IProfilePageController } from "../interfaces/controllers/pages/IProfile
 import { ProfilePageController } from "./pages/ProfilePageController";
 import { ISettingsService } from "../interfaces/services/ISettingsService";
 import { SettingsService } from "../services/SettingsService";
+import { ISettingsPageController } from "../interfaces/controllers/pages/ISettingsPageController";
+import { SettingsPageController } from "./pages/SettingsPageController";
 
 interface IServices {
 	authenticationService: IAuthenticationService
@@ -49,7 +51,8 @@ export class AppController implements IAppController {
 	private _resetPasswordPageController: IResetPasswordPageController | null = null;
 	private _browsePageController: IBrowsePageController | null = null;
 	private _adPageController: IAdPageController | null = null;
-	private _settingsPageController: IProfilePageController | null = null;
+	private _profilePageController: IProfilePageController | null = null;
+	private _settingsPageController: ISettingsPageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -143,12 +146,20 @@ export class AppController implements IAppController {
 	}
 
 	public get profilePageController() : IProfilePageController {
-		if(this._settingsPageController === null) {
-			this._settingsPageController = new ProfilePageController(
+		if(this._profilePageController === null) {
+			this._profilePageController = new ProfilePageController(
 				this.services.userService,
 				this.routingStore,
 				this.userCache
 			);
+		}
+
+		return this._profilePageController;
+	}
+
+	public get settingsPageController() : ISettingsPageController {
+		if(this._settingsPageController === null) {
+			this._settingsPageController = new SettingsPageController();
 		}
 
 		return this._settingsPageController;

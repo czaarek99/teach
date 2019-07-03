@@ -6,3 +6,4 @@ export * from "./HomePage";
 export * from "./BrowsePage";
 export * from "./AdPage";
 export * from "./ProfilePage";
+export * from "./SettingsPage";

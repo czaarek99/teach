@@ -1,6 +1,15 @@
-import * as React from "react";
-import { Theme, createStyles, WithStyles, withStyles, Paper, Typography } from "@material-ui/core";
+import React from "react";
+
 import { InjectedIntlProps, injectIntl } from "react-intl";
+
+import {
+	Theme,
+	createStyles,
+	WithStyles,
+	withStyles,
+	Paper,
+	Typography
+} from "@material-ui/core";
 
 interface IAuthenticationTemplateProps {
 	title: string

@@ -64,7 +64,6 @@ class ProfilePage extends React.Component<
 			</NavbarTemplate>
 		)
 	}
-
 }
 
 export default withStyles(styles)(injectIntl(ProfilePage))

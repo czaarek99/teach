@@ -1,5 +1,4 @@
-import * as React from "react";
-
+import React from "react";
 import MapIcon from "@material-ui/icons/Map";
 
 import { observer } from "mobx-react";

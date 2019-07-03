@@ -1,8 +1,7 @@
-import * as React from "react";
+import React from "react";
+import clsx from "clsx";
 
 import { observer } from "mobx-react";
-
-import clsx from "clsx";
 
 import {
 	WithStyles,

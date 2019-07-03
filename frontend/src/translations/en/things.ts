@@ -22,11 +22,18 @@ export default {
 	"things.teacher": "Teacher",
 	"things.description": "Description",
 	"things.ad": "Ad",
+	"things.privacySettings": "Privacy settings",
 
 	"things.pages.home": "Home",
 	"things.pages.browse": "Browse",
 	"things.pages.profile": "Profile",
 	"things.pages.settings": "Settings",
+
+	"things.setting.showEmail": "Show email",
+	"things.settings.showPhone": "Show phone",
+
+	"things.setting.showEmail.description": "Show email to other users on your ads",
+	"things.setting.showPhone.description": "Show phone to other users on your ads",
 
 	"things.rowsPerPage": "Rows per page:",
 	"things.rowsPerPageIndex": "{from}-{to} of {count}"

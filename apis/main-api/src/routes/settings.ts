@@ -113,7 +113,7 @@ router.get("/", async(context: CustomContext) => {
 		}
 	});
 
-	const settings: ISetting[] = dbSettings.map((userSetting) => {
+	const settings = dbSettings.map((userSetting) => {
 		const databaseKey = getDatabaseKey(userSetting.key);
 
 		return {
