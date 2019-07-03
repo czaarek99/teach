@@ -22,6 +22,7 @@ export default {
 	"things.teacher": "Teacher",
 	"things.description": "Description",
 	"things.ad": "Ad",
+	"things.hidden": "Hidden",
 	"things.privacySettings": "Privacy settings",
 
 	"things.pages.home": "Home",

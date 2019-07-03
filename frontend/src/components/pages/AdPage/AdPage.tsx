@@ -165,11 +165,25 @@ class AdPage extends React.Component<
 				)
 			}
 
+			if(model.teacher.phoneNumber) {
+				phoneComponent = model.teacher.phoneNumber;
+			} else {
+				phoneComponent = (
+					<FormattedMessage id="things.hidden"/>
+				);
+			}
+
+			if(model.teacher.email) {
+				emailComponent = model.teacher.email;
+			} else {
+				emailComponent = (
+					<FormattedMessage id="things.hidden"/>
+				);
+			}
+
 			descriptionComponent = model.description;
 			titleComponent = model.name;
 			realNameComponent = `${model.teacher.firstName} ${model.teacher.lastName}`;
-			emailComponent = model.teacher.email;
-			phoneComponent = model.teacher.phoneNumber;
 			cityComponent = model.teacher.city;
 		}
 

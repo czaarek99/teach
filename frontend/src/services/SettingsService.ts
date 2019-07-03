@@ -13,7 +13,7 @@ export class SettingsService extends BaseService implements ISettingsService {
 	}
 
 	public async updateSettings(input: IManySettingsInput) : Promise<void> {
-		await this.axios.patch("/many")
+		await this.axios.patch("/many", input);
 	}
 
 	public async getSettings() : Promise<ISetting[]> {

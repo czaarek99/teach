@@ -87,6 +87,7 @@ export class SettingsPageController implements ISettingsPageController {
 				this.saveButtonState = "default";
 			});
 		} catch(error) {
+			this.saveButtonState = "error";
 			this.serverError(error);
 		}
 

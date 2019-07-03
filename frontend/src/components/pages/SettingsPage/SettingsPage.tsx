@@ -25,6 +25,10 @@ const styles = (theme: Theme) => createStyles({
 	titlePaper: {
 		padding: 10
 	},
+
+	resetButton: {
+		marginLeft: 10
+	}
 });
 
 interface ISettingsPageProps {
@@ -51,6 +55,7 @@ class SettingsPage extends React.Component<
 		if(controller.showReset) {
 			resetButton = (
 				<Button variant="contained"
+					className={classes.resetButton}
 					onClick={() => controller.onReset()}>
 
 					<FormattedMessage id="actions.reset"/>

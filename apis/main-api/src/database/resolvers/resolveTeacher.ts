@@ -12,14 +12,22 @@ export function resolveTeacher(user: User) : ITeacher {
 		avatarFileName = user.profilePicture.imageFileName;
 	}
 
-	return {
+	let teacher : ITeacher = {
 		firstName: user.firstName,
 		lastName: user.lastName,
-		phoneNumber: user.phoneNumber,
-		email: user.email,
 		city: user.address.city,
 		age,
 		//avatarFileName
 		avatarFileName: "avatar.jpg"
+	};
+
+	for(const setting of user.settings) {
+		if(setting.key === "showEmail") {
+			teacher.email = user.email;
+		} else if(setting.key === "showPhone") {
+			teacher.phoneNumber = user.phoneNumber;
+		}
 	}
+
+	return teacher;
 }

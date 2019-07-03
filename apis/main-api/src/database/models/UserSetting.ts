@@ -1,5 +1,5 @@
 import { User } from "./User";
-import { SETTING_MAX_LENGTH } from "common-library";
+import { SETTING_MAX_LENGTH, SettingKey } from "common-library";
 
 import {
 	Table,
@@ -24,7 +24,7 @@ export class UserSetting extends Model<UserSetting> {
 
 	@AllowNull(false)
 	@Column(DataType.STRING)
-	public key: string;
+	public key: SettingKey;
 
 	@AllowNull(true)
 	@Column(DataType.STRING(SETTING_MAX_LENGTH))
@@ -33,10 +33,5 @@ export class UserSetting extends Model<UserSetting> {
 	@AllowNull(true)
 	@Column(DataType.INTEGER)
 	public integerValue: number;
-
-	@AllowNull
-	@Column(DataType.STRING(10))
-	public type: string;
-
 }
 

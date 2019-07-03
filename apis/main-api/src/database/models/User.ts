@@ -73,5 +73,5 @@ export class User extends Model<User> {
 	public ads?: Ad[]
 
 	@HasMany(() => UserSetting, "userId")
-	public settings: UserSetting;
+	public settings: UserSetting[];
 }

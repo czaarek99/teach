@@ -42,13 +42,17 @@ class PrivacyContent extends React.Component<
 		const showEmailLabel = simpleFormat(this, "things.settings.showEmail");
 		const showPhoneLabel = simpleFormat(this, "things.settings.showPhone");
 
+		const isDisabled = controller.loading;
+
 		const showEmailCheckbox = (
 			<Checkbox checked={controller.viewModel.showEmail}
+				disabled={isDisabled}
 				onChange={(_, checked: boolean) => controller.onChange("showEmail", checked)}/>
 		);
 
 		const showPhoneCheckbox = (
 			<Checkbox checked={controller.viewModel.showPhone}
+				disabled={isDisabled}
 				onChange={(_, checked: boolean) => controller.onChange("showPhone", checked)}/>
 		);
 

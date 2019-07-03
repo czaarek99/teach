@@ -8,6 +8,7 @@ import { Address } from "../database/models/Address";
 import { Image } from "../database/models/Image";
 import { throwApiError } from "server-lib";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
+import { UserSetting } from "../database/models/UserSetting";
 
 const router = Router();
 
@@ -27,7 +28,8 @@ router.get("/:id", {
 		},
 		include: [
 			Address,
-			Image
+			Image,
+			UserSetting
 		]
 	});
 

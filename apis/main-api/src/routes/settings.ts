@@ -93,16 +93,14 @@ router.patch("/many", {
 	for(const change of input.changes) {
 		const update = getUpdate(change.key, change.value);
 
-		promises.push(UserSetting.update(update, {
-			where: {
-				key: change.key,
-				userId: context.state.session.userId
-			}
+		promises.push(UserSetting.upsert<UserSetting>({
+			key: change.key,
+			userId: context.state.session.userId,
+			...update
 		}));
 	}
 
 	await Promise.all(promises);
-
 	context.status = 200;
 });
 

@@ -16,6 +16,7 @@ import {
 	IAdListInput,
 	ISimpleGetInput,
 } from "common-library";
+import { UserSetting } from "../database/models/UserSetting";
 
 const router = Router();
 
@@ -57,7 +58,8 @@ router.get("/list", {
 				{
 					model: User,
 					include: [
-						Address
+						Address,
+						UserSetting
 					]
 				},
 				{
@@ -100,7 +102,8 @@ router.get("/:id", {
 			{
 				model: User,
 				include: [
-					Address
+					Address,
+					UserSetting
 				]
 			},
 			{
