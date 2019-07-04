@@ -11,7 +11,7 @@ import { successTimeout } from "../../util/successTimeout";
 export class SettingsPageController implements ISettingsPageController {
 
 	private readonly settingsService: ISettingsService;
-	private successTimeout: number;
+	private successTimeout?: number;
 
 	@observable private model = new SettingsModel();
 	@observable public viewModel = createViewModel<ISettingsModel>(this.model);
@@ -31,7 +31,7 @@ export class SettingsPageController implements ISettingsPageController {
 	}
 
 	@action
-	private serverError(error) : void {
+	private serverError(error: any) : void {
 		if(error instanceof HttpError) {
 			this.errorMessage = error.error;
 		} else {

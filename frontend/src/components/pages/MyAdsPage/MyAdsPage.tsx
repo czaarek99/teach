@@ -1,4 +1,5 @@
 import React from 'react';
+import AddIcon from '@material-ui/icons/Add';
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
@@ -11,7 +12,8 @@ import {
 	WithStyles,
 	withStyles,
 	Typography,
-	Paper
+	Paper,
+	Fab
 } from "@material-ui/core";
 
 import {
@@ -19,10 +21,21 @@ import {
 } from "../../../interfaces/controllers/templates/INavbarController";
 
 const styles = (theme: Theme) => createStyles({
+
+	container: {
+		position: "relative"
+	},
+
 	titlePaper: {
 		padding: 10
 	},
 
+	fab: {
+		position: "absolute",
+		margin: 10,
+		bottom: 0,
+		right: 0
+	}
 
 });
 
@@ -48,13 +61,18 @@ class MyAdsPage extends React.Component<
 
 		return (
 			<NavbarTemplate controller={navbarController}>
-				<div>
+				<div className={classes.container}>
 					<Paper className={classes.titlePaper}>
 						<Typography variant="h4">
 							<FormattedMessage id="things.pages.myads"/>
 						</Typography>
 					</Paper>
 
+					<Fab className={classes.fab}
+						onClick={() => controller.onNewAd()}>
+
+						<AddIcon />
+					</Fab>
 				</div>
 			</NavbarTemplate>
 		)

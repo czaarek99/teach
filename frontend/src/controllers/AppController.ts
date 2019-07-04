@@ -166,7 +166,9 @@ export class AppController implements IAppController {
 
 	public get myAdsPageController() : IMyAdsPageController {
 		if(this._myAdsPageController === null) {
-			this._myAdsPageController = new MyAdsPageController();
+			this._myAdsPageController = new MyAdsPageController(
+				this.services.adService
+			);
 		}
 
 		return this._myAdsPageController;

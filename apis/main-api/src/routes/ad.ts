@@ -4,7 +4,7 @@ import { Joi } from "koa-joi-router";
 import { CustomContext } from "../Server";
 import { Ad } from "../database/models/Ad";
 import { User } from "../database/models/User";
-import { throwApiError } from "server-lib";
+import { throwApiError, authenticationMiddleware } from "server-lib";
 import { Address } from "../database/models/Address";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { UserSetting } from "../database/models/UserSetting";
@@ -37,6 +37,20 @@ function resolveDatabaseAd(ad: Ad) : IAd {
 	};
 }
 
+const INCLUDES = [
+	{
+		model: AdImage
+	},
+	{
+		model: User,
+		include: [
+			Address,
+			UserSetting,
+			ProfilePicture
+		]
+	},
+];
+
 router.get("/list", {
 	validate: {
 		query: {
@@ -52,19 +66,7 @@ router.get("/list", {
 		Ad.findAll<Ad>({
 			limit: query.limit,
 			offset: query.offset,
-			include: [
-				{
-					model: AdImage
-				},
-				{
-					model: User,
-					include: [
-						Address,
-						UserSetting,
-						ProfilePicture
-					]
-				},
-			]
+			include: INCLUDES
 		}),
 		Ad.count()
 	]);
@@ -94,19 +96,7 @@ router.get("/:id", {
 		where: {
 			id: get.id
 		},
-		include: [
-			{
-				model: AdImage
-			},
-			{
-				model: User,
-				include: [
-					Address,
-					UserSetting,
-					ProfilePicture
-				]
-			},
-		]
+		include: INCLUDES
 	});
 
 	if(!ad) {
@@ -117,5 +107,27 @@ router.get("/:id", {
 	context.body = resolveDatabaseAd(ad);
 	context.status = 200;
 });
+
+router.get("/my", authenticationMiddleware, async(context: CustomContext) => {
+
+	const ads : Ad[] = await Ad.findAll<Ad>({
+		where: {
+			userId: context.state.session.userId,
+		},
+		include: INCLUDES
+	});
+
+	const resolved  = ads.map(resolveDatabaseAd);
+
+	const edge : IEdge<IAd> = {
+		totalCount: ads.length,
+		data: resolved
+	};
+
+	context.body = edge;
+	context.status = 200;
+});
+
+
 
 export default router;

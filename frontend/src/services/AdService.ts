@@ -25,4 +25,9 @@ export class AdService extends BaseService implements IAdService {
 		return response.data;
 	}
 
+	public async getMyAds() : Promise<IEdge<IAd>> {
+		const response = await this.axios.get<IEdge<IAd>>("/my");
+		return response.data;
+	}
+
 }

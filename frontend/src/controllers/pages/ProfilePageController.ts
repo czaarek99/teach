@@ -15,7 +15,7 @@ import {
 import {
 	IProfilePageController,
 } from "../../interfaces/controllers/pages/IProfilePageController";
-import { HttpError } from "common-library";
+import { HttpError, ErrorMessage } from "common-library";
 
 export class ProfilePageController implements IProfilePageController {
 
@@ -92,11 +92,11 @@ export class ProfilePageController implements IProfilePageController {
 	}
 
 	@action
-	public serverError(error) : void {
-
+	public serverError(error: any) : void {
 		if(error instanceof HttpError) {
 			this.errorMessage = error.error;
 		} else {
+			this.errorMessage = ErrorMessage.UNKNOWN;
 			console.error(error);
 		}
 	}
