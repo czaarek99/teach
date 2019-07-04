@@ -7,6 +7,7 @@ import { INavbarController } from "./templates/INavbarController";
 import { IAdPageController } from "./pages/IAdPageController";
 import { IProfilePageController } from "./pages/IProfilePageController";
 import { ISettingsPageController } from "./pages/ISettingsPageController";
+import { IMyAdsPageController } from "./pages/IMyAdsPageController";
 
 export interface IAppController {
 	readonly navbarController: INavbarController
@@ -18,4 +19,5 @@ export interface IAppController {
 	readonly adPageController: IAdPageController
 	readonly profilePageController: IProfilePageController
 	readonly settingsPageController: ISettingsPageController
+	readonly myAdsPageController: IMyAdsPageController
 }

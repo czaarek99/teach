@@ -5,6 +5,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import UserIcon from "@material-ui/icons/AccountBox";
 import SettingsIcon from "@material-ui/icons/Settings";
 import BrowseIcon from "@material-ui/icons/Search";
+import WallpaperIcon from "@material-ui/icons/Wallpaper";
 
 import { InjectedIntlProps, injectIntl, FormattedMessage } from 'react-intl';
 import { observer } from 'mobx-react';
@@ -36,6 +37,7 @@ import {
 	Button
 } from '@material-ui/core';
 import { LoadingButton } from "../../molecules";
+import { getImageUrl } from "../../../util/imageAPI";
 
 const drawerWidth = 270;
 
@@ -189,11 +191,17 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 
 			if(cachedUser) {
 
-				avatarComponent = (
-					<Avatar>
-						{cachedUser.firstName && cachedUser.firstName[0]}
-					</Avatar>
-				);
+				if(cachedUser.avatarFileName) {
+					avatarComponent = (
+						<Avatar src={getImageUrl(cachedUser.avatarFileName)}/>
+					);
+				} else {
+					avatarComponent = (
+						<Avatar>
+							{cachedUser.firstName && cachedUser.firstName[0]}
+						</Avatar>
+					);
+				}
 
 				realNameComponent = cachedUser.firstName;
 				emailComponent = cachedUser.email;
@@ -217,6 +225,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 				<React.Fragment>
 					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Route.SETTINGS)}
 					{this.renderNavigationItem("things.pages.profile", <UserIcon />, Route.PROFILE)}
+					{this.renderNavigationItem("things.pages.myads", <WallpaperIcon />, Route.MY_ADS)}
 				</React.Fragment>
 			);
 

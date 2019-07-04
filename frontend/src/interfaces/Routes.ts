@@ -9,6 +9,7 @@ export enum Route {
 	SETTINGS = "/settings",
 	PROFILE = "/profile",
 	DMS = "/dms",
+	MY_ADS = "/myads",
 
 	//Public pages
 	BROWSE = "/browse",

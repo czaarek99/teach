@@ -14,9 +14,10 @@ import {
 	BrowsePage,
 	HomePage,
 	AdPage,
-	ProfilePage
+	ProfilePage,
+	MyAdsPage,
+	SettingPage
 } from '../../pages';
-import SettingsPage from "../../pages/SettingsPage/SettingsPage";
 
 interface IAppProps {
 	controller: IAppController
@@ -68,7 +69,11 @@ class App extends React.Component<IAppProps> {
 					navbarController={controller.navbarController}/>
 			),
 			[Route.SETTINGS]: () => (
-				<SettingsPage controller={controller.settingsPageController}
+				<SettingPage controller={controller.settingsPageController}
+					navbarController={controller.navbarController}/>
+			),
+			[Route.MY_ADS]: () => (
+				<MyAdsPage controller={controller.myAdsPageController}
 					navbarController={controller.navbarController}/>
 			)
 		};

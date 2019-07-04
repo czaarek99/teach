@@ -1,44 +1,34 @@
+import { observable } from "mobx";
+import { RouterStore } from "mobx-react-router";
 import { IAppController } from "../interfaces/controllers/IAppController";
 import { ILoginPageController } from "../interfaces/controllers/pages/ILoginPageController";
 import { LoginPageController } from "./pages/LoginPageController";
-import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
 import { AuthenticationService } from "../services/AuthenticationService";
 import { IRegistrationPageController } from "../interfaces/controllers/pages/IRegistrationPageController";
 import { RegistrationPageController } from "./pages/RegistrationPageController";
-import { RouterStore } from "mobx-react-router";
 import { IForgotPageController } from "../interfaces/controllers/pages/IForgotPageController";
 import { ForgotPageController } from "./pages/ForgotPageController";
-import { observable } from "mobx";
 import { Route, DEFAULT_ROUTE } from "../interfaces/Routes";
 import { IResetPasswordPageController } from "../interfaces/controllers/pages/IResetPasswordPageController";
 import { ResetPasswordPageController } from "./pages/ResetPasswordPageController";
-import { IAdService } from "../interfaces/services/IAdService";
 import { AdService } from "../services/AdService";
 import { IBrowsePageController } from "../interfaces/controllers/pages/IBrowsePageController";
 import { BrowsePageController } from "./pages/BrowsePageController";
 import { NavbarController } from "./templates/NavbarController";
 import { INavbarController } from "../interfaces/controllers/templates/INavbarController";
-import { IUserService } from "../interfaces/services/IUserService";
 import { UserService } from "../services/UserService";
 import { IUserCache, UserCache } from "../util/UserCache";
 import { IAdPageController } from "../interfaces/controllers/pages/IAdPageController";
 import { AdPageController } from "./pages/AdPageController";
 import { IProfilePageController } from "../interfaces/controllers/pages/IProfilePageController";
 import { ProfilePageController } from "./pages/ProfilePageController";
-import { ISettingsService } from "../interfaces/services/ISettingsService";
 import { SettingsService } from "../services/SettingsService";
 import { ISettingsPageController } from "../interfaces/controllers/pages/ISettingsPageController";
 import { SettingsPageController } from "./pages/SettingsPageController";
-import { IImageService } from "../interfaces/services/IImageService";
 import { ImageService } from "../services/ImagService";
-
-interface IServices {
-	authenticationService: IAuthenticationService
-	userService: IUserService
-	adService: IAdService
-	settingsService: ISettingsService
-	imageService: IImageService
-}
+import { IServices } from "../interfaces/services/IServices";
+import { IMyAdsPageController } from "../interfaces/controllers/pages/IMyAdsPageController";
+import { MyAdsPageController } from "./pages/MyAdsPageController";
 
 export class AppController implements IAppController {
 
@@ -57,6 +47,7 @@ export class AppController implements IAppController {
 	private _adPageController: IAdPageController | null = null;
 	private _profilePageController: IProfilePageController | null = null;
 	private _settingsPageController: ISettingsPageController | null = null;
+	private _myAdsPageController: IMyAdsPageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -171,6 +162,14 @@ export class AppController implements IAppController {
 		}
 
 		return this._settingsPageController;
+	}
+
+	public get myAdsPageController() : IMyAdsPageController {
+		if(this._myAdsPageController === null) {
+			this._myAdsPageController = new MyAdsPageController();
+		}
+
+		return this._myAdsPageController;
 	}
 
 }

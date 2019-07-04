@@ -30,6 +30,7 @@ export default {
 	"things.pages.browse": "Browse",
 	"things.pages.profile": "Profile",
 	"things.pages.settings": "Settings",
+	"things.pages.myads": "My ads",
 
 	"things.settings.showEmail": "Show email to other users on your ads",
 	"things.settings.showPhone": "Show phone to other users on your ads",
