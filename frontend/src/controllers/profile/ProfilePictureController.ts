@@ -13,8 +13,8 @@ export class ProfilePictureController implements IProfilePictureController {
 	private readonly userCache: IUserCache;
 	private readonly imageService: IImageService;
 
-	private imageFile: File;
-	private successTimeout: number;
+	private imageFile?: File;
+	private successTimeout?: number;
 
 	@observable public loading = false;
 	@observable public saveButtonState : LoadingButtonState = "default";
@@ -47,7 +47,7 @@ export class ProfilePictureController implements IProfilePictureController {
 	public async load() : Promise<void> {
 		const user = this.userCache.user;
 		if(user && user.avatarFileName) {
-			this.imageUrl = getImageUrl(this.userCache.user.avatarFileName);
+			this.imageUrl = getImageUrl(user.avatarFileName);
 		}
 	}
 
