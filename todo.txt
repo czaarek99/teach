@@ -1,6 +1,4 @@
-* solve image releation issue sequelize
-* profile picture upload
-
 * ability to create ad in ui
 * dms
 * pricing information on ads
+* ad categories
