@@ -8,15 +8,15 @@ import { throwApiError } from "server-lib";
 import { Image } from "../database/models/Image";
 import { Address } from "../database/models/Address";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
+import { UserSetting } from "../database/models/UserSetting";
 
 import {
 	IAd,
 	IEdge,
 	HttpError,
 	IAdListInput,
-	ISimpleGetInput,
+	ISimpleIdInput
 } from "common-library";
-import { UserSetting } from "../database/models/UserSetting";
 
 const router = Router();
 
@@ -89,7 +89,7 @@ router.get("/:id", {
 	}
 }, async (context: CustomContext) => {
 
-	const get = context.params as ISimpleGetInput;
+	const get = context.params as ISimpleIdInput;
 
 	const ad = await Ad.findOne({
 		where: {

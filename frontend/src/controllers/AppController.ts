@@ -29,12 +29,15 @@ import { ISettingsService } from "../interfaces/services/ISettingsService";
 import { SettingsService } from "../services/SettingsService";
 import { ISettingsPageController } from "../interfaces/controllers/pages/ISettingsPageController";
 import { SettingsPageController } from "./pages/SettingsPageController";
+import { IImageService } from "../interfaces/services/IImageService";
+import { ImageService } from "../services/ImagService";
 
 interface IServices {
 	authenticationService: IAuthenticationService
 	userService: IUserService
 	adService: IAdService
 	settingsService: ISettingsService
+	imageService: IImageService
 }
 
 export class AppController implements IAppController {
@@ -45,6 +48,7 @@ export class AppController implements IAppController {
 	private readonly services: IServices;
 
 	@observable private readonly userCache: IUserCache;
+
 	private _loginPageController: ILoginPageController | null = null;
 	private _registrationPageController: IRegistrationPageController | null = null;
 	private _forgotPageController: IForgotPageController | null = null;
@@ -61,7 +65,8 @@ export class AppController implements IAppController {
 			settingsService: new SettingsService(),
 			authenticationService: new AuthenticationService(),
 			userService: new UserService(),
-			adService: new AdService()
+			adService: new AdService(),
+			imageService: new ImageService()
 		};
 
 		this.userCache = new UserCache(this.services.userService);
@@ -149,6 +154,7 @@ export class AppController implements IAppController {
 		if(this._profilePageController === null) {
 			this._profilePageController = new ProfilePageController(
 				this.services.userService,
+				this.services.imageService,
 				this.routingStore,
 				this.userCache
 			);

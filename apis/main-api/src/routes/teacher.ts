@@ -2,13 +2,13 @@ import * as Router from "koa-joi-router";
 
 import { Joi } from "koa-joi-router";
 import { CustomContext } from "../Server";
-import { ISimpleGetInput, HttpError } from "common-library";
 import { User } from "../database/models/User";
 import { Address } from "../database/models/Address";
 import { Image } from "../database/models/Image";
 import { throwApiError } from "server-lib";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { UserSetting } from "../database/models/UserSetting";
+import { ISimpleIdInput, HttpError } from "common-library";
 
 const router = Router();
 
@@ -20,7 +20,7 @@ router.get("/:id", {
 	}
 }, async(context: CustomContext) => {
 
-	const get = context.params as ISimpleGetInput;
+	const get = context.params as ISimpleIdInput;
 
 	const user : User = await User.findOne<User>({
 		where: {

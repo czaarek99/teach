@@ -9,6 +9,8 @@ import { validate, ValidatorMap } from "../../validation/validate";
 import { IUserService } from "../../interfaces/services/IUserService";
 import { ViewModel } from "../../interfaces/ViewModel";
 import { IUserCache } from "../../util/UserCache";
+import { successTimeout } from "../../util/successTimeout";
+import { ProfilePageController } from "../pages/ProfilePageController";
 
 import {
 	CITY_MIN_LENGTH,
@@ -24,7 +26,6 @@ import {
 	IAddressProfileController,
 	IAddressErrorState
 } from "../../interfaces/controllers/profile/IAddressProfileController";
-import { successTimeout } from "../../util/successTimeout";
 
 const addressValidators : ValidatorMap<AddressModel> = {
 	city: [
@@ -49,8 +50,10 @@ const addressValidators : ValidatorMap<AddressModel> = {
 
 export class AddressProfileController implements IAddressProfileController {
 
+	private readonly parent: ProfilePageController;
 	private readonly userService: IUserService;
 	private readonly userCache: IUserCache;
+
 	private addressButtonStateTimeout?: number;
 
 	@observable private model = new AddressModel();
@@ -68,9 +71,11 @@ export class AddressProfileController implements IAddressProfileController {
 	});
 
 	constructor(
+		parent: ProfilePageController,
 		userService: IUserService,
 		userCache: IUserCache
 	) {
+		this.parent = parent;
 		this.userService = userService;
 		this.userCache = userCache;
 
@@ -136,6 +141,7 @@ export class AddressProfileController implements IAddressProfileController {
 				});
 			} catch(error) {
 				this.saveButtonState = "error";
+				this.parent.serverError(error);
 			}
 		}
 

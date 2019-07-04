@@ -1,0 +1,4 @@
+* ability to create ad in ui
+* profile picture upload
+* dms
+* pricing information on ads

@@ -124,4 +124,9 @@ export class LoginPageController implements ILoginPageController {
 			}
 		}
 	}
+
+	@action
+	public goToRoute(route: Route) : void {
+		this.routingStore.push(route);
+	}
 }

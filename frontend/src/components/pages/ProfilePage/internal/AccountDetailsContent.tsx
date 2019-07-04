@@ -40,156 +40,156 @@ const styles = (theme: Theme) => createStyles({
 		marginRight: 10
 	},
 
-	errorBox: {
-		marginBottom: 10
+		errorBox: {
+			marginBottom: 10
+		}
+	});
+
+	interface IAccountDetailsContentProps {
+		controller: IAccountDetailsProfileController
 	}
-});
 
-interface IAccountDetailsContentProps {
-	controller: IAccountDetailsProfileController
-}
+	@observer
+	class AccountDetailsContent extends React.Component<
+		InjectedIntlProps &
+		WithStyles<typeof styles> &
+		IAccountDetailsContentProps
+	> {
 
-@observer
-class AccountDetailsContent extends React.Component<
-	InjectedIntlProps &
-	WithStyles<typeof styles> &
-	IAccountDetailsContentProps
-> {
+		public render() : React.ReactNode {
 
-	public render() : React.ReactNode {
+			const {
+				classes,
+				controller
+			} = this.props;
 
-		const {
-			classes,
-			controller
-		} = this.props;
+			const emailLabel = simpleFormat(this, "things.email");
+			const currentPasswordLabel = simpleFormat(this, "things.currentPassword");
+			const passwordLabel = simpleFormat(this, "things.password");
+			const newPasswordLabel = simpleFormat(this, "things.newPassword");
+			const repeatPasswordLabel = simpleFormat(this, "actions.repeatPassword");
 
-		const emailLabel = simpleFormat(this, "things.email");
-		const currentPasswordLabel = simpleFormat(this, "things.currentPassword");
-		const passwordLabel = simpleFormat(this, "things.password");
-		const newPasswordLabel = simpleFormat(this, "things.newPassword");
-		const repeatPasswordLabel = simpleFormat(this, "actions.repeatPassword");
+			const isDisabled = controller.loading;
 
-		const isDisabled = controller.loading;
+			let changePasswordContent;
 
-		let changePasswordContent;
+			if(controller.isChangingPassword) {
+				let errorMessage;
 
-		if(controller.isChangingPassword) {
-			let errorMessage;
+				if(controller.errorMessage) {
+					errorMessage = (
+						<InfoBox type="error"
+							className={classes.errorBox}>
 
-			if(controller.errorMessage) {
-				errorMessage = (
-					<InfoBox type="error"
-						className={classes.errorBox}>
+							<FormattedMessage id={controller.errorMessage}/>
+						</InfoBox>
+					)
+				}
 
-						<FormattedMessage id={controller.errorMessage}/>
-					</InfoBox>
+				changePasswordContent = (
+					<React.Fragment>
+						<CustomTextField disabled={isDisabled}
+							className={classes.field}
+							type="password"
+							value={controller.model.currentPassword}
+							minLength={PASSWORD_MIN_LENGTH}
+							maxLength={PASSWORD_MAX_LENGTH}
+							label={currentPasswordLabel}
+							required={true}
+							onChange={event => controller.onChange("currentPassword", event.target.value)}
+							startAdornment={ <KeyIcon /> }
+						/>
+
+						<CustomTextField disabled={isDisabled}
+							className={classes.field}
+							type="password"
+							value={controller.model.newPassword}
+							minLength={PASSWORD_MIN_LENGTH}
+							maxLength={PASSWORD_MAX_LENGTH}
+							label={newPasswordLabel}
+							required={true}
+							onChange={event => controller.onChange("newPassword", event.target.value)}
+							startAdornment={ <KeyIcon /> }
+							errorModel={controller.errorModel}
+							validationKey="password"
+							errorTranslationValues={{
+								value: passwordLabel,
+								minLength: PASSWORD_MIN_LENGTH,
+								maxLength: PASSWORD_MAX_LENGTH
+							}}
+						/>
+
+						<CustomTextField disabled={isDisabled}
+							className={classes.field}
+							type="password"
+							value={controller.model.repeatPassword}
+							minLength={PASSWORD_MIN_LENGTH}
+							maxLength={PASSWORD_MAX_LENGTH}
+							label={repeatPasswordLabel}
+							required={true}
+							onChange={event => controller.onChange("repeatPassword", event.target.value)}
+							startAdornment={ <KeyIcon /> }
+							errorModel={controller.errorModel}
+							validationKey="repeatPassword"
+							errorTranslationValues={{
+								value: passwordLabel
+							}}
+						/>
+
+						{errorMessage}
+
+						<div>
+							<LoadingButton onClick={() => controller.onSave()}
+								className={classes.changePasswordButton}
+								state={controller.saveButtonState}>
+
+								<FormattedMessage id="actions.change" />
+							</LoadingButton>
+
+							<Button variant="contained"
+								onClick={() => controller.cancelChangePassword()}>
+
+								<FormattedMessage id="actions.cancel" />
+							</Button>
+						</div>
+					</React.Fragment>
+				)
+			} else {
+				changePasswordContent = (
+					<Button variant="contained"
+						onClick={() => controller.changePassword()}>
+
+						<FormattedMessage id="actions.changePassword"/>
+					</Button>
 				)
 			}
 
-			changePasswordContent = (
-				<React.Fragment>
-					<CustomTextField disabled={isDisabled}
-						className={classes.field}
-						type="password"
-						value={controller.model.currentPassword}
-						minLength={PASSWORD_MIN_LENGTH}
-						maxLength={PASSWORD_MAX_LENGTH}
-						label={currentPasswordLabel}
-						required={true}
-						onChange={event => controller.onChange("currentPassword", event.target.value)}
-						startAdornment={ <KeyIcon /> }
-					/>
+			return (
+				<Paper className={classes.normalPaper}>
+					<Typography variant="h5">
+						<FormattedMessage id="things.accountDetails"/>
+					</Typography>
 
-					<CustomTextField disabled={isDisabled}
-						className={classes.field}
-						type="password"
-						value={controller.model.newPassword}
-						minLength={PASSWORD_MIN_LENGTH}
-						maxLength={PASSWORD_MAX_LENGTH}
-						label={newPasswordLabel}
-						required={true}
-						onChange={event => controller.onChange("newPassword", event.target.value)}
-						startAdornment={ <KeyIcon /> }
-						errorModel={controller.errorModel}
-						validationKey="password"
-						errorTranslationValues={{
-							value: passwordLabel,
-							minLength: PASSWORD_MIN_LENGTH,
-							maxLength: PASSWORD_MAX_LENGTH
-						}}
-					/>
+					<div className={classes.fieldContainer}>
+						<CustomTextField disabled={true}
+							className={classes.field}
+							type="email"
+							value={controller.email}
+							label={emailLabel}
+							required={true}
+							startAdornment={ <MailIcon /> }
+						/>
 
-					<CustomTextField disabled={isDisabled}
-						className={classes.field}
-						type="password"
-						value={controller.model.repeatPassword}
-						minLength={PASSWORD_MIN_LENGTH}
-						maxLength={PASSWORD_MAX_LENGTH}
-						label={repeatPasswordLabel}
-						required={true}
-						onChange={event => controller.onChange("repeatPassword", event.target.value)}
-						startAdornment={ <KeyIcon /> }
-						errorModel={controller.errorModel}
-						validationKey="repeatPassword"
-						errorTranslationValues={{
-							value: passwordLabel
-						}}
-					/>
+						<Typography>
+							{passwordLabel}
+						</Typography>
 
-					{errorMessage}
-
-					<div>
-						<LoadingButton onClick={() => controller.onSave()}
-							className={classes.changePasswordButton}
-							state={controller.saveButtonState}>
-
-							<FormattedMessage id="actions.change" />
-						</LoadingButton>
-
-						<Button variant="contained"
-							onClick={() => controller.cancelChangePassword()}>
-
-							<FormattedMessage id="actions.cancel" />
-						</Button>
+						{changePasswordContent}
 					</div>
-				</React.Fragment>
-			)
-		} else {
-			changePasswordContent = (
-				<Button variant="contained"
-					onClick={() => controller.changePassword()}>
-
-					<FormattedMessage id="actions.changePassword"/>
-				</Button>
+				</Paper>
 			)
 		}
 
-		return (
-			<Paper className={classes.normalPaper}>
-				<Typography variant="h5">
-					<FormattedMessage id="things.accountDetails"/>
-				</Typography>
-
-				<div className={classes.fieldContainer}>
-					<CustomTextField disabled={true}
-						className={classes.field}
-						type="email"
-						value={controller.email}
-						label={emailLabel}
-						required={true}
-						startAdornment={ <MailIcon /> }
-					/>
-
-					<Typography>
-						{passwordLabel}
-					</Typography>
-
-					{changePasswordContent}
-				</div>
-			</Paper>
-		)
 	}
 
-}
-
-export default withStyles(styles)(injectIntl(AccountDetailsContent));
+	export default withStyles(styles)(injectIntl(AccountDetailsContent));

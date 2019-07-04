@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ProfilePictureContent from "./internal/ProfilePictureContent";
 import PersonalInformationContent from "./internal/PersonalInformationContent";
 import AddressContent from "./internal/AddressContent";
 import AccountDetailsContent from "./internal/AccountDetailsContent";
@@ -20,11 +20,17 @@ import {
 	withStyles,
 	Paper,
 	Typography,
+	Snackbar,
+	Button,
 } from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
 	titlePaper: {
 		padding: 10
+	},
+
+	errorSnackbarContent: {
+		backgroundColor: theme.palette.error.dark
 	},
 });
 
@@ -48,6 +54,30 @@ class ProfilePage extends React.Component<
 			classes
 		} = this.props;
 
+		let errorSnackbar = null;
+		if(controller.errorMessage) {
+			errorSnackbar = (
+				<Snackbar open={true}
+					key={controller.errorMessage}
+					ContentProps={{
+						"className": classes.errorSnackbarContent
+					}}
+					action={
+						<Button onClick={() => controller.onSnackbarClose()}>
+							<FormattedMessage id="actions.ok"/>
+						</Button>
+					}
+					message={
+						<FormattedMessage id={controller.errorMessage}/>
+					}
+					anchorOrigin={{
+						vertical: "bottom",
+						horizontal: "center"
+					}}
+					onClose={() => controller.onSnackbarClose()}/>
+			);
+		}
+
 		return (
 			<NavbarTemplate controller={navbarController}>
 				<div>
@@ -60,7 +90,10 @@ class ProfilePage extends React.Component<
 					<PersonalInformationContent controller={controller.personalController}/>
 					<AddressContent controller={controller.addressController}/>
 					<AccountDetailsContent controller={controller.accountDetailsController}/>
+					<ProfilePictureContent controller={controller.profilePictureController}/>
 				</div>
+
+				{errorSnackbar}
 			</NavbarTemplate>
 		)
 	}

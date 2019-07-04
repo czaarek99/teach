@@ -7,9 +7,10 @@ import { Address } from "../database/models/Address";
 import { Image } from "../database/models/Image";
 import { authenticationMiddleware, throwApiError } from "server-lib";
 import { resolveUser } from "../database/resolvers/resolveUser";
-import { IPersonalInput, IAddress, IPasswordInput, HttpError, ErrorMessage } from "common-library";
+import { IPersonalInput, IAddress, IPasswordInput, HttpError, ErrorMessage, ISimpleIdInput } from "common-library";
 import { Joi } from "koa-joi-router";
 import { hashPassword } from "../util/hashPassword";
+import { deleteImage } from "../util/deleteImage";
 
 import {
 	FIRST_NAME_VALIDATOR,
@@ -35,6 +36,17 @@ router.get("/self", async (context: CustomContext) => {
 			Image
 		]
 	});
+
+	if(!user) {
+		throwApiError(
+			context,
+			new HttpError(
+				404,
+				ErrorMessage.USER_NOT_FOUND,
+				context.state.requestId
+			)
+		)
+	}
 
 	context.body = resolveUser(user);
 	context.status = 200;
@@ -144,6 +156,39 @@ router.patch("/password", {
 	}, {
 		where: {
 			id: context.state.session.userId,
+		}
+	});
+
+	context.status = 200;
+});
+
+router.patch("/profilePic", {
+	validate: {
+		body: {
+			id: Joi.number().integer().min(0)
+		},
+		type: "json"
+	},
+}, async (context: CustomContext) => {
+
+	const input = context.request.body as ISimpleIdInput;
+
+	const user : User = await User.findOne<User>({
+		where: {
+			id: context.state.session.userId
+		}
+	});
+
+	//Delete the old profile picture
+	if(user.profilePicture) {
+		deleteImage(user.profilePicture);
+	}
+
+	await User.update<User>({
+		profilePicture: input.id
+	}, {
+		where: {
+			id: context.state.session.userId
 		}
 	});
 

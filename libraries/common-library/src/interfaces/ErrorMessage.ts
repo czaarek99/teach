@@ -1,26 +1,35 @@
 export enum ErrorMessage {
+	BAD_CAPTCHA = "error.badCaptcha",
+	UNAUTHORIZED = "error.unauthorized",
+	NOT_SET = "error.notSet",
+	BAD_UUID = "error.badUUID",
+	AD_NOT_FOUND = "error.adNotFound",
+
 	EMPTY = "error.empty",
-	PASSWORDS_DONT_MATCH = "error.passwordsDontMatch",
 	TOO_SHORT = "error.tooShort",
 	TOO_LONG = "error.tooLong",
 	WRONG_LENGTH = "error.wrongLength",
-	BAD_CAPTCHA = "error.badCaptcha",
+
 	DATE_TOO_BIG = "error.dateTooBig",
 	DATE_TOO_SMALL = "error.dateTooSmall",
-	INVALID_EMAIL = "error.invalidEmail",
-	EMAIL_EXISTS = "error.emailExists",
+
 	USER_NOT_FOUND = "error.userNotFound",
 	USER_TOO_YOUNG = "error.userTooYoung",
-	UNKNOWN = "error.unknown",
+
+	INVALID_EMAIL = "error.invalidEmail",
+	EMAIL_EXISTS = "error.emailExists",
+
 	COMPONENT = "error.component",
-	UNAUTHORIZED = "error.unauthorized",
+	UNKNOWN = "error.unknown",
 	INTERNAL_SERVER_ERROR = "error.internalServerError",
-	NOT_SET = "error.notSet",
-	PASSWORD_AND_EMAIL_SAME = "error.passwordAndEmailSame",
+
 	BAD_RESET_KEY = "error.badResetKey",
 	EXPIRED_RESET_KEY = "error.expiredResetKey",
-	BAD_UUID = "error.badUUID",
+
+	PASSWORDS_DONT_MATCH = "error.passwordsDontMatch",
+	PASSWORD_AND_EMAIL_SAME = "error.passwordAndEmailSame",
+	WRONG_CURRENT_PASSWORD = "error.wrongCurrentPassword",
+
 	INVALID_IMAGE = "error.invalidImage",
-	AD_NOT_FOUND = "error.adNotFound",
-	WRONG_CURRENT_PASSWORD = "error.wrongCurrentPassword"
+	IMAGE_UPLOAD_LIMIT_REACHED = "error.imageUploadLimit"
 }

@@ -1,22 +1,23 @@
 import * as Router from "koa-router";
 
 import { throwApiError } from "server-lib";
-import { ErrorMessage, HttpError } from "common-library";
+import { ErrorMessage, HttpError, ISimpleStringIdInput, MAX_IMAGE_COUNT } from "common-library";
 import { CustomContext } from "../Server";
 import { v4 } from "uuid";
-import { rename, unlink } from "fs-extra";
+import { rename } from "fs-extra";
 import { join } from "path";
 import { config } from "../config";
 import { Image } from "../database/models/Image";
+import { deleteImage } from "../util/deleteImage";
 
 const router = new Router();
 
 export function throwInvalidImageError(context: CustomContext) : void {
 	throwApiError(
-		context, 
+		context,
 		new HttpError(
-			400, 
-			ErrorMessage.INVALID_IMAGE, 
+			400,
+			ErrorMessage.INVALID_IMAGE,
 			context.state.requestId
 		)
 	);
@@ -26,10 +27,29 @@ router.put("/", async (context: CustomContext) => {
 
 	const image = context.request.files.image;
 
+	const imageCount = await Image.count({
+		where: {
+			userId: context.state.session.userId
+		}
+	});
+
+	if(imageCount > MAX_IMAGE_COUNT) {
+		throwApiError(
+			context,
+			new HttpError(
+				400,
+				ErrorMessage.IMAGE_UPLOAD_LIMIT_REACHED,
+				context.state.requestId
+			)
+		);
+
+		return;
+	}
+
 	if(!image) {
 		throwInvalidImageError(context);
 		return;
-	} 
+	}
 	if(!image.type.startsWith("image")) {
 		throwInvalidImageError(context);
 		return;
@@ -41,7 +61,6 @@ router.put("/", async (context: CustomContext) => {
 		throwInvalidImageError(context);
 		return;
 	}
-
 
 	const uuid = v4();
 	const fileName = `${uuid}.${imageExtension}`;
@@ -62,19 +81,20 @@ router.put("/", async (context: CustomContext) => {
 	context.status = 200;
 });
 
-router.delete("/:fileName", async (context: CustomContext) => {
+router.delete("/:id", async (context: CustomContext) => {
 
-	const fileName = context.params.fileName;
+	const input = context.request.params as unknown as ISimpleStringIdInput;
+	const id = parseInt(input.id);
 
-	if(!fileName) {
+	if(Number.isNaN(id)) {
 		throwInvalidImageError(context);
 		return;
 	}
 
-	const userImage = await Image.findOne<Image>({
+	const userImage : Image = await Image.findOne<Image>({
 		where: {
 			userId: context.state.session.userId,
-			fileName	
+			id
 		}
 	});
 
@@ -83,12 +103,7 @@ router.delete("/:fileName", async (context: CustomContext) => {
 		return;
 	}
 
-	const fullPath = join(config.userImagesPath, fileName);
-
-	await Promise.all([
-		unlink(fullPath),
-		userImage.destroy()
-	]);
+	await deleteImage(userImage);
 
 	context.status = 200;
 });

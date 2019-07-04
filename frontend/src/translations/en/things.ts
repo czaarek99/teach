@@ -24,6 +24,7 @@ export default {
 	"things.ad": "Ad",
 	"things.hidden": "Hidden",
 	"things.privacySettings": "Privacy settings",
+	"things.profilePicture": "Profile picture",
 
 	"things.pages.home": "Home",
 	"things.pages.browse": "Browse",

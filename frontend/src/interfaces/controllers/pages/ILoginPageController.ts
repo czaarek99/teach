@@ -1,6 +1,7 @@
 import { ILoginModel } from "../../models/ILoginModel";
 import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
 import { LoadingButtonState } from "../../../components/molecules/LoadingButton/LoadingButton";
+import { Route } from "../../Routes";
 
 export interface ILoginPageErrorState extends ErrorState {
 	email: string[]
@@ -14,6 +15,7 @@ export interface ILoginPageController {
 	readonly errorMessage: string | null
 	readonly loginButtonState: LoadingButtonState;
 
+	goToRoute: (route: Route) => void
 	onLogin: () => Promise<void>
 	onChange: (key: keyof ILoginModel, value: string) => void
 }

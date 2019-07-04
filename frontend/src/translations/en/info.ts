@@ -4,5 +4,6 @@ export default {
 	"info.welcome": `
 		Welcome to teachelly! A platform for teachers to publish ads and for
 		students to find their teacher.
-	`
+	`,
+	"info.profilePicDrop": "Drop a profile picture here."
 }

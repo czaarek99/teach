@@ -33,7 +33,7 @@ export class Ad extends Model<Ad> {
 	@Column(DataType.TEXT)
 	public description: string;
 
-	@HasOne(() => Image, "parentId")
+	@HasOne(() => Image, "id")
 	public mainImage: Image;
 
 }

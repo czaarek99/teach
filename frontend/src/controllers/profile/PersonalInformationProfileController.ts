@@ -9,6 +9,9 @@ import { IUserCache } from "../../util/UserCache";
 import { minLength, maxLength } from "../../validation/validators";
 import { ValidatorMap, validate } from "../../validation/validate";
 import { LoadingButtonState } from "../../components";
+import { objectKeys } from "../../util/objectKeys";
+import { successTimeout } from "../../util/successTimeout";
+import { ProfilePageController } from "../pages/ProfilePageController";
 
 import {
 	IPersonalInformationProfileController,
@@ -20,8 +23,6 @@ import {
 	FIRST_NAME_MIN_LENGTH,
 	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
-import { objectKeys } from "../../util/objectKeys";
-import { successTimeout } from "../../util/successTimeout";
 
 const personalValidators : ValidatorMap<IPersonalInformationModel> = {
 	firstName: [
@@ -41,6 +42,7 @@ const personalValidators : ValidatorMap<IPersonalInformationModel> = {
 
 export class PersonalInformationProfileController implements IPersonalInformationProfileController {
 
+	private readonly parent: ProfilePageController;
 	private readonly userService: IUserService;
 	private readonly userCache: IUserCache;
 	private saveButtonStateTimeout?: number;
@@ -59,9 +61,12 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 	});
 
 	constructor(
+		parent: ProfilePageController,
 		userService: IUserService,
 		userCache: IUserCache
 	) {
+		this.parent = parent;
+
 		this.userService = userService;
 		this.userCache = userCache;
 
@@ -107,6 +112,8 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 					this.saveButtonState = "default";
 				});
 			} catch(error) {
+				this.parent.serverError(error);
+
 				this.saveButtonState = "error";
 			}
 		}

@@ -122,9 +122,19 @@ class LoginPage extends React.Component<
 					}}
 				/>
 
-				<Link href={Route.FORGOT_PASSWORD} >
+				<Link onClick={() => controller.goToRoute(Route.FORGOT_PASSWORD)}
+					href="#">
+
 					<Typography>
 						<FormattedMessage id="actions.forgotPassword"/>
+					</Typography>
+				</Link>
+
+				<Link onClick={() => controller.goToRoute(Route.REGISTRATION)}
+					href="#">
+
+					<Typography>
+						<FormattedMessage id="actions.noAccount"/>
 					</Typography>
 				</Link>
 

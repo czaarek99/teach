@@ -91,11 +91,11 @@ export class Server {
 		openRouter.use("/ad", ad.middleware());
 		openRouter.use("/user", user.middleware());
 		openRouter.use("/teacher", teacher.middleware())
-		openRouter.use("/image", image.routes());
 
 		const protectedRouter = new Router();
 		protectedRouter.use(authenticationMiddleware);
 		protectedRouter.use("/settings", settings.middleware());
+		protectedRouter.use("/image", image.routes());
 
 		app.use(openRouter.routes());
 		app.use(protectedRouter.routes());

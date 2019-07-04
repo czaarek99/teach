@@ -60,7 +60,7 @@ export class User extends Model<User> {
 	@Column(DataType.STRING(PHONE_NUMBER_MAX_LENGTH))
 	public phoneNumber?: string
 
-	@HasOne(() => Image,  "parentId")
+	@HasOne(() => Image,  "id")
 	public profilePicture?: Image;
 
 	@HasOne(() => Address, "userId")
