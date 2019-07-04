@@ -4,8 +4,9 @@ import { User } from "./models/User";
 import { Address } from "./models/Address";
 import { PasswordReset } from "./models/PasswordReset";
 import { Ad } from "./models/Ad";
-import { Image } from "./models/Image";
 import { UserSetting } from "./models/UserSetting";
+import { ProfilePicture } from "./models/ProfilePicture";
+import { AdImage } from "./models/AdImage";
 
 export function connectToDatabase() : Sequelize {
 	const connection = new Sequelize({
@@ -22,8 +23,9 @@ export function connectToDatabase() : Sequelize {
 		Address,
 		PasswordReset,
 		Ad,
-		Image,
-		UserSetting
+		ProfilePicture,
+		UserSetting,
+		AdImage
 	]);
 
 	return connection;

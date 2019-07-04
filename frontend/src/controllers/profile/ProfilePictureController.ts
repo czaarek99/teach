@@ -1,7 +1,6 @@
 import { IProfilePictureController } from "../../interfaces/controllers/profile/IProfilePictureController";
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { LoadingButtonState } from "../../components";
-import { IUserService } from "../../interfaces/services/IUserService";
 import { IImageService } from "../../interfaces/services/IImageService";
 import { successTimeout } from "../../util/successTimeout";
 import { ProfilePageController } from "../pages/ProfilePageController";
@@ -12,7 +11,6 @@ export class ProfilePictureController implements IProfilePictureController {
 
 	private readonly parent: ProfilePageController;
 	private readonly userCache: IUserCache;
-	private readonly userService: IUserService;
 	private readonly imageService: IImageService;
 
 	private imageFile: File;
@@ -20,18 +18,17 @@ export class ProfilePictureController implements IProfilePictureController {
 
 	@observable public loading = false;
 	@observable public saveButtonState : LoadingButtonState = "default";
+	@observable public deleteButtonState : LoadingButtonState = "default";
 	@observable public isDraggingOver = false;
 	@observable public imageUrl = "";
 
 	constructor(
 		parent: ProfilePageController,
 		userCache: IUserCache,
-		userService: IUserService,
 		imageService :IImageService
 	) {
 		this.parent = parent;
 		this.userCache = userCache;
-		this.userService = userService;
 		this.imageService = imageService;
 	}
 
@@ -41,9 +38,15 @@ export class ProfilePictureController implements IProfilePictureController {
 		}
 	}
 
+	@computed
+	public get showDelete() : boolean {
+		return this.imageUrl ? true : false;
+	}
+
 	@action
 	public async load() : Promise<void> {
-		if(this.userCache.user) {
+		const user = this.userCache.user;
+		if(user && user.avatarFileName) {
 			this.imageUrl = getImageUrl(this.userCache.user.avatarFileName);
 		}
 	}
@@ -64,26 +67,44 @@ export class ProfilePictureController implements IProfilePictureController {
 
 			this.loading = true;
 			this.saveButtonState = "loading";
+			this.deleteButtonState = "disabled";
 
 			try {
-				const id = await this.imageService.uploadImage(this.imageFile);
-				await this.userService.updateProfilePicture({
-					id
-				});
-
+				const output = await this.imageService.updateProfilePic(this.imageFile);
+				this.userCache.updateProfilePic(output.fileName);
 				this.saveButtonState = "success";
 
 				this.successTimeout = successTimeout(() => {
 					this.saveButtonState = "default";
-				})
+				});
 			} catch(error) {
-				console.error(error);
+				this.parent.serverError(error);
 
 				this.saveButtonState = "error";
 			}
 
 			this.loading = false;
+			this.deleteButtonState = "default";
 		}
+	}
+
+	@action
+	public async onDelete() : Promise<void> {
+		this.loading = true;
+		this.saveButtonState = "disabled";
+
+		try {
+			await this.imageService.deleteProfilePic();
+			this.imageFile = undefined;
+			this.imageUrl = "";
+		} catch(error) {
+			this.parent.serverError(error);
+
+			this.saveButtonState = "error";
+		}
+
+		this.saveButtonState = "default";
+		this.loading = false;
 	}
 
 	@action

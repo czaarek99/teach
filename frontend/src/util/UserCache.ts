@@ -20,6 +20,7 @@ export interface IUserCache {
 	recache: () => Promise<void>
 	updatePersonalInfo: (input: IPersonalInput) => void
 	updateAddress: (address: IAddress) => void
+	updateProfilePic: (fileName: string) => void
 	logOut: () => void
 }
 
@@ -37,6 +38,16 @@ export class UserCache implements IUserCache {
 		this.recache();
 	}
 
+	@action
+	public updateProfilePic(fileName: string) {
+		if(this.user) {
+			this.user.avatarFileName = fileName;
+
+			this.saveUserToLocalStorage();
+		}
+	}
+
+	@action
 	public updatePersonalInfo(input: IPersonalInput) : void {
 		if(this.user) {
 			this.user.lastName = input.lastName;
@@ -48,6 +59,7 @@ export class UserCache implements IUserCache {
 		}
 	}
 
+	@action
 	public updateAddress(address: IAddress) : void {
 		if(this.user) {
 			this.user.address = address;
@@ -55,6 +67,7 @@ export class UserCache implements IUserCache {
 		}
 	}
 
+	@action
 	public logOut() : void {
 		localStorage.removeItem(SESSION_KEY_NAME);
 		localStorage.removeItem(EXPIRATION_DATE_KEY_NAME);

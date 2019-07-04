@@ -1,6 +1,6 @@
 import { IUserService } from "../interfaces/services/IUserService";
 import { BaseService } from "./BaseService";
-import { IUser, IPersonalInput, IAddress, IPasswordInput, ISimpleIdInput } from "common-library";
+import { IUser, IPersonalInput, IAddress, IPasswordInput } from "common-library";
 
 export class UserService extends BaseService implements IUserService {
 
@@ -23,10 +23,6 @@ export class UserService extends BaseService implements IUserService {
 
 	public async updatePassword(input: IPasswordInput) : Promise<void> {
 		await this.axios.patch("/password", input);
-	}
-
-	public async updateProfilePicture(input: ISimpleIdInput) : Promise<void> {
-		await this.axios.patch("/profilePic", input);
 	}
 
 }

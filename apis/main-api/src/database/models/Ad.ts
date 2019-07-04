@@ -1,21 +1,29 @@
 import { User } from "./User";
-import { AD_NAME_MAX_LENGTH, IAd } from "common-library";
-import { Image } from "./Image";
+import { AD_NAME_MAX_LENGTH } from "common-library";
+import { AdImage } from "./AdImage";
 
 import {
 	Table,
 	Column,
 	Model,
-	Unique,
 	AllowNull,
 	DataType,
 	BelongsTo,
 	ForeignKey,
-	HasOne
+	HasMany,
+	Unique,
+	PrimaryKey,
+	AutoIncrement
 } from "sequelize-typescript";
 
 @Table
 export class Ad extends Model<Ad> {
+
+	@Unique
+	@PrimaryKey
+	@AutoIncrement
+	@Column(DataType.INTEGER.UNSIGNED)
+	public id: number;
 
 	@BelongsTo(() => User, "userId")
 	public user: User;
@@ -33,7 +41,7 @@ export class Ad extends Model<Ad> {
 	@Column(DataType.TEXT)
 	public description: string;
 
-	@HasOne(() => Image, "id")
-	public mainImage: Image;
+	@HasMany(() => AdImage, "adId")
+	public mainImage: AdImage[];
 
 }

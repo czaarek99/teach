@@ -1,7 +1,7 @@
 import React from 'react';
 import Dropzone from "react-dropzone";
 import UploadIcon from "@material-ui/icons/CloudUpload";
-import DropIcon from "@material-ui/icons/VerticalAlignBottom";
+import EditIcon from "@material-ui/icons/Edit";
 import clsx from "clsx";
 
 import { observer } from "mobx-react";
@@ -37,33 +37,45 @@ const styles = (theme: Theme) => createStyles({
 	dropzone: {
 		width: 256,
 		height: 256,
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
 		borderWidth: 2,
 		borderColor: theme.palette.primary.main,
 		borderStyle: "solid",
 		borderRadius: 3,
 		cursor: "pointer",
 		outline: "none",
-		transition: "background-color 400ms",
 		backgroundSize: "contain",
+		position: "relative",
 
-		"&:hover": {
-			backgroundColor: theme.palette.grey[100]
-		},
-
-		"&:active": {
-			backgroundColor: theme.palette.grey[200],
-		}
-	},
-
-	activeDropzone: {
-		backgroundColor: theme.palette.grey[300]
 	},
 
 	saveButton: {
+		marginRight: 10
+	},
+
+	buttonsContainer: {
 		marginTop: 10
+	},
+
+	overlay: {
+		position: "absolute",
+		top: 0,
+		opacity: 0,
+		left: 0,
+		width: "100%",
+		height: "100%",
+		backgroundColor: `${theme.palette.grey[300]}aa`,
+		transition: "opacity 500ms",
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+
+		"&:hover": {
+			opacity: 1
+		}
+	},
+
+	activeOverlay: {
+		opacity: "1 !important" as any,
 	}
 });
 
@@ -87,19 +99,8 @@ class ProfilePictureContent extends React.Component<
 
 		const isDisabled = controller.loading;
 
-		let uploadIcon;
-		if(!controller.imageUrl) {
-
-			if(controller.isDraggingOver) {
-				uploadIcon = <DropIcon fontSize="large" />
-			} else {
-				uploadIcon = <UploadIcon fontSize="large" />;
-			}
-		}
-
-
-		const dropzoneClasses = clsx(classes.dropzone, {
-			[classes.activeDropzone]: controller.isDraggingOver
+		const overlayClasses = clsx(classes.overlay, {
+			[classes.activeOverlay]: controller.isDraggingOver
 		});
 
 		let dropzoneStyle : React.CSSProperties;
@@ -107,6 +108,16 @@ class ProfilePictureContent extends React.Component<
 			dropzoneStyle = {
 				backgroundImage: `url(${controller.imageUrl})`
 			};
+		}
+
+		let deleteButton;
+		if(controller.showDelete) {
+			deleteButton = (
+				<LoadingButton state={controller.deleteButtonState}
+					onClick={() => controller.onDelete()}>
+						<FormattedMessage id="actions.delete"/>
+				</LoadingButton>
+			);
 		}
 
 		return (
@@ -131,19 +142,29 @@ class ProfilePictureContent extends React.Component<
 					{(props) => (
 						<div {...props.getRootProps()}
 							style={dropzoneStyle}
-							className={dropzoneClasses}>
+							className={classes.dropzone}>
 
 							<input {...props.getInputProps()}/>
-							{uploadIcon}
+
+							<div className={overlayClasses}>
+								{controller.imageUrl ?
+									<EditIcon fontSize="large"/> :
+									<UploadIcon fontSize="large" />
+								}
+							</div>
 						</div>
 					)}
 				</Dropzone>
 
-				<LoadingButton className={classes.saveButton}
-					state={controller.saveButtonState}
-					onClick={() => controller.onSave()}>
-						<FormattedMessage id="actions.save" />
-				</LoadingButton>
+				<div className={classes.buttonsContainer}>
+					<LoadingButton className={classes.saveButton}
+						state={controller.saveButtonState}
+						onClick={() => controller.onSave()}>
+							<FormattedMessage id="actions.save" />
+					</LoadingButton>
+
+					{deleteButton}
+				</div>
 			</Paper>
 		)
 	}

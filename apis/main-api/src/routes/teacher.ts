@@ -4,11 +4,11 @@ import { Joi } from "koa-joi-router";
 import { CustomContext } from "../Server";
 import { User } from "../database/models/User";
 import { Address } from "../database/models/Address";
-import { Image } from "../database/models/Image";
 import { throwApiError } from "server-lib";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { UserSetting } from "../database/models/UserSetting";
 import { ISimpleIdInput, HttpError } from "common-library";
+import { ProfilePicture } from "../database/models/ProfilePicture";
 
 const router = Router();
 
@@ -28,7 +28,7 @@ router.get("/:id", {
 		},
 		include: [
 			Address,
-			Image,
+			ProfilePicture,
 			UserSetting
 		]
 	});

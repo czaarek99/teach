@@ -1,8 +1,8 @@
 import { Address } from "./Address";
 import { PasswordReset } from "./PasswordReset";
 import { Ad } from "./Ad";
-import { Image } from "./Image";
 import { UserSetting } from "./UserSetting";
+import { ProfilePicture } from "./ProfilePicture";
 
 import {
 	Table,
@@ -60,8 +60,8 @@ export class User extends Model<User> {
 	@Column(DataType.STRING(PHONE_NUMBER_MAX_LENGTH))
 	public phoneNumber?: string
 
-	@HasOne(() => Image,  "id")
-	public profilePicture?: Image;
+	@HasOne(() => ProfilePicture,  "userId")
+	public profilePicture?: ProfilePicture;
 
 	@HasOne(() => Address, "userId")
 	public address: Address;

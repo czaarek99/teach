@@ -49,15 +49,18 @@ export class ErrorModel<T extends ErrorState> {
 		return this.validationObject.errorState;
 	}
 
-	@action public setErrors(key: keyof T, errors: string[]) : void {
+	@action
+	public setErrors(key: keyof T, errors: string[]) : void {
 		(this.validationObject.errorState as any)[key] = errors;
 	}
 
-	@action public reset() : void {
+	@action
+	public reset() : void {
 		this.validationObject.reset();
 	}
 
-	@action public submit() : void {
+	@action
+	public submit() : void {
 		this.validationObject.submit();
 	}
 

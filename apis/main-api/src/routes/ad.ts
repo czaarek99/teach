@@ -5,10 +5,11 @@ import { CustomContext } from "../Server";
 import { Ad } from "../database/models/Ad";
 import { User } from "../database/models/User";
 import { throwApiError } from "server-lib";
-import { Image } from "../database/models/Image";
 import { Address } from "../database/models/Address";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { UserSetting } from "../database/models/UserSetting";
+import { AdImage } from "../database/models/AdImage";
+import { ProfilePicture } from "../database/models/ProfilePicture";
 
 import {
 	IAd,
@@ -53,18 +54,16 @@ router.get("/list", {
 			offset: query.offset,
 			include: [
 				{
-					model: Image
+					model: AdImage
 				},
 				{
 					model: User,
 					include: [
 						Address,
-						UserSetting
+						UserSetting,
+						ProfilePicture
 					]
 				},
-				{
-					model: Image
-				}
 			]
 		}),
 		Ad.count()
@@ -97,18 +96,16 @@ router.get("/:id", {
 		},
 		include: [
 			{
-				model: Image
+				model: AdImage
 			},
 			{
 				model: User,
 				include: [
 					Address,
-					UserSetting
+					UserSetting,
+					ProfilePicture
 				]
 			},
-			{
-				model: Image
-			}
 		]
 	});
 

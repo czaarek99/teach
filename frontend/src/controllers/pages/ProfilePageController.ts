@@ -58,7 +58,6 @@ export class ProfilePageController implements IProfilePageController {
 		this.profilePictureController = new ProfilePictureController(
 			this,
 			userCache,
-			userService,
 			imageService
 		);
 

@@ -9,18 +9,10 @@ import {
 	DataType,
 	ForeignKey,
 	BelongsTo,
-	PrimaryKey,
-	AutoIncrement
 } from "sequelize-typescript";
 
 @Table
-export class Image extends Model<Image> {
-
-	@Unique
-	@PrimaryKey
-	@AutoIncrement
-	@Column(DataType.INTEGER.UNSIGNED)
-	public id: number;
+export class ProfilePicture extends Model<ProfilePicture> {
 
 	@BelongsTo(() => User, "userId")
 	public user: User;
@@ -28,7 +20,7 @@ export class Image extends Model<Image> {
 	@AllowNull(false)
 	@ForeignKey(() => User)
 	@Column(DataType.INTEGER.UNSIGNED)
-	public userId: number
+	public userId: number;
 
 	@Unique
 	@AllowNull(false)

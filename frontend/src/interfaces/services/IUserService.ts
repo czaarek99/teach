@@ -11,5 +11,4 @@ export interface IUserService {
 	updatePersonalInfo: (input: IPersonalInput) => Promise<void>
 	updateAddress: (address: IAddress) => Promise<void>
 	updatePassword: (input: IPasswordInput) => Promise<void>
-	updateProfilePicture: (input: ISimpleIdInput) => Promise<void>
 }

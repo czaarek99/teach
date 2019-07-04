@@ -12,6 +12,7 @@ export default {
 	"actions.save": "Save",
 	"actions.reset": "Reset",
 	"actions.change": "Change",
+	"actions.delete": "Delete",
 	"actions.noAccount": "No account?",
 	"actions.resetEmailSent": `
 		An email with instructions on how to reset your password has been sent to

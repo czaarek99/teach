@@ -10,10 +10,15 @@ import { PasswordReset } from "../database/models/PasswordReset";
 import { v4 } from "uuid";
 import { isBefore, subDays } from "date-fns";
 import { randomBytes } from "crypto";
-import { IRedisSession, getNewExpirationDate, throwApiError, authenticationMiddleware } from "server-lib";
 import { verifyRecaptcha } from "../util/verifyRecaptcha";
-import { Image } from "../database/models/Image";
 import { resolveUser } from "../database/resolvers/resolveUser";
+
+import {
+	IRedisSession,
+	getNewExpirationDate,
+	throwApiError,
+	authenticationMiddleware
+} from "server-lib";
 
 import {
 	HttpError,
@@ -44,6 +49,7 @@ import {
 	PASSWORD_VALIDATOR,
 	ADDRESS_VALIDATOR
 } from "../validators";
+import { ProfilePicture } from "../database/models/ProfilePicture";
 
 async function logIn(context: CustomContext, user: User) : Promise<void> {
 	const sessionId = await randomBytes(128).toString("hex");
@@ -198,7 +204,7 @@ router.post("/login", {
 		},
 		include: [
 			Address,
-			Image
+			ProfilePicture
 		]
 	});
 
