@@ -1,12 +1,13 @@
 import { ISettingsPageController } from "../../interfaces/controllers/pages/ISettingsPageController";
 import { observable, computed, action } from "mobx";
 import { SettingsModel } from "../../models/SettingsModel";
-import { createViewModel, ViewModel } from "mobx-utils";
+import { createViewModel } from "mobx-utils";
 import { ISettingsModel } from "../../interfaces/models/ISettingsModel";
 import { LoadingButtonState } from "../../components";
 import { ISettingsService } from "../../interfaces/services/ISettingsService";
 import { HttpError, ErrorMessage } from "common-library";
 import { successTimeout } from "../../util/successTimeout";
+import { ViewModel } from "../../interfaces/ViewModel";
 
 export class SettingsPageController implements ISettingsPageController {
 
