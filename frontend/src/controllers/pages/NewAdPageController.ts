@@ -1,5 +1,5 @@
 import { INewAdModel } from "../../interfaces/models/INewAdModel";
-import { observable } from "mobx";
+import { observable, action, computed } from "mobx";
 import { NewAdModel } from "../../models/NewAdModel";
 import { IAdService } from "../../interfaces/services/IAdService";
 import { ErrorModel } from "../../validation/ErrorModel";
@@ -34,9 +34,15 @@ export class NewAdPageController implements INewAdPageController {
 
 	private readonly adService: IAdService;
 
+	@observable private readonly imageUrls: string[] = [];
+	@observable private readonly adImages: File[] = [];
+
 	@observable public pageError = "";
 	@observable public saveButtonState : LoadingButtonState = "default";
 	@observable public model = new NewAdModel()
+	@observable public isDraggingOver = false;
+	@observable public loading = false;
+	@observable public imageIndex = 0;
 	@observable public errorModel = new ErrorModel<INewAdPageErrorState>({
 		name: [],
 		description: []
@@ -46,6 +52,20 @@ export class NewAdPageController implements INewAdPageController {
 		this.adService = adService;
 	}
 
+	public getImageUrl(index: number) : string {
+		if(this.imageUrls.length > index) {
+			return this.imageUrls[index];
+		}
+
+		return "";
+	}
+
+	@computed
+	public get imageUrl() : string {
+		return this.getImageUrl(this.imageIndex);
+	}
+
+	@action
 	private validate(key: keyof INewAdModel) : void {
 		const keyValidators = validators[key];
 
@@ -55,18 +75,54 @@ export class NewAdPageController implements INewAdPageController {
 		}
 	}
 
+	@action
 	public onChange(key: keyof INewAdModel, value: any) : void {
 		this.model[key] = value;
 
 		this.validate(key);
 	}
 
+	@action
+	public onDragEnter() : void {
+		this.isDraggingOver = true;
+	}
+
+	@action
+	public onDragLeave() : void {
+		this.isDraggingOver = false;
+	}
+
+	@action
 	public async onSave() : Promise<void> {
 
 	}
 
+	@action
+	public onDrop = (files: File[]) : void => {
+		this.adImages[this.imageIndex] = file;
+
+		if(this.imageUrls.length > this.imageIndex) {
+			const oldUrl = this.imageUrls[this.imageIndex];
+			if(oldUrl) {
+				URL.revokeObjectURL(oldUrl);
+			}
+		}
+
+		this.imageUrls[this.imageIndex] = URL.createObjectURL(file);
+	}
+
+	@action
+	public setImageIndex(index: number) : void {
+		this.imageIndex = index;
+	}
+
+	@action
 	public onCloseSnackbar() : void {
 		this.pageError = "";
+	}
+
+	public isImageSlotEnabled(slotIndex: number) : boolean {
+		return this.adImages.length >= slotIndex;
 	}
 
 }

@@ -39,3 +39,6 @@ export const UUID_V4_LENGTH = 36;
 export const SETTING_MAX_LENGTH = 250;
 
 export const MAXIMUM_PROFILE_PICTURE_SIZE = 15 * Math.pow(10, 6);
+
+export const MAXIMUM_AD_PICTURE_SIZE = 20 * Math.pow(10, 6);
+export const MAX_AD_PICTURE_COUNT = 5;

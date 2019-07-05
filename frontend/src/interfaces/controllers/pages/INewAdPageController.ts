@@ -12,7 +12,17 @@ export interface INewAdPageController {
 	readonly errorModel: ErrorModel<INewAdPageErrorState>
 	readonly saveButtonState: LoadingButtonState
 	readonly pageError: string
+	readonly imageUrl: string
+	readonly isDraggingOver: boolean
+	readonly loading: boolean
+	readonly imageIndex: number
 
+	getImageUrl: (index: number) => string
+	isImageSlotEnabled: (slotIndex: number) => boolean
+	setImageIndex: (index: number) => void
+	onDragEnter: () => void
+	onDragLeave: () => void
+	onDrop: (files: File[]) => void
 	onCloseSnackbar: () => void
 	onSave: () => Promise<void>
 	onChange: (key: keyof INewAdModel, value: any) => void

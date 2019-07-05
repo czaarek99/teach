@@ -52,12 +52,11 @@ export class ProfilePictureController implements IProfilePictureController {
 	}
 
 	@action
-	public onDrop = (acceptedFiles: File[]) : void => {
+	public onDrop = (file: File) : void => {
 		this.isDraggingOver = false;
 
-		const image = acceptedFiles[0];
-		this.imageFile = image;
-		this.imageUrl = URL.createObjectURL(image);
+		this.imageFile = file;
+		this.imageUrl = URL.createObjectURL(file);
 	}
 
 	@action

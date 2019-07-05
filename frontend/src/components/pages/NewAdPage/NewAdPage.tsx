@@ -1,20 +1,29 @@
 import React from 'react';
 import InfoIcon from "@material-ui/icons/Info";
-import EditIcon from "@material-ui/icons/Edit";
+import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternate";
+import clsx from "clsx";
 
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { INewAdPageController } from "../../../interfaces/controllers/pages/INewAdPageController";
 import { observer } from "mobx-react";
-import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { NavbarTemplate } from "../../templates";
 import { CustomTextField, LoadingButton } from "../../molecules";
 import { simpleFormat } from "../../../util/simpleFormat";
+import { ImageUploader } from "../../organisms";
+
+import {
+	InjectedIntlProps,
+	injectIntl,
+	FormattedMessage
+} from "react-intl";
 
 import {
 	AD_NAME_MAX_LENGTH,
 	AD_NAME_MIN_LENGTH,
 	AD_DESCRIPTION_MIN_LENGTH,
-	AD_DESCRIPTION_MAX_LENGTH
+	AD_DESCRIPTION_MAX_LENGTH,
+	MAXIMUM_AD_PICTURE_SIZE,
+	MAX_AD_PICTURE_COUNT
 } from "common-library";
 
 import {
@@ -27,15 +36,58 @@ import {
 	Button
 } from "@material-ui/core";
 
+const MEDIUM_BREAKPOINT = "@media screen and (min-width: 400px)";
+const LARGE_BREAKPOINT = "@media screen and (min-width: 560px)";
+const X_LARGE_BREAKPOINT = "@media screen and (min-width: 950px)";
+const XX_LARGE_BREAKPOINT = "@media screen and (min-width: 1400px)";
+
 const styles = (theme: Theme) => createStyles({
 	content: {
 		display: "flex",
-		justifyContent: "center"
+		justifyContent: "center",
 	},
 
 	paper: {
 		padding: 10,
-		maxWidth: 1000
+
+		width: 300,
+
+		[MEDIUM_BREAKPOINT]: {
+			width: 380
+		},
+
+		[LARGE_BREAKPOINT]: {
+			width: 460
+		},
+
+		[X_LARGE_BREAKPOINT]: {
+			width: 600
+		},
+
+		[XX_LARGE_BREAKPOINT]: {
+			width: 800
+		}
+	},
+
+	uploader: {
+		height: 150,
+		marginBottom: 10,
+
+		[MEDIUM_BREAKPOINT]: {
+			height: 190
+		},
+
+		[LARGE_BREAKPOINT]: {
+			height: 230
+		},
+
+		[X_LARGE_BREAKPOINT]: {
+			height: 300
+		},
+
+		[XX_LARGE_BREAKPOINT]: {
+			height: 400
+		}
 	},
 
 	field: {
@@ -45,6 +97,42 @@ const styles = (theme: Theme) => createStyles({
 	errorSnackbarContent: {
 		backgroundColor: theme.palette.error.dark
 	},
+
+	slots: {
+		marginBottom: 10,
+		display: "flex",
+		justifyContent: "space-evenly"
+	},
+
+	imageSlot: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		borderStyle: "dotted",
+		borderColor: theme.palette.grey[200],
+		width: 50,
+		height: 50,
+		position: "relative",
+		cursor: "pointer",
+
+		[MEDIUM_BREAKPOINT]: {
+			width: 60,
+			height: 60,
+		}
+	},
+
+	disabledSlot: {
+		opacity: .5,
+		cursor: "not-allowed"
+	},
+
+	slotOverlay: {
+		position: "absolute",
+		width: "100%",
+		height: "100%",
+		backgroundSize: "contain",
+	}
+
 });
 
 interface INewAdPageProps {
@@ -59,20 +147,54 @@ class NewAdPage extends React.Component<
 	WithStyles<typeof styles>
 > {
 
-	public render() : React.ReactNode {
+	private renderImageSlots() : React.ReactNodeArray {
 
 		const {
-			navbarController,
+			classes,
+			controller
+		} = this.props;
+
+		const slots : React.ReactNodeArray = [];
+
+		for(let i = 0; i < MAX_AD_PICTURE_COUNT; i++) {
+
+			const className = clsx(classes.imageSlot, {
+				[classes.disabledSlot]: !controller.isImageSlotEnabled(i)
+			});
+
+			let style;
+			const imageUrl = controller.getImageUrl(i);
+			if(imageUrl) {
+				style = {
+					backgroundImage: `url(${imageUrl})`
+				}
+			}
+
+			slots.push(
+				<div className={className}
+					key={i}
+					onClick={() => controller.setImageIndex(i)}>
+
+					<AddPhotoIcon fontSize="large"/>
+
+					<div className={classes.slotOverlay}
+						style={{ backgroundImage: controller.getImageUrl(i)}}/>
+				</div>
+			);
+		}
+
+		return slots;
+	}
+
+	private renderErrorSnackbar() : React.ReactNode {
+
+		const {
 			controller,
 			classes
 		} = this.props;
 
-		const adNameLabel = simpleFormat(this, "things.adName");
-		const descriptionLabel = simpleFormat(this, "things.description");
-
-		let errorSnackbar = null;
 		if(controller.pageError) {
-			errorSnackbar = (
+			return (
 				<Snackbar open={true}
 					key={controller.pageError}
 					ContentProps={{
@@ -93,6 +215,18 @@ class NewAdPage extends React.Component<
 					onClose={() => controller.onCloseSnackbar()}/>
 			);
 		}
+	}
+
+	public render() : React.ReactNode {
+
+		const {
+			navbarController,
+			controller,
+			classes
+		} = this.props;
+
+		const adNameLabel = simpleFormat(this, "things.adName");
+		const descriptionLabel = simpleFormat(this, "things.description");
 
 		return (
 			<NavbarTemplate controller={navbarController}>
@@ -115,6 +249,19 @@ class NewAdPage extends React.Component<
 								maxLength: AD_NAME_MAX_LENGTH
 							}}
 						/>
+
+						<ImageUploader className={classes.uploader}
+							onDrop={controller.onDrop}
+							imageUrl={controller.imageUrl}
+							state={controller.loading ? "disabled" : "default"}
+							maxSize={MAXIMUM_AD_PICTURE_SIZE}
+							active={controller.isDraggingOver}
+							onDragEnter={() => controller.onDragEnter()}
+							onDragLeave={() => controller.onDragLeave()}/>
+
+						<div className={classes.slots}>
+							{this.renderImageSlots()}
+						</div>
 
 						<CustomTextField
 							rows={10}
@@ -142,7 +289,7 @@ class NewAdPage extends React.Component<
 					</Paper>
 				</div>
 
-				{errorSnackbar}
+				{this.renderErrorSnackbar()}
 			</NavbarTemplate>
 		)
 	}
