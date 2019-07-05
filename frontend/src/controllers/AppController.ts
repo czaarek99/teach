@@ -29,6 +29,8 @@ import { ImageService } from "../services/ImagService";
 import { IServices } from "../interfaces/services/IServices";
 import { IMyAdsPageController } from "../interfaces/controllers/pages/IMyAdsPageController";
 import { MyAdsPageController } from "./pages/MyAdsPageController";
+import { INewAdPageController } from "../interfaces/controllers/pages/INewAdPageController";
+import { NewAdPageController } from "./pages/NewAdPageController";
 
 export class AppController implements IAppController {
 
@@ -48,6 +50,7 @@ export class AppController implements IAppController {
 	private _profilePageController: IProfilePageController | null = null;
 	private _settingsPageController: ISettingsPageController | null = null;
 	private _myAdsPageController: IMyAdsPageController | null = null;
+	private _newAdPageController: INewAdPageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -167,11 +170,20 @@ export class AppController implements IAppController {
 	public get myAdsPageController() : IMyAdsPageController {
 		if(this._myAdsPageController === null) {
 			this._myAdsPageController = new MyAdsPageController(
-				this.services.adService
+				this.services.adService,
+				this.routingStore
 			);
 		}
 
 		return this._myAdsPageController;
+	}
+
+	public get newAdPageController() : INewAdPageController {
+		if(this._newAdPageController === null)  {
+			this._newAdPageController = new NewAdPageController();
+		}
+
+		return this._newAdPageController;
 	}
 
 }

@@ -16,7 +16,8 @@ import {
 	AdPage,
 	ProfilePage,
 	MyAdsPage,
-	SettingPage
+	SettingPage,
+	NewAdPage
 } from '../../pages';
 
 interface IAppProps {
@@ -74,6 +75,10 @@ class App extends React.Component<IAppProps> {
 			),
 			[Route.MY_ADS]: () => (
 				<MyAdsPage controller={controller.myAdsPageController}
+					navbarController={controller.navbarController}/>
+			),
+			[Route.NEW_AD]: () => (
+				<NewAdPage controller={controller.newAdPageController}
 					navbarController={controller.navbarController}/>
 			)
 		};

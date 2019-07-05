@@ -3,17 +3,24 @@ import { observable, action } from "mobx";
 import { IAdController } from "../../interfaces/controllers/IAdController";
 import { IAdService } from "../../interfaces/services/IAdService";
 import { HttpError, ErrorMessage } from "common-library";
+import { RouterStore } from "mobx-react-router";
+import { Route } from "../../interfaces/Routes";
 
 export class MyAdsPageController implements IMyAdsPageController {
 
 	private readonly adService: IAdService;
+	private readonly routingStore: RouterStore;
 
 	@observable public adControllers: IAdController[] = [];
 	@observable public loading = true;
 	@observable public pageError = "";
 
-	constructor(adService: IAdService) {
+	constructor(
+		adService: IAdService,
+		routingStore: RouterStore
+	) {
 		this.adService = adService;
+		this.routingStore = routingStore;
 
 		this.load();
 	}
@@ -38,6 +45,6 @@ export class MyAdsPageController implements IMyAdsPageController {
 
 	@action
 	public onNewAd() : void {
-
+		this.routingStore.push(Route.NEW_AD);
 	}
 }
