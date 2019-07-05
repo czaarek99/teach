@@ -180,7 +180,9 @@ export class AppController implements IAppController {
 
 	public get newAdPageController() : INewAdPageController {
 		if(this._newAdPageController === null)  {
-			this._newAdPageController = new NewAdPageController();
+			this._newAdPageController = new NewAdPageController(
+				this.services.adService
+			);
 		}
 
 		return this._newAdPageController;

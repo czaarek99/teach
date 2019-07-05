@@ -24,7 +24,7 @@ import {
 	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
 
-const personalValidators : ValidatorMap<IPersonalInformationModel> = {
+const validators : ValidatorMap<IPersonalInformationModel> = {
 	firstName: [
 		minLength(FIRST_NAME_MIN_LENGTH),
 		maxLength(FIRST_NAME_MAX_LENGTH)
@@ -130,7 +130,7 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 	}
 
 	private validate(key: keyof IPersonalInformationModel) : void {
-		const keyValidators = personalValidators[key];
+		const keyValidators = validators[key];
 
 		if(keyValidators !== undefined) {
 			const value = this._viewModel[key];

@@ -38,6 +38,7 @@ export class NavbarController implements INavbarController {
 	@action
 	public onNavItemClick(route: Route) : void {
 		this.routingStore.push(route);
+		this.navigationDrawerIsOpen = false;
 	}
 
 	public isSelected(route: Route) : boolean {

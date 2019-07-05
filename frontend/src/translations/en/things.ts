@@ -6,6 +6,7 @@ export default {
 	"things.password": "Password",
 	"things.firstName": "First name",
 	"things.lastName": "Last name",
+	"things.adName": "Ad name",
 	"things.zipCode": "Zip code",
 	"things.street": "Street",
 	"things.address": "Address",
