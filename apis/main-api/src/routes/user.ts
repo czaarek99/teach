@@ -51,7 +51,9 @@ router.get("/self", async (context: CustomContext) => {
 				ErrorMessage.USER_NOT_FOUND,
 				context.state.requestId
 			)
-		)
+		);
+
+		return;
 	}
 
 	context.body = resolveUser(user);

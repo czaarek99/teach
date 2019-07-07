@@ -160,7 +160,9 @@ export class AppController implements IAppController {
 	public get settingsPageController() : ISettingsPageController {
 		if(this._settingsPageController === null) {
 			this._settingsPageController = new SettingsPageController(
-				this.services.settingsService
+				this.services.settingsService,
+				this.userCache,
+				this.routingStore
 			);
 		}
 
@@ -171,7 +173,8 @@ export class AppController implements IAppController {
 		if(this._myAdsPageController === null) {
 			this._myAdsPageController = new MyAdsPageController(
 				this.services.adService,
-				this.routingStore
+				this.routingStore,
+				this.userCache
 			);
 		}
 

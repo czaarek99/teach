@@ -1,12 +1,13 @@
 import { RouterStore } from "mobx-react-router";
 import { IUserCache } from "../../util/UserCache";
-import { Route } from "../../interfaces/Routes";
 import { observable, action } from "mobx";
 import { IUserService } from "../../interfaces/services/IUserService";
 import { AddressProfileController } from "../profile/AddressProfileController";
 import { AccountDetailsProfileController } from "../profile/AccountDetailsProfileController";
 import { ProfilePictureController } from "../profile/ProfilePictureController";
 import { IImageService } from "../../interfaces/services/IImageService";
+import { HttpError, ErrorMessage } from "common-library";
+import { requireLogin } from "../../util/requireLogin";
 
 import {
 	PersonalInformationProfileController
@@ -15,7 +16,6 @@ import {
 import {
 	IProfilePageController,
 } from "../../interfaces/controllers/pages/IProfilePageController";
-import { HttpError, ErrorMessage } from "common-library";
 
 export class ProfilePageController implements IProfilePageController {
 
@@ -70,10 +70,9 @@ export class ProfilePageController implements IProfilePageController {
 		this.addressController.loadUserFromCache();
 		this.accountDetailsController.loadUserFromCache();
 
-		await this.userCache.recache();
-
-		if(!this.userCache.isLoggedIn) {
-			this.routingStore.push(Route.LOGIN);
+		const isLoggedIn = await requireLogin(this.userCache, this.routingStore);
+		if(!isLoggedIn) {
+			return;
 		}
 
 		await Promise.all([

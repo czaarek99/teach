@@ -5,11 +5,14 @@ import { IAdService } from "../../interfaces/services/IAdService";
 import { HttpError, ErrorMessage } from "common-library";
 import { RouterStore } from "mobx-react-router";
 import { Route } from "../../interfaces/Routes";
+import { IUserCache } from "../../util/UserCache";
+import { requireLogin } from "../../util/requireLogin";
 
 export class MyAdsPageController implements IMyAdsPageController {
 
 	private readonly adService: IAdService;
 	private readonly routingStore: RouterStore;
+	private readonly userCache: IUserCache;
 
 	@observable public adControllers: IAdController[] = [];
 	@observable public loading = true;
@@ -17,16 +20,23 @@ export class MyAdsPageController implements IMyAdsPageController {
 
 	constructor(
 		adService: IAdService,
-		routingStore: RouterStore
+		routingStore: RouterStore,
+		userCache: IUserCache
 	) {
 		this.adService = adService;
 		this.routingStore = routingStore;
+		this.userCache = userCache;
 
 		this.load();
 	}
 
 	@action
 	private async load() : Promise<void> {
+		const isLoggedIn = await requireLogin(this.userCache, this.routingStore);
+		if(!isLoggedIn) {
+			return;
+		}
+
 		try {
 			//const ads = await this.adService.getMyAds();
 

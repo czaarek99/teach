@@ -91,11 +91,13 @@ export class NewAdPageController implements INewAdPageController {
 	@action
 	private validate(key: keyof INewAdModel) : void {
 		if(key === "images") {
+			const errors = [];
+
 			if(this.model.images.length === 0) {
-				this.errorModel.setErrors("images", [
-					ErrorMessage.NOT_ENOUGH_AD_IMAGES
-				]);
+				errors.push(ErrorMessage.NOT_ENOUGH_AD_IMAGES);
 			}
+
+			this.errorModel.setErrors("images", errors);
 		} else {
 			const keyValidators = validators[key];
 
@@ -162,6 +164,8 @@ export class NewAdPageController implements INewAdPageController {
 					this.saveButtonState = "default";
 				})
 			} catch(error) {
+				this.saveButtonState = "error";
+
 				if(error instanceof HttpError) {
 					this.pageError = error.error;
 				} else {
@@ -186,6 +190,8 @@ export class NewAdPageController implements INewAdPageController {
 			const url = URL.createObjectURL(file);
 			this.imageUrls.push(url);
 		}
+
+		this.validate("images");
 	}
 
 	@action

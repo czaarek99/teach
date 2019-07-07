@@ -106,7 +106,18 @@ router.delete("/profile", async (context: CustomContext) => {
 
 router.patch("/ad/:id", async(context: CustomContext) => {
 
-	const params = context.request.params as unknown as ISimpleIdInput;
+	const params = context.params as unknown as ISimpleIdInput;
+
+	if(!("id" in params)) {
+		throwApiError(
+			context,
+			new HttpError(
+				400,
+				"Please provide an id",
+				context.state.requestId
+			)
+		)
+	}
 
 	const ad : Ad = await Ad.findOne({
 		where: {
@@ -162,14 +173,14 @@ router.patch("/ad/:id", async(context: CustomContext) => {
 				promises.push(unlink(oldImageFullPath));
 				promises.push(
 					adImage.update({
-						imageFileName: newImageFullPath
+						imageFileName: newFileName
 					})
 				)
 			} else {
 				bulkInserts.push({
 					adId: ad.id,
 					index: i,
-					imageFileName: newImageFullPath
+					imageFileName: newFileName
 				});
 			}
 
@@ -198,7 +209,7 @@ router.patch("/ad/:id", async(context: CustomContext) => {
 	};
 
 	context.body = output;
-	context.status = 501;
+	context.status = 200;
 });
 
 export default router;

@@ -4,3 +4,4 @@
 * dms
 * pricing information on ads
 * ad categories
+* add rootstore
