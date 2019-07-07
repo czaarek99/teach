@@ -208,6 +208,8 @@ router.patch("/ad/:id", async(context: CustomContext) => {
 		images
 	};
 
+	//TODO: Clean up unused images
+
 	context.body = output;
 	context.status = 200;
 });

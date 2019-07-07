@@ -43,7 +43,7 @@ export class EditAdPageController implements IEditAdPageController {
 	private readonly imageService: IImageService;
 	private saveButtonStateTimeout?: number;
 
-	@observable private readonly imageUrls: string[] = [];
+	@observable private readonly imageUrls = new Map<number, string>();
 
 	@observable public pageError = "";
 	@observable public saveButtonState : LoadingButtonState = "default";
@@ -77,9 +77,28 @@ export class EditAdPageController implements IEditAdPageController {
 			const id = parseInt(idString);
 
 			const ad = await this.adService.getAd(id);
+			this.model.fromOutput(ad);
+
+			for(const image of ad.images) {
+				const url = getImageUrl(image.fileName);
+				this.imageUrls.set(image.index, url);
+			}
 		}
 
 		this.loading = false;
+	}
+
+	@computed
+	private get emptySlots() : number[] {
+		const slots = [];
+
+		for(let i = 0; i < MAX_AD_PICTURE_COUNT; i++) {
+			if(!this.model.images.has(i) && !this.imageUrls.has(i)) {
+				slots.push(i);
+			}
+		}
+
+		return slots;
 	}
 
 	@action
@@ -92,8 +111,10 @@ export class EditAdPageController implements IEditAdPageController {
 	}
 
 	public getImageUrl(index: number) : string {
-		if(this.imageUrls.length > index) {
-			return this.imageUrls[index];
+		const url = this.imageUrls.get(index);
+
+		if(url) {
+			return url;
 		}
 
 		return "";
@@ -109,7 +130,7 @@ export class EditAdPageController implements IEditAdPageController {
 		if(key === "images") {
 			const errors = [];
 
-			if(this.model.images.length === 0) {
+			if(this.model.images.size === 0) {
 				errors.push(ErrorMessage.NOT_ENOUGH_AD_IMAGES);
 			}
 
@@ -167,10 +188,13 @@ export class EditAdPageController implements IEditAdPageController {
 				);
 
 				for(const image of imageOutput.images) {
-					const oldUrl = this.imageUrls[image.index];
-					URL.revokeObjectURL(oldUrl);
+					const oldUrl = this.imageUrls.get(image.index);
 
-					this.imageUrls[image.index] = getImageUrl(image.fileName);
+					if(oldUrl)  {
+						URL.revokeObjectURL(oldUrl);
+					}
+
+					this.imageUrls.set(image.index, getImageUrl(image.fileName));
 				}
 
 				this.saveButtonState = "success";
@@ -196,15 +220,19 @@ export class EditAdPageController implements IEditAdPageController {
 	public onDrop = (files: File[]) : void => {
 		this.isDraggingOver = false;
 
+		const emptySlots = this.emptySlots;
+
 		for(const file of files) {
-			if(this.model.images.length >= MAX_AD_PICTURE_COUNT) {
+			const slot = emptySlots.shift();
+
+			if(slot === undefined) {
 				break;
 			}
 
-			this.model.images.push(file);
+			this.model.images.set(slot, file);
 
 			const url = URL.createObjectURL(file);
-			this.imageUrls.push(url);
+			this.imageUrls.set(slot, url);
 		}
 
 		this.validate("images");
@@ -212,13 +240,12 @@ export class EditAdPageController implements IEditAdPageController {
 
 	@action
 	public onDeleteImage(index: number) : void {
-		if(this.model.images.length > index) {
-			this.model.images.splice(index, 1);
+		this.model.images.delete(index);
 
-			const url = this.imageUrls[index];
-			URL.revokeObjectURL(url);
-
-			this.imageUrls.splice(index, 1);
+		const imageUrl = this.imageUrls.get(index);
+		if(imageUrl) {
+			URL.revokeObjectURL(imageUrl);
+			this.imageUrls.delete(index);
 		}
 	}
 

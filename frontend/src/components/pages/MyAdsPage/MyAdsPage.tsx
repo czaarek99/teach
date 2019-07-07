@@ -74,8 +74,9 @@ class MyAdsPage extends React.Component<
 
 		const ads = controller.adControllers.map((controller: IAdController) => {
 			return (
-				<Ad controller={controller}/>
-			)
+				<Ad controller={controller}
+					key={controller.controllerId}/>
+			);
 		});
 
 		return (

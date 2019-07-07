@@ -1,18 +1,16 @@
 import { IEditAdModel } from "../interfaces/models/IEditAdModel";
 import { observable } from "mobx";
-import { IEditAdInput, IAd, MAX_AD_PICTURE_COUNT } from "common-library";
+import { IEditAdInput, IAd } from "common-library";
 
 export class EditAdModel implements IEditAdModel {
 
 	@observable public name = "";
 	@observable public description = "";
-	@observable public images : File[] = new Array(MAX_AD_PICTURE_COUNT);
+	@observable public images = new Map<number, File>();
 
 	public fromOutput(ad: IAd) : void {
 		this.name = ad.name;
 		this.description = ad.description;
-
-		new File([], "");
 	}
 
 	public toValidate() : IEditAdModel {
@@ -33,12 +31,12 @@ export class EditAdModel implements IEditAdModel {
 	public toImageInput() : FormData {
 		const formData = new FormData();
 
-		for(let i = 0; i < this.images.length; i++) {
-			const image = this.images[i];
-			formData.set(i.toString(), image);
+		for(const [key, value] of this.images.entries()) {
+			formData.set(key.toString(), value);
 		}
 
 		return formData;
 	}
+
 
 }

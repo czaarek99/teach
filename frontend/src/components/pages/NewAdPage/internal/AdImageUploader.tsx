@@ -94,14 +94,17 @@ const styles = (theme: Theme) => createStyles({
 
 	removeOverlay: {
 		position: "absolute",
-		width: "100%",
-		height: "100%",
 		opacity: 0,
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: `${theme.palette.grey[200]}aa`,
+		backgroundColor: "blue",
+		//backgroundColor: `${theme.palette.grey[200]}aa`,
 		transition: "opacity 500ms",
+		width: 40,
+		height: 40,
+		right: 0,
+		bottom: 0,
 
 		"&:hover": {
 			opacity: 1
@@ -208,6 +211,7 @@ class AdImageUploader extends React.Component<
 				<FormattedMessage id={error}/>
 			);
 		}
+
 
 		return (
 			<div>
