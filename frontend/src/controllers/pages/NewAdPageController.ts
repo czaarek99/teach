@@ -6,6 +6,7 @@ import { ErrorModel } from "../../validation/ErrorModel";
 import { ValidatorMap, validate } from "../../validation/validate";
 import { minLength, maxLength } from "../../validation/validators";
 import { LoadingButtonState } from "../../components";
+import { objectKeys } from "../../util/objectKeys";
 
 import {
 	INewAdPageController,
@@ -17,9 +18,9 @@ import {
 	AD_NAME_MAX_LENGTH,
 	AD_DESCRIPTION_MIN_LENGTH,
 	AD_DESCRIPTION_MAX_LENGTH,
-	MAX_AD_PICTURE_COUNT
+	MAX_AD_PICTURE_COUNT,
+	ErrorMessage
 } from "common-library";
-import { objectKeys } from "../../util/objectKeys";
 
 const validators : ValidatorMap<INewAdModel> = {
 	name: [
@@ -48,7 +49,8 @@ export class NewAdPageController implements INewAdPageController {
 	@observable public descriptionRows = 12;
 	@observable public errorModel = new ErrorModel<INewAdPageErrorState>({
 		name: [],
-		description: []
+		description: [],
+		images: [ErrorMessage.NOT_ENOUGH_AD_IMAGES]
 	});
 
 	constructor(adService: IAdService) {

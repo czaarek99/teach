@@ -5,6 +5,7 @@ import { LoadingButtonState } from "../../../components";
 export interface INewAdPageErrorState extends ErrorState {
 	name: string[]
 	description: string[]
+	images: string[]
 }
 
 export interface INewAdPageController {

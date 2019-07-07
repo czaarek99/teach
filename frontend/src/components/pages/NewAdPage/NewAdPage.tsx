@@ -2,7 +2,6 @@ import React from 'react';
 import InfoIcon from "@material-ui/icons/Info";
 import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 import DeleteIcon from "@material-ui/icons/Delete";
-import clsx from "clsx";
 
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { INewAdPageController } from "../../../interfaces/controllers/pages/INewAdPageController";
@@ -100,12 +99,17 @@ const styles = (theme: Theme) => createStyles({
 		marginBottom: 10
 	},
 
+	description: {
+		marginBottom: 10,
+		marginTop: 10
+	},
+
 	errorSnackbarContent: {
 		backgroundColor: theme.palette.error.dark
 	},
 
 	slots: {
-		marginBottom: 10,
+		marginBottom: 3,
 		display: "flex",
 		justifyContent: "center"
 	},
@@ -182,6 +186,10 @@ const styles = (theme: Theme) => createStyles({
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: `${theme.palette.grey[200]}aa`,
+	},
+
+	imageUploaderError: {
+		color: theme.palette.error.main
 	}
 
 });
@@ -299,11 +307,20 @@ class NewAdPage extends React.Component<
 		const {
 			navbarController,
 			controller,
-			classes
+			classes,
 		} = this.props;
 
 		const adNameLabel = simpleFormat(this, "things.adName");
 		const descriptionLabel = simpleFormat(this, "things.description");
+
+		let uploaderErrorText;
+
+		const error = controller.errorModel.getFirstKeyError("images");
+		if(error) {
+			uploaderErrorText = (
+				<FormattedMessage id={error}/>
+			);
+		}
 
 		return (
 			<NavbarTemplate controller={navbarController}>
@@ -342,9 +359,13 @@ class NewAdPage extends React.Component<
 							{this.renderImageSlots()}
 						</div>
 
+						<Typography className={classes.imageUploaderError}>
+							{uploaderErrorText}
+						</Typography>
+
 						<CustomTextField
 							rows={controller.descriptionRows}
-							className={classes.field}
+							className={classes.description}
 							multiline={true}
 							value={controller.model.description}
 							minLength={AD_DESCRIPTION_MIN_LENGTH}

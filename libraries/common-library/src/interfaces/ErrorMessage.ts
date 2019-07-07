@@ -3,7 +3,9 @@ export enum ErrorMessage {
 	UNAUTHORIZED = "error.unauthorized",
 	NOT_SET = "error.notSet",
 	BAD_UUID = "error.badUUID",
+
 	AD_NOT_FOUND = "error.adNotFound",
+	NOT_ENOUGH_AD_IMAGES = "error.notEnoughAdImages",
 
 	EMPTY = "error.empty",
 	TOO_SHORT = "error.tooShort",
