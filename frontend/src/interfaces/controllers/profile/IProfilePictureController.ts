@@ -11,7 +11,7 @@ export interface IProfilePictureController {
 	onUnmount: () => void
 	onDragEnter: () => void
 	onDragLeave: () => void
-	onDrop: (file: File) => void
+	onDrop: (file: File[]) => void
 	onSave: () => Promise<void>
 	onDelete: () => Promise<void>
 }

@@ -1,6 +1,6 @@
 import { IImageService } from "../interfaces/services/IImageService";
 import { BaseService } from "./BaseService";
-import { IProfilePictureOutput } from "common-library";
+import { IProfilePictureOutput, IAdImagesOutput } from "common-library";
 
 export class ImageService extends BaseService implements IImageService  {
 
@@ -27,6 +27,16 @@ export class ImageService extends BaseService implements IImageService  {
 
 	public async deleteImage(id: number) : Promise<void> {
 		await this.axios.delete(`/${id}`);
+	}
+
+	public async updateAdPics(formData: FormData) : Promise<IAdImagesOutput> {
+		const response = await this.axios.patch<IAdImagesOutput>("/ad", formData, {
+			headers: {
+				"Content-Type": "multipart/form-data"
+			}
+		});
+
+		return response.data;
 	}
 
 }

@@ -18,6 +18,7 @@ interface IImageUploaderProps {
 	imageUrl?: string
 	className?: string
 	multiple?: boolean
+	showOverlay?: boolean
 
 	onDrop: (file: File[]) => void
 	onDragEnter?: () => void
@@ -35,6 +36,8 @@ const styles = (theme: Theme) => createStyles({
 		outline: "none",
 		backgroundSize: "contain",
 		position: "relative",
+		backgroundRepeat: "no-repeat",
+		backgroundPosition: "center"
 	},
 
 	overlay: {
@@ -44,7 +47,7 @@ const styles = (theme: Theme) => createStyles({
 		left: 0,
 		width: "100%",
 		height: "100%",
-		backgroundColor: `${theme.palette.grey[300]}aa`,
+		backgroundColor: `${theme.palette.grey[200]}aa`,
 		transition: "opacity 500ms",
 		display: "flex",
 		justifyContent: "center",
@@ -71,7 +74,8 @@ class ImageUploader extends React.Component<
 		active: false,
 		onDragEnter: () => {},
 		onDragLeave: () => {},
-		multiple : false
+		multiple: false,
+		showOverlay: true
 	}
 
 	public render() : React.ReactNode {
@@ -86,7 +90,8 @@ class ImageUploader extends React.Component<
 			onDragEnter,
 			onDragLeave,
 			imageUrl,
-			multiple
+			multiple,
+			showOverlay
 		} = this.props;
 
 		const overlayClasses = clsx(classes.overlay, {
@@ -100,6 +105,18 @@ class ImageUploader extends React.Component<
 			dropzoneStyle = {
 				backgroundImage: `url(${imageUrl})`
 			};
+		}
+
+		let overlay: React.ReactNode;
+		if(showOverlay) {
+			overlay = (
+				<div className={overlayClasses}>
+					{imageUrl ?
+						<EditIcon fontSize="large"/> :
+						<UploadIcon fontSize="large" />
+					}
+				</div>
+			)
 		}
 
 		return (
@@ -119,12 +136,7 @@ class ImageUploader extends React.Component<
 
 						<input {...props.getInputProps()}/>
 
-						<div className={overlayClasses}>
-							{imageUrl ?
-								<EditIcon fontSize="large"/> :
-								<UploadIcon fontSize="large" />
-							}
-						</div>
+						{overlay}
 					</div>
 				)}
 			</Dropzone>

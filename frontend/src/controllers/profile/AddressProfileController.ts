@@ -27,7 +27,7 @@ import {
 	IAddressErrorState
 } from "../../interfaces/controllers/profile/IAddressProfileController";
 
-const addressValidators : ValidatorMap<AddressModel> = {
+const validators : ValidatorMap<AddressModel> = {
 	city: [
 		minLength(CITY_MIN_LENGTH),
 		maxLength(CITY_MAX_LENGTH)
@@ -95,7 +95,7 @@ export class AddressProfileController implements IAddressProfileController {
 	}
 
 	private validate(key: keyof IAddressModel) : void {
-		const keyValidators = addressValidators[key];
+		const keyValidators = validators[key];
 
 		if(keyValidators !== undefined) {
 			const value = this._viewModel[key];

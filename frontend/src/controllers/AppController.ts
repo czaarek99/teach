@@ -25,7 +25,7 @@ import { ProfilePageController } from "./pages/ProfilePageController";
 import { SettingsService } from "../services/SettingsService";
 import { ISettingsPageController } from "../interfaces/controllers/pages/ISettingsPageController";
 import { SettingsPageController } from "./pages/SettingsPageController";
-import { ImageService } from "../services/ImagService";
+import { ImageService } from "../services/ImageService";
 import { IServices } from "../interfaces/services/IServices";
 import { IMyAdsPageController } from "../interfaces/controllers/pages/IMyAdsPageController";
 import { MyAdsPageController } from "./pages/MyAdsPageController";

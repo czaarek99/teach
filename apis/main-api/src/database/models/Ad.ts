@@ -42,6 +42,6 @@ export class Ad extends Model<Ad> {
 	public description: string;
 
 	@HasMany(() => AdImage, "adId")
-	public mainImage: AdImage[];
+	public images: AdImage[];
 
 }

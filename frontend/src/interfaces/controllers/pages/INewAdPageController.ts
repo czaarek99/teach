@@ -16,9 +16,9 @@ export interface INewAdPageController {
 	readonly isDraggingOver: boolean
 	readonly loading: boolean
 	readonly imageIndex: number
+	readonly descriptionRows: number
 
 	getImageUrl: (index: number) => string
-	isImageSlotEnabled: (slotIndex: number) => boolean
 	setImageIndex: (index: number) => void
 	onDragEnter: () => void
 	onDragLeave: () => void
@@ -26,4 +26,6 @@ export interface INewAdPageController {
 	onCloseSnackbar: () => void
 	onSave: () => Promise<void>
 	onChange: (key: keyof INewAdModel, value: any) => void
+	onDeleteImage: (index: number) => void
+	onWindowResize: () => void
 }

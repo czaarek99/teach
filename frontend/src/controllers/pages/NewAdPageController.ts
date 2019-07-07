@@ -16,8 +16,10 @@ import {
 	AD_NAME_MIN_LENGTH,
 	AD_NAME_MAX_LENGTH,
 	AD_DESCRIPTION_MIN_LENGTH,
-	AD_DESCRIPTION_MAX_LENGTH
+	AD_DESCRIPTION_MAX_LENGTH,
+	MAX_AD_PICTURE_COUNT
 } from "common-library";
+import { objectKeys } from "../../util/objectKeys";
 
 const validators : ValidatorMap<INewAdModel> = {
 	name: [
@@ -33,9 +35,9 @@ const validators : ValidatorMap<INewAdModel> = {
 export class NewAdPageController implements INewAdPageController {
 
 	private readonly adService: IAdService;
+	private saveButtonStateTimeout?: number;
 
 	@observable private readonly imageUrls: string[] = [];
-	@observable private readonly adImages: File[] = [];
 
 	@observable public pageError = "";
 	@observable public saveButtonState : LoadingButtonState = "default";
@@ -43,6 +45,7 @@ export class NewAdPageController implements INewAdPageController {
 	@observable public isDraggingOver = false;
 	@observable public loading = false;
 	@observable public imageIndex = 0;
+	@observable public descriptionRows = 12;
 	@observable public errorModel = new ErrorModel<INewAdPageErrorState>({
 		name: [],
 		description: []
@@ -50,6 +53,15 @@ export class NewAdPageController implements INewAdPageController {
 
 	constructor(adService: IAdService) {
 		this.adService = adService;
+	}
+
+	@action
+	public onWindowResize = () : void => {
+		if(window.innerWidth > 1400) {
+			this.descriptionRows = 16;
+		} else {
+			this.descriptionRows = 12;
+		}
 	}
 
 	public getImageUrl(index: number) : string {
@@ -94,21 +106,46 @@ export class NewAdPageController implements INewAdPageController {
 
 	@action
 	public async onSave() : Promise<void> {
+		clearTimeout(this.saveButtonStateTimeout);
 
+		const toValidate = this.model.toValidate();
+		for(const key of objectKeys(toValidate)) {
+			this.validate(key);
+		}
+
+		if(this.errorModel.hasErrors()) {
+			this.saveButtonState = "error";
+		} else {
+			this.saveButtonState = "loading";
+		}
 	}
 
 	@action
 	public onDrop = (files: File[]) : void => {
-		this.adImages[this.imageIndex] = file;
+		this.isDraggingOver = false;
 
-		if(this.imageUrls.length > this.imageIndex) {
-			const oldUrl = this.imageUrls[this.imageIndex];
-			if(oldUrl) {
-				URL.revokeObjectURL(oldUrl);
+		for(const file of files) {
+			if(this.model.images.length >= MAX_AD_PICTURE_COUNT) {
+				break;
 			}
-		}
 
-		this.imageUrls[this.imageIndex] = URL.createObjectURL(file);
+			this.model.images.push(file);
+
+			const url = URL.createObjectURL(file);
+			this.imageUrls.push(url);
+		}
+	}
+
+	@action
+	public onDeleteImage(index: number) : void {
+		if(this.model.images.length > index) {
+			this.model.images.splice(index, 1);
+
+			const url = this.imageUrls[index];
+			URL.revokeObjectURL(url);
+
+			this.imageUrls.splice(index, 1);
+		}
 	}
 
 	@action
@@ -120,9 +157,4 @@ export class NewAdPageController implements INewAdPageController {
 	public onCloseSnackbar() : void {
 		this.pageError = "";
 	}
-
-	public isImageSlotEnabled(slotIndex: number) : boolean {
-		return this.adImages.length >= slotIndex;
-	}
-
 }

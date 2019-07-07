@@ -16,7 +16,12 @@ import {
 	IEdge,
 	HttpError,
 	IAdListInput,
-	ISimpleIdInput
+	ISimpleIdInput,
+	AD_NAME_MIN_LENGTH,
+	AD_NAME_MAX_LENGTH,
+	AD_DESCRIPTION_MIN_LENGTH,
+	AD_DESCRIPTION_MAX_LENGTH,
+	INewAdInput
 } from "common-library";
 
 const router = Router();
@@ -108,7 +113,9 @@ router.get("/:id", {
 	context.status = 200;
 });
 
-router.get("/my", authenticationMiddleware, async(context: CustomContext) => {
+router.use(authenticationMiddleware);
+
+router.get("/my", async(context: CustomContext) => {
 
 	const ads : Ad[] = await Ad.findAll<Ad>({
 		where: {
@@ -125,6 +132,52 @@ router.get("/my", authenticationMiddleware, async(context: CustomContext) => {
 	};
 
 	context.body = edge;
+	context.status = 200;
+});
+
+router.put("/", {
+	validate: {
+		body: {
+			name: Joi.string().min(AD_NAME_MIN_LENGTH).max(AD_NAME_MAX_LENGTH).required(),
+			description: Joi.string().min(AD_DESCRIPTION_MIN_LENGTH).max(AD_DESCRIPTION_MAX_LENGTH).required()
+		},
+		type: "json"
+	}
+}, async(context: CustomContext) => {
+
+	const input = context.request.body as INewAdInput;
+
+	await Ad.create({
+		name: input.name,
+		description: input.description,
+		userId: context.state.session.userId
+	});
+
+	context.status = 200;
+});
+
+router.patch("/:id", {
+	validate: {
+		body: {
+			name: Joi.string().min(AD_NAME_MIN_LENGTH).max(AD_NAME_MAX_LENGTH).optional(),
+			description: Joi.string().min(AD_DESCRIPTION_MIN_LENGTH).max(AD_DESCRIPTION_MAX_LENGTH).optional()
+		},
+		params: {
+			id: Joi.number().min(0).required()
+		},
+		type: "json"
+	},
+}, async(context: CustomContext) => {
+
+	const input = context.request.body as Partial<INewAdInput>;
+	const paramsInput = context.request.params as unknown as ISimpleIdInput;
+
+	await Ad.update(input, {
+		where: {
+			id: paramsInput.id
+		}
+	});
+
 	context.status = 200;
 });
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import InfoIcon from "@material-ui/icons/Info";
 import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternate";
+import DeleteIcon from "@material-ui/icons/Delete";
 import clsx from "clsx";
 
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
@@ -33,13 +34,17 @@ import {
 	withStyles,
 	Paper,
 	Snackbar,
-	Button
+	Button,
+	Typography
 } from "@material-ui/core";
 
 const MEDIUM_BREAKPOINT = "@media screen and (min-width: 400px)";
 const LARGE_BREAKPOINT = "@media screen and (min-width: 560px)";
-const X_LARGE_BREAKPOINT = "@media screen and (min-width: 950px)";
+const X_LARGE_BREAKPOINT = "@media screen and (min-width: 980px)";
 const XX_LARGE_BREAKPOINT = "@media screen and (min-width: 1400px)";
+
+const PAPER_PADDING = 10;
+const UPLOADER_BORDER = 2;
 
 const styles = (theme: Theme) => createStyles({
 	content: {
@@ -48,45 +53,46 @@ const styles = (theme: Theme) => createStyles({
 	},
 
 	paper: {
-		padding: 10,
+		padding: PAPER_PADDING,
 
 		width: 300,
 
 		[MEDIUM_BREAKPOINT]: {
-			width: 380
+			width: 380 + PAPER_PADDING * 2 + UPLOADER_BORDER * 2
 		},
 
 		[LARGE_BREAKPOINT]: {
-			width: 460
+			width: 430 + PAPER_PADDING * 2 + UPLOADER_BORDER * 2
 		},
 
 		[X_LARGE_BREAKPOINT]: {
-			width: 600
+			width: 600 + PAPER_PADDING * 2 + UPLOADER_BORDER * 2
 		},
 
 		[XX_LARGE_BREAKPOINT]: {
-			width: 800
+			width: 800 + PAPER_PADDING * 2 + UPLOADER_BORDER * 2
 		}
 	},
 
 	uploader: {
 		height: 150,
-		marginBottom: 10,
+		borderBottomLeftRadius: 0,
+		borderBottomRightRadius: 0,
 
 		[MEDIUM_BREAKPOINT]: {
-			height: 190
+			height: 190 + UPLOADER_BORDER * 2
 		},
 
 		[LARGE_BREAKPOINT]: {
-			height: 230
+			height: 215 + UPLOADER_BORDER * 2
 		},
 
 		[X_LARGE_BREAKPOINT]: {
-			height: 300
+			height: 300 + UPLOADER_BORDER * 2
 		},
 
 		[XX_LARGE_BREAKPOINT]: {
-			height: 400
+			height: 400 + UPLOADER_BORDER * 2
 		}
 	},
 
@@ -101,23 +107,38 @@ const styles = (theme: Theme) => createStyles({
 	slots: {
 		marginBottom: 10,
 		display: "flex",
-		justifyContent: "space-evenly"
+		justifyContent: "center"
 	},
 
 	imageSlot: {
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
-		borderStyle: "dotted",
-		borderColor: theme.palette.grey[200],
-		width: 50,
-		height: 50,
+		borderStyle: "solid",
+		borderColor: theme.palette.primary.main,
+		borderWidth: "0 0 2px 2px",
+		width: 120,
+		height: 60,
 		position: "relative",
 		cursor: "pointer",
 
+		"&:first-child": {
+			borderBottomLeftRadius: 3,
+		},
+
+		"&:last-child": {
+			borderRightWidth: 2,
+			borderBottomRightRadius: 2
+		},
+
 		[MEDIUM_BREAKPOINT]: {
-			width: 60,
-			height: 60,
+			width: 140,
+			height: 70,
+		},
+
+		[XX_LARGE_BREAKPOINT]: {
+			width: 200,
+			height: 100
 		}
 	},
 
@@ -126,11 +147,41 @@ const styles = (theme: Theme) => createStyles({
 		cursor: "not-allowed"
 	},
 
-	slotOverlay: {
+	imageOverlay: {
 		position: "absolute",
 		width: "100%",
 		height: "100%",
 		backgroundSize: "contain",
+		backgroundRepeat: "no-repeat",
+		backgroundPosition: "center",
+	},
+
+	removeOverlay: {
+		position: "absolute",
+		width: "100%",
+		height: "100%",
+		opacity: 0,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: `${theme.palette.grey[200]}aa`,
+		transition: "opacity 500ms",
+
+		"&:hover": {
+			opacity: 1
+		}
+	},
+
+	numberOverlay: {
+		position: "absolute",
+		bottom: 0,
+		left: 0,
+		height: 20,
+		width: 20,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: `${theme.palette.grey[200]}aa`,
 	}
 
 });
@@ -147,6 +198,16 @@ class NewAdPage extends React.Component<
 	WithStyles<typeof styles>
 > {
 
+	public componentDidMount() : void {
+		const onWindowResize = this.props.controller.onWindowResize;
+		window.addEventListener("resize", onWindowResize);
+		onWindowResize();
+	}
+
+	public componentWillUnmount() : void {
+		window.removeEventListener("resize", this.props.controller.onWindowResize);
+	}
+
 	private renderImageSlots() : React.ReactNodeArray {
 
 		const {
@@ -158,27 +219,43 @@ class NewAdPage extends React.Component<
 
 		for(let i = 0; i < MAX_AD_PICTURE_COUNT; i++) {
 
-			const className = clsx(classes.imageSlot, {
-				[classes.disabledSlot]: !controller.isImageSlotEnabled(i)
-			});
-
-			let style;
+			let overlays;
 			const imageUrl = controller.getImageUrl(i);
+
 			if(imageUrl) {
-				style = {
+				const style = {
 					backgroundImage: `url(${imageUrl})`
-				}
+				};
+
+				overlays = (
+					<React.Fragment>
+						<div className={classes.imageOverlay}
+							style={style}/>
+
+						<div className={classes.removeOverlay}
+							onClick={() => controller.onDeleteImage(i)}>
+
+							<DeleteIcon fontSize="large"/>
+						</div>
+					</React.Fragment>
+				);
+
 			}
 
 			slots.push(
-				<div className={className}
+				<div className={classes.imageSlot}
 					key={i}
 					onClick={() => controller.setImageIndex(i)}>
 
 					<AddPhotoIcon fontSize="large"/>
 
-					<div className={classes.slotOverlay}
-						style={{ backgroundImage: controller.getImageUrl(i)}}/>
+					{overlays}
+
+					<div className={classes.numberOverlay}>
+						<Typography>
+							{i+1}
+						</Typography>
+					</div>
 				</div>
 			);
 		}
@@ -255,7 +332,9 @@ class NewAdPage extends React.Component<
 							imageUrl={controller.imageUrl}
 							state={controller.loading ? "disabled" : "default"}
 							maxSize={MAXIMUM_AD_PICTURE_SIZE}
+							multiple={true}
 							active={controller.isDraggingOver}
+							showOverlay={!controller.imageUrl}
 							onDragEnter={() => controller.onDragEnter()}
 							onDragLeave={() => controller.onDragLeave()}/>
 
@@ -264,7 +343,7 @@ class NewAdPage extends React.Component<
 						</div>
 
 						<CustomTextField
-							rows={10}
+							rows={controller.descriptionRows}
 							className={classes.field}
 							multiline={true}
 							value={controller.model.description}
