@@ -55,6 +55,6 @@ export class MyAdsPageController implements IMyAdsPageController {
 
 	@action
 	public onNewAd() : void {
-		this.routingStore.push(Route.NEW_AD);
+		this.routingStore.push(Route.EDIT_AD);
 	}
 }

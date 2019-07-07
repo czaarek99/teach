@@ -21,8 +21,8 @@ import {
 	AD_NAME_MAX_LENGTH,
 	AD_DESCRIPTION_MIN_LENGTH,
 	AD_DESCRIPTION_MAX_LENGTH,
-	INewAdInput,
-	ISimpleIdOutput
+	ISimpleIdOutput,
+	IEditAdInput
 } from "common-library";
 
 const router = Router();
@@ -146,7 +146,7 @@ router.put("/", {
 	}
 }, async(context: CustomContext) => {
 
-	const input = context.request.body as INewAdInput;
+	const input = context.request.body as IEditAdInput;
 
 	const ad : Ad = await Ad.create({
 		name: input.name,
@@ -175,7 +175,7 @@ router.patch("/:id", {
 	},
 }, async(context: CustomContext) => {
 
-	const input = context.request.body as Partial<INewAdInput>;
+	const input = context.request.body as Partial<IEditAdInput>;
 	const paramsInput = context.request.params as unknown as ISimpleIdInput;
 
 	await Ad.update(input, {

@@ -29,8 +29,8 @@ import { ImageService } from "../services/ImageService";
 import { IServices } from "../interfaces/services/IServices";
 import { IMyAdsPageController } from "../interfaces/controllers/pages/IMyAdsPageController";
 import { MyAdsPageController } from "./pages/MyAdsPageController";
-import { INewAdPageController } from "../interfaces/controllers/pages/INewAdPageController";
-import { NewAdPageController } from "./pages/NewAdPageController";
+import { IEditAdPageController } from "../interfaces/controllers/pages/INewAdPageController";
+import { EditAdPageController } from "./pages/EditAdPageController";
 
 export class AppController implements IAppController {
 
@@ -50,7 +50,7 @@ export class AppController implements IAppController {
 	private _profilePageController: IProfilePageController | null = null;
 	private _settingsPageController: ISettingsPageController | null = null;
 	private _myAdsPageController: IMyAdsPageController | null = null;
-	private _newAdPageController: INewAdPageController | null = null;
+	private _editAdPageController: IEditAdPageController | null = null;
 
 	constructor(routingStore: RouterStore) {
 		this.routingStore = routingStore;
@@ -181,15 +181,15 @@ export class AppController implements IAppController {
 		return this._myAdsPageController;
 	}
 
-	public get newAdPageController() : INewAdPageController {
-		if(this._newAdPageController === null)  {
-			this._newAdPageController = new NewAdPageController(
+	public get editAdPageController() : IEditAdPageController {
+		if(this._editAdPageController === null)  {
+			this._editAdPageController = new EditAdPageController(
 				this.services.adService,
 				this.services.imageService
 			);
 		}
 
-		return this._newAdPageController;
+		return this._editAdPageController;
 	}
 
 }

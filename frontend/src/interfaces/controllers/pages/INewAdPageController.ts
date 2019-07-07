@@ -1,16 +1,16 @@
-import { INewAdModel } from "../../models/INewAdModel";
+import { IEditAdModel } from "../../models/IEditAdModel";
 import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
 import { LoadingButtonState } from "../../../components";
 
-export interface INewAdPageErrorState extends ErrorState {
+export interface IEditAdPageErrorState extends ErrorState {
 	name: string[]
 	description: string[]
 	images: string[]
 }
 
-export interface INewAdPageController {
-	readonly model: INewAdModel;
-	readonly errorModel: ErrorModel<INewAdPageErrorState>
+export interface IEditAdPageController {
+	readonly model: IEditAdModel;
+	readonly errorModel: ErrorModel<IEditAdPageErrorState>
 	readonly saveButtonState: LoadingButtonState
 	readonly pageError: string
 	readonly currentImageUrl: string
@@ -26,7 +26,7 @@ export interface INewAdPageController {
 	onDrop: (files: File[]) => void
 	onCloseSnackbar: () => void
 	onSave: () => Promise<void>
-	onChange: (key: keyof INewAdModel, value: any) => void
+	onChange: (key: keyof IEditAdModel, value: any) => void
 	onDeleteImage: (index: number) => void
 	onWindowResize: () => void
 }

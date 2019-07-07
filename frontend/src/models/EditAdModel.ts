@@ -1,14 +1,14 @@
-import { INewAdModel } from "../interfaces/models/INewAdModel";
+import { IEditAdModel } from "../interfaces/models/IEditAdModel";
 import { observable } from "mobx";
-import { INewAdInput } from "common-library";
+import { IEditAdInput } from "common-library";
 
-export class NewAdModel implements INewAdModel {
+export class EditAdModel implements IEditAdModel {
 
 	@observable public name = "";
 	@observable public description = "";
 	@observable public images : File[] = [];
 
-	public toValidate() : INewAdModel {
+	public toValidate() : IEditAdModel {
 		return {
 			name: this.name,
 			description: this.description,
@@ -16,7 +16,7 @@ export class NewAdModel implements INewAdModel {
 		};
 	}
 
-	public toInput() : INewAdInput {
+	public toInput() : IEditAdInput {
 		return {
 			name: this.name,
 			description: this.description

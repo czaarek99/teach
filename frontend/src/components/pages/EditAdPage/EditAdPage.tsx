@@ -3,7 +3,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import AdImageUploader from "./internal/AdImageUploader";
 
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
-import { INewAdPageController } from "../../../interfaces/controllers/pages/INewAdPageController";
+import { IEditAdPageController } from "../../../interfaces/controllers/pages/INewAdPageController";
 import { observer } from "mobx-react";
 import { NavbarTemplate } from "../../templates";
 import { CustomTextField, LoadingButton } from "../../molecules";
@@ -84,11 +84,11 @@ const styles = (theme: Theme) => createStyles({
 
 interface INewAdPageProps {
 	navbarController: INavbarController
-	controller: INewAdPageController
+	controller: IEditAdPageController
 }
 
 @observer
-class NewAdPage extends React.Component<
+class EditAdPage extends React.Component<
 	INewAdPageProps &
 	InjectedIntlProps &
 	WithStyles<typeof styles>
@@ -201,4 +201,4 @@ class NewAdPage extends React.Component<
 	}
 }
 
-export default withStyles(styles)(injectIntl(NewAdPage));
+export default withStyles(styles)(injectIntl(EditAdPage));

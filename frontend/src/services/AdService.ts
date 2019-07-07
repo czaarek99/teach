@@ -5,8 +5,8 @@ import {
 	IPagination,
 	IEdge,
 	IAd,
-	INewAdInput,
-	ISimpleIdOutput
+	ISimpleIdOutput,
+	IEditAdInput
 } from "common-library";
 
 export class AdService extends BaseService implements IAdService {
@@ -37,12 +37,12 @@ export class AdService extends BaseService implements IAdService {
 		return response.data;
 	}
 
-	public async createAd(input: INewAdInput) : Promise<ISimpleIdOutput> {
+	public async createAd(input: IEditAdInput) : Promise<ISimpleIdOutput> {
 		const response = await this.axios.put<ISimpleIdOutput>("/", input);
 		return response.data;
 	}
 
-	public async updateAd(id: number, changes: Partial<INewAdInput>) : Promise<void> {
+	public async updateAd(id: number, changes: Partial<IEditAdInput>) : Promise<void> {
 		await this.axios.patch("/" + id, changes);
 	}
 

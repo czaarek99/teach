@@ -8,4 +8,4 @@ export * from "./IPersonalInput";
 export * from "./IPasswordInput";
 export * from "./IManySettingsInput";
 export * from "./ISimpleStringIdInput";
-export * from "./INewAdInput";
+export * from "./IEditAdInput";

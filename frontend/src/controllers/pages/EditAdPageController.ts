@@ -1,6 +1,6 @@
-import { INewAdModel } from "../../interfaces/models/INewAdModel";
+import { IEditAdModel } from "../../interfaces/models/IEditAdModel";
 import { observable, action, computed } from "mobx";
-import { NewAdModel } from "../../models/NewAdModel";
+import { EditAdModel } from "../../models/EditAdModel";
 import { IAdService } from "../../interfaces/services/IAdService";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { ValidatorMap, validate } from "../../validation/validate";
@@ -8,10 +8,12 @@ import { minLength, maxLength } from "../../validation/validators";
 import { LoadingButtonState } from "../../components";
 import { objectKeys } from "../../util/objectKeys";
 import { IImageService } from "../../interfaces/services/IImageService";
+import { getImageUrl } from "../../util/imageAPI";
+import { successTimeout } from "../../util/successTimeout";
 
 import {
-	INewAdPageController,
-	INewAdPageErrorState
+	IEditAdPageController,
+	IEditAdPageErrorState
 } from "../../interfaces/controllers/pages/INewAdPageController";
 
 import {
@@ -23,10 +25,8 @@ import {
 	ErrorMessage,
 	HttpError
 } from "common-library";
-import { getImageUrl } from "../../util/imageAPI";
-import { successTimeout } from "../../util/successTimeout";
 
-const validators : ValidatorMap<INewAdModel> = {
+const validators : ValidatorMap<IEditAdModel> = {
 	name: [
 		minLength(AD_NAME_MIN_LENGTH),
 		maxLength(AD_NAME_MAX_LENGTH)
@@ -37,7 +37,7 @@ const validators : ValidatorMap<INewAdModel> = {
 	]
 }
 
-export class NewAdPageController implements INewAdPageController {
+export class EditAdPageController implements IEditAdPageController {
 
 	private readonly adService: IAdService;
 	private readonly imageService: IImageService;
@@ -47,12 +47,12 @@ export class NewAdPageController implements INewAdPageController {
 
 	@observable public pageError = "";
 	@observable public saveButtonState : LoadingButtonState = "default";
-	@observable public model = new NewAdModel()
+	@observable public model = new EditAdModel()
 	@observable public isDraggingOver = false;
 	@observable public loading = false;
 	@observable public imageIndex = 0;
 	@observable public descriptionRows = 12;
-	@observable public errorModel = new ErrorModel<INewAdPageErrorState>({
+	@observable public errorModel = new ErrorModel<IEditAdPageErrorState>({
 		name: [],
 		description: [],
 		images: []
@@ -89,7 +89,7 @@ export class NewAdPageController implements INewAdPageController {
 	}
 
 	@action
-	private validate(key: keyof INewAdModel) : void {
+	private validate(key: keyof IEditAdModel) : void {
 		if(key === "images") {
 			const errors = [];
 
@@ -109,7 +109,7 @@ export class NewAdPageController implements INewAdPageController {
 	}
 
 	@action
-	public onChange(key: keyof INewAdModel, value: any) : void {
+	public onChange(key: keyof IEditAdModel, value: any) : void {
 		this.model[key] = value;
 
 		this.validate(key);

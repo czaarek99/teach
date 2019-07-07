@@ -1,4 +1,4 @@
-export interface INewAdInput {
+export interface IEditAdInput {
 	name: string
 	description: string
 }

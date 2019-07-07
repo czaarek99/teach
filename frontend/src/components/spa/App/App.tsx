@@ -77,8 +77,8 @@ class App extends React.Component<IAppProps> {
 				<MyAdsPage controller={controller.myAdsPageController}
 					navbarController={controller.navbarController}/>
 			),
-			[Route.NEW_AD]: () => (
-				<NewAdPage controller={controller.newAdPageController}
+			[Route.EDIT_AD]: () => (
+				<NewAdPage controller={controller.editAdPageController}
 					navbarController={controller.navbarController}/>
 			)
 		};
