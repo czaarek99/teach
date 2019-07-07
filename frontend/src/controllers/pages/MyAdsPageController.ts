@@ -4,13 +4,14 @@ import { IAdController } from "../../interfaces/controllers/IAdController";
 import { IAdService } from "../../interfaces/services/IAdService";
 import { HttpError, ErrorMessage, MAX_USER_AD_COUNT } from "common-library";
 import { RouterStore } from "mobx-react-router";
-import { Route } from "../../interfaces/Routes";
 import { IUserCache } from "../../util/UserCache";
 import { requireLogin } from "../../util/requireLogin";
 import { AdController } from "../AdController";
+import { IAppController } from "../../interfaces/controllers/IAppController";
 
 export class MyAdsPageController implements IMyAdsPageController {
 
+	private readonly parent: IAppController;
 	private readonly adService: IAdService;
 	private readonly routingStore: RouterStore;
 	private readonly userCache: IUserCache;
@@ -21,10 +22,12 @@ export class MyAdsPageController implements IMyAdsPageController {
 	@observable public canAdd = false;
 
 	constructor(
+		parent: IAppController,
 		adService: IAdService,
 		routingStore: RouterStore,
 		userCache: IUserCache
 	) {
+		this.parent = parent;
 		this.adService = adService;
 		this.routingStore = routingStore;
 		this.userCache = userCache;
@@ -63,6 +66,6 @@ export class MyAdsPageController implements IMyAdsPageController {
 
 	@action
 	public onNewAd() : void {
-		this.routingStore.push(Route.EDIT_AD);
+		this.parent.onNewAd();
 	}
 }

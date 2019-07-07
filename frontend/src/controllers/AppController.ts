@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, action } from "mobx";
 import { RouterStore } from "mobx-react-router";
 import { IAppController } from "../interfaces/controllers/IAppController";
 import { ILoginPageController } from "../interfaces/controllers/pages/ILoginPageController";
@@ -172,6 +172,7 @@ export class AppController implements IAppController {
 	public get myAdsPageController() : IMyAdsPageController {
 		if(this._myAdsPageController === null) {
 			this._myAdsPageController = new MyAdsPageController(
+				this,
 				this.services.adService,
 				this.routingStore,
 				this.userCache
@@ -190,6 +191,12 @@ export class AppController implements IAppController {
 		}
 
 		return this._editAdPageController;
+	}
+
+	@action
+	public onNewAd() : void {
+		this._editAdPageController = null;
+		this.routingStore.push(Route.EDIT_AD);
 	}
 
 }

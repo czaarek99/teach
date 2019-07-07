@@ -30,6 +30,7 @@ export class EditAdModel implements IEditAdModel {
 
 	public toImageInput() : FormData {
 		const formData = new FormData();
+		formData.set("test", "test");
 
 		for(const [key, value] of this.images.entries()) {
 			formData.set(key.toString(), value);

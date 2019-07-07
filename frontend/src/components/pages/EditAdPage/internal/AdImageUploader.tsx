@@ -75,6 +75,10 @@ const styles = (theme: Theme) => createStyles({
 		[XX_LARGE_BREAKPOINT]: {
 			width: 200,
 			height: 100
+		},
+
+		"&:hover $removeOverlay": {
+			opacity: 1
 		}
 	},
 
@@ -94,26 +98,25 @@ const styles = (theme: Theme) => createStyles({
 
 	removeOverlay: {
 		position: "absolute",
-		width: "100%",
-		height: "100%",
 		opacity: 0,
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: `${theme.palette.grey[200]}aa`,
 		transition: "opacity 500ms",
-
-		"&:hover": {
-			opacity: 1
-		}
+		width: 25,
+		height: 25,
+		bottom: 0,
+		right: 0,
+		cursor: ""
 	},
 
 	numberOverlay: {
 		position: "absolute",
 		bottom: 0,
 		left: 0,
-		height: 20,
-		width: 20,
+		height: 25,
+		width: 25,
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
@@ -165,7 +168,7 @@ class AdImageUploader extends React.Component<
 						<div className={classes.removeOverlay}
 							onClick={() => controller.onDeleteImage(i)}>
 
-							<DeleteIcon fontSize="large"/>
+							<DeleteIcon />
 						</div>
 					</React.Fragment>
 				);

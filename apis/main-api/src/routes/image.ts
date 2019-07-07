@@ -104,6 +104,10 @@ router.delete("/profile", async (context: CustomContext) => {
 
 });
 
+router.delete("/ad/:id", async(context: CustomContext) => {
+
+})
+
 router.patch("/ad/:id", async(context: CustomContext) => {
 
 	const params = context.params as unknown as ISimpleIdInput;
