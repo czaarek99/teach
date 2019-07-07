@@ -1,4 +1,5 @@
 import { ITeacher } from "./ITeacher";
+import { IAdImage } from "./IAdImage";
 
 export interface IAd {
 	teacher: ITeacher
@@ -6,6 +7,6 @@ export interface IAd {
 	id: number
 	name: string
 	description: string
-	imageFileName: string
 	publicationDate: Date
+	images: IAdImage[]
 }

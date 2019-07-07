@@ -12,6 +12,7 @@ export class AdPageController implements IAdPageController {
 
 	@observable public ad: IAd | null = null;
 	@observable public errorMessage = "";
+	@observable public carouselStep = 0;
 
 	constructor(adService: IAdService, routingStore: RouterStore) {
 		this.adService = adService;
@@ -23,7 +24,6 @@ export class AdPageController implements IAdPageController {
 	@action
 	private async load() : Promise<void> {
 		const searchParams = new URLSearchParams(window.location.search);
-
 		const idString = searchParams.get("adId");
 
 		if(!idString) {
@@ -58,6 +58,16 @@ export class AdPageController implements IAdPageController {
 	@action
 	public closeSnackbar() : void {
 		this.errorMessage = "";
+	}
+
+	@action
+	public onCarouselForward() : void {
+		this.carouselStep++;
+	}
+
+	@action
+	public onCarouselBack() : void {
+		this.carouselStep--;
 	}
 
 }

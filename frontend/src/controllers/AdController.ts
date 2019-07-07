@@ -1,9 +1,10 @@
 import { IAdController } from "../interfaces/controllers/IAdController";
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { v4 } from "uuid";
 import { RouterStore } from "mobx-react-router";
 import { Route } from "../interfaces/Routes";
 import { IAd } from "common-library";
+import { getImageUrl } from "../util/imageAPI";
 
 export class AdController implements IAdController {
 
@@ -30,6 +31,15 @@ export class AdController implements IAdController {
 			this.routingStore.push(`${Route.AD}?${params}`);
 		}
 
+	}
+
+	@computed
+	public get mainImage() : string {
+		if(this.ad && this.ad.images.length > 0) {
+			return getImageUrl(this.ad.images[0].fileName);
+		}
+
+		return "";
 	}
 
 }

@@ -151,7 +151,7 @@ export class Ad extends React.Component<
 
 			image = (
 				<CardMedia component="img"
-					image={getImageUrl(ad.imageFileName)}
+					image={controller.mainImage}
 					className={classes.image}/>
 			);
 

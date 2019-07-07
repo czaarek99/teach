@@ -1,12 +1,19 @@
 import { IEditAdModel } from "../interfaces/models/IEditAdModel";
 import { observable } from "mobx";
-import { IEditAdInput } from "common-library";
+import { IEditAdInput, IAd, MAX_AD_PICTURE_COUNT } from "common-library";
 
 export class EditAdModel implements IEditAdModel {
 
 	@observable public name = "";
 	@observable public description = "";
-	@observable public images : File[] = [];
+	@observable public images : File[] = new Array(MAX_AD_PICTURE_COUNT);
+
+	public fromOutput(ad: IAd) : void {
+		this.name = ad.name;
+		this.description = ad.description;
+
+		new File([], "");
+	}
 
 	public toValidate() : IEditAdModel {
 		return {

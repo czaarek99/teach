@@ -9,6 +9,8 @@ export default {
 	"actions.forgotPassword": "Forgot password?",
 	"actions.changePassword": "Change password",
 	"actions.goBackToBrowse": "Go back to browsing",
+	"actions.back": "Back",
+	"actions.next": "Next",
 	"actions.save": "Save",
 	"actions.reset": "Reset",
 	"actions.change": "Change",

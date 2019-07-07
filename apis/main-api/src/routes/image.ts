@@ -16,8 +16,8 @@ import {
 	IProfilePictureOutput,
 	MAX_AD_PICTURE_COUNT,
 	ISimpleIdInput,
-	IAdImageOutput,
-	IAdImagesOutput
+	IAdImagesOutput,
+	IAdImage
 } from "common-library";
 
 type AdImageInsert = Pick<AdImage, "adId" | "imageFileName" | "index">;
@@ -197,7 +197,7 @@ router.patch("/ad/:id", async(context: CustomContext) => {
 		}
 	});
 
-	const images : IAdImageOutput[] = dbAdImages.map((adImage: AdImage) => {
+	const images : IAdImage[] = dbAdImages.map((adImage: AdImage) => {
 		return {
 			index: adImage.index,
 			fileName: adImage.imageFileName

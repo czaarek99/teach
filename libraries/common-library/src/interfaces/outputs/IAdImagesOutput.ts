@@ -1,8 +1,5 @@
-export interface IAdImageOutput {
-	index: number
-	fileName: string
-}
+import { IAdImage } from "../models";
 
 export interface IAdImagesOutput {
-	images: IAdImageOutput[]
+	images: IAdImage[]
 }

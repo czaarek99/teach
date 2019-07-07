@@ -49,7 +49,7 @@ export class EditAdPageController implements IEditAdPageController {
 	@observable public saveButtonState : LoadingButtonState = "default";
 	@observable public model = new EditAdModel()
 	@observable public isDraggingOver = false;
-	@observable public loading = false;
+	@observable public loading = true;
 	@observable public imageIndex = 0;
 	@observable public descriptionRows = 12;
 	@observable public errorModel = new ErrorModel<IEditAdPageErrorState>({
@@ -64,6 +64,22 @@ export class EditAdPageController implements IEditAdPageController {
 	) {
 		this.adService = adService;
 		this.imageService = imageService;
+
+		this.load();
+	}
+
+	@action
+	private async load() : Promise<void> {
+		const searchParams = new URLSearchParams(window.location.search);
+		const idString = searchParams.get("adId");
+
+		if(idString) {
+			const id = parseInt(idString);
+
+			const ad = await this.adService.getAd(id);
+		}
+
+		this.loading = false;
 	}
 
 	@action

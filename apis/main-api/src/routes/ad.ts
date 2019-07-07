@@ -22,7 +22,8 @@ import {
 	AD_DESCRIPTION_MIN_LENGTH,
 	AD_DESCRIPTION_MAX_LENGTH,
 	ISimpleIdOutput,
-	IEditAdInput
+	IEditAdInput,
+	IAdImage
 } from "common-library";
 
 const router = Router();
@@ -32,14 +33,20 @@ function resolveDatabaseAd(ad: Ad) : IAd {
 
 	const teacher = resolveTeacher(user);
 
+	const images : IAdImage[] = ad.images.map((dbImage: AdImage) => {
+		return {
+			index: dbImage.index,
+			fileName: dbImage.imageFileName
+		}
+	});
+
 	return {
 		teacher,
 		id: ad.id,
 		name: ad.name,
 		description: ad.description,
-		//imageFileName: ad.mainImage.imageFileName,
-		imageFileName: "ad.png",
-		publicationDate: ad.createdAt
+		publicationDate: ad.createdAt,
+		images,
 	};
 }
 

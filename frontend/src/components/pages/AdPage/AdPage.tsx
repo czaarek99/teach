@@ -1,5 +1,6 @@
 import React from 'react';
 import Skeleton from "react-loading-skeleton";
+import AdCarousel from "./internal/AdCarousel";
 
 import { IAdPageController } from "../../../interfaces/controllers/pages/IAdPageController";
 import { NavbarTemplate } from "../../templates";
@@ -10,7 +11,6 @@ import { observer } from "mobx-react";
 
 import {
 	Card,
-	CardMedia,
 	Theme,
 	createStyles,
 	WithStyles,
@@ -149,8 +149,7 @@ class AdPage extends React.Component<
 
 		} else {
 			imageComponent = (
-				<CardMedia component="img"
-					image={getImageUrl(model.imageFileName)}/>
+				<AdCarousel controller={controller}/>
 			);
 
 			if(model.teacher.avatarFileName) {
