@@ -1,5 +1,5 @@
-* ability to create ad in ui
-
+* edit ads + myadspage
+* edit button on own ads
 * decide on money handling
 * dms
 * pricing information on ads
