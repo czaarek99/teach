@@ -13,7 +13,7 @@ export interface INewAdPageController {
 	readonly errorModel: ErrorModel<INewAdPageErrorState>
 	readonly saveButtonState: LoadingButtonState
 	readonly pageError: string
-	readonly imageUrl: string
+	readonly currentImageUrl: string
 	readonly isDraggingOver: boolean
 	readonly loading: boolean
 	readonly imageIndex: number

@@ -21,7 +21,8 @@ import {
 	AD_NAME_MAX_LENGTH,
 	AD_DESCRIPTION_MIN_LENGTH,
 	AD_DESCRIPTION_MAX_LENGTH,
-	INewAdInput
+	INewAdInput,
+	ISimpleIdOutput
 } from "common-library";
 
 const router = Router();
@@ -147,12 +148,17 @@ router.put("/", {
 
 	const input = context.request.body as INewAdInput;
 
-	await Ad.create({
+	const ad : Ad = await Ad.create({
 		name: input.name,
 		description: input.description,
 		userId: context.state.session.userId
 	});
 
+	const output : ISimpleIdOutput = {
+		id: ad.id
+	};
+
+	context.body = output;
 	context.status = 200;
 });
 

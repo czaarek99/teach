@@ -29,8 +29,8 @@ export class ImageService extends BaseService implements IImageService  {
 		await this.axios.delete(`/${id}`);
 	}
 
-	public async updateAdPics(formData: FormData) : Promise<IAdImagesOutput> {
-		const response = await this.axios.patch<IAdImagesOutput>("/ad", formData, {
+	public async updateAdPics(id: number, formData: FormData) : Promise<IAdImagesOutput> {
+		const response = await this.axios.patch<IAdImagesOutput>(`/ad/${id}`, formData, {
 			headers: {
 				"Content-Type": "multipart/form-data"
 			}

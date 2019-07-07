@@ -7,6 +7,7 @@ import { ValidatorMap, validate } from "../../validation/validate";
 import { minLength, maxLength } from "../../validation/validators";
 import { LoadingButtonState } from "../../components";
 import { objectKeys } from "../../util/objectKeys";
+import { IImageService } from "../../interfaces/services/IImageService";
 
 import {
 	INewAdPageController,
@@ -19,8 +20,11 @@ import {
 	AD_DESCRIPTION_MIN_LENGTH,
 	AD_DESCRIPTION_MAX_LENGTH,
 	MAX_AD_PICTURE_COUNT,
-	ErrorMessage
+	ErrorMessage,
+	HttpError
 } from "common-library";
+import { getImageUrl } from "../../util/imageAPI";
+import { successTimeout } from "../../util/successTimeout";
 
 const validators : ValidatorMap<INewAdModel> = {
 	name: [
@@ -36,6 +40,7 @@ const validators : ValidatorMap<INewAdModel> = {
 export class NewAdPageController implements INewAdPageController {
 
 	private readonly adService: IAdService;
+	private readonly imageService: IImageService;
 	private saveButtonStateTimeout?: number;
 
 	@observable private readonly imageUrls: string[] = [];
@@ -50,11 +55,15 @@ export class NewAdPageController implements INewAdPageController {
 	@observable public errorModel = new ErrorModel<INewAdPageErrorState>({
 		name: [],
 		description: [],
-		images: [ErrorMessage.NOT_ENOUGH_AD_IMAGES]
+		images: []
 	});
 
-	constructor(adService: IAdService) {
+	constructor(
+		adService: IAdService,
+		imageService: IImageService
+	) {
 		this.adService = adService;
+		this.imageService = imageService;
 	}
 
 	@action
@@ -75,17 +84,25 @@ export class NewAdPageController implements INewAdPageController {
 	}
 
 	@computed
-	public get imageUrl() : string {
+	public get currentImageUrl() : string {
 		return this.getImageUrl(this.imageIndex);
 	}
 
 	@action
 	private validate(key: keyof INewAdModel) : void {
-		const keyValidators = validators[key];
+		if(key === "images") {
+			if(this.model.images.length === 0) {
+				this.errorModel.setErrors("images", [
+					ErrorMessage.NOT_ENOUGH_AD_IMAGES
+				]);
+			}
+		} else {
+			const keyValidators = validators[key];
 
-		if(keyValidators !== undefined) {
-			const value = this.model[key];
-			this.errorModel.setErrors(key, validate(value, keyValidators));
+			if(keyValidators !== undefined) {
+				const value = this.model[key];
+				this.errorModel.setErrors(key, validate(value, keyValidators));
+			}
 		}
 	}
 
@@ -119,6 +136,39 @@ export class NewAdPageController implements INewAdPageController {
 			this.saveButtonState = "error";
 		} else {
 			this.saveButtonState = "loading";
+
+			try {
+				const input = this.model.toInput();
+				const imageInput = this.model.toImageInput();
+
+				const output = await this.adService.createAd(input);
+
+				const imageOutput = await this.imageService.updateAdPics(
+					output.id,
+					imageInput
+				);
+
+				for(const image of imageOutput.images) {
+					const oldUrl = this.imageUrls[image.index];
+					URL.revokeObjectURL(oldUrl);
+
+					this.imageUrls[image.index] = getImageUrl(image.fileName);
+				}
+
+				this.saveButtonState = "success";
+				this.pageError = "";
+
+				this.saveButtonStateTimeout = successTimeout(() => {
+					this.saveButtonState = "default";
+				})
+			} catch(error) {
+				if(error instanceof HttpError) {
+					this.pageError = error.error;
+				} else {
+					console.error(error)
+					this.pageError = ErrorMessage.COMPONENT;
+				}
+			}
 		}
 	}
 

@@ -1,4 +1,6 @@
 * ability to create ad in ui
+
+* decide on money handling
 * dms
 * pricing information on ads
 * ad categories
