@@ -62,6 +62,14 @@ class LoginPage extends React.Component<
 	InjectedIntlProps
 > {
 
+	public componentDidMount() : void {
+		document.addEventListener("keydown", this.props.controller.onKeyDown);
+	}
+
+	public componentWillUnmount() : void {
+		document.removeEventListener("keydown", this.props.controller.onKeyDown);
+	}
+
 	public render() : React.ReactNode {
 
 		const {

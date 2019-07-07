@@ -129,4 +129,11 @@ export class LoginPageController implements ILoginPageController {
 	public goToRoute(route: Route) : void {
 		this.routingStore.push(route);
 	}
+
+	@action
+	public onKeyDown = (event: KeyboardEvent) : void => {
+		if(event.key === "Enter") {
+			this.onLogin();
+		}
+	}
 }

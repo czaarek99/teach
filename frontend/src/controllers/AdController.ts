@@ -5,7 +5,7 @@ import { RouterStore } from "mobx-react-router";
 import { Route } from "../interfaces/Routes";
 import { IAd } from "common-library";
 
-export class BrowsePageAdController implements IAdController {
+export class AdController implements IAdController {
 
 	private readonly routingStore: RouterStore;
 

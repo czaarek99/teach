@@ -1,7 +1,7 @@
 import { observable, action } from "mobx";
 import { IAdController } from "../../interfaces/controllers/IAdController";
 import { IAdService } from "../../interfaces/services/IAdService";
-import { BrowsePageAdController } from "../BrowsePageAdController";
+import { AdController } from "../AdController";
 
 import {
 	IBrowsePageController
@@ -48,7 +48,7 @@ export class BrowsePageController implements IBrowsePageController {
 		const amountToLoad = Math.min(this.totalAdCount - offset, this.adsPerPage)
 
 		for(let i = 0; i < amountToLoad; i++) {
-			this.activeAdControllers.push(new BrowsePageAdController(this.routingStore));
+			this.activeAdControllers.push(new AdController(this.routingStore));
 		}
 
 		window.setTimeout(async () => {

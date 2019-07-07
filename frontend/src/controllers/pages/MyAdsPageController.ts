@@ -2,11 +2,12 @@ import { IMyAdsPageController } from "../../interfaces/controllers/pages/IMyAdsP
 import { observable, action } from "mobx";
 import { IAdController } from "../../interfaces/controllers/IAdController";
 import { IAdService } from "../../interfaces/services/IAdService";
-import { HttpError, ErrorMessage } from "common-library";
+import { HttpError, ErrorMessage, MAX_USER_AD_COUNT } from "common-library";
 import { RouterStore } from "mobx-react-router";
 import { Route } from "../../interfaces/Routes";
 import { IUserCache } from "../../util/UserCache";
 import { requireLogin } from "../../util/requireLogin";
+import { AdController } from "../AdController";
 
 export class MyAdsPageController implements IMyAdsPageController {
 
@@ -17,6 +18,7 @@ export class MyAdsPageController implements IMyAdsPageController {
 	@observable public adControllers: IAdController[] = [];
 	@observable public loading = true;
 	@observable public pageError = "";
+	@observable public canAdd = false;
 
 	constructor(
 		adService: IAdService,
@@ -38,8 +40,15 @@ export class MyAdsPageController implements IMyAdsPageController {
 		}
 
 		try {
-			//const ads = await this.adService.getMyAds();
+			const ads = await this.adService.getMyAds();
 
+			for(const ad of ads.data) {
+				const adController = new AdController(this.routingStore);
+				adController.load(ad);
+				this.adControllers.push(adController);
+			}
+
+			this.canAdd = ads.totalCount < MAX_USER_AD_COUNT;
 		} catch (error) {
 			if(error instanceof HttpError) {
 				this.pageError = error.error;
@@ -48,7 +57,6 @@ export class MyAdsPageController implements IMyAdsPageController {
 				console.error(error);
 			}
 		}
-
 
 		this.loading = false;
 	}

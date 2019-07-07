@@ -15,6 +15,7 @@ export interface ILoginPageController {
 	readonly errorMessage: string | null
 	readonly loginButtonState: LoadingButtonState;
 
+	onKeyDown: (event: KeyboardEvent) => void
 	goToRoute: (route: Route) => void
 	onLogin: () => Promise<void>
 	onChange: (key: keyof ILoginModel, value: string) => void

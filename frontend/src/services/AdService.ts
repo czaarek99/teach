@@ -28,7 +28,7 @@ export class AdService extends BaseService implements IAdService {
 	}
 
 	public async getAd(id: number) : Promise<IAd> {
-		const response = await this.axios.get<IAd>(`/${id}`);
+		const response = await this.axios.get<IAd>(`/single/${id}`);
 		return response.data;
 	}
 

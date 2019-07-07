@@ -88,7 +88,7 @@ router.get("/list", {
 	context.status = 200;
 });
 
-router.get("/:id", {
+router.get("/single/:id", {
 	validate: {
 		params: {
 			id: Joi.number().min(0).required()

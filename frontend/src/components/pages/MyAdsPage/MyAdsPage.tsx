@@ -4,7 +4,8 @@ import AddIcon from '@material-ui/icons/Add';
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { NavbarTemplate } from "../../templates";
-import { IMyAdsPageController } from "../../../interfaces/controllers/pages/IMyAdsPageController";
+import { Ad } from "../../organisms";
+import { IAdController } from "../../../interfaces/controllers/IAdController";
 
 import {
 	Theme,
@@ -15,6 +16,10 @@ import {
 	Paper,
 	Fab
 } from "@material-ui/core";
+
+import {
+	IMyAdsPageController
+} from "../../../interfaces/controllers/pages/IMyAdsPageController";
 
 import {
 	INavbarController
@@ -31,10 +36,18 @@ const styles = (theme: Theme) => createStyles({
 	},
 
 	fab: {
-		position: "absolute",
+		position: "fixed",
 		margin: 10,
 		bottom: 0,
 		right: 0
+	},
+
+	myAdsContainer: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		width: "100%",
+		flexWrap: "wrap"
 	}
 
 });
@@ -59,6 +72,12 @@ class MyAdsPage extends React.Component<
 			controller
 		} = this.props;
 
+		const ads = controller.adControllers.map((controller: IAdController) => {
+			return (
+				<Ad controller={controller}/>
+			)
+		});
+
 		return (
 			<NavbarTemplate controller={navbarController}>
 				<div className={classes.container}>
@@ -68,12 +87,17 @@ class MyAdsPage extends React.Component<
 						</Typography>
 					</Paper>
 
-					<Fab className={classes.fab}
-						onClick={() => controller.onNewAd()}>
-
-						<AddIcon />
-					</Fab>
+					<div className={classes.myAdsContainer}>
+						{ads}
+					</div>
 				</div>
+
+				<Fab className={classes.fab}
+					disabled={!controller.canAdd}
+					onClick={() => controller.onNewAd()}>
+
+					<AddIcon />
+				</Fab>
 			</NavbarTemplate>
 		)
 	}
