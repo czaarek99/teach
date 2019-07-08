@@ -75,7 +75,8 @@ function validateSchemaManually(context: CustomContext, schema: AnySchema, value
 
 router.use(bodyParser({
 	multipart: true,
-	json: true
+	json: true,
+	parsedMethods: ["POST", "PUT", "PATCH", "DELETE"]
 }));
 
 router.patch("/profile", async (context: CustomContext) => {
@@ -169,6 +170,8 @@ router.delete("/ad/:id", async(context: CustomContext) => {
 			}
 		}
 	});
+
+	context.status = 200;
 });
 
 router.patch("/ad/:id", async(context: CustomContext) => {

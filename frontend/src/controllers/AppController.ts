@@ -1,4 +1,4 @@
-import { observable, action } from "mobx";
+import { observable } from "mobx";
 import { IAppController } from "../interfaces/controllers/IAppController";
 import { ILoginPageController } from "../interfaces/controllers/pages/ILoginPageController";
 import { LoginPageController } from "./pages/LoginPageController";
