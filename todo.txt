@@ -1,6 +1,5 @@
-* edit button on own ads
+* implement delete button on own ads
 * decide on money handling
 * dms
 * pricing information on ads
 * ad categories
-* add rootstore

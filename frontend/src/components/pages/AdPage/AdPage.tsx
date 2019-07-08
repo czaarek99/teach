@@ -100,12 +100,9 @@ const styles = (theme: Theme) => createStyles({
 
 	ownerControls: {
 		display: "flex",
-		borderBottomColor: theme.palette.grey[200],
-		borderBottomStyle: "solid",
-		borderBottomWidth: 2
 	},
 
-	ownerControlContainer: {
+	ownerControlButton: {
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
@@ -239,16 +236,16 @@ class AdPage extends React.Component<
 		if(controller.isMyAd) {
 			ownerControls = (
 				<section className={classes.ownerControls}>
-					<div className={classes.ownerControlContainer}
+					<Button className={classes.ownerControlButton}
 						onClick={() => controller.edit()}>
 
 						<EditIcon />
-					</div>
-					<div className={classes.ownerControlContainer}
+					</Button>
+					<Button className={classes.ownerControlButton}
 						onClick={() => controller.delete()}>
 
 						<DeleteIcon />
-					</div>
+					</Button>
 				</section>
 			);
 		}
