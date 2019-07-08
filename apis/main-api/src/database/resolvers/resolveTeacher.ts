@@ -13,6 +13,7 @@ export function resolveTeacher(user: User) : ITeacher {
 	}
 
 	let teacher : ITeacher = {
+		id: user.id,
 		firstName: user.firstName,
 		lastName: user.lastName,
 		city: user.address.city,

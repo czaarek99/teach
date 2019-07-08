@@ -4,25 +4,19 @@ import { IAdController } from "../../interfaces/controllers/IAdController";
 import { HttpError, ErrorMessage, MAX_USER_AD_COUNT } from "common-library";
 import { requireLogin } from "../../util/requireLogin";
 import { AdController } from "../AdController";
-import { IAppController } from "../../interfaces/controllers/IAppController";
 import { RootStore } from "../../stores/RootStore";
 
 export class MyAdsPageController implements IMyAdsPageController {
 
 	@observable private readonly rootStore: RootStore;
-	private readonly parent: IAppController;
 
 	@observable public adControllers: IAdController[] = [];
 	@observable public loading = true;
 	@observable public pageError = "";
 	@observable public canAdd = false;
 
-	constructor(
-		rootStore: RootStore,
-		parent: IAppController,
-	) {
+	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
-		this.parent = parent;
 
 		this.load();
 	}
@@ -58,6 +52,6 @@ export class MyAdsPageController implements IMyAdsPageController {
 
 	@action
 	public onNewAd() : void {
-		this.parent.onEditAd();
+		this.rootStore.editAd();
 	}
 }

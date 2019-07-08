@@ -1,4 +1,5 @@
 import * as Router from "koa-router";
+import * as bodyParser from "koa-body";
 
 import { throwApiError } from "server-lib";
 import { CustomContext } from "../Server";
@@ -31,10 +32,6 @@ const router = new Router();
 const AD_ID_VALIDATOR = Joi.number()
 	.integer()
 	.min(0)
-	.required();
-
-const AD_IDS_VALIDATOR = Joi.array()
-	.allow(AD_ID_VALIDATOR)
 	.required();
 
 const AD_ID_INDEXES_VALIDATOR = Joi.array().allow(
@@ -75,6 +72,11 @@ function validateSchemaManually(context: CustomContext, schema: AnySchema, value
 
 	return true;
 }
+
+router.use(bodyParser({
+	multipart: true,
+	json: true
+}));
 
 router.patch("/profile", async (context: CustomContext) => {
 

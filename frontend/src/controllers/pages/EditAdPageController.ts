@@ -2,7 +2,7 @@ import { IEditAdModel } from "../../interfaces/models/IEditAdModel";
 import { observable, action, computed } from "mobx";
 import { EditAdModel } from "../../models/EditAdModel";
 import { ErrorModel } from "../../validation/ErrorModel";
-import { ValidatorMap, validate } from "../../validation/validate";
+import { ValidatorMap, validate, ValidationResult } from "../../validation/validate";
 import { minLength, maxLength } from "../../validation/validators";
 import { LoadingButtonState } from "../../components";
 import { objectKeys } from "../../util/objectKeys";
@@ -27,18 +27,22 @@ import {
 	IAdDeleteIndexesInput
 } from "common-library";
 
-const validators : ValidatorMap<IEditAdModel> = {
-	name: [
-		minLength(AD_NAME_MIN_LENGTH),
-		maxLength(AD_NAME_MAX_LENGTH)
-	],
-	description: [
-		minLength(AD_DESCRIPTION_MIN_LENGTH),
-		maxLength(AD_DESCRIPTION_MAX_LENGTH)
-	]
-}
-
 export class EditAdPageController implements IEditAdPageController {
+
+	private readonly validators : ValidatorMap<IEditAdModel> = {
+		name: [
+			minLength(AD_NAME_MIN_LENGTH),
+			maxLength(AD_NAME_MAX_LENGTH)
+		],
+		description: [
+			minLength(AD_DESCRIPTION_MIN_LENGTH),
+			maxLength(AD_DESCRIPTION_MAX_LENGTH)
+		],
+		images: [
+			this.imagesValidator.bind(this)
+		]
+
+	}
 
 	@observable private readonly rootStore: RootStore;
 	private saveButtonStateTimeout?: number;
@@ -60,13 +64,19 @@ export class EditAdPageController implements IEditAdPageController {
 	});
 
 	constructor(
-		rootStore: RootStore,
-		id?: number
+		rootStore: RootStore
 	) {
 		this.rootStore = rootStore;
-		this.id = id;
 
 		this.load();
+	}
+
+	private imagesValidator() : ValidationResult {
+		if(!this.hasImages) {
+			return ErrorMessage.NOT_ENOUGH_AD_IMAGES;
+		}
+
+		return null;
 	}
 
 	@action
@@ -76,17 +86,31 @@ export class EditAdPageController implements IEditAdPageController {
 			return;
 		}
 
-		if(this.id !== undefined) {
-			const ad = await this.rootStore.services.adService.getAd(this.id);
-			this.model.fromOutput(ad);
+		const searchParams = new URLSearchParams(window.location.search);
+		const idString = searchParams.get("adId");
 
-			for(const image of ad.images) {
-				const url = getImageUrl(image.fileName);
-				this.imageUrls.set(image.index, url);
+		if(idString) {
+			const id = parseInt(idString);
+
+			if(!Number.isNaN(id)) {
+				this.id = id;
+
+				const ad = await this.rootStore.services.adService.getAd(this.id);
+				this.model.fromOutput(ad);
+
+				for(const image of ad.images) {
+					const url = getImageUrl(image.fileName);
+					this.imageUrls.set(image.index, url);
+				}
 			}
 		}
 
 		this.loading = false;
+	}
+
+	@computed
+	private get hasImages() : boolean {
+		return this.model.images.size > 0 || this.imageUrls.size > 0;
 	}
 
 	@computed
@@ -128,21 +152,11 @@ export class EditAdPageController implements IEditAdPageController {
 
 	@action
 	private validate(key: keyof IEditAdModel) : void {
-		if(key === "images") {
-			const errors = [];
+		const keyValidators = this.validators[key];
 
-			if(this.model.images.size === 0) {
-				errors.push(ErrorMessage.NOT_ENOUGH_AD_IMAGES);
-			}
-
-			this.errorModel.setErrors("images", errors);
-		} else {
-			const keyValidators = validators[key];
-
-			if(keyValidators !== undefined) {
-				const value = this.model[key];
-				this.errorModel.setErrors(key, validate(value, keyValidators));
-			}
+		if(keyValidators !== undefined) {
+			const value = this.model[key];
+			this.errorModel.setErrors(key, validate(value, keyValidators));
 		}
 	}
 
@@ -266,6 +280,8 @@ export class EditAdPageController implements IEditAdPageController {
 			URL.revokeObjectURL(imageUrl);
 			this.imageUrls.delete(index);
 		}
+
+		this.validate("images");
 	}
 
 	@action

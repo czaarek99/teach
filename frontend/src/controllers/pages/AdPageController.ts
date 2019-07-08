@@ -1,5 +1,5 @@
 import { IAdPageController } from "../../interfaces/controllers/pages/IAdPageController";
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { IAd, ErrorMessage } from "common-library";
 import { Route } from "../../interfaces/Routes";
 import { RootStore } from "../../stores/RootStore";
@@ -20,6 +20,8 @@ export class AdPageController implements IAdPageController {
 
 	@action
 	private async load() : Promise<void> {
+		await this.rootStore.userCache.recache();
+
 		const searchParams = new URLSearchParams(window.location.search);
 		const idString = searchParams.get("adId");
 
@@ -40,6 +42,15 @@ export class AdPageController implements IAdPageController {
 		} catch(error) {
 			this.showAdNotFound();
 		}
+	}
+
+	@computed
+	public get isMyAd() : boolean {
+		const user = this.rootStore.userCache.user;
+
+		return user !== undefined &&
+			this.ad !== null &&
+			user.id === this.ad.teacher.id;
 	}
 
 	@action
@@ -65,6 +76,18 @@ export class AdPageController implements IAdPageController {
 	@action
 	public onCarouselBack() : void {
 		this.carouselStep--;
+	}
+
+	@action
+	public edit() : void {
+		if(this.ad) {
+			this.rootStore.editAd(this.ad.id);
+		}
+	}
+
+	@action
+	public delete() : void {
+
 	}
 
 }

@@ -1,5 +1,4 @@
 import * as Koa from "koa";
-import * as bodyParser from "koa-body";
 import * as Router from "koa-router";
 import * as userAgent from "koa-useragent";
 import * as cors from "@koa/cors";
@@ -73,10 +72,6 @@ export class Server {
 
 		app.use(cors({
 			credentials: true
-		}));
-
-		app.use(bodyParser({
-			multipart: true
 		}));
 
 		app.use(userAgent);

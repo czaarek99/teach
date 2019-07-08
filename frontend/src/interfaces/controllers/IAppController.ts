@@ -22,6 +22,4 @@ export interface IAppController {
 	readonly settingsPageController: ISettingsPageController
 	readonly myAdsPageController: IMyAdsPageController
 	readonly editAdPageController: IEditAdPageController
-
-	onEditAd: (id?: number) => void
 }

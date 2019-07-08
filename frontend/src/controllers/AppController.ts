@@ -122,8 +122,7 @@ export class AppController implements IAppController {
 	public get myAdsPageController() : IMyAdsPageController {
 		if(this._myAdsPageController === null) {
 			this._myAdsPageController = new MyAdsPageController(
-				this.rootStore,
-				this
+				this.rootStore
 			);
 		}
 
@@ -137,15 +136,4 @@ export class AppController implements IAppController {
 
 		return this._editAdPageController;
 	}
-
-	@action
-	public onEditAd(id?: number) : void {
-		this._editAdPageController = new EditAdPageController(
-			this.rootStore,
-			id
-		);
-
-		this.rootStore.routingStore.push(Route.EDIT_AD);
-	}
-
 }

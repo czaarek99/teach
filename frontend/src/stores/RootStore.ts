@@ -3,6 +3,7 @@ import { IUserCache, UserCache } from "../util/UserCache";
 import { RouterStore, syncHistoryWithStore, SynchronizedHistory } from "mobx-react-router";
 import { createBrowserHistory } from "history";
 import { observable } from "mobx";
+import { Route } from "../interfaces/Routes";
 
 export class RootStore {
 
@@ -20,6 +21,14 @@ export class RootStore {
 
 	public getHistory() : SynchronizedHistory {
 		return syncHistoryWithStore(createBrowserHistory(), this.routingStore);
+	}
+
+	public editAd(id?: number) : void {
+		if(id === undefined) {
+			this.routingStore.push(Route.EDIT_AD);
+		} else {
+			this.routingStore.push(`${Route.EDIT_AD}?adId=${id}`);
+		}
 	}
 
 }

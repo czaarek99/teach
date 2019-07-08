@@ -1,6 +1,8 @@
 import React from 'react';
 import Skeleton from "react-loading-skeleton";
 import AdCarousel from "./internal/AdCarousel";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import { IAdPageController } from "../../../interfaces/controllers/pages/IAdPageController";
 import { NavbarTemplate } from "../../templates";
@@ -94,7 +96,28 @@ const styles = (theme: Theme) => createStyles({
 		backgroundColor: theme.palette.error.dark
 	},
 
-	description: {}
+	description: {},
+
+	ownerControls: {
+		display: "flex",
+		borderBottomColor: theme.palette.grey[200],
+		borderBottomStyle: "solid",
+		borderBottomWidth: 2
+	},
+
+	ownerControlContainer: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 10,
+		flexGrow: 1,
+		flexBasis: 0,
+		cursor: "pointer",
+
+		"&:hover": {
+			backgroundColor: theme.palette.grey[100]
+		}
+	}
 
 });
 
@@ -210,12 +233,32 @@ class AdPage extends React.Component<
 			)
 		}
 
+		let ownerControls;
+		if(controller.isMyAd) {
+			ownerControls = (
+				<section className={classes.ownerControls}>
+					<div className={classes.ownerControlContainer}
+						onClick={() => controller.edit()}>
+
+						<EditIcon />
+					</div>
+					<div className={classes.ownerControlContainer}
+						onClick={() => controller.delete()}>
+
+						<DeleteIcon />
+					</div>
+				</section>
+			);
+		}
+
 		return (
 			<NavbarTemplate controller={navbarController}>
 				{snackbar}
 
 				<div className={classes.root}>
 					<Card className={classes.card}>
+						{ownerControls}
+
 						<section className={classes.section}>
 							<Typography variant="h4">
 								<FormattedMessage id="things.ad"/>
