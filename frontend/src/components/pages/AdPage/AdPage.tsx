@@ -10,6 +10,7 @@ import { INavbarController } from "../../../interfaces/controllers/templates/INa
 import { getImageUrl } from "../../../util/imageAPI";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 import { observer } from "mobx-react";
+import { red } from "@material-ui/core/colors";
 
 import {
 	Card,
@@ -21,6 +22,10 @@ import {
 	Avatar,
 	Snackbar,
 	Button,
+	Dialog,
+	DialogTitle,
+	DialogContent,
+	DialogActions,
 } from "@material-ui/core";
 
 const AD_SMALL_BREAKPOINT = "@media screen and (min-width: 400px)";
@@ -115,6 +120,14 @@ const styles = (theme: Theme) => createStyles({
 		"&:hover": {
 			backgroundColor: theme.palette.grey[100]
 		}
+	},
+
+	deleteButton: {
+		backgroundColor: red[600],
+
+		"&:hover": {
+			backgroundColor: red[800]
+		}
 	}
 
 });
@@ -130,6 +143,97 @@ class AdPage extends React.Component<
 	InjectedIntlProps &
 	WithStyles<typeof styles>
 > {
+
+	private renderSnackbar() : React.ReactNode {
+
+		const {
+			controller,
+			classes
+		} = this.props;
+
+		if(controller.errorMessage) {
+			return (
+				<Snackbar open={true}
+					key={controller.errorMessage}
+					ContentProps={{
+						"className": classes.errorSnackbarContent
+					}}
+					action={
+						<Button onClick={() => controller.goBackToBrowse()}>
+							<FormattedMessage id="actions.goBackToBrowse"/>
+						</Button>
+					}
+					message={
+						<FormattedMessage id={controller.errorMessage}/>
+					}
+					anchorOrigin={{
+						vertical: "bottom",
+						horizontal: "center"
+					}}
+					onClose={() => controller.closeSnackbar()}/>
+			);
+		}
+	}
+
+	private renderOwnerControls() : React.ReactNode {
+
+		const {
+			controller,
+			classes
+		} = this.props;
+
+		if(controller.isMyAd) {
+			return (
+				<section className={classes.ownerControls}>
+					<Button className={classes.ownerControlButton}
+						onClick={() => controller.edit()}>
+
+						<EditIcon />
+					</Button>
+					<Button className={classes.ownerControlButton}
+						onClick={() => controller.openConfirmDialog()}>
+
+						<DeleteIcon />
+					</Button>
+				</section>
+			);
+		}
+	}
+
+	private renderConfirmationModal() : React.ReactNode {
+
+		const {
+			controller,
+			classes
+		} = this.props;
+
+		return (
+			<Dialog open={controller.showConfirmDeleteDialog}
+				keepMounted={true}
+				onClose={() => controller.closeConfirmDialog()}>
+
+				<DialogTitle>
+					<FormattedMessage id="info.areYouSure"/>
+				</DialogTitle>
+
+				<DialogContent>
+					<FormattedMessage id="info.adDelete"/>
+				</DialogContent>
+
+				<DialogActions>
+					<Button onClick={() => controller.closeConfirmDialog()}>
+						<FormattedMessage id="actions.cancel"/>
+					</Button>
+					<Button onClick={() => controller.delete()}
+						className={classes.deleteButton}
+						variant="contained">
+
+						<FormattedMessage id="actions.delete"/>
+					</Button>
+				</DialogActions>
+			</Dialog>
+		);
+	}
 
 	public render() : React.ReactNode {
 
@@ -208,55 +312,11 @@ class AdPage extends React.Component<
 			cityComponent = model.teacher.city;
 		}
 
-		let snackbar;
-		if(controller.errorMessage) {
-			snackbar = (
-				<Snackbar open={true}
-					key={controller.errorMessage}
-					ContentProps={{
-						"className": classes.errorSnackbarContent
-					}}
-					action={
-						<Button onClick={() => controller.goBackToBrowse()}>
-							<FormattedMessage id="actions.goBackToBrowse"/>
-						</Button>
-					}
-					message={
-						<FormattedMessage id={controller.errorMessage}/>
-					}
-					anchorOrigin={{
-						vertical: "bottom",
-						horizontal: "center"
-					}}
-					onClose={() => controller.closeSnackbar()}/>
-			)
-		}
-
-		let ownerControls;
-		if(controller.isMyAd) {
-			ownerControls = (
-				<section className={classes.ownerControls}>
-					<Button className={classes.ownerControlButton}
-						onClick={() => controller.edit()}>
-
-						<EditIcon />
-					</Button>
-					<Button className={classes.ownerControlButton}
-						onClick={() => controller.delete()}>
-
-						<DeleteIcon />
-					</Button>
-				</section>
-			);
-		}
-
 		return (
 			<NavbarTemplate controller={navbarController}>
-				{snackbar}
-
 				<div className={classes.root}>
 					<Card className={classes.card}>
-						{ownerControls}
+						{this.renderOwnerControls()}
 
 						<section className={classes.section}>
 							<Typography variant="h4">
@@ -319,6 +379,9 @@ class AdPage extends React.Component<
 						</section>
 					</Card>
 				</div>
+
+				{this.renderSnackbar()}
+				{this.renderConfirmationModal()}
 			</NavbarTemplate>
 		)
 	}

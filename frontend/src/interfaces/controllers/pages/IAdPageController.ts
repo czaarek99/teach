@@ -8,9 +8,12 @@ export interface IAdPageController {
 	readonly carouselCanGoBack: boolean
 	readonly carouselCanGoNext: boolean
 	readonly adImageCount: number
+	readonly showConfirmDeleteDialog: boolean
 
+	delete: () => Promise<void>
+	openConfirmDialog: () => void
+	closeConfirmDialog: () => void
 	edit: () => void
-	delete: () => void
 	onCarouselBack: () => void
 	onCarouselForward: () => void
 	closeSnackbar: () => void

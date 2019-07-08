@@ -1,6 +1,6 @@
 import { IAdPageController } from "../../interfaces/controllers/pages/IAdPageController";
 import { observable, action, computed } from "mobx";
-import { IAd, ErrorMessage } from "common-library";
+import { IAd, ErrorMessage, HttpError } from "common-library";
 import { Route } from "../../interfaces/Routes";
 import { RootStore } from "../../stores/RootStore";
 
@@ -11,6 +11,7 @@ export class AdPageController implements IAdPageController {
 	@observable public ad: IAd | null = null;
 	@observable public errorMessage = "";
 	@observable public carouselStep = 0;
+	@observable public showConfirmDeleteDialog = false;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -105,8 +106,29 @@ export class AdPageController implements IAdPageController {
 	}
 
 	@action
-	public delete() : void {
-
+	public openConfirmDialog() : void {
+		this.showConfirmDeleteDialog = true;
 	}
 
+	@action
+	public closeConfirmDialog() : void {
+		this.showConfirmDeleteDialog = false;
+	}
+
+	@action
+	public async delete() : Promise<void> {
+		if(this.ad) {
+			try {
+				await this.rootStore.services.adService.deleteAd(this.ad.id);
+				this.rootStore.routingStore.replace(Route.HOME);
+			} catch(error) {
+				if(error instanceof HttpError) {
+					this.errorMessage = error.error;
+				} else {
+					console.error(error)
+					this.errorMessage = ErrorMessage.COMPONENT;
+				}
+			}
+		}
+	}
 }

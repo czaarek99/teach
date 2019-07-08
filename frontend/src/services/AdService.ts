@@ -46,4 +46,8 @@ export class AdService extends BaseService implements IAdService {
 		await this.axios.patch("/" + id, changes);
 	}
 
+	public async deleteAd(id: number) : Promise<void> {
+		await this.axios.delete("/" + id);
+	}
+
 }

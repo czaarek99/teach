@@ -12,4 +12,5 @@ export interface IAdService  {
 	getMyAds: () => Promise<IEdge<IAd>>
 	createAd: (newAd: IEditAdInput) => Promise<ISimpleIdOutput>
 	updateAd: (id: number, changes: Partial<IEditAdInput>) => Promise<void>
+	deleteAd: (id: number) => Promise<void>
 }

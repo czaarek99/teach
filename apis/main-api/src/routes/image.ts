@@ -4,7 +4,7 @@ import * as bodyParser from "koa-body";
 import { throwApiError } from "server-lib";
 import { CustomContext } from "../Server";
 import { v4 } from "uuid";
-import { rename, unlink } from "fs-extra";
+import { rename } from "fs-extra";
 import { join } from "path";
 import { config } from "../config";
 import { ProfilePicture } from "../database/models/ProfilePicture";
@@ -24,6 +24,7 @@ import {
 	IAdImage,
 	IAdDeleteIndexesInput
 } from "common-library";
+import { throwAdNotFound } from "../util/throwAdNotFound";
 
 type AdImageInsert = Pick<AdImage, "adId" | "imageFileName" | "index">;
 
@@ -131,18 +132,11 @@ router.patch("/profile", async (context: CustomContext) => {
 
 router.delete("/profile", async (context: CustomContext) => {
 
-	const picture : ProfilePicture = await ProfilePicture.findOne<ProfilePicture>({
+	await ProfilePicture.destroy({
 		where: {
 			userId: context.state.session.userId
 		}
 	});
-
-	const fullPath = join(config.userImagesPath, picture.imageFileName);
-
-	await Promise.all([
-		unlink(fullPath),
-		picture.destroy()
-	]);
 
 	context.status = 200;
 
@@ -192,14 +186,8 @@ router.patch("/ad/:id", async(context: CustomContext) => {
 	});
 
 	if(!ad) {
-		throwApiError(
-			context,
-			new HttpError(
-				404,
-				ErrorMessage.AD_NOT_FOUND,
-				context.state.requestId
-			)
-		);
+		throwAdNotFound(context);
+		return;
 	}
 
 	const promises : Promise<any>[] = [];
@@ -231,9 +219,6 @@ router.patch("/ad/:id", async(context: CustomContext) => {
 
 			//Remove old adimage for this index
 			if(adImage) {
-				const oldImageFullPath = join(config.userImagesPath, adImage.imageFileName);
-
-				promises.push(unlink(oldImageFullPath));
 				promises.push(
 					adImage.update({
 						imageFileName: newFileName

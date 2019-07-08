@@ -23,8 +23,10 @@ import {
 	AD_DESCRIPTION_MAX_LENGTH,
 	ISimpleIdOutput,
 	IEditAdInput,
-	IAdImage
+	IAdImage,
+	ErrorMessage
 } from "common-library";
+import { throwAdNotFound } from "../util/throwAdNotFound";
 
 const router = Router();
 
@@ -113,7 +115,7 @@ router.get("/single/:id", {
 	});
 
 	if(!ad) {
-		throwApiError(context, new HttpError(404));
+		throwAdNotFound(context);
 		return;
 	}
 
@@ -188,6 +190,19 @@ router.patch("/:id", {
 	await Ad.update(input, {
 		where: {
 			id: paramsInput.id
+		}
+	});
+
+	context.status = 200;
+});
+
+router.delete("/:id", async(context: CustomContext) => {
+	const params = context.request.params as unknown as ISimpleIdInput;
+
+	await Ad.destroy({
+		where: {
+			id: params.id,
+			userId: context.state.session.userId
 		}
 	});
 
