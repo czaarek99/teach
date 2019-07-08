@@ -37,7 +37,8 @@ export class MyAdsPageController implements IMyAdsPageController {
 				this.adControllers.push(adController);
 			}
 
-			this.canAdd = ads.totalCount < MAX_USER_AD_COUNT;
+			const max = MAX_USER_AD_COUNT;
+			this.canAdd = ads.totalCount < max;
 		} catch (error) {
 			if(error instanceof HttpError) {
 				this.pageError = error.error;

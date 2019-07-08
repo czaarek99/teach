@@ -18,8 +18,7 @@ export function resolveTeacher(user: User) : ITeacher {
 		lastName: user.lastName,
 		city: user.address.city,
 		age,
-		//avatarFileName
-		avatarFileName: "avatar.jpg"
+		avatarFileName
 	};
 
 	for(const setting of user.settings) {

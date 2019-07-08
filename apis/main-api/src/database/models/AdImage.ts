@@ -18,7 +18,11 @@ import {
 @Table
 export class AdImage extends Model<AdImage> {
 
-	@BelongsTo(() => Ad, "adId")
+	@BelongsTo(() => Ad, {
+		foreignKey: "adId",
+		hooks: true,
+		foreignKeyConstraint: true
+	})
 	public ad: Ad;
 
 	@AllowNull(false)
@@ -37,6 +41,7 @@ export class AdImage extends Model<AdImage> {
 
 	@BeforeDestroy
 	public static destroyImage(image: AdImage) : void {
+		console.log("delete ad image");
 		const path = join(config.userImagesPath, image.imageFileName);
 		unlink(path);
 	}

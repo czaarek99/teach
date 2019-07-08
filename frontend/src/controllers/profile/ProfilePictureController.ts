@@ -94,6 +94,7 @@ export class ProfilePictureController implements IProfilePictureController {
 
 		try {
 			await this.rootStore.services.imageService.deleteProfilePic();
+			this.rootStore.userCache.deleteProfilePic();
 			this.imageFile = undefined;
 			this.imageUrl = "";
 		} catch(error) {

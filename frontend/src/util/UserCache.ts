@@ -21,6 +21,7 @@ export interface IUserCache {
 	updatePersonalInfo: (input: IPersonalInput) => void
 	updateAddress: (address: IAddress) => void
 	updateProfilePic: (fileName: string) => void
+	deleteProfilePic: () => void
 	logOut: () => void
 }
 
@@ -42,6 +43,15 @@ export class UserCache implements IUserCache {
 	public updateProfilePic(fileName: string) {
 		if(this.user) {
 			this.user.avatarFileName = fileName;
+
+			this.saveUserToLocalStorage();
+		}
+	}
+
+	@action
+	public deleteProfilePic() : void {
+		if(this.user) {
+			delete this.user.avatarFileName;
 
 			this.saveUserToLocalStorage();
 		}

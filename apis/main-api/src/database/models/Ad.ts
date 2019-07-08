@@ -41,7 +41,11 @@ export class Ad extends Model<Ad> {
 	@Column(DataType.TEXT)
 	public description: string;
 
-	@HasMany(() => AdImage, "adId")
+	@HasMany(() => AdImage, {
+		foreignKey: "adId",
+		hooks: true,
+		onDelete: "cascade"
+	})
 	public images: AdImage[];
 
 }

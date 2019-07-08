@@ -4,7 +4,7 @@ import * as bodyParser from "koa-body";
 import { throwApiError } from "server-lib";
 import { CustomContext } from "../Server";
 import { v4 } from "uuid";
-import { rename } from "fs-extra";
+import { rename, unlink } from "fs-extra";
 import { join } from "path";
 import { config } from "../config";
 import { ProfilePicture } from "../database/models/ProfilePicture";
@@ -135,7 +135,8 @@ router.delete("/profile", async (context: CustomContext) => {
 	await ProfilePicture.destroy({
 		where: {
 			userId: context.state.session.userId
-		}
+		},
+		individualHooks: true
 	});
 
 	context.status = 200;
@@ -161,8 +162,9 @@ router.delete("/ad/:id", async(context: CustomContext) => {
 			adId: params.id,
 			index: {
 				[Op.in]: body.indexes
-			}
-		}
+			},
+		},
+		individualHooks: true
 	});
 
 	context.status = 200;
@@ -219,6 +221,12 @@ router.patch("/ad/:id", async(context: CustomContext) => {
 
 			//Remove old adimage for this index
 			if(adImage) {
+				const oldImageFullPath = join(config.userImagesPath, adImage.imageFileName);
+
+				promises.push(
+					unlink(oldImageFullPath)
+				);
+
 				promises.push(
 					adImage.update({
 						imageFileName: newFileName

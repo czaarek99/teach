@@ -3,3 +3,5 @@
 * dms
 * pricing information on ads
 * ad categories
+* ability to delete account
+* add viewmodel to editadpage

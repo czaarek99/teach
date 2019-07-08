@@ -114,13 +114,7 @@ export class AppController implements IAppController {
 	}
 
 	public get myAdsPageController() : IMyAdsPageController {
-		if(this._myAdsPageController === null) {
-			this._myAdsPageController = new MyAdsPageController(
-				this.rootStore
-			);
-		}
-
-		return this._myAdsPageController;
+		return new MyAdsPageController(this.rootStore);
 	}
 
 	public get editAdPageController() : IEditAdPageController {

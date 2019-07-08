@@ -10,11 +10,11 @@ import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { UserSetting } from "../database/models/UserSetting";
 import { AdImage } from "../database/models/AdImage";
 import { ProfilePicture } from "../database/models/ProfilePicture";
+import { throwAdNotFound } from "../util/throwAdNotFound";
 
 import {
 	IAd,
 	IEdge,
-	HttpError,
 	IAdListInput,
 	ISimpleIdInput,
 	AD_NAME_MIN_LENGTH,
@@ -24,9 +24,7 @@ import {
 	ISimpleIdOutput,
 	IEditAdInput,
 	IAdImage,
-	ErrorMessage
 } from "common-library";
-import { throwAdNotFound } from "../util/throwAdNotFound";
 
 const router = Router();
 
@@ -203,7 +201,8 @@ router.delete("/:id", async(context: CustomContext) => {
 		where: {
 			id: params.id,
 			userId: context.state.session.userId
-		}
+		},
+		individualHooks: true
 	});
 
 	context.status = 200;
