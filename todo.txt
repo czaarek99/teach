@@ -1,4 +1,3 @@
-* implement delete button on own ads
 * ability to make ad private
 * decide on money handling
 * dms
