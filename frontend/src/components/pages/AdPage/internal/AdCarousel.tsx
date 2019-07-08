@@ -21,6 +21,7 @@ import {
 
 interface IAdCarouselProps {
 	controller: IAdPageController
+	imageClassName: string
 }
 
 const styles = (theme: Theme) => createStyles({
@@ -37,7 +38,8 @@ class AdCarousel extends React.Component<
 	private renderImages() : React.ReactNodeArray {
 
 		const {
-			controller
+			controller,
+			imageClassName
 		} = this.props;
 
 		const ad = controller.ad;
@@ -45,6 +47,7 @@ class AdCarousel extends React.Component<
 			return ad.images.map((image: IAdImage) => {
 				return (
 					<CardMedia component="img"
+						className={imageClassName}
 						key={image.index}
 						image={getImageUrl(image.fileName)}/>
 				)
@@ -69,7 +72,9 @@ class AdCarousel extends React.Component<
 
 		return (
 			<div>
-				<SwipeableViews index={controller.carouselStep}>
+				<SwipeableViews index={controller.carouselStep}
+					enableMouseEvents={true}>
+
 					{this.renderImages()}
 				</SwipeableViews>
 				<MobileStepper variant="dots"

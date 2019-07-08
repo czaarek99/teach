@@ -23,9 +23,9 @@ import {
 	Button,
 } from "@material-ui/core";
 
-const SMALL_BREAKPOINT = "@media screen and (min-width: 400px)";
-const MEDIUM_BREAKPOINT = "@media screen and (min-width: 1000px)";
-const LARGE_BREAKPOINT = "@media screen and (min-width: 1400px)";
+const AD_SMALL_BREAKPOINT = "@media screen and (min-width: 400px)";
+const AD_MEDIUM_BREAKPOINT = "@media screen and (min-width: 1000px)";
+const AD_LARGE_BREAKPOINT = "@media screen and (min-width: 1400px)";
 
 const MIN_DESCRIPTION_LINES = 3;
 
@@ -39,15 +39,15 @@ const styles = (theme: Theme) => createStyles({
 		padding: 10,
 		width: 300,
 
-		[SMALL_BREAKPOINT]: {
+		[AD_SMALL_BREAKPOINT]: {
 			width: 380
 		},
 
-		[MEDIUM_BREAKPOINT]: {
+		[AD_MEDIUM_BREAKPOINT]: {
 			width: 500
 		},
 
-		[LARGE_BREAKPOINT]: {
+		[AD_LARGE_BREAKPOINT]: {
 			width: 700
 		}
 	},
@@ -56,15 +56,15 @@ const styles = (theme: Theme) => createStyles({
 		objectFit: "contain",
 		height: 150,
 
-		[SMALL_BREAKPOINT]: {
+		[AD_SMALL_BREAKPOINT]: {
 			height: 190
 		},
 
-		[MEDIUM_BREAKPOINT]: {
+		[AD_MEDIUM_BREAKPOINT]: {
 			height: 250
 		},
 
-		[LARGE_BREAKPOINT]: {
+		[AD_LARGE_BREAKPOINT]: {
 			height: 350
 		}
 	},
@@ -173,7 +173,8 @@ class AdPage extends React.Component<
 
 		} else {
 			imageComponent = (
-				<AdCarousel controller={controller}/>
+				<AdCarousel controller={controller}
+					imageClassName={classes.image}/>
 			);
 
 			if(model.teacher.avatarFileName) {
