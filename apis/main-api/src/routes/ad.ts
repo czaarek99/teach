@@ -197,13 +197,23 @@ router.patch("/:id", {
 router.delete("/:id", async(context: CustomContext) => {
 	const params = context.request.params as unknown as ISimpleIdInput;
 
-	await Ad.destroy({
+	const ad : Ad =  await Ad.findOne({
 		where: {
 			id: params.id,
 			userId: context.state.session.userId
 		},
-		individualHooks: true
+		include: [
+			AdImage
+		],
 	});
+
+	if(!ad) {
+		throwAdNotFound(context);
+		return;
+	}
+
+	//Dont await here either
+	await ad.destroy();
 
 	context.status = 200;
 });

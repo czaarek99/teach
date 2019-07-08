@@ -20,8 +20,9 @@ export class AdImage extends Model<AdImage> {
 
 	@BelongsTo(() => Ad, {
 		foreignKey: "adId",
-		hooks: true,
-		foreignKeyConstraint: true
+		hooks: false,
+		foreignKeyConstraint: true,
+		onDelete: "cascade"
 	})
 	public ad: Ad;
 
@@ -41,7 +42,7 @@ export class AdImage extends Model<AdImage> {
 
 	@BeforeDestroy
 	public static destroyImage(image: AdImage) : void {
-		console.log("delete ad image");
+		console.log("destroying image");
 		const path = join(config.userImagesPath, image.imageFileName);
 		unlink(path);
 	}

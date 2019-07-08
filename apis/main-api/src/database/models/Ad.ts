@@ -13,7 +13,7 @@ import {
 	HasMany,
 	Unique,
 	PrimaryKey,
-	AutoIncrement
+	AutoIncrement,
 } from "sequelize-typescript";
 
 @Table
@@ -44,7 +44,8 @@ export class Ad extends Model<Ad> {
 	@HasMany(() => AdImage, {
 		foreignKey: "adId",
 		hooks: true,
-		onDelete: "cascade"
+		onDelete: "cascade",
+		foreignKeyConstraint: true
 	})
 	public images: AdImage[];
 
