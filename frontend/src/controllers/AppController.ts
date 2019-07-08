@@ -36,11 +36,9 @@ export class AppController implements IAppController {
 	private _forgotPageController: IForgotPageController | null = null;
 	private _resetPasswordPageController: IResetPasswordPageController | null = null;
 	private _browsePageController: IBrowsePageController | null = null;
-	private _adPageController: IAdPageController | null = null;
 	private _profilePageController: IProfilePageController | null = null;
 	private _settingsPageController: ISettingsPageController | null = null;
 	private _myAdsPageController: IMyAdsPageController | null = null;
-	private _editAdPageController: IEditAdPageController | null = null;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -96,11 +94,7 @@ export class AppController implements IAppController {
 	}
 
 	public get adPageController() : IAdPageController {
-		if(this._adPageController === null) {
-			this._adPageController = new AdPageController(this.rootStore);
-		}
-
-		return this._adPageController;
+		return new AdPageController(this.rootStore);
 	}
 
 	public get profilePageController() : IProfilePageController {
@@ -130,10 +124,6 @@ export class AppController implements IAppController {
 	}
 
 	public get editAdPageController() : IEditAdPageController {
-		if(this._editAdPageController === null)  {
-			this._editAdPageController = new EditAdPageController(this.rootStore);
-		}
-
-		return this._editAdPageController;
+		return new EditAdPageController(this.rootStore);
 	}
 }

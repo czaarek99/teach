@@ -80,6 +80,7 @@ class AdCarousel extends React.Component<
 				<MobileStepper variant="dots"
 					backButton={
 						<Button size="small"
+							disabled={!controller.carouselCanGoBack}
 							onClick={() => controller.onCarouselBack()}>
 
 							<KeyboardArrowLeft />
@@ -88,6 +89,7 @@ class AdCarousel extends React.Component<
 					}
 					nextButton={
 						<Button size="small"
+							disabled={!controller.carouselCanGoNext}
 							onClick={() => controller.onCarouselForward()}>
 							<FormattedMessage id="actions.next"/>
 							<KeyboardArrowRight />

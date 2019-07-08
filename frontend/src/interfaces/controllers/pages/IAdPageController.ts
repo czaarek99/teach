@@ -5,6 +5,9 @@ export interface IAdPageController {
 	readonly errorMessage: string;
 	readonly carouselStep: number
 	readonly isMyAd: boolean
+	readonly carouselCanGoBack: boolean
+	readonly carouselCanGoNext: boolean
+	readonly adImageCount: number
 
 	edit: () => void
 	delete: () => void

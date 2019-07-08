@@ -53,6 +53,25 @@ export class AdPageController implements IAdPageController {
 			user.id === this.ad.teacher.id;
 	}
 
+	@computed
+	public get carouselCanGoBack() : boolean {
+		return this.carouselStep !== 0;
+	}
+
+	@computed
+	public get adImageCount() : number {
+		if(this.ad) {
+			return this.ad.images.length;
+		}
+
+		return 0;
+	}
+
+	@computed
+	public get carouselCanGoNext() : boolean {
+		return this.carouselStep < this.adImageCount - 1;
+	}
+
 	@action
 	public goBackToBrowse() : void {
 		this.rootStore.routingStore.push(Route.BROWSE);
