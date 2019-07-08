@@ -113,6 +113,7 @@ const styles = (theme: Theme) => createStyles({
 		flexGrow: 1,
 		flexBasis: 0,
 		cursor: "pointer",
+		transition: "background-color 300ms",
 
 		"&:hover": {
 			backgroundColor: theme.palette.grey[100]
