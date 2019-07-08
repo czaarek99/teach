@@ -1,28 +1,28 @@
 import { INavbarController } from "../../interfaces/controllers/templates/INavbarController";
-import { RouterStore } from "mobx-react-router";
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { Route } from "../../interfaces/Routes";
-import { IUserCache } from "../../util/UserCache";
-import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
 import { LoadingButtonState } from "../../components";
+import { RootStore } from "../../stores/RootStore";
+import { IUser } from "common-library";
 
 export class NavbarController implements INavbarController {
 
-	private readonly routingStore: RouterStore;
-	private readonly authService: IAuthenticationService;
-
-	@observable public readonly userCache: IUserCache;
+	@observable private readonly rootStore: RootStore;
 	@observable public navigationDrawerIsOpen = false;
 	@observable public logoutButtonState : LoadingButtonState = "default";
 
-	constructor(
-		routingStore: RouterStore,
-		userCache: IUserCache,
-		authService: IAuthenticationService
-	) {
-		this.routingStore = routingStore;
-		this.userCache = userCache;
-		this.authService = authService;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
+	}
+
+	@computed
+	public get isLoggedIn() : boolean {
+		return this.rootStore.userCache.isLoggedIn;
+	}
+
+	@computed
+	public get cachedUser() : IUser | undefined {
+		return this.rootStore.userCache.user;
 	}
 
 	@action
@@ -37,27 +37,27 @@ export class NavbarController implements INavbarController {
 
 	@action
 	public onNavItemClick(route: Route) : void {
-		this.routingStore.push(route);
+		this.rootStore.routingStore.push(route);
 		this.navigationDrawerIsOpen = false;
 	}
 
 	public isSelected(route: Route) : boolean {
-		return this.routingStore.location.pathname === route;
+		return this.rootStore.routingStore.location.pathname === route;
 	}
 
 	@action
 	public async logOut() : Promise<void> {
 		this.logoutButtonState = "loading";
-		await this.authService.logOut();
+		await this.rootStore.services.authenticationService.logOut();
 
-		this.userCache.logOut();
+		this.rootStore.userCache.logOut();
 
-		this.routingStore.push(Route.BROWSE);
+		this.rootStore.routingStore.push(Route.BROWSE);
 		this.logoutButtonState = "success";
 	}
 
 	@action
 	public logIn() : void {
-		this.routingStore.push(Route.LOGIN);
+		this.rootStore.routingStore.push(Route.LOGIN);
 	}
 }

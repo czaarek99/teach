@@ -1,9 +1,5 @@
-import {
-	IResetPasswordPageController, IResetPasswordPageErrorState
-} from "../../interfaces/controllers/pages/IResetPasswordPageController";
 import { observable, action } from "mobx";
 import { ResetPasswordModel } from "../../models/ResetPasswordModel";
-import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { LoadingButtonState, InfoBoxType } from "../../components";
 import { ErrorMessage, HttpError } from "common-library";
@@ -11,10 +7,16 @@ import { IResetPasswordModel } from "../../interfaces/models/IResetPasswordModel
 import { ValidatorMap, ValidationResult, validate } from "../../validation/validate";
 import { password, uuid4 } from "../../validation/validators";
 import { objectKeys } from "../../util/objectKeys";
+import { RootStore } from "../../stores/RootStore";
+
+import {
+	IResetPasswordPageController,
+	IResetPasswordPageErrorState
+} from "../../interfaces/controllers/pages/IResetPasswordPageController";
 
 export class ResetPasswordPageController implements IResetPasswordPageController {
 
-	private readonly authenticationService: IAuthenticationService;
+	private readonly rootStore: RootStore;
 	private readonly validators : ValidatorMap<IResetPasswordModel> = {
 		password: [
 			password
@@ -37,8 +39,8 @@ export class ResetPasswordPageController implements IResetPasswordPageController
 		repeatPassword: []
 	});
 
-	constructor(authenticationService: IAuthenticationService) {
-		this.authenticationService = authenticationService;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 
 		const url = new URL(window.location.href);
 
@@ -104,7 +106,9 @@ export class ResetPasswordPageController implements IResetPasswordPageController
 				this.resetPasswordButtonState = "loading";
 
 				try {
-					await this.authenticationService.resetPassword(this.model.toInput());
+					await this.rootStore.services.authenticationService.resetPassword(
+						this.model.toInput()
+					);
 
 					this.infoBoxType = "success";
 					this.infoBoxMessage = "actions.passwordIsReset";

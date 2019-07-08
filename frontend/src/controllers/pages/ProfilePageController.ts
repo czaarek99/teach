@@ -1,13 +1,10 @@
-import { RouterStore } from "mobx-react-router";
-import { IUserCache } from "../../util/UserCache";
 import { observable, action } from "mobx";
-import { IUserService } from "../../interfaces/services/IUserService";
 import { AddressProfileController } from "../profile/AddressProfileController";
 import { AccountDetailsProfileController } from "../profile/AccountDetailsProfileController";
 import { ProfilePictureController } from "../profile/ProfilePictureController";
-import { IImageService } from "../../interfaces/services/IImageService";
 import { HttpError, ErrorMessage } from "common-library";
 import { requireLogin } from "../../util/requireLogin";
+import { RootStore } from "../../stores/RootStore";
 
 import {
 	PersonalInformationProfileController
@@ -19,8 +16,7 @@ import {
 
 export class ProfilePageController implements IProfilePageController {
 
-	private readonly routingStore: RouterStore;
-	private readonly userCache: IUserCache;
+	@observable private readonly rootStore: RootStore;
 
 	@observable public loading = true;
 	@observable public personalController: PersonalInformationProfileController;
@@ -30,35 +26,27 @@ export class ProfilePageController implements IProfilePageController {
 	@observable public errorMessage = "";
 
 	constructor(
-		userService: IUserService,
-		imageService: IImageService,
-		routingStore: RouterStore,
-		userCache: IUserCache
+		rootStore: RootStore
 	) {
-		this.routingStore = routingStore;
-		this.userCache = userCache;
+		this.rootStore = rootStore;
 
 		this.personalController = new PersonalInformationProfileController(
+			rootStore,
 			this,
-			userService,
-			userCache
 		);
 
 		this.addressController = new AddressProfileController(
+			rootStore,
 			this,
-			userService,
-			userCache
 		);
 
 		this.accountDetailsController = new AccountDetailsProfileController(
-			userCache,
-			userService,
+			rootStore,
 		);
 
 		this.profilePictureController = new ProfilePictureController(
+			rootStore,
 			this,
-			userCache,
-			imageService
 		);
 
 		this.load();
@@ -70,7 +58,7 @@ export class ProfilePageController implements IProfilePageController {
 		this.addressController.loadUserFromCache();
 		this.accountDetailsController.loadUserFromCache();
 
-		const isLoggedIn = await requireLogin(this.userCache, this.routingStore);
+		const isLoggedIn = await requireLogin(this.rootStore);
 		if(!isLoggedIn) {
 			return;
 		}

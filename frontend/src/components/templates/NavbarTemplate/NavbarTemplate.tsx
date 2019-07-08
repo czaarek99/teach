@@ -185,9 +185,8 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		let realNameComponent : React.ReactNode;
 		let emailComponent : React.ReactNode;
 
-		const cache = controller.userCache;
-		if(cache.isLoggedIn) {
-			const cachedUser = cache.user;
+		if(controller.isLoggedIn) {
+			const cachedUser = controller.cachedUser;
 
 			if(cachedUser) {
 
@@ -220,7 +219,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		let loggedInPages;
 		let loginLogoutButton;
 
-		if(controller.userCache.isLoggedIn) {
+		if(controller.isLoggedIn) {
 			loggedInPages = (
 				<React.Fragment>
 					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Route.SETTINGS)}

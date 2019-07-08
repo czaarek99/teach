@@ -1,11 +1,12 @@
 import { Route } from "../../Routes";
-import { IUserCache } from "../../../util/UserCache";
 import { LoadingButtonState } from "../../../components";
+import { IUser } from "common-library";
 
 export interface INavbarController {
 	readonly navigationDrawerIsOpen: boolean
-	readonly userCache: IUserCache
 	readonly logoutButtonState: LoadingButtonState
+	readonly isLoggedIn: boolean
+	readonly cachedUser?: IUser
 
 	isSelected: (route: Route) => boolean
 	onWindowResize: () => void

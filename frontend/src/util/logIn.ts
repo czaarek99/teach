@@ -1,6 +1,5 @@
-import { RouterStore } from "mobx-react-router";
 import { Route } from "../interfaces/Routes";
-import { IUserCache } from "./UserCache";
+import { RootStore } from "../stores/RootStore";
 
 import {
 	SESSION_KEY_NAME,
@@ -10,17 +9,16 @@ import {
 } from "common-library";
 
 export async function logIn(
-	routingStore: RouterStore,
+	rootStore: RootStore,
 	authResponse: IAuthOutput,
-	userCache: IUserCache
 ) : Promise<void> {
 	localStorage.setItem(SESSION_KEY_NAME, authResponse.sessionId);
 	localStorage.setItem(EXPIRATION_DATE_KEY_NAME, authResponse.expirationDate.toString());
 	localStorage.setItem(USER_KEY_NAME, JSON.stringify(authResponse.user))
 
-	await userCache.recache();
+	await rootStore.userCache.recache();
 
 	setTimeout(() => {
-		routingStore.push(Route.BROWSE);
+		rootStore.routingStore.push(Route.BROWSE);
 	}, 1000)
 }

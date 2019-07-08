@@ -1,17 +1,15 @@
 import { IProfilePictureController } from "../../interfaces/controllers/profile/IProfilePictureController";
 import { observable, action, computed } from "mobx";
 import { LoadingButtonState } from "../../components";
-import { IImageService } from "../../interfaces/services/IImageService";
 import { successTimeout } from "../../util/successTimeout";
 import { ProfilePageController } from "../pages/ProfilePageController";
-import { IUserCache } from "../../util/UserCache";
 import { getImageUrl } from "../../util/imageAPI";
+import { RootStore } from "../../stores/RootStore";
 
 export class ProfilePictureController implements IProfilePictureController {
 
+	@observable private readonly rootStore: RootStore;
 	private readonly parent: ProfilePageController;
-	private readonly userCache: IUserCache;
-	private readonly imageService: IImageService;
 
 	private imageFile?: File;
 	private successTimeout?: number;
@@ -23,13 +21,11 @@ export class ProfilePictureController implements IProfilePictureController {
 	@observable public imageUrl = "";
 
 	constructor(
+		rootStore: RootStore,
 		parent: ProfilePageController,
-		userCache: IUserCache,
-		imageService :IImageService
 	) {
+		this.rootStore = rootStore;
 		this.parent = parent;
-		this.userCache = userCache;
-		this.imageService = imageService;
 	}
 
 	public onUnmount() : void {
@@ -45,7 +41,7 @@ export class ProfilePictureController implements IProfilePictureController {
 
 	@action
 	public async load() : Promise<void> {
-		const user = this.userCache.user;
+		const user = this.rootStore.userCache.user;
 		if(user && user.avatarFileName) {
 			this.imageUrl = getImageUrl(user.avatarFileName);
 		}
@@ -70,8 +66,11 @@ export class ProfilePictureController implements IProfilePictureController {
 			this.deleteButtonState = "disabled";
 
 			try {
-				const output = await this.imageService.updateProfilePic(this.imageFile);
-				this.userCache.updateProfilePic(output.fileName);
+				const output = await this.rootStore.services.imageService.updateProfilePic(
+					this.imageFile
+				);
+
+				this.rootStore.userCache.updateProfilePic(output.fileName);
 				this.saveButtonState = "success";
 
 				this.successTimeout = successTimeout(() => {
@@ -94,7 +93,7 @@ export class ProfilePictureController implements IProfilePictureController {
 		this.saveButtonState = "disabled";
 
 		try {
-			await this.imageService.deleteProfilePic();
+			await this.rootStore.services.imageService.deleteProfilePic();
 			this.imageFile = undefined;
 			this.imageUrl = "";
 		} catch(error) {

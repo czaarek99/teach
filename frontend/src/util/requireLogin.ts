@@ -1,16 +1,12 @@
-import { IUserCache } from "./UserCache";
-import { RouterStore } from "mobx-react-router";
 import { Route } from "../interfaces/Routes";
+import { RootStore } from "../stores/RootStore";
 
-export async function requireLogin(
-	userCache: IUserCache,
-	routingStore: RouterStore
-) : Promise<boolean> {
+export async function requireLogin(rootStore: RootStore) : Promise<boolean> {
 
-	await userCache.recache();
+	await rootStore.userCache.recache();
 
-	if(!userCache.isLoggedIn) {
-		routingStore.push(Route.LOGIN);
+	if(!rootStore.userCache.isLoggedIn) {
+		rootStore.routingStore.push(Route.LOGIN);
 
 		return false;
 	}

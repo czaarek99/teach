@@ -3,18 +3,17 @@ import { AccountDetailsModel } from "../../models/AccountDetailsModel";
 import { LoadingButtonState } from "../../components";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { IAccountDetailsModel } from "../../interfaces/models/IAccountDetailsModel";
-import { IUserCache } from "../../util/UserCache";
-import { IUserService } from "../../interfaces/services/IUserService";
 import { ValidatorMap, validate } from "../../validation/validate";
 import { password } from "../../validation/validators";
 import { ErrorMessage, HttpError } from "common-library";
 import { objectKeys } from "../../util/objectKeys";
+import { successTimeout } from "../../util/successTimeout";
+import { RootStore } from "../../stores/RootStore";
 
 import {
 	IAccountDetailsProfileController,
 	IAccountDetailsErrorState
 } from "../../interfaces/controllers/profile/IAccountDetailsProfileController";
-import { successTimeout } from "../../util/successTimeout";
 
 const validators : ValidatorMap<IAccountDetailsModel> = {
 	newPassword: [
@@ -24,8 +23,7 @@ const validators : ValidatorMap<IAccountDetailsModel> = {
 
 export class AccountDetailsProfileController implements IAccountDetailsProfileController {
 
-	private readonly userCache: IUserCache;
-	private readonly userService: IUserService;
+	@observable private readonly rootStore: RootStore;
 	private saveButtonStateTimeout?: number;
 
 	@observable private justChangedPassword = false;
@@ -40,12 +38,8 @@ export class AccountDetailsProfileController implements IAccountDetailsProfileCo
 		repeatPassword: []
 	});
 
-	constructor(
-		userCache: IUserCache,
-		userService: IUserService,
-	) {
-		this.userCache = userCache;
-		this.userService = userService;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 	}
 
 	@action
@@ -75,7 +69,7 @@ export class AccountDetailsProfileController implements IAccountDetailsProfileCo
 
 	@action
 	public async loadUserFromCache() : Promise<void> {
-		const user = this.userCache.user;
+		const user = this.rootStore.userCache.user;
 
 		if(user)  {
 			this.email = user.email;
@@ -120,7 +114,7 @@ export class AccountDetailsProfileController implements IAccountDetailsProfileCo
 				const input = this.model.toInput();
 
 				try {
-					await this.userService.updatePassword(input);
+					await this.rootStore.services.userService.updatePassword(input);
 					this.saveButtonState = "success";
 					this.justChangedPassword = true;
 					this.errorMessage = "";

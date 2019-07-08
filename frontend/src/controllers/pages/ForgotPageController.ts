@@ -1,7 +1,6 @@
 import { observable, action } from "mobx";
 import { ForgotModel } from "../../models/ForgotModel";
 import { IForgotModel } from "../../interfaces/models/IForgotModel";
-import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
 import { LoadingButtonState, InfoBoxType, IRecaptchaFunctions } from "../../components";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { ValidatorMap, validate } from "../../validation/validate";
@@ -9,6 +8,7 @@ import { email, notSet } from "../../validation/validators";
 import { objectKeys } from "../../util/objectKeys";
 import { HttpError } from "common-library";
 import { ErrorMessage } from "common-library";
+import { RootStore } from "../../stores/RootStore";
 
 import {
 	IForgotPageController,
@@ -22,7 +22,7 @@ const validators : ValidatorMap<IForgotModel> = {
 
 export class ForgotPageController implements IForgotPageController {
 
-	private readonly authenticationService: IAuthenticationService;
+	@observable private readonly rootStore: RootStore;
 	private captchaFunctions?: IRecaptchaFunctions;
 
 	@observable public model = new ForgotModel();
@@ -37,8 +37,8 @@ export class ForgotPageController implements IForgotPageController {
 		captcha: []
 	})
 
-	constructor(authenticationService: IAuthenticationService) {
-		this.authenticationService = authenticationService;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 	}
 
 	@action
@@ -78,7 +78,9 @@ export class ForgotPageController implements IForgotPageController {
 				this.loading = true;
 
 				try {
-					await this.authenticationService.forgot(this.model.toInput());
+					await this.rootStore.services.authenticationService.forgot(
+						this.model.toInput()
+					);
 
 					this.infoBoxType = "success";
 					this.forgotButtonState = "success";

@@ -1,9 +1,7 @@
 import { observable, action } from "mobx";
-import { RouterStore } from "mobx-react-router";
 import { IAppController } from "../interfaces/controllers/IAppController";
 import { ILoginPageController } from "../interfaces/controllers/pages/ILoginPageController";
 import { LoginPageController } from "./pages/LoginPageController";
-import { AuthenticationService } from "../services/AuthenticationService";
 import { IRegistrationPageController } from "../interfaces/controllers/pages/IRegistrationPageController";
 import { RegistrationPageController } from "./pages/RegistrationPageController";
 import { IForgotPageController } from "../interfaces/controllers/pages/IForgotPageController";
@@ -11,35 +9,27 @@ import { ForgotPageController } from "./pages/ForgotPageController";
 import { Route, DEFAULT_ROUTE } from "../interfaces/Routes";
 import { IResetPasswordPageController } from "../interfaces/controllers/pages/IResetPasswordPageController";
 import { ResetPasswordPageController } from "./pages/ResetPasswordPageController";
-import { AdService } from "../services/AdService";
 import { IBrowsePageController } from "../interfaces/controllers/pages/IBrowsePageController";
 import { BrowsePageController } from "./pages/BrowsePageController";
 import { NavbarController } from "./templates/NavbarController";
 import { INavbarController } from "../interfaces/controllers/templates/INavbarController";
-import { UserService } from "../services/UserService";
-import { IUserCache, UserCache } from "../util/UserCache";
 import { IAdPageController } from "../interfaces/controllers/pages/IAdPageController";
 import { AdPageController } from "./pages/AdPageController";
 import { IProfilePageController } from "../interfaces/controllers/pages/IProfilePageController";
 import { ProfilePageController } from "./pages/ProfilePageController";
-import { SettingsService } from "../services/SettingsService";
 import { ISettingsPageController } from "../interfaces/controllers/pages/ISettingsPageController";
 import { SettingsPageController } from "./pages/SettingsPageController";
-import { ImageService } from "../services/ImageService";
-import { IServices } from "../interfaces/services/IServices";
 import { IMyAdsPageController } from "../interfaces/controllers/pages/IMyAdsPageController";
 import { MyAdsPageController } from "./pages/MyAdsPageController";
 import { IEditAdPageController } from "../interfaces/controllers/pages/INewAdPageController";
 import { EditAdPageController } from "./pages/EditAdPageController";
+import { RootStore } from "../stores/RootStore";
 
 export class AppController implements IAppController {
 
+	@observable private readonly rootStore: RootStore;
+
 	public readonly navbarController: INavbarController;
-
-	private readonly routingStore: RouterStore;
-	private readonly services: IServices;
-
-	@observable private readonly userCache: IUserCache;
 
 	private _loginPageController: ILoginPageController | null = null;
 	private _registrationPageController: IRegistrationPageController | null = null;
@@ -52,39 +42,22 @@ export class AppController implements IAppController {
 	private _myAdsPageController: IMyAdsPageController | null = null;
 	private _editAdPageController: IEditAdPageController | null = null;
 
-	constructor(routingStore: RouterStore) {
-		this.routingStore = routingStore;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 
-		this.services = {
-			settingsService: new SettingsService(),
-			authenticationService: new AuthenticationService(),
-			userService: new UserService(),
-			adService: new AdService(),
-			imageService: new ImageService()
-		};
-
-		this.userCache = new UserCache(this.services.userService);
-
-		this.navbarController = new NavbarController(
-			routingStore,
-			this.userCache,
-			this.services.authenticationService
-		);
-
+		this.navbarController = new NavbarController(rootStore);
 
 		const routes = Object.values(Route);
-		if(!routes.includes(routingStore.location.pathname)) {
-			routingStore.push(DEFAULT_ROUTE);
+		const location = rootStore.routingStore.location;
+
+		if(location && !routes.includes(location.pathname)) {
+			rootStore.routingStore.push(DEFAULT_ROUTE);
 		}
 	}
 
 	public get loginPageController() : ILoginPageController {
 		if(this._loginPageController === null) {
-			this._loginPageController = new LoginPageController(
-				this.services.authenticationService,
-				this.routingStore,
-				this.userCache
-			);
+			this._loginPageController = new LoginPageController(this.rootStore);
 		}
 
 		return this._loginPageController;
@@ -92,11 +65,7 @@ export class AppController implements IAppController {
 
 	public get registrationPageController() : IRegistrationPageController {
 		if(this._registrationPageController === null) {
-			this._registrationPageController = new RegistrationPageController(
-				this.services.authenticationService,
-				this.routingStore,
-				this.userCache
-			);
+			this._registrationPageController = new RegistrationPageController(this.rootStore);
 		}
 
 		return this._registrationPageController;
@@ -104,9 +73,7 @@ export class AppController implements IAppController {
 
 	public get forgotPageController() : IForgotPageController {
 		if(this._forgotPageController === null) {
-			this._forgotPageController = new ForgotPageController(
-				this.services.authenticationService
-			);
+			this._forgotPageController = new ForgotPageController(this.rootStore);
 		}
 
 		return this._forgotPageController;
@@ -114,9 +81,7 @@ export class AppController implements IAppController {
 
 	public get resetPasswordPageController() : IResetPasswordPageController {
 		if(this._resetPasswordPageController === null) {
-			this._resetPasswordPageController = new ResetPasswordPageController(
-				this.services.authenticationService
-			);
+			this._resetPasswordPageController = new ResetPasswordPageController(this.rootStore);
 		}
 
 		return this._resetPasswordPageController;
@@ -124,10 +89,7 @@ export class AppController implements IAppController {
 
 	public get browsePageController() : IBrowsePageController {
 		if(this._browsePageController === null) {
-			this._browsePageController = new BrowsePageController(
-				this.services.adService,
-				this.routingStore
-			);
+			this._browsePageController = new BrowsePageController(this.rootStore);
 		}
 
 		return this._browsePageController;
@@ -135,10 +97,7 @@ export class AppController implements IAppController {
 
 	public get adPageController() : IAdPageController {
 		if(this._adPageController === null) {
-			this._adPageController = new AdPageController(
-				this.services.adService,
-				this.routingStore
-			);
+			this._adPageController = new AdPageController(this.rootStore);
 		}
 
 		return this._adPageController;
@@ -146,12 +105,7 @@ export class AppController implements IAppController {
 
 	public get profilePageController() : IProfilePageController {
 		if(this._profilePageController === null) {
-			this._profilePageController = new ProfilePageController(
-				this.services.userService,
-				this.services.imageService,
-				this.routingStore,
-				this.userCache
-			);
+			this._profilePageController = new ProfilePageController(this.rootStore);
 		}
 
 		return this._profilePageController;
@@ -159,11 +113,7 @@ export class AppController implements IAppController {
 
 	public get settingsPageController() : ISettingsPageController {
 		if(this._settingsPageController === null) {
-			this._settingsPageController = new SettingsPageController(
-				this.services.settingsService,
-				this.userCache,
-				this.routingStore
-			);
+			this._settingsPageController = new SettingsPageController(this.rootStore);
 		}
 
 		return this._settingsPageController;
@@ -172,10 +122,8 @@ export class AppController implements IAppController {
 	public get myAdsPageController() : IMyAdsPageController {
 		if(this._myAdsPageController === null) {
 			this._myAdsPageController = new MyAdsPageController(
-				this,
-				this.services.adService,
-				this.routingStore,
-				this.userCache
+				this.rootStore,
+				this
 			);
 		}
 
@@ -184,12 +132,7 @@ export class AppController implements IAppController {
 
 	public get editAdPageController() : IEditAdPageController {
 		if(this._editAdPageController === null)  {
-			this._editAdPageController = new EditAdPageController(
-				this.services.adService,
-				this.services.imageService,
-				this.userCache,
-				this.routingStore
-			);
+			this._editAdPageController = new EditAdPageController(this.rootStore);
 		}
 
 		return this._editAdPageController;
@@ -198,14 +141,11 @@ export class AppController implements IAppController {
 	@action
 	public onEditAd(id?: number) : void {
 		this._editAdPageController = new EditAdPageController(
-			this.services.adService,
-			this.services.imageService,
-			this.userCache,
-			this.routingStore,
+			this.rootStore,
 			id
 		);
 
-		this.routingStore.push(Route.EDIT_AD);
+		this.rootStore.routingStore.push(Route.EDIT_AD);
 	}
 
 }

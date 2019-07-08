@@ -4,14 +4,13 @@ import { IPersonalInformationModel } from "../../interfaces/models/IPersonalInfo
 import { ViewModel } from "../../interfaces/ViewModel";
 import { PersonalInformationModel } from "../../models/PersonalInformationModel";
 import { createViewModel } from "mobx-utils";
-import { IUserService } from "../../interfaces/services/IUserService";
-import { IUserCache } from "../../util/UserCache";
 import { minLength, maxLength } from "../../validation/validators";
 import { ValidatorMap, validate } from "../../validation/validate";
 import { LoadingButtonState } from "../../components";
 import { objectKeys } from "../../util/objectKeys";
 import { successTimeout } from "../../util/successTimeout";
 import { ProfilePageController } from "../pages/ProfilePageController";
+import { RootStore } from "../../stores/RootStore";
 
 import {
 	IPersonalInformationProfileController,
@@ -42,9 +41,8 @@ const validators : ValidatorMap<IPersonalInformationModel> = {
 
 export class PersonalInformationProfileController implements IPersonalInformationProfileController {
 
+	@observable private readonly rootStore: RootStore;
 	private readonly parent: ProfilePageController;
-	private readonly userService: IUserService;
-	private readonly userCache: IUserCache;
 	private saveButtonStateTimeout?: number;
 
 	@observable private _viewModel : ViewModel<PersonalInformationModel>;
@@ -61,22 +59,19 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 	});
 
 	constructor(
+		rootStore: RootStore,
 		parent: ProfilePageController,
-		userService: IUserService,
-		userCache: IUserCache
 	) {
+		this.rootStore = rootStore;
 		this.parent = parent;
-
-		this.userService = userService;
-		this.userCache = userCache;
 
 		this._viewModel = createViewModel(this.model);
 		this.viewModel = this._viewModel as any;
 	}
 
 	public loadUserFromCache() : void {
-		if(this.userCache.user) {
-			this.model.fromJson(this.userCache.user);
+		if(this.rootStore.userCache.user) {
+			this.model.fromJson(this.rootStore.userCache.user);
 		}
 	}
 
@@ -103,10 +98,10 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 			const input = this.model.toInput();
 
 			try {
-				await this.userService.updatePersonalInfo(input);
+				await this.rootStore.services.userService.updatePersonalInfo(input);
 				this.saveButtonState = "success";
 
-				this.userCache.updatePersonalInfo(input);
+				this.rootStore.userCache.updatePersonalInfo(input);
 
 				this.saveButtonStateTimeout = successTimeout(() => {
 					this.saveButtonState = "default";

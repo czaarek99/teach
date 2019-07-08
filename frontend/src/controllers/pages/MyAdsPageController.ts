@@ -1,20 +1,16 @@
 import { IMyAdsPageController } from "../../interfaces/controllers/pages/IMyAdsPageController";
 import { observable, action } from "mobx";
 import { IAdController } from "../../interfaces/controllers/IAdController";
-import { IAdService } from "../../interfaces/services/IAdService";
 import { HttpError, ErrorMessage, MAX_USER_AD_COUNT } from "common-library";
-import { RouterStore } from "mobx-react-router";
-import { IUserCache } from "../../util/UserCache";
 import { requireLogin } from "../../util/requireLogin";
 import { AdController } from "../AdController";
 import { IAppController } from "../../interfaces/controllers/IAppController";
+import { RootStore } from "../../stores/RootStore";
 
 export class MyAdsPageController implements IMyAdsPageController {
 
+	@observable private readonly rootStore: RootStore;
 	private readonly parent: IAppController;
-	private readonly adService: IAdService;
-	private readonly routingStore: RouterStore;
-	private readonly userCache: IUserCache;
 
 	@observable public adControllers: IAdController[] = [];
 	@observable public loading = true;
@@ -22,31 +18,27 @@ export class MyAdsPageController implements IMyAdsPageController {
 	@observable public canAdd = false;
 
 	constructor(
+		rootStore: RootStore,
 		parent: IAppController,
-		adService: IAdService,
-		routingStore: RouterStore,
-		userCache: IUserCache
 	) {
+		this.rootStore = rootStore;
 		this.parent = parent;
-		this.adService = adService;
-		this.routingStore = routingStore;
-		this.userCache = userCache;
 
 		this.load();
 	}
 
 	@action
 	private async load() : Promise<void> {
-		const isLoggedIn = await requireLogin(this.userCache, this.routingStore);
+		const isLoggedIn = await requireLogin(this.rootStore);
 		if(!isLoggedIn) {
 			return;
 		}
 
 		try {
-			const ads = await this.adService.getMyAds();
+			const ads = await this.rootStore.services.adService.getMyAds();
 
 			for(const ad of ads.data) {
-				const adController = new AdController(this.routingStore);
+				const adController = new AdController(this.rootStore);
 				adController.load(ad);
 				this.adControllers.push(adController);
 			}

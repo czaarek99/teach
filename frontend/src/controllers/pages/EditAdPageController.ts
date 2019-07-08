@@ -1,18 +1,15 @@
 import { IEditAdModel } from "../../interfaces/models/IEditAdModel";
 import { observable, action, computed } from "mobx";
 import { EditAdModel } from "../../models/EditAdModel";
-import { IAdService } from "../../interfaces/services/IAdService";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { ValidatorMap, validate } from "../../validation/validate";
 import { minLength, maxLength } from "../../validation/validators";
 import { LoadingButtonState } from "../../components";
 import { objectKeys } from "../../util/objectKeys";
-import { IImageService } from "../../interfaces/services/IImageService";
 import { getImageUrl } from "../../util/imageAPI";
 import { successTimeout } from "../../util/successTimeout";
 import { requireLogin } from "../../util/requireLogin";
-import { RouterStore } from "mobx-react-router";
-import { IUserCache } from "../../util/UserCache";
+import { RootStore } from "../../stores/RootStore";
 
 import {
 	IEditAdPageController,
@@ -43,10 +40,7 @@ const validators : ValidatorMap<IEditAdModel> = {
 
 export class EditAdPageController implements IEditAdPageController {
 
-	private readonly adService: IAdService;
-	private readonly imageService: IImageService;
-	private readonly userCache: IUserCache;
-	private readonly routingStore: RouterStore;
+	@observable private readonly rootStore: RootStore;
 	private saveButtonStateTimeout?: number;
 
 	@observable private readonly imageUrls = new Map<number, string>();
@@ -66,16 +60,10 @@ export class EditAdPageController implements IEditAdPageController {
 	});
 
 	constructor(
-		adService: IAdService,
-		imageService: IImageService,
-		userCache: IUserCache,
-		routingStore: RouterStore,
+		rootStore: RootStore,
 		id?: number
 	) {
-		this.adService = adService;
-		this.imageService = imageService;
-		this.userCache = userCache;
-		this.routingStore = routingStore;
+		this.rootStore = rootStore;
 		this.id = id;
 
 		this.load();
@@ -83,13 +71,13 @@ export class EditAdPageController implements IEditAdPageController {
 
 	@action
 	private async load() : Promise<void> {
-		const isLoggedIn = await requireLogin(this.userCache, this.routingStore)
+		const isLoggedIn = await requireLogin(this.rootStore)
 		if(!isLoggedIn) {
 			return;
 		}
 
 		if(this.id !== undefined) {
-			const ad = await this.adService.getAd(this.id);
+			const ad = await this.rootStore.services.adService.getAd(this.id);
 			this.model.fromOutput(ad);
 
 			for(const image of ad.images) {
@@ -194,7 +182,7 @@ export class EditAdPageController implements IEditAdPageController {
 				const imageInput = this.model.toImageInput();
 
 				if(this.id === undefined) {
-					const output = await this.adService.createAd(editAdInput);
+					const output = await this.rootStore.services.adService.createAd(editAdInput);
 					this.id = output.id
 				} else {
 					const adDeleteImagesInput : IAdDeleteIndexesInput = {
@@ -202,12 +190,18 @@ export class EditAdPageController implements IEditAdPageController {
 					};
 
 					await Promise.all([
-						this.imageService.deleteAdPics(this.id, adDeleteImagesInput),
-						this.adService.updateAd(this.id, editAdInput)
+						this.rootStore.services.imageService.deleteAdPics(
+							this.id,
+							adDeleteImagesInput
+						),
+						this.rootStore.services.adService.updateAd(
+							this.id,
+							editAdInput
+						)
 					]);
 				}
 
-				const imageOutput = await this.imageService.updateAdPics(
+				const imageOutput = await this.rootStore.services.imageService.updateAdPics(
 					this.id,
 					imageInput
 				);

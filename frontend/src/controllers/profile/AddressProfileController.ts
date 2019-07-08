@@ -6,10 +6,9 @@ import { IAddressModel } from "../../interfaces/models/IAddressModel";
 import { LoadingButtonState } from "../../components";
 import { minLength, maxLength } from "../../validation/validators";
 import { validate, ValidatorMap } from "../../validation/validate";
-import { IUserService } from "../../interfaces/services/IUserService";
 import { ViewModel } from "../../interfaces/ViewModel";
-import { IUserCache } from "../../util/UserCache";
 import { successTimeout } from "../../util/successTimeout";
+import { RootStore } from "../../stores/RootStore";
 import { ProfilePageController } from "../pages/ProfilePageController";
 
 import {
@@ -50,9 +49,8 @@ const validators : ValidatorMap<AddressModel> = {
 
 export class AddressProfileController implements IAddressProfileController {
 
+	private readonly rootStore: RootStore;
 	private readonly parent: ProfilePageController;
-	private readonly userService: IUserService;
-	private readonly userCache: IUserCache;
 
 	private addressButtonStateTimeout?: number;
 
@@ -71,21 +69,19 @@ export class AddressProfileController implements IAddressProfileController {
 	});
 
 	constructor(
+		rootStore: RootStore,
 		parent: ProfilePageController,
-		userService: IUserService,
-		userCache: IUserCache
 	) {
+		this.rootStore = rootStore;
 		this.parent = parent;
-		this.userService = userService;
-		this.userCache = userCache;
 
 		this._viewModel = createViewModel(this.model);
 		this.viewModel = this._viewModel as any;
 	}
 
 	public loadUserFromCache() : void {
-		if(this.userCache.user) {
-			this.model.fromJson(this.userCache.user.address);
+		if(this.rootStore.userCache.user) {
+			this.model.fromJson(this.rootStore.userCache.user.address);
 		}
 	}
 
@@ -131,10 +127,10 @@ export class AddressProfileController implements IAddressProfileController {
 			const address = this.model.toInput();
 
 			try {
-				await this.userService.updateAddress(address);
+				await this.rootStore.services.userService.updateAddress(address);
 				this.saveButtonState = "success";
 
-				this.userCache.updateAddress(address);
+				this.rootStore.userCache.updateAddress(address);
 
 				this.addressButtonStateTimeout = successTimeout(() => {
 					this.saveButtonState = "default";

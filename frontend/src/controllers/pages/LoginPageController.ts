@@ -5,14 +5,13 @@ import { LoginModel } from "../../models/LoginModel";
 import { empty } from "../../validation/validators";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { validate, ValidatorMap } from "../../validation/validate";
-import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
 import { HttpError, ErrorMessage } from "common-library";
 import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
-import { RouterStore } from "mobx-react-router";
 import { logIn } from "../../util/logIn";
 import { objectKeys } from "../../util/objectKeys";
-import { IUserCache } from "../../util/UserCache";
 import { Route } from "../../interfaces/Routes";
+import { RootStore } from "../../stores/RootStore";
+import { requireNoLogin } from "../../util/requireNoLogin";
 
 const validators : ValidatorMap<ILoginModel> = {
 	email: [empty],
@@ -21,9 +20,7 @@ const validators : ValidatorMap<ILoginModel> = {
 
 export class LoginPageController implements ILoginPageController {
 
-	private readonly routingStore: RouterStore;
-	private readonly authenticationService: IAuthenticationService;
-	private readonly userCache: IUserCache;
+	@observable private readonly rootStore: RootStore;
 
 	private shouldValidate = false;
 	private isLoggedIn = false;
@@ -37,24 +34,17 @@ export class LoginPageController implements ILoginPageController {
 		password: []
 	});
 
-	constructor(
-		authenticationService: IAuthenticationService,
-		routingStore: RouterStore,
-		userCache: IUserCache
-	) {
-		this.routingStore = routingStore;
-		this.authenticationService = authenticationService;
-		this.userCache = userCache;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 
 		this.load();
 	}
 
 	@action
 	private async load() : Promise<void> {
-		await this.userCache.recache();
-
-		if(this.userCache.isLoggedIn) {
-			this.routingStore.push(Route.BROWSE);
+		const canLoadPage = await requireNoLogin(this.rootStore);
+		if(!canLoadPage) {
+			return;
 		}
 
 		this.loading = false;
@@ -103,13 +93,15 @@ export class LoginPageController implements ILoginPageController {
 			this.loginButtonState = "loading";
 
 			try {
-				const response = await this.authenticationService.logIn(this.model.toInput());
+				const response = await this.rootStore.services.authenticationService.logIn(
+					this.model.toInput()
+				);
 
 				this.isLoggedIn = true;
 				this.errorMessage = null;
 				this.loginButtonState = "success";
 
-				await logIn(this.routingStore, response, this.userCache);
+				await logIn(this.rootStore, response);
 			} catch(error) {
 				if(error instanceof HttpError) {
 					this.errorMessage = error.error;
@@ -127,7 +119,7 @@ export class LoginPageController implements ILoginPageController {
 
 	@action
 	public goToRoute(route: Route) : void {
-		this.routingStore.push(route);
+		this.rootStore.routingStore.push(route);
 	}
 
 	@action

@@ -3,15 +3,13 @@ import { RegistrationModel } from "../../models/RegistrationModel";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
 import { IRegistrationModel } from "../../interfaces/models/IRegistrationModel";
-import { IAuthenticationService } from "../../interfaces/services/IAuthenticationService";
 import { ValidatorMap, validate } from "../../validation/validate";
 import { email, minLength, maxLength, password, notSet } from "../../validation/validators";
-import { RouterStore } from "mobx-react-router";
 import { logIn } from "../../util/logIn";
 import { objectKeys } from "../../util/objectKeys";
-import { IUserCache } from "../../util/UserCache";
 import { IRecaptchaFunctions } from "../../components";
-import { Route } from "../../interfaces/Routes";
+import { RootStore } from "../../stores/RootStore";
+import { requireNoLogin } from "../../util/requireNoLogin";
 
 import {
 	FIRST_NAME_MIN_LENGTH,
@@ -84,9 +82,7 @@ const validators : ValidatorMap<IRegistrationModel> = {
 
 export class RegistrationPageController implements IRegistrationPageController {
 
-	private readonly routingStore: RouterStore;
-	private readonly authenticationService: IAuthenticationService;
-	private readonly userCache: IUserCache;
+	@observable private readonly rootStore: RootStore;
 
 	private shouldValidate = false;
 	private shouldValidatePassword = false;
@@ -112,24 +108,17 @@ export class RegistrationPageController implements IRegistrationPageController {
 		state: []
 	});
 
-	constructor(
-		authenticationService: IAuthenticationService,
-		routingStore: RouterStore,
-		userCache: IUserCache
-	) {
-		this.routingStore = routingStore;
-		this.authenticationService = authenticationService;
-		this.userCache = userCache;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 
 		this.load();
 	}
 
 	@action
 	private async load() : Promise<void> {
-		await this.userCache.recache();
-
-		if(this.userCache.isLoggedIn) {
-			this.routingStore.push(Route.BROWSE);
+		const canLoadPage = await requireNoLogin(this.rootStore);
+		if(!canLoadPage) {
+			return;
 		}
 
 		this.loading = false;
@@ -207,11 +196,13 @@ export class RegistrationPageController implements IRegistrationPageController {
 			this.loading = true;
 
 			try  {
-				const response = await this.authenticationService.register(this.model.toJson());
+				const response = await this.rootStore.services.authenticationService.register(
+					this.model.toJson()
+				);
 
 				this.errorMessage = null;
 				this.registerButtonState = "success";
-				await logIn(this.routingStore, response, this.userCache);
+				await logIn(this.rootStore, response);
 			} catch(error) {
 				this.model.captcha = null;
 

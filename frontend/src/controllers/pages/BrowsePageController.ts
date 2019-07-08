@@ -1,17 +1,15 @@
 import { observable, action } from "mobx";
 import { IAdController } from "../../interfaces/controllers/IAdController";
-import { IAdService } from "../../interfaces/services/IAdService";
 import { AdController } from "../AdController";
+import { RootStore } from "../../stores/RootStore";
 
 import {
 	IBrowsePageController
 } from "../../interfaces/controllers/pages/IBrowsePageController";
-import { RouterStore } from "mobx-react-router";
 
 export class BrowsePageController implements IBrowsePageController {
 
-	private readonly adService: IAdService;
-	private readonly routingStore: RouterStore;
+	@observable private readonly rootStore: RootStore;
 
 	@observable public pageNumber = 0;
 	@observable public totalAdCount = 0;
@@ -20,16 +18,15 @@ export class BrowsePageController implements IBrowsePageController {
 	@observable public pageLoading = true;
 	@observable public listLoading = true;
 
-	constructor(adService: IAdService, routingStore: RouterStore) {
-		this.adService = adService;
-		this.routingStore = routingStore;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 
 		this.load();
 	}
 
 	@action
 	private async load() : Promise<void> {
-		const info = await this.adService.getAds({
+		const info = await this.rootStore.services.adService.getAds({
 			limit: 0,
 			offset: 0
 		});
@@ -48,11 +45,11 @@ export class BrowsePageController implements IBrowsePageController {
 		const amountToLoad = Math.min(this.totalAdCount - offset, this.adsPerPage)
 
 		for(let i = 0; i < amountToLoad; i++) {
-			this.activeAdControllers.push(new AdController(this.routingStore));
+			this.activeAdControllers.push(new AdController(this.rootStore));
 		}
 
 		window.setTimeout(async () => {
-			const ads = await this.adService.getAds({
+			const ads = await this.rootStore.services.adService.getAds({
 				offset,
 				limit: amountToLoad
 			});

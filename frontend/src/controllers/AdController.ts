@@ -1,20 +1,20 @@
 import { IAdController } from "../interfaces/controllers/IAdController";
 import { observable, action, computed } from "mobx";
 import { v4 } from "uuid";
-import { RouterStore } from "mobx-react-router";
 import { Route } from "../interfaces/Routes";
 import { IAd } from "common-library";
 import { getImageUrl } from "../util/imageAPI";
+import { RootStore } from "../stores/RootStore";
 
 export class AdController implements IAdController {
 
-	private readonly routingStore: RouterStore;
+	@observable private readonly rootStore: RootStore;
 
 	@observable public ad: IAd | null = null;
 	@observable public readonly controllerId = v4();
 
-	constructor(routingStore: RouterStore) {
-		this.routingStore = routingStore;
+	constructor(rootStore: RootStore) {
+		this.rootStore = rootStore;
 	}
 
 	@action
@@ -28,7 +28,7 @@ export class AdController implements IAdController {
 			const params = new URLSearchParams();
 			params.set("adId", this.ad.id.toString());
 
-			this.routingStore.push(`${Route.AD}?${params}`);
+			this.rootStore.routingStore.push(`${Route.AD}?${params}`);
 		}
 
 	}

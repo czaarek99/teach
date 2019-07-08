@@ -9,24 +9,35 @@ import { IntlProvider } from 'react-intl';
 import { AppController } from './controllers/AppController';
 import { ThemeProvider } from '@material-ui/styles';
 import { Router } from 'react-router';
-import { syncHistoryWithStore, RouterStore } from 'mobx-react-router';
-import { createBrowserHistory } from 'history';
 import { Provider } from 'mobx-react';
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { App } from './components';
 import { registerLocale } from "i18n-iso-countries";
+import { RootStore } from "./stores/RootStore";
+import { IServices } from "./interfaces/services/IServices";
+import { SettingsService } from "./services/SettingsService";
+import { AuthenticationService } from "./services/AuthenticationService";
+import { UserService } from "./services/UserService";
+import { AdService } from "./services/AdService";
+import { ImageService } from "./services/ImageService";
 
 registerLocale(englishLocale);
 
-const routingStore = new RouterStore();
-const history = syncHistoryWithStore(createBrowserHistory(), routingStore);
+const services : IServices = {
+	settingsService: new SettingsService(),
+	authenticationService: new AuthenticationService(),
+	userService: new UserService(),
+	adService: new AdService(),
+	imageService: new ImageService()
+};
 
-const appController = new AppController(routingStore);
+const rootStore = new RootStore(services);
+const appController = new AppController(rootStore);
 
 ReactDOM.render(
 	(
-		<Provider routingStore={routingStore}>
-			<Router history={history}>
+		<Provider routingStore={rootStore.routingStore}>
+			<Router history={rootStore.getHistory()}>
 				<ThemeProvider theme={theme}>
 					<IntlProvider locale="en" messages={translations.en}>
 						<MuiPickersUtilsProvider utils={DateFnsUtils}>

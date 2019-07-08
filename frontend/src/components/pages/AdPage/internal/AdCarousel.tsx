@@ -45,6 +45,7 @@ class AdCarousel extends React.Component<
 			return ad.images.map((image: IAdImage) => {
 				return (
 					<CardMedia component="img"
+						key={image.index}
 						image={getImageUrl(image.fileName)}/>
 				)
 			})
