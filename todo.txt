@@ -1,4 +1,3 @@
-* ability to make ad private
 * decide on money handling
 * dms
 * pricing information on ads

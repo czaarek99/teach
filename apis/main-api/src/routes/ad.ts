@@ -4,13 +4,14 @@ import { Joi } from "koa-joi-router";
 import { CustomContext } from "../Server";
 import { Ad } from "../database/models/Ad";
 import { User } from "../database/models/User";
-import { throwApiError, authenticationMiddleware } from "server-lib";
+import { authenticationMiddleware } from "server-lib";
 import { Address } from "../database/models/Address";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { UserSetting } from "../database/models/UserSetting";
 import { AdImage } from "../database/models/AdImage";
 import { ProfilePicture } from "../database/models/ProfilePicture";
 import { throwAdNotFound } from "../util/throwAdNotFound";
+import { Op } from "sequelize";
 
 import {
 	IAd,
@@ -46,6 +47,7 @@ function resolveDatabaseAd(ad: Ad) : IAd {
 		name: ad.name,
 		description: ad.description,
 		publicationDate: ad.createdAt,
+		private: ad.private,
 		images,
 	};
 }
@@ -75,13 +77,20 @@ router.get("/list", {
 
 	const query = context.query as IAdListInput;
 
+	const where = {
+		private: false
+	};
+
 	const [ads, count] : [Ad[], number] = await Promise.all([
 		Ad.findAll<Ad>({
+			where,
 			limit: query.limit,
 			offset: query.offset,
 			include: INCLUDES
 		}),
-		Ad.count()
+		Ad.count({
+			where
+		})
 	]);
 
 	const resolved = ads.map(resolveDatabaseAd);
@@ -105,9 +114,23 @@ router.get("/single/:id", {
 
 	const get = context.params as ISimpleIdInput;
 
+	let userId = -1;
+
+	if(context.state.session) {
+		userId = context.state.session.userId;
+	}
+
 	const ad = await Ad.findOne({
 		where: {
-			id: get.id
+			id: get.id,
+			[Op.or]: [
+				{
+					private: false
+				},
+				{
+					userId
+				}
+			],
 		},
 		include: INCLUDES
 	});
@@ -147,7 +170,8 @@ router.put("/", {
 	validate: {
 		body: {
 			name: Joi.string().min(AD_NAME_MIN_LENGTH).max(AD_NAME_MAX_LENGTH).required(),
-			description: Joi.string().min(AD_DESCRIPTION_MIN_LENGTH).max(AD_DESCRIPTION_MAX_LENGTH).required()
+			description: Joi.string().min(AD_DESCRIPTION_MIN_LENGTH).max(AD_DESCRIPTION_MAX_LENGTH).required(),
+			private: Joi.bool().required()
 		},
 		type: "json"
 	}
@@ -158,7 +182,8 @@ router.put("/", {
 	const ad : Ad = await Ad.create({
 		name: input.name,
 		description: input.description,
-		userId: context.state.session.userId
+		private: input.private,
+		userId: context.state.session.userId,
 	});
 
 	const output : ISimpleIdOutput = {
@@ -173,7 +198,8 @@ router.patch("/:id", {
 	validate: {
 		body: {
 			name: Joi.string().min(AD_NAME_MIN_LENGTH).max(AD_NAME_MAX_LENGTH).optional(),
-			description: Joi.string().min(AD_DESCRIPTION_MIN_LENGTH).max(AD_DESCRIPTION_MAX_LENGTH).optional()
+			description: Joi.string().min(AD_DESCRIPTION_MIN_LENGTH).max(AD_DESCRIPTION_MAX_LENGTH).optional(),
+			private: Joi.bool().optional()
 		},
 		params: {
 			id: Joi.number().min(0).required()

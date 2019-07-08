@@ -162,7 +162,8 @@ export class EditAdPageController implements IEditAdPageController {
 
 	@action
 	public onChange(key: keyof IEditAdModel, value: any) : void {
-		this.model[key] = value;
+		//Hack, why do we have to do this?
+		this.model[key] = value as never;
 
 		this.validate(key);
 	}

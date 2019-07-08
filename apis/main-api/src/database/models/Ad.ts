@@ -41,6 +41,10 @@ export class Ad extends Model<Ad> {
 	@Column(DataType.TEXT)
 	public description: string;
 
+	@AllowNull(false)
+	@Column
+	public private: boolean;
+
 	@HasMany(() => AdImage, {
 		foreignKey: "adId",
 		hooks: true,

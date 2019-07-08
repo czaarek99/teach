@@ -75,7 +75,7 @@ class ImageUploader extends React.Component<
 		onDragEnter: () => {},
 		onDragLeave: () => {},
 		multiple: false,
-		showOverlay: true
+		showOverlay: true,
 	}
 
 	public render() : React.ReactNode {
@@ -91,7 +91,7 @@ class ImageUploader extends React.Component<
 			onDragLeave,
 			imageUrl,
 			multiple,
-			showOverlay
+			showOverlay,
 		} = this.props;
 
 		const overlayClasses = clsx(classes.overlay, {

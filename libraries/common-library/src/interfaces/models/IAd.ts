@@ -9,4 +9,5 @@ export interface IAd {
 	description: string
 	publicationDate: Date
 	images: IAdImage[]
+	private: boolean
 }

@@ -30,6 +30,8 @@ import {
 	Paper,
 	Snackbar,
 	Button,
+	Checkbox,
+	FormControlLabel,
 } from "@material-ui/core";
 
 export const MEDIUM_BREAKPOINT = "@media screen and (min-width: 400px)";
@@ -145,11 +147,23 @@ class EditAdPage extends React.Component<
 
 		const adNameLabel = simpleFormat(this, "things.adName");
 		const descriptionLabel = simpleFormat(this, "things.description");
+		const privateLabel = simpleFormat(this, "things.private");
+
+		const isDisabled = controller.loading;
+
+		const privateCheckbox = (
+			<Checkbox checked={controller.model.private}
+				disabled={isDisabled}
+				onChange={(_, checked: boolean) => controller.onChange("private", checked)}/>
+		);
+
+
 		return (
 			<NavbarTemplate controller={navbarController}>
 				<div className={classes.content}>
 					<Paper className={classes.paper}>
 						<CustomTextField
+							disabled={isDisabled}
 							className={classes.field}
 							value={controller.model.name}
 							minLength={AD_NAME_MIN_LENGTH}
@@ -170,6 +184,7 @@ class EditAdPage extends React.Component<
 						<AdImageUploader controller={controller}/>
 
 						<CustomTextField
+							disabled={isDisabled}
 							rows={controller.descriptionRows}
 							className={classes.description}
 							multiline={true}
@@ -187,6 +202,12 @@ class EditAdPage extends React.Component<
 								maxLength: AD_DESCRIPTION_MAX_LENGTH
 							}}
 						/>
+
+						<div>
+							<FormControlLabel control={privateCheckbox}
+								label={privateLabel}/>
+						</div>
+
 
 						<LoadingButton onClick={() => controller.onSave()}
 							state={controller.saveButtonState}>

@@ -13,6 +13,7 @@ import { Ad } from "../database/models/Ad";
 import { Joi } from "koa-joi-router";
 import { AnySchema } from "joi";
 import { Op } from "sequelize";
+import { throwAdNotFound } from "../util/throwAdNotFound";
 
 import {
 	ErrorMessage,
@@ -24,7 +25,6 @@ import {
 	IAdImage,
 	IAdDeleteIndexesInput
 } from "common-library";
-import { throwAdNotFound } from "../util/throwAdNotFound";
 
 type AdImageInsert = Pick<AdImage, "adId" | "imageFileName" | "index">;
 
