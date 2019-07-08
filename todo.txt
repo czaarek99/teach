@@ -1,4 +1,3 @@
-* edit ads
 * edit button on own ads
 * decide on money handling
 * dms

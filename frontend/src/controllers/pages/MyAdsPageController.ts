@@ -66,6 +66,6 @@ export class MyAdsPageController implements IMyAdsPageController {
 
 	@action
 	public onNewAd() : void {
-		this.parent.onNewAd();
+		this.parent.onEditAd();
 	}
 }

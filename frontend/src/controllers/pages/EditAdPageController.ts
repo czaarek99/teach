@@ -10,6 +10,9 @@ import { objectKeys } from "../../util/objectKeys";
 import { IImageService } from "../../interfaces/services/IImageService";
 import { getImageUrl } from "../../util/imageAPI";
 import { successTimeout } from "../../util/successTimeout";
+import { requireLogin } from "../../util/requireLogin";
+import { RouterStore } from "mobx-react-router";
+import { IUserCache } from "../../util/UserCache";
 
 import {
 	IEditAdPageController,
@@ -23,7 +26,8 @@ import {
 	AD_DESCRIPTION_MAX_LENGTH,
 	MAX_AD_PICTURE_COUNT,
 	ErrorMessage,
-	HttpError
+	HttpError,
+	IAdDeleteIndexesInput
 } from "common-library";
 
 const validators : ValidatorMap<IEditAdModel> = {
@@ -41,9 +45,12 @@ export class EditAdPageController implements IEditAdPageController {
 
 	private readonly adService: IAdService;
 	private readonly imageService: IImageService;
+	private readonly userCache: IUserCache;
+	private readonly routingStore: RouterStore;
 	private saveButtonStateTimeout?: number;
 
 	@observable private readonly imageUrls = new Map<number, string>();
+	@observable private id?: number;
 
 	@observable public pageError = "";
 	@observable public saveButtonState : LoadingButtonState = "default";
@@ -60,23 +67,29 @@ export class EditAdPageController implements IEditAdPageController {
 
 	constructor(
 		adService: IAdService,
-		imageService: IImageService
+		imageService: IImageService,
+		userCache: IUserCache,
+		routingStore: RouterStore,
+		id?: number
 	) {
 		this.adService = adService;
 		this.imageService = imageService;
+		this.userCache = userCache;
+		this.routingStore = routingStore;
+		this.id = id;
 
 		this.load();
 	}
 
 	@action
 	private async load() : Promise<void> {
-		const searchParams = new URLSearchParams(window.location.search);
-		const idString = searchParams.get("adId");
+		const isLoggedIn = await requireLogin(this.userCache, this.routingStore)
+		if(!isLoggedIn) {
+			return;
+		}
 
-		if(idString) {
-			const id = parseInt(idString);
-
-			const ad = await this.adService.getAd(id);
+		if(this.id !== undefined) {
+			const ad = await this.adService.getAd(this.id);
 			this.model.fromOutput(ad);
 
 			for(const image of ad.images) {
@@ -177,13 +190,25 @@ export class EditAdPageController implements IEditAdPageController {
 			this.saveButtonState = "loading";
 
 			try {
-				const input = this.model.toInput();
+				const editAdInput = this.model.toInput();
 				const imageInput = this.model.toImageInput();
 
-				const output = await this.adService.createAd(input);
+				if(this.id === undefined) {
+					const output = await this.adService.createAd(editAdInput);
+					this.id = output.id
+				} else {
+					const adDeleteImagesInput : IAdDeleteIndexesInput = {
+						indexes: this.emptySlots
+					};
+
+					await Promise.all([
+						this.imageService.deleteAdPics(this.id, adDeleteImagesInput),
+						this.adService.updateAd(this.id, editAdInput)
+					]);
+				}
 
 				const imageOutput = await this.imageService.updateAdPics(
-					output.id,
+					this.id,
 					imageInput
 				);
 

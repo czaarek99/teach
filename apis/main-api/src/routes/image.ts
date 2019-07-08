@@ -9,6 +9,9 @@ import { config } from "../config";
 import { ProfilePicture } from "../database/models/ProfilePicture";
 import { AdImage } from "../database/models/AdImage";
 import { Ad } from "../database/models/Ad";
+import { Joi } from "koa-joi-router";
+import { AnySchema } from "joi";
+import { Op } from "sequelize";
 
 import {
 	ErrorMessage,
@@ -17,12 +20,30 @@ import {
 	MAX_AD_PICTURE_COUNT,
 	ISimpleIdInput,
 	IAdImagesOutput,
-	IAdImage
+	IAdImage,
+	IAdDeleteIndexesInput
 } from "common-library";
 
 type AdImageInsert = Pick<AdImage, "adId" | "imageFileName" | "index">;
 
 const router = new Router();
+
+const AD_ID_VALIDATOR = Joi.number()
+	.integer()
+	.min(0)
+	.required();
+
+const AD_IDS_VALIDATOR = Joi.array()
+	.allow(AD_ID_VALIDATOR)
+	.required();
+
+const AD_ID_INDEXES_VALIDATOR = Joi.array().allow(
+	Joi.number()
+	.integer()
+	.min(0)
+	.max(MAX_AD_PICTURE_COUNT)
+	.required()
+).required();
 
 function throwInvalidImageError(context: CustomContext) : void {
 	throwApiError(
@@ -33,6 +54,26 @@ function throwInvalidImageError(context: CustomContext) : void {
 			context.state.requestId
 		)
 	);
+}
+
+function validateSchemaManually(context: CustomContext, schema: AnySchema, value: any) : boolean {
+	const result = schema.validate(value);
+
+	if(result.error) {
+		throwApiError(
+			context,
+			new HttpError(
+				400,
+				result.error.message,
+				context.state.requestId,
+				true
+			)
+		);
+
+		return false;
+	}
+
+	return true;
 }
 
 router.patch("/profile", async (context: CustomContext) => {
@@ -106,21 +147,34 @@ router.delete("/profile", async (context: CustomContext) => {
 
 router.delete("/ad/:id", async(context: CustomContext) => {
 
-})
+	const params = context.params as unknown as ISimpleIdInput;
+
+	if(!validateSchemaManually(context, AD_ID_VALIDATOR, params.id)) {
+		return;
+	}
+
+	const body = context.request.body as IAdDeleteIndexesInput;
+
+	if(!validateSchemaManually(context, AD_ID_INDEXES_VALIDATOR, body.indexes)) {
+		return;
+	}
+
+	await AdImage.destroy({
+		where: {
+			adId: params.id,
+			index: {
+				[Op.in]: body.indexes
+			}
+		}
+	});
+});
 
 router.patch("/ad/:id", async(context: CustomContext) => {
 
 	const params = context.params as unknown as ISimpleIdInput;
 
-	if(!("id" in params)) {
-		throwApiError(
-			context,
-			new HttpError(
-				400,
-				"Please provide an id",
-				context.state.requestId
-			)
-		)
+	if(!validateSchemaManually(context, AD_ID_VALIDATOR, params.id)) {
+		return;
 	}
 
 	const ad : Ad = await Ad.findOne({

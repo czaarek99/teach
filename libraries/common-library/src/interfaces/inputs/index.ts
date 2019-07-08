@@ -9,3 +9,5 @@ export * from "./IPasswordInput";
 export * from "./IManySettingsInput";
 export * from "./ISimpleStringIdInput";
 export * from "./IEditAdInput";
+export * from "./ISimpleIdsInput";
+export * from "./IAdDeleteIndexesInput";

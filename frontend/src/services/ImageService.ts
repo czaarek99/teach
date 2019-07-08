@@ -1,6 +1,6 @@
 import { IImageService } from "../interfaces/services/IImageService";
 import { BaseService } from "./BaseService";
-import { IProfilePictureOutput, IAdImagesOutput } from "common-library";
+import { IProfilePictureOutput, IAdImagesOutput, IAdDeleteIndexesInput } from "common-library";
 
 export class ImageService extends BaseService implements IImageService  {
 
@@ -37,6 +37,12 @@ export class ImageService extends BaseService implements IImageService  {
 		});
 
 		return response.data;
+	}
+
+	public async deleteAdPics(id: number, input: IAdDeleteIndexesInput) : Promise<void> {
+		await this.axios.delete(`/ad/${id}`, {
+			data: input
+		});
 	}
 
 }

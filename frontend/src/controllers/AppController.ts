@@ -186,7 +186,9 @@ export class AppController implements IAppController {
 		if(this._editAdPageController === null)  {
 			this._editAdPageController = new EditAdPageController(
 				this.services.adService,
-				this.services.imageService
+				this.services.imageService,
+				this.userCache,
+				this.routingStore
 			);
 		}
 
@@ -194,8 +196,15 @@ export class AppController implements IAppController {
 	}
 
 	@action
-	public onNewAd() : void {
-		this._editAdPageController = null;
+	public onEditAd(id?: number) : void {
+		this._editAdPageController = new EditAdPageController(
+			this.services.adService,
+			this.services.imageService,
+			this.userCache,
+			this.routingStore,
+			id
+		);
+
 		this.routingStore.push(Route.EDIT_AD);
 	}
 
