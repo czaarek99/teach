@@ -1,6 +1,6 @@
 import { IEditAdModel } from "../interfaces/models/IEditAdModel";
 import { observable } from "mobx";
-import { IEditAdInput, IAd } from "common-library";
+import { IEditAdInput, IAd, AdCategory } from "common-library";
 
 export class EditAdModel implements IEditAdModel {
 
@@ -8,6 +8,7 @@ export class EditAdModel implements IEditAdModel {
 	@observable public description = "";
 	@observable public images = new Map<number, File>();
 	@observable public private = false;
+	@observable public category = AdCategory.COMPUTER_SCIENCE;
 
 	public fromOutput(ad: IAd) : void {
 		this.name = ad.name;
@@ -20,7 +21,8 @@ export class EditAdModel implements IEditAdModel {
 			name: this.name,
 			description: this.description,
 			images: this.images,
-			private: this.private
+			private: this.private,
+			category: this.category
 		};
 	}
 
@@ -28,7 +30,8 @@ export class EditAdModel implements IEditAdModel {
 		return {
 			name: this.name,
 			description: this.description,
-			private: this.private
+			private: this.private,
+			category: this.category
 		};
 	}
 

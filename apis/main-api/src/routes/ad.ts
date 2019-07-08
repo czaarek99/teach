@@ -25,6 +25,7 @@ import {
 	ISimpleIdOutput,
 	IEditAdInput,
 	IAdImage,
+	AdCategory,
 } from "common-library";
 
 const router = Router();
@@ -48,6 +49,7 @@ function resolveDatabaseAd(ad: Ad) : IAd {
 		description: ad.description,
 		publicationDate: ad.createdAt,
 		private: ad.private,
+		category: ad.category,
 		images,
 	};
 }
@@ -65,6 +67,8 @@ const INCLUDES = [
 		]
 	},
 ];
+
+const AD_CATEGORY_VALUES = Object.values(AdCategory);
 
 router.get("/list", {
 	validate: {
@@ -171,7 +175,8 @@ router.put("/", {
 		body: {
 			name: Joi.string().min(AD_NAME_MIN_LENGTH).max(AD_NAME_MAX_LENGTH).required(),
 			description: Joi.string().min(AD_DESCRIPTION_MIN_LENGTH).max(AD_DESCRIPTION_MAX_LENGTH).required(),
-			private: Joi.bool().required()
+			private: Joi.bool().required(),
+			category: Joi.string().allow(AD_CATEGORY_VALUES).required()
 		},
 		type: "json"
 	}
@@ -184,6 +189,7 @@ router.put("/", {
 		description: input.description,
 		private: input.private,
 		userId: context.state.session.userId,
+		category: input.category
 	});
 
 	const output : ISimpleIdOutput = {
@@ -199,7 +205,8 @@ router.patch("/:id", {
 		body: {
 			name: Joi.string().min(AD_NAME_MIN_LENGTH).max(AD_NAME_MAX_LENGTH).optional(),
 			description: Joi.string().min(AD_DESCRIPTION_MIN_LENGTH).max(AD_DESCRIPTION_MAX_LENGTH).optional(),
-			private: Joi.bool().optional()
+			private: Joi.bool().optional(),
+			category: Joi.string().allow(AD_CATEGORY_VALUES).optional()
 		},
 		params: {
 			id: Joi.number().min(0).required()

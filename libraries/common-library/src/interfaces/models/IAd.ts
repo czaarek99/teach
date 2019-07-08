@@ -1,5 +1,6 @@
 import { ITeacher } from "./ITeacher";
 import { IAdImage } from "./IAdImage";
+import { AdCategory } from "../../AdCategory";
 
 export interface IAd {
 	teacher: ITeacher
@@ -10,4 +11,5 @@ export interface IAd {
 	publicationDate: Date
 	images: IAdImage[]
 	private: boolean
+	category: AdCategory
 }

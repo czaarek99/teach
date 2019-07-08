@@ -1,5 +1,5 @@
 import { User } from "./User";
-import { AD_NAME_MAX_LENGTH } from "common-library";
+import { AD_NAME_MAX_LENGTH, AdCategory } from "common-library";
 import { AdImage } from "./AdImage";
 
 import {
@@ -44,6 +44,10 @@ export class Ad extends Model<Ad> {
 	@AllowNull(false)
 	@Column
 	public private: boolean;
+
+	@AllowNull(false)
+	@Column(DataType.STRING(100))
+	public category: AdCategory;
 
 	@HasMany(() => AdImage, {
 		foreignKey: "adId",

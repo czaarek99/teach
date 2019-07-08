@@ -208,7 +208,6 @@ class EditAdPage extends React.Component<
 								label={privateLabel}/>
 						</div>
 
-
 						<LoadingButton onClick={() => controller.onSave()}
 							state={controller.saveButtonState}>
 							<FormattedMessage id="actions.save"/>
