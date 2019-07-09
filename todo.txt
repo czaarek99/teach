@@ -1,6 +1,7 @@
+* ad categories
+* add viewmodel to editadpage
 * decide on money handling
+* show user country on ads
 * dms
 * pricing information on ads
-* ad categories
 * ability to delete account
-* add viewmodel to editadpage

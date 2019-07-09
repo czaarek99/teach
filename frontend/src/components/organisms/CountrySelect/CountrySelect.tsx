@@ -49,7 +49,7 @@ class CountrySelect extends React.Component<
 			<OutlinedInput id={SELECT_INPUT_ID}
 				fullWidth={true}
 				labelWidth={this.selectLabelWidth} />
-		)
+		);
 	}
 
 	public render() : React.ReactNode {

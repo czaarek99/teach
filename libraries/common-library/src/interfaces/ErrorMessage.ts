@@ -6,6 +6,7 @@ export enum ErrorMessage {
 
 	AD_NOT_FOUND = "error.adNotFound",
 	NOT_ENOUGH_AD_IMAGES = "error.notEnoughAdImages",
+	AD_CATEGORY_REQUIRED = "error.adCategoryRequired",
 
 	EMPTY = "error.empty",
 	TOO_SHORT = "error.tooShort",

@@ -75,6 +75,7 @@ router.get("/list", {
 		query: {
 			limit: Joi.number().min(0).max(500).required(),
 			offset: Joi.number().min(0).required(),
+			category: Joi.string().allow(AD_CATEGORY_VALUES).allow("").optional()
 		}
 	}
 }, async (context: CustomContext) => {
@@ -82,7 +83,8 @@ router.get("/list", {
 	const query = context.query as IAdListInput;
 
 	const where = {
-		private: false
+		private: false,
+		category: query.category
 	};
 
 	const [ads, count] : [Ad[], number] = await Promise.all([

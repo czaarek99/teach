@@ -1,15 +1,52 @@
 export enum AdCategory {
-	COMPUTER_SCIENCE = "computerScience",
-	PROGRAMMING = "programming",
-	HACKING = "hacking",
+	NONE = "category.none",
 
-	MUSIC = "music",
-	MUSIC_PRODUCTION = "musicProduction",
-	INSTRUMENTS = "instruments",
+	COMPUTER_SCIENCE = "category.computerScience",
+	PROGRAMMING = "category.computerScience.programming",
+	HACKING = "category.computerScience.hacking",
 
-	LANGUAGE = "language",
+	MUSIC = "category.music",
+	MUSIC_PRODUCTION = "category.music.musicProduction",
+	INSTRUMENTS = "category.music.instruments",
 
-	SCIENCE = "science",
-	PHYSICS = "physics",
-	MATH = "math",
+	SCIENCE = "category.science",
+	PHYSICS = "category.science.physics",
+	MATH = "category.science.math",
+
+	LANGUAGE = "category.language",
 }
+
+export interface IAdCategoryMapping {
+	parent: AdCategory
+	children?: AdCategory[]
+}
+
+export const CATEGORY_MAP : IAdCategoryMapping[] = [
+	{
+		parent: AdCategory.NONE
+	},
+	{
+		parent: AdCategory.COMPUTER_SCIENCE,
+		children: [
+			AdCategory.PROGRAMMING,
+			AdCategory.HACKING
+		]
+	},
+	{
+		parent: AdCategory.MUSIC,
+		children: [
+			AdCategory.MUSIC_PRODUCTION,
+			AdCategory.INSTRUMENTS
+		]
+	},
+	{
+		parent: AdCategory.SCIENCE,
+		children: [
+			AdCategory.PHYSICS,
+			AdCategory.MATH
+		]
+	},
+	{
+		parent: AdCategory.LANGUAGE,
+	}
+]

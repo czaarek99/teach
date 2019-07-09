@@ -20,6 +20,9 @@ import {
 	AD_NAME_MIN_LENGTH,
 	AD_DESCRIPTION_MIN_LENGTH,
 	AD_DESCRIPTION_MAX_LENGTH,
+	AdCategory,
+	CATEGORY_MAP,
+	IAdCategoryMapping,
 } from "common-library";
 
 import {
@@ -32,6 +35,9 @@ import {
 	Button,
 	Checkbox,
 	FormControlLabel,
+	FormControl,
+	InputLabel,
+	NativeSelect,
 } from "@material-ui/core";
 
 export const MEDIUM_BREAKPOINT = "@media screen and (min-width: 400px)";
@@ -157,7 +163,6 @@ class EditAdPage extends React.Component<
 				onChange={(_, checked: boolean) => controller.onChange("private", checked)}/>
 		);
 
-
 		return (
 			<NavbarTemplate controller={navbarController}>
 				<div className={classes.content}>
@@ -203,15 +208,19 @@ class EditAdPage extends React.Component<
 							}}
 						/>
 
+						{this.renderCategorySelect()}
+
 						<div>
 							<FormControlLabel control={privateCheckbox}
 								label={privateLabel}/>
 						</div>
 
-						<LoadingButton onClick={() => controller.onSave()}
-							state={controller.saveButtonState}>
-							<FormattedMessage id="actions.save"/>
-						</LoadingButton>
+						<div>
+							<LoadingButton onClick={() => controller.onSave()}
+								state={controller.saveButtonState}>
+								<FormattedMessage id="actions.save"/>
+							</LoadingButton>
+						</div>
 					</Paper>
 				</div>
 

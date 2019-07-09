@@ -6,6 +6,7 @@ export interface IEditAdPageErrorState extends ErrorState {
 	name: string[]
 	description: string[]
 	images: string[]
+	category: string[]
 }
 
 export interface IEditAdPageController {

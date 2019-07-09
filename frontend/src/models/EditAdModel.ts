@@ -8,7 +8,7 @@ export class EditAdModel implements IEditAdModel {
 	@observable public description = "";
 	@observable public images = new Map<number, File>();
 	@observable public private = false;
-	@observable public category = AdCategory.COMPUTER_SCIENCE;
+	@observable public category = AdCategory.NONE;
 
 	public fromOutput(ad: IAd) : void {
 		this.name = ad.name;

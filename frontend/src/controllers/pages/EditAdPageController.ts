@@ -24,7 +24,8 @@ import {
 	MAX_AD_PICTURE_COUNT,
 	ErrorMessage,
 	HttpError,
-	IAdDeleteIndexesInput
+	IAdDeleteIndexesInput,
+	AdCategory
 } from "common-library";
 
 export class EditAdPageController implements IEditAdPageController {
@@ -40,8 +41,10 @@ export class EditAdPageController implements IEditAdPageController {
 		],
 		images: [
 			this.imagesValidator.bind(this)
+		],
+		category: [
+			this.categoryValidator.bind(this)
 		]
-
 	}
 
 	@observable private readonly rootStore: RootStore;
@@ -60,7 +63,8 @@ export class EditAdPageController implements IEditAdPageController {
 	@observable public errorModel = new ErrorModel<IEditAdPageErrorState>({
 		name: [],
 		description: [],
-		images: []
+		images: [],
+		category: []
 	});
 
 	constructor(
@@ -74,6 +78,14 @@ export class EditAdPageController implements IEditAdPageController {
 	private imagesValidator() : ValidationResult {
 		if(!this.hasImages) {
 			return ErrorMessage.NOT_ENOUGH_AD_IMAGES;
+		}
+
+		return null;
+	}
+
+	private categoryValidator() : ValidationResult {
+		if(this.model.category === AdCategory.NONE) {
+			return ErrorMessage.AD_CATEGORY_REQUIRED;
 		}
 
 		return null;
