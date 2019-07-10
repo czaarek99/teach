@@ -4,14 +4,12 @@ import { observer } from "mobx-react";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { CATEGORY_MAP, IAdCategoryMapping, AdCategory } from "common-library";
 import { simpleFormat } from "../../../util/simpleFormat";
+import { CustomNativeSelect } from "../CustomNativeSelect";
 
 import {
 	Theme,
 	createStyles,
 	WithStyles,
-	FormControl,
-	InputLabel,
-	NativeSelect,
 	withStyles
 } from "@material-ui/core";
 
@@ -27,8 +25,12 @@ const styles = (theme: Theme) => createStyles({
 });
 
 interface IAdCategorySelectProps {
-	value: AdCategory
-	className: string
+	value?: AdCategory | ""
+	required?: boolean
+	onChange: (category: AdCategory) => void
+	errorMessage?: string | null
+	className?: string
+	disabled?: boolean
 }
 
 @observer
@@ -62,7 +64,11 @@ class AdCategorySelect extends React.Component<
 
 		const {
 			value,
-			className
+			className,
+			onChange,
+			errorMessage,
+			required,
+			disabled
 		} = this.props;
 
 		const options : React.ReactNodeArray = CATEGORY_MAP.map((mapping: IAdCategoryMapping) => {
@@ -81,15 +87,24 @@ class AdCategorySelect extends React.Component<
 		});
 
 		return (
-			<FormControl className={className}>
-				<InputLabel>
+			<CustomNativeSelect value={value}
+				required={required}
+				className={className}
+				disabled={disabled}
+				errorMessage={errorMessage}
+				label={
 					<FormattedMessage id="things.adCategory"/>
-				</InputLabel>
+				}
+				onChange={(value: string) => onChange(value as AdCategory)}
+			>
 
-				<NativeSelect value={value}>
-					{options}
-				</NativeSelect>
-			</FormControl>
+				<option value="">
+					{ }
+				</option>
+
+				{options}
+
+			</CustomNativeSelect>
 		);
 	}
 }

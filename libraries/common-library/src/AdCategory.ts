@@ -1,6 +1,4 @@
 export enum AdCategory {
-	NONE = "category.none",
-
 	COMPUTER_SCIENCE = "category.computerScience",
 	PROGRAMMING = "category.computerScience.programming",
 	HACKING = "category.computerScience.hacking",
@@ -22,9 +20,6 @@ export interface IAdCategoryMapping {
 }
 
 export const CATEGORY_MAP : IAdCategoryMapping[] = [
-	{
-		parent: AdCategory.NONE
-	},
 	{
 		parent: AdCategory.COMPUTER_SCIENCE,
 		children: [

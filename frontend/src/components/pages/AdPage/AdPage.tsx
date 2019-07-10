@@ -250,6 +250,7 @@ class AdPage extends React.Component<
 		let emailComponent: React.ReactNode = <Skeleton/> ;
 		let phoneComponent: React.ReactNode = <Skeleton />;
 		let cityComponent: React.ReactNode = <Skeleton />;
+		let categoryComponent: React.ReactNode = <Skeleton />;
 
 		let avatarComponent;
 		let imageComponent;
@@ -306,8 +307,23 @@ class AdPage extends React.Component<
 				);
 			}
 
+			categoryComponent = (
+				<React.Fragment>
+					<FormattedMessage id="things.adCategory"/>
+					<span>: </span>
+					<FormattedMessage id={model.category}/>
+				</React.Fragment>
+			);
+
+			titleComponent = (
+				<React.Fragment>
+					<FormattedMessage id="things.title"/>
+					<span>: </span>
+					{model.name}
+				</React.Fragment>
+			);
+
 			descriptionComponent = model.description;
-			titleComponent = model.name;
 			realNameComponent = `${model.teacher.firstName} ${model.teacher.lastName}`;
 			cityComponent = model.teacher.city;
 		}
@@ -325,11 +341,19 @@ class AdPage extends React.Component<
 						</section>
 
 						<section className={classes.section}>
-							<Typography variant="h5" noWrap={true}>
+							<Typography variant="h5"
+								noWrap={true}>
 								{titleComponent}
 							</Typography>
+
+							<Typography variant="h6"
+								noWrap={true}>
+								{categoryComponent}
+							</Typography>
+
 							{imageComponent}
 						</section>
+
 
 						<section className={classes.section}>
 							<Typography variant="h6">

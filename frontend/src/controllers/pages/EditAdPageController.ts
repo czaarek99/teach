@@ -84,7 +84,7 @@ export class EditAdPageController implements IEditAdPageController {
 	}
 
 	private categoryValidator() : ValidationResult {
-		if(this.model.category === AdCategory.NONE) {
+		if(!this.model.category) {
 			return ErrorMessage.AD_CATEGORY_REQUIRED;
 		}
 

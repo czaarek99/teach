@@ -8,12 +8,13 @@ export class EditAdModel implements IEditAdModel {
 	@observable public description = "";
 	@observable public images = new Map<number, File>();
 	@observable public private = false;
-	@observable public category = AdCategory.NONE;
+	@observable public category : AdCategory | "" = "";
 
 	public fromOutput(ad: IAd) : void {
 		this.name = ad.name;
 		this.description = ad.description;
 		this.private = ad.private;
+		this.category = ad.category;
 	}
 
 	public toValidate() : IEditAdModel {
@@ -27,6 +28,10 @@ export class EditAdModel implements IEditAdModel {
 	}
 
 	public toInput() : IEditAdInput {
+		if(this.category === "") {
+			throw new Error("Can not construct an ad without a category");
+		}
+
 		return {
 			name: this.name,
 			description: this.description,

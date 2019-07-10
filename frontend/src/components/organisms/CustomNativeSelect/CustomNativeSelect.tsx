@@ -3,17 +3,23 @@ import React from "react";
 import { observer } from "mobx-react";
 import { observable } from "mobx";
 import { v4 } from "uuid";
+import { FormattedMessage } from "react-intl";
 
 import {
 	OutlinedInput,
 	FormControl,
 	InputLabel,
-	NativeSelect
+	NativeSelect,
+	FormHelperText
 } from "@material-ui/core";
 
 interface ICustomNativeSelectProps {
-	label: string
-	value: string
+	label: React.ReactNode
+	value?: string | null
+	required?: boolean
+	errorMessage?: string | null
+	className?: string
+	disabled?: boolean
 	onChange: (value: string) => void
 }
 
@@ -40,6 +46,15 @@ class CustomNativeSelect extends React.Component<
 		);
 	}
 
+	private renderError() : React.ReactNode {
+		if(this.props.errorMessage) {
+			return (
+				<FormHelperText>
+					<FormattedMessage id={this.props.errorMessage}/>
+				</FormHelperText>
+			);
+		}
+	}
 
 	public render() : React.ReactNode {
 
@@ -47,15 +62,22 @@ class CustomNativeSelect extends React.Component<
 			value,
 			onChange,
 			label,
-			children
+			children,
+			className,
+			errorMessage,
+			required,
+			disabled
 		} = this.props;
 
 		return (
 			<FormControl fullWidth={true}
+				error={errorMessage ? true : false}
+				className={className}
+				disabled={disabled}
 				variant="outlined">
 
 				<InputLabel htmlFor={this.selectId}
-					required={true}
+					required={required}
 					ref={this.selectLabelRef}>
 
 					{label}
@@ -68,6 +90,8 @@ class CustomNativeSelect extends React.Component<
 
 					{children}
 				</NativeSelect>
+
+				{this.renderError()}
 			</FormControl>
 		)
 	}

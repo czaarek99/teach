@@ -5,5 +5,5 @@ export interface IEditAdModel {
 	readonly description: string
 	readonly images: Map<number, File>
 	readonly private: boolean
-	readonly category: AdCategory
+	readonly category: AdCategory | ""
 }

@@ -21,5 +21,6 @@ export default {
 	[ErrorMessage.EXPIRED_RESET_KEY]: "This password reset link has expired.",
 	[ErrorMessage.AD_NOT_FOUND]: "Can not find an ad with that id",
 	[ErrorMessage.WRONG_CURRENT_PASSWORD]: "Old password is wrong",
-	[ErrorMessage.NOT_ENOUGH_AD_IMAGES]: "You have to upload at least one ad image"
+	[ErrorMessage.NOT_ENOUGH_AD_IMAGES]: "You have to upload at least one ad image",
+	[ErrorMessage.AD_CATEGORY_REQUIRED]: "You have to pick a category for your ad"
 }

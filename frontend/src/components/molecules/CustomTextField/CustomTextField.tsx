@@ -1,8 +1,7 @@
 import React from "react";
 
-import TextField, { TextFieldProps } from "@material-ui/core/TextField";
-
-import { InputAdornment } from "@material-ui/core";
+import { TextFieldProps } from "@material-ui/core/TextField";
+import { InputAdornment, TextField } from "@material-ui/core";
 import { InjectedIntlProps, MessageValue, injectIntl } from "react-intl";
 import { ErrorModel, ErrorState } from "../../../validation/ErrorModel";
 import { observer } from "mobx-react";
@@ -91,19 +90,19 @@ export class CustomTextField<T extends ErrorState = {}> extends React.Component<
 
 		return (
 			<TextField { ...rest as TextFieldProps}
-			error={translatedError !== null}
-			helperText={translatedError}
-			InputProps={{
-				startAdornment: startAndorn,
-				endAdornment: endAndorn,
-				...InputProps
-			}}
-			//eslint-disable-next-line
-			inputProps={{
-				maxLength,
-				minLength,
-				...inputProps
-			}}/>
+				error={translatedError !== null}
+				helperText={translatedError}
+				InputProps={{
+					startAdornment: startAndorn,
+					endAdornment: endAndorn,
+					...InputProps
+				}}
+				//eslint-disable-next-line
+				inputProps={{
+					maxLength,
+					minLength,
+					...inputProps
+				}}/>
 		)
 	}
 

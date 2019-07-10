@@ -1,8 +1,6 @@
 import { AdCategory } from "common-library";
 
 export default {
-	[AdCategory.NONE]: "Pick one",
-
 	[AdCategory.COMPUTER_SCIENCE]: "Computer science",
 	[AdCategory.PROGRAMMING]: "Programming",
 	[AdCategory.HACKING]: "Hacking",

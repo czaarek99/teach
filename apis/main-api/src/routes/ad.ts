@@ -82,10 +82,13 @@ router.get("/list", {
 
 	const query = context.query as IAdListInput;
 
-	const where = {
+	let where : Partial<Pick<Ad, "private" | "category">> = {
 		private: false,
-		category: query.category
 	};
+
+	if(query.category) {
+		where.category = query.category;
+	}
 
 	const [ads, count] : [Ad[], number] = await Promise.all([
 		Ad.findAll<Ad>({

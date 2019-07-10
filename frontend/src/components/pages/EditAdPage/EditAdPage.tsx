@@ -7,6 +7,7 @@ import { IEditAdPageController } from "../../../interfaces/controllers/pages/INe
 import { observer } from "mobx-react";
 import { NavbarTemplate } from "../../templates";
 import { CustomTextField, LoadingButton } from "../../molecules";
+import { AdCategorySelect } from "../../organisms";
 import { simpleFormat } from "../../../util/simpleFormat";
 
 import {
@@ -20,9 +21,6 @@ import {
 	AD_NAME_MIN_LENGTH,
 	AD_DESCRIPTION_MIN_LENGTH,
 	AD_DESCRIPTION_MAX_LENGTH,
-	AdCategory,
-	CATEGORY_MAP,
-	IAdCategoryMapping,
 } from "common-library";
 
 import {
@@ -35,9 +33,6 @@ import {
 	Button,
 	Checkbox,
 	FormControlLabel,
-	FormControl,
-	InputLabel,
-	NativeSelect,
 } from "@material-ui/core";
 
 export const MEDIUM_BREAKPOINT = "@media screen and (min-width: 400px)";
@@ -208,7 +203,12 @@ class EditAdPage extends React.Component<
 							}}
 						/>
 
-						{this.renderCategorySelect()}
+
+						<AdCategorySelect value={controller.model.category}
+							disabled={isDisabled}
+							required={true}
+							errorMessage={controller.errorModel.getFirstKeyError("category")}
+							onChange={category => controller.onChange("category", category)}/>
 
 						<div>
 							<FormControlLabel control={privateCheckbox}
