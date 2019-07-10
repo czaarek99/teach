@@ -1,8 +1,6 @@
 import React from 'react';
 import Skeleton from "react-loading-skeleton";
 import AdCarousel from "./internal/AdCarousel";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 import { IAdPageController } from "../../../interfaces/controllers/pages/IAdPageController";
 import { NavbarTemplate } from "../../templates";
@@ -27,6 +25,8 @@ import {
 	DialogContent,
 	DialogActions,
 } from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const AD_SMALL_BREAKPOINT = "@media screen and (min-width: 400px)";
 const AD_MEDIUM_BREAKPOINT = "@media screen and (min-width: 1000px)";
@@ -188,12 +188,12 @@ class AdPage extends React.Component<
 					<Button className={classes.ownerControlButton}
 						onClick={() => controller.edit()}>
 
-						<EditIcon />
+						<FontAwesomeIcon icon={faPen}/>
 					</Button>
 					<Button className={classes.ownerControlButton}
 						onClick={() => controller.openConfirmDialog()}>
 
-						<DeleteIcon />
+						<FontAwesomeIcon icon={faTrash}/>
 					</Button>
 				</section>
 			);

@@ -1,15 +1,15 @@
 import React from "react";
 
-import CalendarIcon from "@material-ui/icons/CalendarToday";
-
 import { CustomTextField } from "../../../molecules";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 
 class DatePickerTextField extends React.Component {
 
 	public render() : React.ReactNode {
 
 		return (
-			<CustomTextField startAdornment={ <CalendarIcon />}
+			<CustomTextField startAdornment={ <FontAwesomeIcon icon={faCalendar}/>}
 				{...this.props} />
 		)
 

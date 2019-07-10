@@ -1,6 +1,4 @@
 import React from 'react';
-import UserIcon from "@material-ui/icons/AccountBox";
-import PhoneIcon from "@material-ui/icons/Phone";
 import ActionButtons from "./ActionButtons";
 
 import { observer } from "mobx-react";
@@ -22,6 +20,8 @@ import {
 import {
 	IPersonalInformationProfileController
 } from "../../../../interfaces/controllers/profile/IPersonalInformationProfileController";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignature, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 interface IPersonalInformationContentProps {
 	controller: IPersonalInformationProfileController
@@ -78,7 +78,7 @@ class PersonalInformationContent extends React.Component<
 						label={firstNameLabel}
 						required={true}
 						onChange={event => controller.onChange("firstName", event.target.value)}
-						startAdornment={ <UserIcon /> }
+						startAdornment={ <FontAwesomeIcon icon={faSignature}/> }
 						errorModel={controller.errorModel}
 						validationKey="firstName"
 						errorTranslationValues={{
@@ -96,7 +96,7 @@ class PersonalInformationContent extends React.Component<
 						label={lastNameLabel}
 						required={true}
 						onChange={event => controller.onChange("lastName", event.target.value)}
-						startAdornment={ <UserIcon /> }
+						startAdornment={ <FontAwesomeIcon icon={faSignature}/> }
 						errorModel={controller.errorModel}
 						validationKey="lastName"
 						errorTranslationValues={{
@@ -113,7 +113,7 @@ class PersonalInformationContent extends React.Component<
 						maxLength={PHONE_NUMBER_MAX_LENGTH}
 						label={phoneNumberLabel}
 						onChange={event => controller.onChange("phoneNumber", event.target.value)}
-						startAdornment={ <PhoneIcon /> }
+						startAdornment={ <FontAwesomeIcon icon={faPhone}/> }
 						errorModel={controller.errorModel}
 						validationKey="phoneNumber"
 						errorTranslationValues={{

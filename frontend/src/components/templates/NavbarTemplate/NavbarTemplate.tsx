@@ -1,21 +1,27 @@
 import React from 'react';
 import Skeleton from "react-loading-skeleton";
-import HomeIcon from "@material-ui/icons/Home"
 import MenuIcon from "@material-ui/icons/Menu";
-import UserIcon from "@material-ui/icons/AccountBox";
-import SettingsIcon from "@material-ui/icons/Settings";
-import BrowseIcon from "@material-ui/icons/Search";
-import WallpaperIcon from "@material-ui/icons/Wallpaper";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { InjectedIntlProps, injectIntl, FormattedMessage } from 'react-intl';
 import { observer } from 'mobx-react';
 import { simpleFormat } from '../../../util/simpleFormat';
 import { Route } from '../../../interfaces/Routes';
 import { PRODUCT_NAME } from 'common-library';
+import { LoadingButton } from "../../molecules";
+import { getImageUrl } from "../../../util/imageAPI";
 
 import {
 	INavbarController
 } from '../../../interfaces/controllers/templates/INavbarController';
+
+import {
+	faCog,
+	faUser,
+	faAd,
+	faHome,
+	faSearch
+} from "@fortawesome/free-solid-svg-icons";
 
 import {
 	ListItem,
@@ -36,8 +42,6 @@ import {
 	Avatar,
 	Button
 } from '@material-ui/core';
-import { LoadingButton } from "../../molecules";
-import { getImageUrl } from "../../../util/imageAPI";
 
 const drawerWidth = 270;
 
@@ -119,6 +123,10 @@ const styles = (theme: Theme) => createStyles({
 	logoutButtonContainer: {
 		display: "flex",
 		justifyContent: "center"
+	},
+
+	navIcon: {
+		fontSize: 20
 	}
 
 });
@@ -222,9 +230,25 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		if(controller.isLoggedIn) {
 			loggedInPages = (
 				<React.Fragment>
-					{this.renderNavigationItem("things.pages.settings", <SettingsIcon />, Route.SETTINGS)}
-					{this.renderNavigationItem("things.pages.profile", <UserIcon />, Route.PROFILE)}
-					{this.renderNavigationItem("things.pages.myads", <WallpaperIcon />, Route.MY_ADS)}
+					{this.renderNavigationItem(
+						"things.pages.settings",
+						<FontAwesomeIcon icon={faCog}
+							className={classes.navIcon}/>,
+						Route.SETTINGS
+					)}
+
+					{this.renderNavigationItem(
+						"things.pages.profile",
+						<FontAwesomeIcon icon={faUser}
+							className={classes.navIcon}/>,
+						Route.PROFILE
+					)}
+					{this.renderNavigationItem(
+						"things.pages.myads",
+						<FontAwesomeIcon icon={faAd}
+							className={classes.navIcon}/>,
+						Route.MY_ADS
+					)}
 				</React.Fragment>
 			);
 
@@ -275,8 +299,18 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 				<Divider />
 
 				<List>
-					{this.renderNavigationItem("things.pages.home", <HomeIcon />, Route.HOME)}
-					{this.renderNavigationItem("things.pages.browse", <BrowseIcon />, Route.BROWSE)}
+					{this.renderNavigationItem(
+						"things.pages.home",
+						<FontAwesomeIcon icon={faHome}
+							className={classes.navIcon}/>,
+						Route.HOME
+					)}
+					{this.renderNavigationItem(
+						"things.pages.browse",
+						<FontAwesomeIcon icon={faSearch}
+							className={classes.navIcon}/>,
+						Route.BROWSE
+					)}
 					{loggedInPages}
 				</List>
 

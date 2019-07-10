@@ -1,5 +1,4 @@
 import React from 'react';
-import MapIcon from "@material-ui/icons/Map";
 import ActionButtons from "./ActionButtons";
 
 import { observer } from "mobx-react";
@@ -9,6 +8,8 @@ import { Theme, withStyles, Paper, Typography } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
 import { simpleFormat } from "../../../../util/simpleFormat";
 import { CountrySelect } from "../../../organisms";
+import { faMap } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
 	STATE_MAX_LENGTH,
@@ -66,6 +67,10 @@ class AddressContent extends React.Component<
 		const streetLabel = simpleFormat(this, "things.street");
 		const stateLabel = simpleFormat(this, "things.state");
 
+		const mapIcon = (
+			<FontAwesomeIcon icon={faMap}/>
+		);
+
 		return (
 			<Paper className={classes.normalPaper}>
 				<Typography variant="h5">
@@ -82,7 +87,7 @@ class AddressContent extends React.Component<
 						label={streetLabel}
 						required={true}
 						onChange={event => controller.onChange("street", event.target.value)}
-						startAdornment={ <MapIcon/> }
+						startAdornment={mapIcon}
 						errorModel={controller.errorModel}
 						validationKey="street"
 						errorTranslationValues={{
@@ -100,7 +105,7 @@ class AddressContent extends React.Component<
 						label={cityLabel}
 						required={true}
 						onChange={event => controller.onChange("city", event.target.value)}
-						startAdornment={ <MapIcon/> }
+						startAdornment={mapIcon}
 						errorModel={controller.errorModel}
 						validationKey="city"
 						errorTranslationValues={{
@@ -118,7 +123,7 @@ class AddressContent extends React.Component<
 						label={zipCodeLabel}
 						required={true}
 						onChange={event => controller.onChange("zipCode", event.target.value)}
-						startAdornment={ <MapIcon/> }
+						startAdornment={mapIcon}
 						errorModel={controller.errorModel}
 						validationKey="zipCode"
 						errorTranslationValues={{
@@ -134,7 +139,7 @@ class AddressContent extends React.Component<
 						maxLength={STATE_MAX_LENGTH}
 						label={stateLabel}
 						onChange={event => controller.onChange("state", event.target.value)}
-						startAdornment={ <MapIcon/> }
+						startAdornment={mapIcon}
 						errorModel={controller.errorModel}
 						validationKey="state"
 						errorTranslationValues={{

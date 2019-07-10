@@ -1,5 +1,4 @@
 import React from "react";
-import MailIcon from "@material-ui/icons/Mail";
 
 import { IForgotPageController } from "../../../interfaces/controllers/pages/IForgotPageController";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
@@ -9,6 +8,8 @@ import { EMAIL_MAX_LENGTH, EMAIL_MIN_LENGTH } from "common-library";
 import { LoadingButton, CustomTextField, InfoBox } from "../../molecules";
 import { CustomCaptcha } from "../../organisms";
 import { AuthenticationTemplate, AUTHENTICATION_MARGIN } from "../../templates";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 import {
 	Theme,
@@ -93,7 +94,7 @@ class ForgotPage extends React.Component<
 					label={emailLabel}
 					required={true}
 					onChange={event => controller.onChange("email", event.target.value)}
-					startAdornment={ <MailIcon /> }
+					startAdornment={ <FontAwesomeIcon icon={faEnvelope}/> }
 					errorModel={controller.errorModel}
 					validationKey="email"
 					errorTranslationValues={{

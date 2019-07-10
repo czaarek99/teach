@@ -1,7 +1,4 @@
 import React from 'react';
-import MailIcon from "@material-ui/icons/Mail";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import KeyIcon from "@material-ui/icons/VpnKey";
 
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { simpleFormat } from "../../../util/simpleFormat";
@@ -10,6 +7,8 @@ import { PASSWORD_MAX_LENGTH, EMAIL_MAX_LENGTH } from "common-library";
 import { InfoBox, CustomTextField, LoadingButton } from "../../molecules";
 import { Route } from "../../../interfaces/Routes";
 import { AuthenticationTemplate, AUTHENTICATION_MARGIN } from "../../templates";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faKey, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 import {
 	ILoginPageController,
@@ -23,6 +22,7 @@ import {
 	Typography,
 	Link,
 } from "@material-ui/core";
+
 
 const styles = (theme: Theme) => createStyles({
 
@@ -42,12 +42,16 @@ const styles = (theme: Theme) => createStyles({
 
 	loginButton: {
 		width: 120,
-		transition: "font-size 600ms",
+		height: 36,
 
-		"&:hover": {
+		"&:hover $loginText": {
 			fontSize: 0
 		}
 	},
+
+	loginText: {
+		transition: "font-size 600ms",
+	}
 
 });
 
@@ -107,7 +111,7 @@ class LoginPage extends React.Component<
 					label={emailLabel}
 					required={true}
 					onChange={event => controller.onChange("email", event.target.value)}
-					startAdornment={ <MailIcon /> }
+					startAdornment={ <FontAwesomeIcon icon={faEnvelope}/> }
 					errorModel={controller.errorModel}
 					validationKey="email"
 					errorTranslationValues={{
@@ -122,7 +126,7 @@ class LoginPage extends React.Component<
 					label={passwordLabel}
 					required={true}
 					onChange={event => controller.onChange("password", event.target.value)}
-					startAdornment={ <KeyIcon /> }
+					startAdornment={ <FontAwesomeIcon icon={faKey}/> }
 					errorModel={controller.errorModel}
 					validationKey="password"
 					errorTranslationValues={{
@@ -152,9 +156,12 @@ class LoginPage extends React.Component<
 					<LoadingButton state={controller.loginButtonState}
 						className={classes.loginButton}
 						onClick={() => controller.onLogin()}>
-						{loginLabel}
 
-						<ArrowForwardIcon />
+						<span className={classes.loginText}>
+							{loginLabel}
+						</span>
+
+						<FontAwesomeIcon icon={faArrowRight}/>
 					</LoadingButton>
 				</div>
 			</AuthenticationTemplate>

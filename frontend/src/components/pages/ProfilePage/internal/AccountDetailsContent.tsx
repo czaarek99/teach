@@ -1,6 +1,4 @@
 import React from 'react';
-import MailIcon from "@material-ui/icons/Mail";
-import KeyIcon from "@material-ui/icons/VpnKey";
 
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { observer } from "mobx-react";
@@ -21,6 +19,8 @@ import {
 import {
 	IAccountDetailsProfileController
 } from "../../../../interfaces/controllers/profile/IAccountDetailsProfileController";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faKey, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 const styles = (theme: Theme) => createStyles({
 	normalPaper: {
@@ -73,6 +73,10 @@ class AccountDetailsContent extends React.Component<
 
 		let changePasswordContent;
 
+		const keyIcon = (
+			<FontAwesomeIcon icon={faKey}/>
+		);
+
 		if(controller.isChangingPassword) {
 			let errorMessage;
 
@@ -97,7 +101,7 @@ class AccountDetailsContent extends React.Component<
 						label={currentPasswordLabel}
 						required={true}
 						onChange={event => controller.onChange("currentPassword", event.target.value)}
-						startAdornment={ <KeyIcon /> }
+						startAdornment={keyIcon}
 					/>
 
 					<CustomTextField disabled={isDisabled}
@@ -109,7 +113,7 @@ class AccountDetailsContent extends React.Component<
 						label={newPasswordLabel}
 						required={true}
 						onChange={event => controller.onChange("newPassword", event.target.value)}
-						startAdornment={ <KeyIcon /> }
+						startAdornment={keyIcon}
 						errorModel={controller.errorModel}
 						validationKey="password"
 						errorTranslationValues={{
@@ -128,7 +132,7 @@ class AccountDetailsContent extends React.Component<
 						label={repeatPasswordLabel}
 						required={true}
 						onChange={event => controller.onChange("repeatPassword", event.target.value)}
-						startAdornment={ <KeyIcon /> }
+						startAdornment={keyIcon}
 						errorModel={controller.errorModel}
 						validationKey="repeatPassword"
 						errorTranslationValues={{
@@ -177,7 +181,7 @@ class AccountDetailsContent extends React.Component<
 						value={controller.email}
 						label={emailLabel}
 						required={true}
-						startAdornment={ <MailIcon /> }
+						startAdornment={ <FontAwesomeIcon icon={faEnvelope}/> }
 					/>
 
 					<Typography>

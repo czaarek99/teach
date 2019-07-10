@@ -31,14 +31,11 @@ export class AppController implements IAppController {
 
 	public readonly navbarController: INavbarController;
 
-	private _loginPageController: ILoginPageController | null = null;
-	private _registrationPageController: IRegistrationPageController | null = null;
 	private _forgotPageController: IForgotPageController | null = null;
 	private _resetPasswordPageController: IResetPasswordPageController | null = null;
 	private _browsePageController: IBrowsePageController | null = null;
 	private _profilePageController: IProfilePageController | null = null;
 	private _settingsPageController: ISettingsPageController | null = null;
-	private _myAdsPageController: IMyAdsPageController | null = null;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -54,19 +51,11 @@ export class AppController implements IAppController {
 	}
 
 	public get loginPageController() : ILoginPageController {
-		if(this._loginPageController === null) {
-			this._loginPageController = new LoginPageController(this.rootStore);
-		}
-
-		return this._loginPageController;
+		return new LoginPageController(this.rootStore);
 	}
 
 	public get registrationPageController() : IRegistrationPageController {
-		if(this._registrationPageController === null) {
-			this._registrationPageController = new RegistrationPageController(this.rootStore);
-		}
-
-		return this._registrationPageController;
+		return new RegistrationPageController(this.rootStore);
 	}
 
 	public get forgotPageController() : IForgotPageController {
