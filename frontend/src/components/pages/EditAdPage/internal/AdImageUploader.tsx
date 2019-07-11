@@ -1,6 +1,4 @@
 import React from 'react';
-import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternate";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 import { Theme, createStyles, Typography } from "@material-ui/core";
 import { IEditAdPageController } from "../../../../interfaces/controllers/pages/INewAdPageController";
@@ -17,6 +15,8 @@ import {
 	XX_LARGE_BREAKPOINT,
 	X_LARGE_BREAKPOINT
 } from "../EditAdPage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 
 const styles = (theme: Theme) => createStyles({
 	uploader: {
@@ -168,7 +168,7 @@ class AdImageUploader extends React.Component<
 						<div className={classes.removeOverlay}
 							onClick={() => controller.onDeleteImage(i)}>
 
-							<DeleteIcon />
+							<FontAwesomeIcon icon={faTrash}/>
 						</div>
 					</React.Fragment>
 				);
@@ -180,7 +180,7 @@ class AdImageUploader extends React.Component<
 					key={i}
 					onClick={() => controller.setImageIndex(i)}>
 
-					<AddPhotoIcon fontSize="large"/>
+					<FontAwesomeIcon icon={faCloudUploadAlt} />
 
 					{overlays}
 

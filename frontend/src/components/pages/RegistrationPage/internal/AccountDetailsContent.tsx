@@ -1,6 +1,4 @@
 import React from 'react';
-import MailIcon from "@material-ui/icons/Mail";
-import KeyIcon from "@material-ui/icons/VpnKey";
 
 import { observer } from "mobx-react";
 import { IRegistrationContentProps } from "../RegistrationPage";
@@ -15,6 +13,8 @@ import {
 	PASSWORD_MIN_LENGTH,
 	PASSWORD_MAX_LENGTH,
 } from "common-library";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
 
 @observer
 class AccountDetailsContent extends React.Component<
@@ -33,6 +33,10 @@ class AccountDetailsContent extends React.Component<
 		const emailLabel = simpleFormat(this, "things.email");
 		const passwordLabel = simpleFormat(this, "things.password");
 		const repeatPasswordLabel = simpleFormat(this, "actions.repeatPassword");
+
+		const keyIcon = (
+			<FontAwesomeIcon icon={faKey}/>
+		);
 
 		return (
 			<Box>
@@ -54,7 +58,7 @@ class AccountDetailsContent extends React.Component<
 						label={emailLabel}
 						required={true}
 						onChange={event => controller.onChange("email", event.target.value)}
-						startAdornment={ <MailIcon /> }
+						startAdornment={ <FontAwesomeIcon icon={faEnvelope}/> }
 						errorModel={controller.errorModel}
 						validationKey="email"
 						errorTranslationValues={{
@@ -74,7 +78,7 @@ class AccountDetailsContent extends React.Component<
 						label={passwordLabel}
 						required={true}
 						onChange={event => controller.onChange("password", event.target.value)}
-						startAdornment={ <KeyIcon /> }
+						startAdornment={keyIcon}
 						errorModel={controller.errorModel}
 						validationKey="password"
 						errorTranslationValues={{
@@ -94,7 +98,7 @@ class AccountDetailsContent extends React.Component<
 						label={repeatPasswordLabel}
 						required={true}
 						onChange={event => controller.onChange("repeatPassword", event.target.value)}
-						startAdornment={ <KeyIcon /> }
+						startAdornment={keyIcon}
 						errorModel={controller.errorModel}
 						validationKey="repeatPassword"
 						errorTranslationValues={{

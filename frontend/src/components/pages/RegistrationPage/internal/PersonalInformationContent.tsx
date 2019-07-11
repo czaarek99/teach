@@ -1,6 +1,4 @@
 import React from 'react';
-import UserIcon from "@material-ui/icons/AccountBox";
-import PhoneIcon from "@material-ui/icons/Phone";
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
@@ -18,6 +16,8 @@ import {
 	getUserMaxDate,
 	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignature, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 
 @observer
@@ -39,6 +39,10 @@ class PersonalInformationContent extends React.Component<
 		const birthDateLabel = simpleFormat(this, "things.birthDate");
 		const phoneNumberLabel = simpleFormat(this, "things.phoneNumber");
 
+		const signatureIcon = (
+			<FontAwesomeIcon icon={faSignature}/>
+		);
+
 		return (
 			<Box>
 				<Box mb={margin}
@@ -59,7 +63,7 @@ class PersonalInformationContent extends React.Component<
 						label={firstNameLabel}
 						required={true}
 						onChange={event => controller.onChange("firstName", event.target.value)}
-						startAdornment={ <UserIcon /> }
+						startAdornment={signatureIcon}
 						errorModel={controller.errorModel}
 						validationKey="firstName"
 						errorTranslationValues={{
@@ -79,7 +83,7 @@ class PersonalInformationContent extends React.Component<
 						label={lastNameLabel}
 						required={true}
 						onChange={event => controller.onChange("lastName", event.target.value)}
-						startAdornment={ <UserIcon /> }
+						startAdornment={signatureIcon}
 						errorModel={controller.errorModel}
 						validationKey="lastName"
 						errorTranslationValues={{
@@ -98,7 +102,7 @@ class PersonalInformationContent extends React.Component<
 						maxLength={PHONE_NUMBER_MAX_LENGTH}
 						label={phoneNumberLabel}
 						onChange={event => controller.onChange("phoneNumber", event.target.value)}
-						startAdornment={ <PhoneIcon /> }
+						startAdornment={ <FontAwesomeIcon icon={faPhone}/> }
 						errorModel={controller.errorModel}
 						validationKey="phoneNumber"
 						errorTranslationValues={{

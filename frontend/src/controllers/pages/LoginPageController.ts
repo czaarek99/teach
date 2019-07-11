@@ -23,8 +23,8 @@ export class LoginPageController implements ILoginPageController {
 	@observable private readonly rootStore: RootStore;
 
 	private shouldValidate = false;
-	private isLoggedIn = false;
 
+	@observable public isLoggedIn = false;
 	@observable public loginButtonState: LoadingButtonState = "default";
 	@observable public loading = true;
 	@observable public model = new LoginModel();

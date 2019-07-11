@@ -1,5 +1,4 @@
 import React from 'react';
-import InfoIcon from "@material-ui/icons/Info";
 import AdImageUploader from "./internal/AdImageUploader";
 
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
@@ -9,6 +8,8 @@ import { NavbarTemplate } from "../../templates";
 import { CustomTextField, LoadingButton } from "../../molecules";
 import { AdCategorySelect } from "../../organisms";
 import { simpleFormat } from "../../../util/simpleFormat";
+import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
 	InjectedIntlProps,
@@ -171,7 +172,7 @@ class EditAdPage extends React.Component<
 							label={adNameLabel}
 							required={true}
 							onChange={event => controller.onChange("name", event.target.value)}
-							startAdornment={ <InfoIcon /> }
+							startAdornment={ <FontAwesomeIcon icon={faInfo} /> }
 							errorModel={controller.errorModel}
 							validationKey="name"
 							errorTranslationValues={{

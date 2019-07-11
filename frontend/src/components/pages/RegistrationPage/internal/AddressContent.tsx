@@ -1,5 +1,4 @@
 import React from "react";
-import MapIcon from "@material-ui/icons/Map";
 
 import { observer } from "mobx-react";
 import { IRegistrationContentProps } from "../RegistrationPage";
@@ -7,6 +6,8 @@ import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { simpleFormat } from "../../../../util/simpleFormat";
 import { CustomTextField } from "../../../molecules";
 import { CountrySelect } from "../../../organisms";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMap } from "@fortawesome/free-solid-svg-icons";
 
 import {
 	Box,
@@ -43,6 +44,10 @@ class AddressContent extends React.Component<
 		const streetLabel = simpleFormat(this, "things.street");
 		const stateLabel = simpleFormat(this, "things.state");
 
+		const mapIcon = (
+			<FontAwesomeIcon icon={faMap}/>
+		);
+
 		return (
 			<Box>
 				<Box mb={margin}
@@ -63,7 +68,7 @@ class AddressContent extends React.Component<
 						label={streetLabel}
 						required={true}
 						onChange={event => controller.onChange("street", event.target.value)}
-						startAdornment={ <MapIcon/> }
+						startAdornment={mapIcon}
 						errorModel={controller.errorModel}
 						validationKey="street"
 						errorTranslationValues={{
@@ -82,7 +87,7 @@ class AddressContent extends React.Component<
 						label={cityLabel}
 						required={true}
 						onChange={event => controller.onChange("city", event.target.value)}
-						startAdornment={ <MapIcon/> }
+						startAdornment={mapIcon}
 						errorModel={controller.errorModel}
 						validationKey="city"
 						errorTranslationValues={{
@@ -101,7 +106,7 @@ class AddressContent extends React.Component<
 						label={zipCodeLabel}
 						required={true}
 						onChange={event => controller.onChange("zipCode", event.target.value)}
-						startAdornment={ <MapIcon/> }
+						startAdornment={mapIcon}
 						errorModel={controller.errorModel}
 						validationKey="zipCode"
 						errorTranslationValues={{
@@ -118,7 +123,7 @@ class AddressContent extends React.Component<
 						maxLength={STATE_MAX_LENGTH}
 						label={stateLabel}
 						onChange={event => controller.onChange("state", event.target.value)}
-						startAdornment={ <MapIcon/> }
+						startAdornment={mapIcon}
 						errorModel={controller.errorModel}
 						validationKey="state"
 						errorTranslationValues={{

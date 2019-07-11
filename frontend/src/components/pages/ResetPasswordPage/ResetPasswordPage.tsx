@@ -1,14 +1,25 @@
 import React from 'react';
-import KeyIcon from "@material-ui/icons/VpnKey";
 
-import { Theme, createStyles, WithStyles, withStyles, Typography } from '@material-ui/core';
 import { InjectedIntlProps, injectIntl, FormattedMessage } from 'react-intl';
-import { IResetPasswordPageController } from '../../../interfaces/controllers/pages/IResetPasswordPageController';
 import { AuthenticationTemplate, AUTHENTICATION_MARGIN } from '../../templates';
 import { simpleFormat } from "../../../util/simpleFormat";
 import { CustomTextField, LoadingButton, InfoBox } from "../../molecules";
 import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "common-library";
 import { observer } from "mobx-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faKey } from "@fortawesome/free-solid-svg-icons";
+
+import {
+	Theme,
+	createStyles,
+	WithStyles,
+	withStyles,
+	Typography
+} from '@material-ui/core';
+
+import {
+	IResetPasswordPageController
+} from '../../../interfaces/controllers/pages/IResetPasswordPageController';
 
 const styles = (theme: Theme) => createStyles({
 
@@ -66,6 +77,10 @@ export class ResetPasswordPage extends React.Component<
 			);
 		}
 
+		const keyIcon = (
+			<FontAwesomeIcon icon={faKey}/>
+		);
+
 		return (
 			<AuthenticationTemplate title={resetPasswordLabel}>
 
@@ -78,7 +93,7 @@ export class ResetPasswordPage extends React.Component<
 					label={newPasswordLabel}
 					required={true}
 					onChange={event => controller.onChange("password", event.target.value)}
-					startAdornment={ <KeyIcon /> }
+					startAdornment={keyIcon}
 					errorModel={controller.errorModel}
 					validationKey="password"
 					errorTranslationValues={{
@@ -95,7 +110,7 @@ export class ResetPasswordPage extends React.Component<
 					label={repeatPasswordLabel}
 					required={true}
 					onChange={event => controller.onChange("repeatPassword", event.target.value)}
-					startAdornment={ <KeyIcon /> }
+					startAdornment={keyIcon}
 					errorModel={controller.errorModel}
 					validationKey="repeatPassword"
 					errorTranslationValues={{

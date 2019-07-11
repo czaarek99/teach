@@ -51,6 +51,7 @@ const styles = (theme: Theme) => createStyles({
 
 	loginText: {
 		transition: "font-size 600ms",
+		marginRight: 5
 	}
 
 });
@@ -100,6 +101,12 @@ class LoginPage extends React.Component<
 				</InfoBox>
 			);
 		}
+
+		const loginText = (
+			<span className={classes.loginText}>
+				{loginLabel}
+			</span>
+		);
 
 		return (
 			<AuthenticationTemplate title={loginLabel}>
@@ -157,9 +164,7 @@ class LoginPage extends React.Component<
 						className={classes.loginButton}
 						onClick={() => controller.onLogin()}>
 
-						<span className={classes.loginText}>
-							{loginLabel}
-						</span>
+						{!controller.isLoggedIn && loginText}
 
 						<FontAwesomeIcon icon={faArrowRight}/>
 					</LoadingButton>

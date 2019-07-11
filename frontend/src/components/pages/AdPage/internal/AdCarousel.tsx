@@ -1,13 +1,12 @@
 import React from 'react';
 import SwipeableViews from "react-swipeable-views";
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { IAdImage } from "common-library";
 import { getImageUrl } from "../../../../util/imageAPI";
 import { IAdPageController } from "../../../../interfaces/controllers/pages/IAdPageController";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
 	Theme,
@@ -18,6 +17,7 @@ import {
 	MobileStepper,
 	Button
 } from "@material-ui/core";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 interface IAdCarouselProps {
 	controller: IAdPageController
@@ -25,7 +25,10 @@ interface IAdCarouselProps {
 }
 
 const styles = (theme: Theme) => createStyles({
-
+	arrowIcon: {
+		margin: 5,
+		fontSize: 18
+	}
 });
 
 @observer
@@ -60,7 +63,8 @@ class AdCarousel extends React.Component<
 	public render(): React.ReactNode {
 
 		const {
-			controller
+			controller,
+			classes
 		} = this.props;
 
 		let steps = 0;
@@ -83,7 +87,8 @@ class AdCarousel extends React.Component<
 							disabled={!controller.carouselCanGoBack}
 							onClick={() => controller.onCarouselBack()}>
 
-							<KeyboardArrowLeft />
+							<FontAwesomeIcon icon={faAngleLeft}
+								className={classes.arrowIcon}/>
 							<FormattedMessage id="actions.back"/>
 						</Button>
 					}
@@ -91,8 +96,10 @@ class AdCarousel extends React.Component<
 						<Button size="small"
 							disabled={!controller.carouselCanGoNext}
 							onClick={() => controller.onCarouselForward()}>
+
 							<FormattedMessage id="actions.next"/>
-							<KeyboardArrowRight />
+							<FontAwesomeIcon icon={faAngleRight}
+								className={classes.arrowIcon}/>
 						</Button>
 					}
 					steps={steps}

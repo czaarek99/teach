@@ -13,7 +13,8 @@ export interface ILoginPageController {
 	readonly errorModel: ErrorModel<ILoginPageErrorState>
 	readonly loading: boolean
 	readonly errorMessage: string | null
-	readonly loginButtonState: LoadingButtonState;
+	readonly loginButtonState: LoadingButtonState
+	readonly isLoggedIn: boolean
 
 	onKeyDown: (event: KeyboardEvent) => void
 	goToRoute: (route: Route) => void

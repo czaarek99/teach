@@ -16,8 +16,10 @@ import {
 	createStyles,
 	Theme,
 	withStyles,
-	WithStyles
+	WithStyles,
+	CardActions
 } from "@material-ui/core";
+import { AdCategoryIcon } from "../../molecules";
 
 /*
 
@@ -78,6 +80,11 @@ const styles = (theme: Theme) => createStyles({
 		lineClamp: MAX_DESCRIPTION_LINES,
 		overflow: "hidden",
 		textOverflow: "ellipsis",
+	},
+
+	adIconContainer: {
+		padding: 16,
+		fontSize: 20
 	}
 });
 
@@ -108,6 +115,7 @@ export class Ad extends React.Component<
 		let avatar;
 		let image;
 		let name;
+		let adIcon;
 
 		if(ad === null) {
 			name = (
@@ -155,6 +163,12 @@ export class Ad extends React.Component<
 					className={classes.image}/>
 			);
 
+			adIcon = (
+				<div className={classes.adIconContainer}>
+					<AdCategoryIcon category={ad.category}/>
+				</div>
+			);
+
 			if(ad.teacher.avatarFileName) {
 				avatar = (
 					<Avatar src={getImageUrl(ad.teacher.avatarFileName)}/>
@@ -173,6 +187,7 @@ export class Ad extends React.Component<
 				onClick={() => controller.onClick()}>
 				<Card className={classes.card}>
 					<CardHeader title={name}
+						action={adIcon}
 						subheader={subHeader}
 						avatar={avatar}
 					/>
@@ -184,6 +199,7 @@ export class Ad extends React.Component<
 							{description}
 						</Typography>
 					</CardContent>
+
 				</Card>
 			</div>
 		)

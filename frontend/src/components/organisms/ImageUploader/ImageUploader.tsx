@@ -1,12 +1,12 @@
 import React from "react";
 import Dropzone from "react-dropzone";
-import UploadIcon from "@material-ui/icons/CloudUpload";
-import EditIcon from "@material-ui/icons/Edit";
 import clsx from "clsx";
 
 import { observer } from "mobx-react";
 import { WithStyles, createStyles } from "@material-ui/styles";
 import { Theme, withStyles } from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 
 type ImageUploaderState = "default" | "disabled";
 
@@ -112,8 +112,8 @@ class ImageUploader extends React.Component<
 			overlay = (
 				<div className={overlayClasses}>
 					{imageUrl ?
-						<EditIcon fontSize="large"/> :
-						<UploadIcon fontSize="large" />
+						<FontAwesomeIcon icon={faPen} size="2x"/> :
+						<FontAwesomeIcon icon={faCloudUploadAlt} size="2x" />
 					}
 				</div>
 			)

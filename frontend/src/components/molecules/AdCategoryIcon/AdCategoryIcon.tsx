@@ -1,13 +1,24 @@
 import React from "react";
 
-import ComputerIcon from "@material-ui/icons/Computer";
-import CodeIcon from "@material-ui/icons/Code";
-import BugIcon from "@material-ui/icons/BugReport";
-import NoteIcon from "@material-ui/icons/MusicNote";
-import LibraryNoteIcon from "@material-ui/icons/LibraryMusic"
-
 import { observer } from "mobx-react";
 import { AdCategory } from "common-library";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Tooltip } from "@material-ui/core";
+import { FormattedMessage } from "react-intl";
+
+import {
+	faFlask,
+	faLaptop,
+	faTerminal,
+	faCode,
+	faMusic,
+	faCompactDisc,
+	faGuitar,
+	faAtom,
+	faSquareRootAlt,
+	faLanguage,
+	faQuestion
+} from "@fortawesome/free-solid-svg-icons";
 
 interface IAdCategoryIconProps {
 	category: AdCategory
@@ -17,33 +28,66 @@ interface IAdCategoryIconProps {
 class AdCategoryIcon extends React.Component<IAdCategoryIconProps> {
 
 	public render() : React.ReactNode {
+
+		const {
+			category
+		} = this.props;
+
 		let icon;
 
-		switch(this.props.category) {
+		switch(category) {
 			case AdCategory.COMPUTER_SCIENCE:
-				icon = <ComputerIcon />;
+				icon = faLaptop;
+				break;
 			case AdCategory.PROGRAMMING:
-				icon = <CodeIcon />;
+				icon = faCode;
+				break;
 			case AdCategory.HACKING:
-				icon = <BugIcon />;
+				icon = faTerminal;
+				break;
 			case AdCategory.MUSIC:
-				icon = <NoteIcon />;
+				icon = faMusic;
+				break;
 			case AdCategory.MUSIC_PRODUCTION:
-				icon = <LibraryNoteIcon />;
+				icon = faCompactDisc;
+				break;
 			case AdCategory.INSTRUMENTS:
-				icon = <NoteIcon />;
+				icon = faGuitar;
+				break;
 			case AdCategory.SCIENCE:
-
+				icon = faFlask;
+				break;
 			case AdCategory.PHYSICS:
-
+				icon = faAtom;
+				break;
 			case AdCategory.MATH:
-
+				icon = faSquareRootAlt;
+				break;
 			case AdCategory.LANGUAGE:
+				icon = faLanguage;
+				break;
+			default:
+				icon = faQuestion;
 		}
 
-		return icon;
-	}
+		const title = (
+			<React.Fragment>
+				<FormattedMessage id="things.adCategory"/>
+				<span>: </span>
+				<FormattedMessage id={category}/>
+			</React.Fragment>
+		);
 
+		return (
+			<Tooltip placement="top"
+				title={title}>
+
+				<div>
+					<FontAwesomeIcon icon={icon}/>
+				</div>
+			</Tooltip>
+		);
+	}
 }
 
 export default AdCategoryIcon;
