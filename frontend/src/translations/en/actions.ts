@@ -14,6 +14,7 @@ export default {
 	"actions.save": "Save",
 	"actions.reset": "Reset",
 	"actions.change": "Change",
+	"actions.clear": "Clear",
 	"actions.delete": "Delete",
 	"actions.noAccount": "No account?",
 	"actions.resetEmailSent": `

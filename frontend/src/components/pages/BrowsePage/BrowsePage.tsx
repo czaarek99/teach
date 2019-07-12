@@ -1,4 +1,5 @@
 import React from 'react';
+import AdFilter from "./internal/AdFilter";
 
 import { Ad } from '../../organisms';
 import { observer } from 'mobx-react';
@@ -15,7 +16,8 @@ import {
 	withStyles,
 	TablePagination,
 	CircularProgress,
-	Typography} from "@material-ui/core";
+	Typography,
+} from "@material-ui/core";
 
 import {
 	IBrowsePageController
@@ -35,7 +37,9 @@ const styles = (theme: Theme) => createStyles({
 	messageContainer: {
 		display: "flex",
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
+		marginTop: 10,
+		flexGrow: 0
 	},
 
 	progressContainer: {
@@ -57,6 +61,7 @@ const styles = (theme: Theme) => createStyles({
 		cursor: "not-allowed",
 		pointerEvents: "none"
 	},
+
 });
 
 interface IBrowsePageProps {
@@ -143,6 +148,8 @@ class BrowsePage extends React.Component<
 
 		return (
 			<NavbarTemplate controller={navbarController}>
+				<AdFilter controller={controller}/>
+
 				{content}
 			</NavbarTemplate>
 

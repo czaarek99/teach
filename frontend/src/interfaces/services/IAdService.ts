@@ -3,11 +3,12 @@ import {
 	IEdge,
 	IAd,
 	ISimpleIdOutput,
-	IEditAdInput
+	IEditAdInput,
+	IAdListInput
 } from "common-library";
 
 export interface IAdService  {
-	getAds: (pagination: IPagination) => Promise<IEdge<IAd>>
+	getAds: (pagination: IAdListInput) => Promise<IEdge<IAd>>
 	getAd: (id: number) => Promise<IAd>
 	getMyAds: () => Promise<IEdge<IAd>>
 	createAd: (newAd: IEditAdInput) => Promise<ISimpleIdOutput>

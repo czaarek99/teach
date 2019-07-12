@@ -8,8 +8,9 @@ import { CustomTextField } from "../../molecules";
 import DatePickerTextField from "./internal/DatePickerTextField";
 
 interface ICustomDatePickerProps {
-	value: MaterialUiPickersDate
-	label?: string
+	value?: MaterialUiPickersDate
+	className?: string
+	label?: React.ReactNode
 	maxDate?: MaterialUiPickersDate
 	minDate?: MaterialUiPickersDate
 	maxDateMessage?: string
@@ -44,6 +45,7 @@ class CustomDatePicker extends React.Component<
 			icon,
 			disabled,
 			intl,
+			className
 		} = this.props;
 
 
@@ -69,6 +71,7 @@ class CustomDatePicker extends React.Component<
 
 		return (
 			<DatePicker value={value}
+				className={className}
 				disabled={disabled}
 				okLabel={okLabel}
 				required={required}

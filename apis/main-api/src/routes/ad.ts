@@ -11,7 +11,7 @@ import { UserSetting } from "../database/models/UserSetting";
 import { AdImage } from "../database/models/AdImage";
 import { ProfilePicture } from "../database/models/ProfilePicture";
 import { throwAdNotFound } from "../util/throwAdNotFound";
-import { Op } from "sequelize";
+import { Op, QueryTypes } from "sequelize";
 
 import {
 	IAd,
@@ -27,6 +27,7 @@ import {
 	IAdImage,
 	AdCategory,
 } from "common-library";
+import { Sequelize } from "sequelize-typescript";
 
 const router = Router();
 
@@ -75,19 +76,45 @@ router.get("/list", {
 		query: {
 			limit: Joi.number().min(0).max(500).required(),
 			offset: Joi.number().min(0).required(),
-			category: Joi.string().allow(AD_CATEGORY_VALUES).allow("").optional()
+			category: Joi.string().allow(AD_CATEGORY_VALUES).allow("").optional(),
+			search: Joi.string().allow("").optional(),
+			startDate: Joi.date().optional(),
+			endDate: Joi.date().optional()
 		}
 	}
 }, async (context: CustomContext) => {
 
 	const query = context.query as IAdListInput;
 
-	let where : Partial<Pick<Ad, "private" | "category">> = {
-		private: false,
+	let where : any = {
+		private: false
 	};
+
+	if(query.startDate || query.endDate) {
+		const dateRequirements : any = {};
+
+		if(query.startDate) {
+			dateRequirements[Op.gt] = query.startDate;
+		}
+
+		if(query.endDate) {
+			dateRequirements[Op.lt] = query.endDate;
+		}
+
+		where.creationDate = dateRequirements;
+	}
 
 	if(query.category) {
 		where.category = query.category;
+	}
+
+	if(query.search) {
+		where.name = Sequelize.where(
+			Sequelize.fn("lower", Sequelize.col("name")),
+			{
+				[Op.like]: `%${query.search}%`
+			}
+		)
 	}
 
 	const [ads, count] : [Ad[], number] = await Promise.all([

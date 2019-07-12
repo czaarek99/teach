@@ -1,4 +1,5 @@
 import { IAd } from "common-library";
+import { IAdFilterModel } from "../../models/IAdFilterModel";
 
 export interface IAdPageController {
 	readonly ad: IAd | null;

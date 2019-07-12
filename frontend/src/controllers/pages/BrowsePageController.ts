@@ -2,6 +2,9 @@ import { observable, action } from "mobx";
 import { IAdController } from "../../interfaces/controllers/IAdController";
 import { AdController } from "../AdController";
 import { RootStore } from "../../stores/RootStore";
+import { IAdFilterModel } from "../../interfaces/models/IAdFilterModel";
+import { AdFilterModel } from "../../models/AdFilterModel";
+import { LoadingButtonState } from "../../components";
 
 import {
 	IBrowsePageController
@@ -11,12 +14,15 @@ export class BrowsePageController implements IBrowsePageController {
 
 	@observable private readonly rootStore: RootStore;
 
+	@observable public filterButtonState : LoadingButtonState = "default"
+	@observable public filterLoading = false;
 	@observable public pageNumber = 0;
 	@observable public totalAdCount = 0;
 	@observable public adsPerPage = 50;
 	@observable public activeAdControllers : IAdController[] = [];
 	@observable public pageLoading = true;
 	@observable public listLoading = true;
+	@observable public adFilterModel = new AdFilterModel();
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -49,10 +55,8 @@ export class BrowsePageController implements IBrowsePageController {
 		}
 
 		window.setTimeout(async () => {
-			const ads = await this.rootStore.services.adService.getAds({
-				offset,
-				limit: amountToLoad
-			});
+			const input = this.adFilterModel.toInput(offset, amountToLoad);
+			const ads = await this.rootStore.services.adService.getAds(input);
 
 			this.totalAdCount = ads.totalCount;
 
@@ -70,10 +74,28 @@ export class BrowsePageController implements IBrowsePageController {
 	}
 
 	@action
+	public onFilter() : void {
+		this.pageNumber = 1;
+		this.activeAdControllers = [];
+
+		this.loadAds();
+	}
+
+	@action
+	public onFilterClear() : void {
+		this.adFilterModel.clear();
+	}
+
+	@action
 	public onChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, page: number) : void => {
 		this.pageNumber = page;
 		this.resetScroll();
 		this.loadAds();
+	}
+
+	@action
+	public onChangeFilter(key: keyof IAdFilterModel, value: any) : void {
+		this.adFilterModel[key] = value;
 	}
 
 	@action

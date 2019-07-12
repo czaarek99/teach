@@ -13,6 +13,8 @@ export default {
 	"things.country": "Country",
 	"things.city": "City",
 	"things.birthDate": "Birth date",
+	"things.startDate": "Start date",
+	"things.endDate": "End date",
 	"things.state": "State",
 	"things.personalInformation": "Personal information",
 	"things.accountDetails": "Account details",
@@ -29,6 +31,8 @@ export default {
 	"things.private": "Private",
 	"things.adCategory": "Category",
 	"things.title": "Title",
+	"things.adFilter": "Filter",
+	"things.filter": "Filter",
 
 	"things.pages.home": "Home",
 	"things.pages.browse": "Browse",
