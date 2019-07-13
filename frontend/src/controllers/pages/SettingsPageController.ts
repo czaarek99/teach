@@ -6,7 +6,6 @@ import { ISettingsModel } from "../../interfaces/models/ISettingsModel";
 import { LoadingButtonState } from "../../components";
 import { HttpError, ErrorMessage } from "common-library";
 import { successTimeout } from "../../util/successTimeout";
-import { ViewModel } from "../../interfaces/ViewModel";
 import { requireLogin } from "../../util/requireLogin";
 import { RootStore } from "../../stores/RootStore";
 

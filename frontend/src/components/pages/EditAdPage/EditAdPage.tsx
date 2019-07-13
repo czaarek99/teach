@@ -5,7 +5,7 @@ import { INavbarController } from "../../../interfaces/controllers/templates/INa
 import { IEditAdPageController } from "../../../interfaces/controllers/pages/IEditAdPageController";
 import { observer } from "mobx-react";
 import { NavbarTemplate } from "../../templates";
-import { CustomTextField, LoadingButton } from "../../molecules";
+import { CustomTextField } from "../../molecules";
 import { AdCategorySelect, SaveButtons } from "../../organisms";
 import { simpleFormat } from "../../../util/simpleFormat";
 import { faInfo } from "@fortawesome/free-solid-svg-icons";

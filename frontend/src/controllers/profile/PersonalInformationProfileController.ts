@@ -127,7 +127,7 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 	@action
 	public onReset = () : void => {
 		this.viewModel.reset();
-		this.errorModel.reset();
+		this.errorModel.clear();
 	}
 
 	@action

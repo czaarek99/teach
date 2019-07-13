@@ -307,6 +307,7 @@ export class EditAdPageController implements IEditAdPageController {
 	@action
 	public onReset() : void {
 		this.viewModel.reset();
+		this.errorModel.clear();
 	}
 
 	@action

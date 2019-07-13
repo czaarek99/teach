@@ -9,6 +9,34 @@ export interface ErrorState {
 interface ValidationObject<T extends ErrorState> {
 	errorState: T
 }
+/*
+
+This ErrorModel kind of works. It really needs to be
+refactored in the future if we have any kind of success.
+
+Issues:
+1. Reset function does not actually work
+2. We are abusing createViewModel here
+3. There probably is no need for a separate error model
+interface for these. We should just use the interface
+for the model
+4. This does not handle more complex validation
+5. We need to cast shit like idiots here
+6. We should probably be showing the users errors
+on submit instead of onChange for a better UX
+experience. This errormodel should make that possible
+within itself.
+7. We copy paste the same validate function into all
+controllers. Maybe this should be more closely tied
+with our validators?
+
+
+Overall it's a hard design issue which probably does
+not matter in the beginning when we just want
+to get a first working version out to check
+for feasibility.
+
+*/
 
 export class ErrorModel<T extends ErrorState> {
 
@@ -62,6 +90,13 @@ export class ErrorModel<T extends ErrorState> {
 	@action
 	public submit() : void {
 		this.validationObject.submit();
+	}
+
+	@action
+	public clear() : void {
+		for(const key of Object.keys(this.validationObject.errorState)) {
+			(this.validationObject.errorState[key] as any) = [];
+		}
 	}
 
 }

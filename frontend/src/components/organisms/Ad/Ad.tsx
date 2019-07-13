@@ -5,6 +5,7 @@ import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IAdController } from "../../../interfaces/controllers/IAdController";
 import { getImageUrl } from "../../../util/imageAPI";
 import { observer } from "mobx-react";
+import { AdCategoryIcon } from "../../molecules";
 
 import {
 	Card,
@@ -17,9 +18,7 @@ import {
 	Theme,
 	withStyles,
 	WithStyles,
-	CardActions
 } from "@material-ui/core";
-import { AdCategoryIcon } from "../../molecules";
 
 /*
 

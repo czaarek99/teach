@@ -106,7 +106,7 @@ export class AddressProfileController implements IAddressProfileController {
 	@action
 	public onReset = () : void => {
 		this.viewModel.reset();
-		this.errorModel.reset();
+		this.errorModel.clear();
 	}
 
 	@action

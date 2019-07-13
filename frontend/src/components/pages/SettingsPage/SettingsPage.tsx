@@ -5,8 +5,8 @@ import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { WithStyles } from "@material-ui/styles";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
+import { SaveButtons } from "../../organisms";
 import { NavbarTemplate } from "../../templates";
-import { LoadingButton } from "../../molecules";
 
 import {
 	ISettingsPageController
@@ -18,9 +18,7 @@ import {
 	withStyles,
 	Paper,
 	Typography,
-	Button
 } from "@material-ui/core";
-import { SaveButtons } from "../../organisms";
 
 const styles = (theme: Theme) => createStyles({
 	titlePaper: {
