@@ -2,11 +2,11 @@ import { IAdService } from "../interfaces/services/IAdService";
 import { BaseService } from "./BaseService";
 
 import {
-	IPagination,
 	IEdge,
 	IAd,
 	ISimpleIdOutput,
-	IEditAdInput
+	IEditAdInput,
+	IAdListInput
 } from "common-library";
 
 export class AdService extends BaseService implements IAdService {
@@ -15,10 +15,13 @@ export class AdService extends BaseService implements IAdService {
 		super("/ad")
 	}
 
-	public async getAds(pagination: IPagination) : Promise<IEdge<IAd>> {
+	public async getAds(input: IAdListInput) : Promise<IEdge<IAd>> {
 		const params = new URLSearchParams();
-		params.set("offset", pagination.offset.toString());
-		params.set("limit", pagination.limit.toString());
+		for(const [key, value] of Object.entries(input)) {
+			if(value !== undefined && value !== null) {
+				params.set(key, value);
+			}
+		}
 
 		const response = await this.axios.get<IEdge<IAd>>(
 			`/list?${params.toString()}`

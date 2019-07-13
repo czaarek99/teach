@@ -9,6 +9,7 @@ import { LoadingButtonState } from "../../components";
 import {
 	IBrowsePageController
 } from "../../interfaces/controllers/pages/IBrowsePageController";
+import { ErrorMessage, HttpError } from "common-library";
 
 export class BrowsePageController implements IBrowsePageController {
 
@@ -23,6 +24,7 @@ export class BrowsePageController implements IBrowsePageController {
 	@observable public pageLoading = true;
 	@observable public listLoading = true;
 	@observable public adFilterModel = new AdFilterModel();
+	@observable public pageError = "";
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -32,14 +34,21 @@ export class BrowsePageController implements IBrowsePageController {
 
 	@action
 	private async load() : Promise<void> {
-		const info = await this.rootStore.services.adService.getAds({
-			limit: 0,
-			offset: 0
-		});
+		this.filterButtonState = "loading";
 
-		this.totalAdCount = info.totalCount;
-		this.pageLoading = false;
-		this.loadAds();
+		try {
+			const input = this.adFilterModel.toInput(0, 0);
+			const info = await this.rootStore.services.adService.getAds(input);
+
+			this.pageNumber = 0;
+			this.activeAdControllers = [];
+			this.totalAdCount = info.totalCount;
+			this.loadAds();
+		} catch(error) {
+			this.serverError(error);
+		} finally {
+			this.pageLoading = false;
+		}
 	}
 
 	@action
@@ -56,16 +65,23 @@ export class BrowsePageController implements IBrowsePageController {
 
 		window.setTimeout(async () => {
 			const input = this.adFilterModel.toInput(offset, amountToLoad);
-			const ads = await this.rootStore.services.adService.getAds(input);
 
-			this.totalAdCount = ads.totalCount;
+			try {
 
-			for(let i = 0; i < amountToLoad; i++) {
-				const ad = ads.data[i];
-				this.activeAdControllers[i].load(ad);
+				const ads = await this.rootStore.services.adService.getAds(input);
+
+				this.totalAdCount = ads.totalCount;
+
+				for(let i = 0; i < amountToLoad; i++) {
+					const ad = ads.data[i];
+					this.activeAdControllers[i].load(ad);
+				}
+			} catch(error) {
+				this.serverError(error);
+			} finally {
+				this.filterButtonState = "default";
+				this.listLoading = false;
 			}
-
-			this.listLoading = false;
 		}, 20);
 	}
 
@@ -74,11 +90,20 @@ export class BrowsePageController implements IBrowsePageController {
 	}
 
 	@action
-	public onFilter() : void {
-		this.pageNumber = 1;
-		this.activeAdControllers = [];
+	private serverError(error: any) : void {
+		this.filterButtonState = "error";
 
-		this.loadAds();
+		if(error instanceof HttpError) {
+			this.pageError = error.error;
+		} else {
+			this.pageError = ErrorMessage.UNKNOWN;
+			console.error(error);
+		}
+	}
+
+	@action
+	public async onFilter() : Promise<void> {
+		await this.load();
 	}
 
 	@action
@@ -96,6 +121,11 @@ export class BrowsePageController implements IBrowsePageController {
 	@action
 	public onChangeFilter(key: keyof IAdFilterModel, value: any) : void {
 		this.adFilterModel[key] = value;
+	}
+
+	@action
+	public onCloseSnackbar() : void {
+		this.pageError = "";
 	}
 
 	@action

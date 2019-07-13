@@ -17,6 +17,8 @@ import {
 	TablePagination,
 	CircularProgress,
 	Typography,
+	Snackbar,
+	Button,
 } from "@material-ui/core";
 
 import {
@@ -62,6 +64,10 @@ const styles = (theme: Theme) => createStyles({
 		pointerEvents: "none"
 	},
 
+	errorSnackbarContent: {
+		backgroundColor: theme.palette.error.dark
+	},
+
 });
 
 interface IBrowsePageProps {
@@ -75,6 +81,37 @@ class BrowsePage extends React.Component<
 	InjectedIntlProps &
 	WithStyles<typeof styles>
 > {
+
+	private renderSnackbar() : React.ReactNode {
+
+		const {
+			controller,
+			classes
+		} = this.props;
+
+		if(controller.pageError) {
+			return (
+				<Snackbar open={true}
+					key={controller.pageError}
+					ContentProps={{
+						"className": classes.errorSnackbarContent
+					}}
+					action={
+						<Button onClick={() => controller.onCloseSnackbar()}>
+							<FormattedMessage id="actions.ok"/>
+						</Button>
+					}
+					message={
+						<FormattedMessage id={controller.pageError}/>
+					}
+					anchorOrigin={{
+						vertical: "bottom",
+						horizontal: "center"
+					}}
+					onClose={() => controller.onCloseSnackbar()}/>
+			);
+		}
+	}
 
 	public render() : React.ReactNode {
 
@@ -151,6 +188,8 @@ class BrowsePage extends React.Component<
 				<AdFilter controller={controller}/>
 
 				{content}
+
+				{this.renderSnackbar()}
 			</NavbarTemplate>
 
 		)

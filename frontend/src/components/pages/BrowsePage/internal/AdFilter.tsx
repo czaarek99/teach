@@ -135,7 +135,8 @@ class AdFilter extends React.Component<
 					<CustomDatePicker
 						className={classes.datePicker}
 						value={controller.adFilterModel.endPublishDate}
-						minDate={new Date()}
+						maxDate={new Date()}
+						minDate={controller.adFilterModel.startPublishDate}
 						onChange={date => controller.onChangeFilter("endPublishDate", date)}
 						label={
 							<FormattedMessage id="things.endDate"/>
@@ -143,6 +144,7 @@ class AdFilter extends React.Component<
 
 					<div>
 						<Button variant="contained"
+							onClick={() => controller.onFilterClear()}
 							className={classes.clearButton}>
 
 							<FormattedMessage id="actions.clear"/>

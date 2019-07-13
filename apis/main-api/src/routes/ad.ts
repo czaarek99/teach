@@ -101,7 +101,7 @@ router.get("/list", {
 			dateRequirements[Op.lt] = query.endDate;
 		}
 
-		where.creationDate = dateRequirements;
+		where.createdAt = dateRequirements;
 	}
 
 	if(query.category) {
