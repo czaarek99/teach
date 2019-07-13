@@ -5,11 +5,11 @@ import { ErrorModel } from "../../validation/ErrorModel";
 import { ValidatorMap, validate, ValidationResult } from "../../validation/validate";
 import { minLength, maxLength } from "../../validation/validators";
 import { LoadingButtonState } from "../../components";
-import { objectKeys } from "../../util/objectKeys";
 import { getImageUrl } from "../../util/imageAPI";
 import { successTimeout } from "../../util/successTimeout";
 import { requireLogin } from "../../util/requireLogin";
 import { RootStore } from "../../stores/RootStore";
+import { createViewModel } from "mobx-utils";
 
 import {
 	IEditAdPageController,
@@ -25,7 +25,6 @@ import {
 	ErrorMessage,
 	HttpError,
 	IAdDeleteIndexesInput,
-	AdCategory
 } from "common-library";
 
 export class EditAdPageController implements IEditAdPageController {
@@ -51,11 +50,12 @@ export class EditAdPageController implements IEditAdPageController {
 
 	@observable private readonly rootStore: RootStore;
 	@observable private readonly imageUrls = new Map<number, string>();
+	@observable private model = new EditAdModel();
 	@observable private id?: number;
 
 	@observable public pageError = "";
 	@observable public saveButtonState : LoadingButtonState = "default";
-	@observable public model = new EditAdModel()
+	@observable public viewModel = createViewModel<IEditAdModel>(this.model);
 	@observable public isDraggingOver = false;
 	@observable public loading = true;
 	@observable public imageIndex = 0;
@@ -84,7 +84,7 @@ export class EditAdPageController implements IEditAdPageController {
 	}
 
 	private categoryValidator() : ValidationResult {
-		if(!this.model.category) {
+		if(!this.viewModel.category) {
 			return ErrorMessage.AD_CATEGORY_REQUIRED;
 		}
 
@@ -121,8 +121,13 @@ export class EditAdPageController implements IEditAdPageController {
 	}
 
 	@computed
+	public get showReset() : boolean {
+		return this.viewModel.isDirty;
+	}
+
+	@computed
 	private get hasImages() : boolean {
-		return this.model.images.size > 0 || this.imageUrls.size > 0;
+		return this.viewModel.images.size > 0 || this.imageUrls.size > 0;
 	}
 
 	@computed
@@ -130,7 +135,7 @@ export class EditAdPageController implements IEditAdPageController {
 		const slots = [];
 
 		for(let i = 0; i < MAX_AD_PICTURE_COUNT; i++) {
-			if(!this.model.images.has(i) && !this.imageUrls.has(i)) {
+			if(!this.viewModel.images.has(i) && !this.imageUrls.has(i)) {
 				slots.push(i);
 			}
 		}
@@ -167,7 +172,7 @@ export class EditAdPageController implements IEditAdPageController {
 		const keyValidators = this.validators[key];
 
 		if(keyValidators !== undefined) {
-			const value = this.model[key];
+			const value = this.viewModel[key];
 			this.errorModel.setErrors(key, validate(value, keyValidators));
 		}
 	}
@@ -175,7 +180,7 @@ export class EditAdPageController implements IEditAdPageController {
 	@action
 	public onChange(key: keyof IEditAdModel, value: any) : void {
 		//Hack, why do we have to do this?
-		this.model[key] = value as never;
+		this.viewModel[key] = value as never;
 
 		this.validate(key);
 	}
@@ -194,8 +199,7 @@ export class EditAdPageController implements IEditAdPageController {
 	public async onSave() : Promise<void> {
 		clearTimeout(this.saveButtonStateTimeout);
 
-		const toValidate = this.model.toValidate();
-		for(const key of objectKeys(toValidate)) {
+		for(const key of this.viewModel.changedValues.keys()) {
 			this.validate(key);
 		}
 
@@ -203,6 +207,7 @@ export class EditAdPageController implements IEditAdPageController {
 			this.saveButtonState = "error";
 		} else {
 			this.saveButtonState = "loading";
+			this.viewModel.submit();
 
 			try {
 				const editAdInput = this.model.toInput();
@@ -275,7 +280,7 @@ export class EditAdPageController implements IEditAdPageController {
 				break;
 			}
 
-			this.model.images.set(slot, file);
+			this.viewModel.images.set(slot, file);
 
 			const url = URL.createObjectURL(file);
 			this.imageUrls.set(slot, url);
@@ -286,7 +291,7 @@ export class EditAdPageController implements IEditAdPageController {
 
 	@action
 	public onDeleteImage(index: number) : void {
-		this.model.images.delete(index);
+		this.viewModel.images.delete(index);
 
 		const imageUrl = this.imageUrls.get(index);
 		if(imageUrl) {

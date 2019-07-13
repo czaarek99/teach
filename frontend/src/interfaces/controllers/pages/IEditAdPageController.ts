@@ -1,6 +1,7 @@
 import { IEditAdModel } from "../../models/IEditAdModel";
 import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
 import { LoadingButtonState } from "../../../components";
+import { ViewModel } from "../../ViewModel";
 
 export interface IEditAdPageErrorState extends ErrorState {
 	name: string[]
@@ -10,7 +11,7 @@ export interface IEditAdPageErrorState extends ErrorState {
 }
 
 export interface IEditAdPageController {
-	readonly model: IEditAdModel;
+	readonly viewModel: ViewModel<IEditAdModel>;
 	readonly errorModel: ErrorModel<IEditAdPageErrorState>
 	readonly saveButtonState: LoadingButtonState
 	readonly pageError: string
@@ -19,6 +20,7 @@ export interface IEditAdPageController {
 	readonly loading: boolean
 	readonly imageIndex: number
 	readonly descriptionRows: number
+	readonly showReset: boolean
 
 	getImageUrl: (index: number) => string
 	setImageIndex: (index: number) => void

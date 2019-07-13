@@ -154,7 +154,7 @@ class EditAdPage extends React.Component<
 		const isDisabled = controller.loading;
 
 		const privateCheckbox = (
-			<Checkbox checked={controller.model.private}
+			<Checkbox checked={controller.viewModel.private}
 				disabled={isDisabled}
 				onChange={(_, checked: boolean) => controller.onChange("private", checked)}/>
 		);
@@ -166,7 +166,7 @@ class EditAdPage extends React.Component<
 						<CustomTextField
 							disabled={isDisabled}
 							className={classes.field}
-							value={controller.model.name}
+							value={controller.viewModel.name}
 							minLength={AD_NAME_MIN_LENGTH}
 							maxLength={AD_NAME_MAX_LENGTH}
 							label={adNameLabel}
@@ -189,7 +189,7 @@ class EditAdPage extends React.Component<
 							rows={controller.descriptionRows}
 							className={classes.description}
 							multiline={true}
-							value={controller.model.description}
+							value={controller.viewModel.description}
 							minLength={AD_DESCRIPTION_MIN_LENGTH}
 							maxLength={AD_DESCRIPTION_MAX_LENGTH}
 							label={descriptionLabel}
@@ -205,7 +205,7 @@ class EditAdPage extends React.Component<
 						/>
 
 
-						<AdCategorySelect value={controller.model.category}
+						<AdCategorySelect value={controller.viewModel.category}
 							disabled={isDisabled}
 							required={true}
 							errorMessage={controller.errorModel.getFirstKeyError("category")}
