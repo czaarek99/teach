@@ -39,6 +39,7 @@ export default {
 	"things.pages.profile": "Profile",
 	"things.pages.settings": "Settings",
 	"things.pages.myads": "My ads",
+	"things.pages.dms": "DMs",
 
 	"things.settings.showEmail": "Show email to other users on your ads",
 	"things.settings.showPhone": "Show phone to other users on your ads",

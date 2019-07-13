@@ -20,7 +20,8 @@ import {
 	faUser,
 	faAd,
 	faHome,
-	faSearch
+	faSearch,
+	faComments
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -248,6 +249,12 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 						<FontAwesomeIcon icon={faAd}
 							className={classes.navIcon}/>,
 						Route.MY_ADS
+					)}
+					{this.renderNavigationItem(
+						"things.pages.dms",
+						<FontAwesomeIcon icon={faComments}
+							className={classes.navIcon} />,
+						Route.DMS
 					)}
 				</React.Fragment>
 			);

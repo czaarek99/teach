@@ -24,6 +24,8 @@ import { MyAdsPageController } from "./pages/MyAdsPageController";
 import { IEditAdPageController } from "../interfaces/controllers/pages/IEditAdPageController";
 import { EditAdPageController } from "./pages/EditAdPageController";
 import { RootStore } from "../stores/RootStore";
+import { IDMPageController } from "../interfaces/controllers/pages/IDMPageController";
+import { DMPageController } from "./pages/DMPageController";
 
 export class AppController implements IAppController {
 
@@ -31,9 +33,6 @@ export class AppController implements IAppController {
 
 	public readonly navbarController: INavbarController;
 
-	private _forgotPageController: IForgotPageController | null = null;
-	private _resetPasswordPageController: IResetPasswordPageController | null = null;
-	private _browsePageController: IBrowsePageController | null = null;
 	private _profilePageController: IProfilePageController | null = null;
 	private _settingsPageController: ISettingsPageController | null = null;
 
@@ -59,27 +58,15 @@ export class AppController implements IAppController {
 	}
 
 	public get forgotPageController() : IForgotPageController {
-		if(this._forgotPageController === null) {
-			this._forgotPageController = new ForgotPageController(this.rootStore);
-		}
-
-		return this._forgotPageController;
+		return new ForgotPageController(this.rootStore);
 	}
 
 	public get resetPasswordPageController() : IResetPasswordPageController {
-		if(this._resetPasswordPageController === null) {
-			this._resetPasswordPageController = new ResetPasswordPageController(this.rootStore);
-		}
-
-		return this._resetPasswordPageController;
+		return new ResetPasswordPageController(this.rootStore);
 	}
 
 	public get browsePageController() : IBrowsePageController {
-		if(this._browsePageController === null) {
-			this._browsePageController = new BrowsePageController(this.rootStore);
-		}
-
-		return this._browsePageController;
+		return new BrowsePageController(this.rootStore);
 	}
 
 	public get adPageController() : IAdPageController {
@@ -108,5 +95,9 @@ export class AppController implements IAppController {
 
 	public get editAdPageController() : IEditAdPageController {
 		return new EditAdPageController(this.rootStore);
+	}
+
+	public get dmPageController() : IDMPageController {
+		return new DMPageController(this.rootStore);
 	}
 }

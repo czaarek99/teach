@@ -9,3 +9,4 @@ export * from "./ProfilePage";
 export * from "./SettingsPage";
 export * from "./MyAdsPage";
 export * from "./EditAdPage";
+export * from "./DMPage";
