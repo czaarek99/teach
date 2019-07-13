@@ -1,7 +1,11 @@
-* decide on money handling
 * show user country on ads
-* dms
 * pricing information on ads
-* ability to delete account
+* decide on money handling
+* purse?
+
+
+
+* dms
+* ability to delete account (gdpr!)
 * common components for registration + profile editing of info (maybe?)
 * improve errormodel validation
