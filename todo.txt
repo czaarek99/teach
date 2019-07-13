@@ -3,6 +3,7 @@
 * purse?
 
 * dms
+* images in dms
 * homepage
 * ability to delete account (gdpr!)
 * common components for registration + profile editing of info (maybe?)

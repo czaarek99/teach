@@ -3,6 +3,7 @@ import { PasswordReset } from "./PasswordReset";
 import { Ad } from "./Ad";
 import { UserSetting } from "./UserSetting";
 import { ProfilePicture } from "./ProfilePicture";
+import { Conversation } from "./Conversation";
 
 import {
 	Table,
@@ -14,7 +15,7 @@ import {
 	HasOne,
 	PrimaryKey,
 	AutoIncrement,
-	HasMany
+	HasMany,
 } from "sequelize-typescript";
 
 import {
@@ -59,6 +60,9 @@ export class User extends Model<User> {
 	@AllowNull(true)
 	@Column(DataType.STRING(PHONE_NUMBER_MAX_LENGTH))
 	public phoneNumber?: string
+
+	@HasMany(() => Conversation, "userId")
+	public conversations: Conversation[];
 
 	@HasOne(() => ProfilePicture,  "userId")
 	public profilePicture?: ProfilePicture;

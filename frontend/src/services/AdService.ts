@@ -1,5 +1,6 @@
 import { IAdService } from "../interfaces/services/IAdService";
 import { BaseService } from "./BaseService";
+import { objectToParams } from "../util/objectToParams";
 
 import {
 	IEdge,
@@ -16,15 +17,10 @@ export class AdService extends BaseService implements IAdService {
 	}
 
 	public async getAds(input: IAdListInput) : Promise<IEdge<IAd>> {
-		const params = new URLSearchParams();
-		for(const [key, value] of Object.entries(input)) {
-			if(value !== undefined && value !== null) {
-				params.set(key, value);
-			}
-		}
+		const params = objectToParams(input);
 
 		const response = await this.axios.get<IEdge<IAd>>(
-			`/list?${params.toString()}`
+			`/list?${params}`
 		);
 
 		return response.data;

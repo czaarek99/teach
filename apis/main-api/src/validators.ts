@@ -50,6 +50,10 @@ export const PASSWORD_VALIDATOR = Joi.string()
 	.max(PASSWORD_MAX_LENGTH)
 	.required();
 
+export const OFFSET_VALIDATOR = Joi.number()
+	.min(0)
+	.required();
+
 export const ADDRESS_VALIDATOR = Joi.object({
 	street: Joi.string()
 		.min(STREET_MIN_LENGTH)

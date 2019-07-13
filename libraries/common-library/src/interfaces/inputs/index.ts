@@ -11,3 +11,4 @@ export * from "./ISimpleStringIdInput";
 export * from "./IEditAdInput";
 export * from "./ISimpleIdsInput";
 export * from "./IAdDeleteIndexesInput";
+export * from "./IDMListInput";

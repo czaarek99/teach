@@ -12,6 +12,7 @@ import { isBefore, subDays } from "date-fns";
 import { randomBytes } from "crypto";
 import { verifyRecaptcha } from "../util/verifyRecaptcha";
 import { resolveUser } from "../database/resolvers/resolveUser";
+import { ProfilePicture } from "../database/models/ProfilePicture";
 
 import {
 	IRedisSession,
@@ -49,7 +50,6 @@ import {
 	PASSWORD_VALIDATOR,
 	ADDRESS_VALIDATOR
 } from "../validators";
-import { ProfilePicture } from "../database/models/ProfilePicture";
 
 async function logIn(context: CustomContext, user: User) : Promise<void> {
 	const sessionId = await randomBytes(128).toString("hex");

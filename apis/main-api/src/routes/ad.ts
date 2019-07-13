@@ -11,7 +11,9 @@ import { UserSetting } from "../database/models/UserSetting";
 import { AdImage } from "../database/models/AdImage";
 import { ProfilePicture } from "../database/models/ProfilePicture";
 import { throwAdNotFound } from "../util/throwAdNotFound";
-import { Op, QueryTypes } from "sequelize";
+import { Op } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
+import { OFFSET_VALIDATOR } from "../validators";
 
 import {
 	IAd,
@@ -27,7 +29,6 @@ import {
 	IAdImage,
 	AdCategory,
 } from "common-library";
-import { Sequelize } from "sequelize-typescript";
 
 const router = Router();
 
@@ -75,7 +76,7 @@ router.get("/list", {
 	validate: {
 		query: {
 			limit: Joi.number().min(0).max(500).required(),
-			offset: Joi.number().min(0).required(),
+			offset: OFFSET_VALIDATOR,
 			category: Joi.string().allow(AD_CATEGORY_VALUES).allow("").optional(),
 			search: Joi.string().allow("").optional(),
 			startDate: Joi.date().optional(),

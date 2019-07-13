@@ -11,6 +11,7 @@ import image from "./routes/image";
 import user from "./routes/user";
 import teacher from "./routes/teacher";
 import settings from "./routes/settings";
+import dm from "./routes/dm";
 
 import { config } from "./config";
 import { EmailClient } from "./email/EmailClient";
@@ -91,6 +92,7 @@ export class Server {
 		protectedRouter.use(authenticationMiddleware);
 		protectedRouter.use("/settings", settings.middleware());
 		protectedRouter.use("/image", image.routes());
+		protectedRouter.use("/dm", dm.middleware());
 
 		app.use(openRouter.routes());
 		app.use(protectedRouter.routes());

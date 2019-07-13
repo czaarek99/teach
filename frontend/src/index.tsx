@@ -20,6 +20,7 @@ import { AuthenticationService } from "./services/AuthenticationService";
 import { UserService } from "./services/UserService";
 import { AdService } from "./services/AdService";
 import { ImageService } from "./services/ImageService";
+import { DMService } from "./services/DMService";
 
 registerLocale(englishLocale);
 
@@ -28,7 +29,8 @@ const services : IServices = {
 	authenticationService: new AuthenticationService(),
 	userService: new UserService(),
 	adService: new AdService(),
-	imageService: new ImageService()
+	imageService: new ImageService(),
+	dmService: new DMService()
 };
 
 const rootStore = new RootStore(services);
