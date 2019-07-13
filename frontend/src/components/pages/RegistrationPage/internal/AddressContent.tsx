@@ -135,6 +135,7 @@ class AddressContent extends React.Component<
 
 				<Box mb={margin}>
 					<CountrySelect value={controller.model.countryCode}
+						disabled={true}
 						onChange={value => controller.onChange("countryCode", value)}/>
 				</Box>
 

@@ -147,6 +147,7 @@ class AddressContent extends React.Component<
 					/>
 
 					<CountrySelect value={controller.viewModel.countryCode}
+						disabled={true}
 						onChange={value => controller.onChange("countryCode", value)}/>
 
 					<SaveButtons onSave={() => controller.onSave()}

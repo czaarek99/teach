@@ -8,6 +8,7 @@ import { CustomNativeSelect } from "../CustomNativeSelect";
 
 interface ICountrySelectProps {
 	value: string
+	disabled?: boolean
 	onChange: (countryCode: string) => void
 }
 
@@ -37,12 +38,14 @@ class CountrySelect extends React.Component<
 
 		const {
 			value,
-			onChange
+			onChange,
+			disabled
 		} = this.props;
 
 		return (
 			<CustomNativeSelect
 				value={value}
+				disabled={disabled}
 				onChange={onChange} label={
 					<FormattedMessage id="things.country"/>
 				}>
