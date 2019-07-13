@@ -14,4 +14,5 @@ export interface INavbarController {
 	onNavItemClick: (route: Route) => void
 	logOut: () => Promise<void>
 	logIn: () => void
+	register: () => void
 }

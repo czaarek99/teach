@@ -126,6 +126,10 @@ const styles = (theme: Theme) => createStyles({
 		justifyContent: "center"
 	},
 
+	registerButton: {
+		marginRight: 10
+	},
+
 	navIcon: {
 		fontSize: 20
 	}
@@ -271,6 +275,13 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		} else {
 			loginLogoutButton = (
 				<div className={classes.logoutButtonContainer}>
+					<Button variant="contained"
+						className={classes.registerButton}
+						onClick={() => controller.register()}>
+
+						<FormattedMessage id="actions.register"/>
+					</Button>
+
 					<Button variant="contained"
 						onClick={() => controller.logIn()}>
 

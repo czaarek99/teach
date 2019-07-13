@@ -60,4 +60,9 @@ export class NavbarController implements INavbarController {
 	public logIn() : void {
 		this.rootStore.routingStore.push(Route.LOGIN);
 	}
+
+	@action
+	public register() : void {
+		this.rootStore.routingStore.push(Route.REGISTRATION);
+	}
 }

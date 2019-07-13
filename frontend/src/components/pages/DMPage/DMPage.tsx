@@ -1,12 +1,13 @@
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
 
-import { Theme, createStyles, WithStyles, withStyles, Fab } from "@material-ui/core";
+import { Theme, createStyles, WithStyles, withStyles, Fab, Typography } from "@material-ui/core";
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import { NavbarTemplate } from "../../templates";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { IDMPageController } from "../../../interfaces/controllers/pages/IDMPageController";
+import { IConversation } from "common-library";
 
 const styles = (theme: Theme) => createStyles({
 
@@ -32,8 +33,27 @@ class DMPage extends React.Component<
 > {
 
 	private renderUsers() : React.ReactNode {
+
+		const {
+			controller
+		} = this.props;
+
+		const convos = controller.convos.map((convo: IConversation) => {
+			const correspondent = convo.members[0];
+
+			return (
+				<div>
+					<Typography>
+						{correspondent.firstName} {correspondent.lastName}
+					</Typography>
+				</div>
+			)
+		});
+
 		return (
-			<span></span>
+			<div>
+				{convos}
+			</div>
 		)
 	}
 

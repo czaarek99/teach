@@ -10,6 +10,7 @@ import { Address } from "../database/models/Address";
 import { UserSetting } from "../database/models/UserSetting";
 import { ProfilePicture } from "../database/models/ProfilePicture";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
+import { Op } from "sequelize";
 
 const router = Router();
 
@@ -65,6 +66,11 @@ router.get("/list", {
 				},
 				{
 					model: User,
+					where: {
+						id: {
+							[Op.not]: context.state.session.userId
+						}
+					},
 					include: [
 						Address,
 						UserSetting,
