@@ -151,6 +151,7 @@ class AddressContent extends React.Component<
 						onChange={value => controller.onChange("countryCode", value)}/>
 
 					<ActionButtons onSave={() => controller.onSave()}
+						showReset={controller.showReset}
 						onReset={() => controller.onReset()}
 						saveButtonState={controller.saveButtonState}/>
 				</div>

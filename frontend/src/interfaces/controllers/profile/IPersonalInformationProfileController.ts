@@ -14,6 +14,7 @@ export interface IPersonalInformationProfileController {
 	readonly errorModel: ErrorModel<IPersonalErrorState>
 	readonly saveButtonState: LoadingButtonState
 	readonly loading: boolean
+	readonly showReset: boolean
 
 	onChange: (key: keyof IPersonalInformationModel, value: any) => void
 	onSave: () => Promise<void>

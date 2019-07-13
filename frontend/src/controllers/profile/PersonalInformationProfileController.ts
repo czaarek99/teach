@@ -1,7 +1,6 @@
-import { observable } from "mobx";
+import { observable, action, computed } from "mobx";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { IPersonalInformationModel } from "../../interfaces/models/IPersonalInformationModel";
-import { ViewModel } from "../../interfaces/ViewModel";
 import { PersonalInformationModel } from "../../models/PersonalInformationModel";
 import { createViewModel } from "mobx-utils";
 import { minLength, maxLength } from "../../validation/validators";
@@ -65,17 +64,25 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 		this.parent = parent;
 	}
 
+	@computed
+	public get showReset() : boolean {
+		return this.viewModel.isDirty;
+	}
+
+	@action
 	public loadUserFromCache() : void {
 		if(this.rootStore.userCache.user) {
 			this.model.fromJson(this.rootStore.userCache.user);
 		}
 	}
 
+	@action
 	public async load() : Promise<void> {
 		this.loading = false;
 		this.saveButtonState = "default";
 	}
 
+	@action
 	public onSave = async () : Promise<void> => {
 		clearTimeout(this.saveButtonStateTimeout);
 
@@ -111,16 +118,19 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 		}
 	}
 
+	@action
 	public onChange(key: keyof IPersonalInformationModel, value: any) : void {
 		this.viewModel[key] = value;
 		this.validate(key);
 	}
 
+	@action
 	public onReset = () : void => {
 		this.viewModel.reset();
 		this.errorModel.reset();
 	}
 
+	@action
 	private validate(key: keyof IPersonalInformationModel) : void {
 		const keyValidators = validators[key];
 

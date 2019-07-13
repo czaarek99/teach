@@ -15,6 +15,7 @@ export interface IAddressProfileController {
 	readonly errorModel: ErrorModel<IAddressErrorState>
 	readonly saveButtonState: LoadingButtonState
 	readonly loading: boolean
+	readonly showReset: boolean
 
 	onChange: (key: keyof IAddressModel, value: any) => void
 	onSave: () => Promise<void>

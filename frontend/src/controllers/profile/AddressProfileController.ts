@@ -1,4 +1,4 @@
-import { observable } from "mobx";
+import { observable, action, computed } from "mobx";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { AddressModel } from "../../models/AddressModel";
 import { createViewModel } from "mobx-utils";
@@ -8,6 +8,8 @@ import { validate, ValidatorMap } from "../../validation/validate";
 import { successTimeout } from "../../util/successTimeout";
 import { RootStore } from "../../stores/RootStore";
 import { ProfilePageController } from "../pages/ProfilePageController";
+import { IAddressModel } from "../../interfaces/models/IAddressModel";
+import { objectKeys } from "../../util/objectKeys";
 
 import {
 	CITY_MIN_LENGTH,
@@ -23,8 +25,6 @@ import {
 	IAddressProfileController,
 	IAddressErrorState
 } from "../../interfaces/controllers/profile/IAddressProfileController";
-import { IAddressModel } from "../../interfaces/models/IAddressModel";
-import { objectKeys } from "../../util/objectKeys";
 
 const validators : ValidatorMap<IAddressModel> = {
 	city: [
@@ -75,17 +75,25 @@ export class AddressProfileController implements IAddressProfileController {
 		this.parent = parent;
 	}
 
+	@computed
+	public get showReset() : boolean {
+		return this.viewModel.isDirty;
+	}
+
+	@action
 	public loadUserFromCache() : void {
 		if(this.rootStore.userCache.user) {
 			this.model.fromJson(this.rootStore.userCache.user.address);
 		}
 	}
 
+	@action
 	public async load() : Promise<void> {
 		this.loading = false;
 		this.saveButtonState = "default";
 	}
 
+	@action
 	private validate(key: keyof IAddressModel) : void {
 		const keyValidators = validators[key];
 
@@ -95,16 +103,19 @@ export class AddressProfileController implements IAddressProfileController {
 		}
 	}
 
+	@action
 	public onReset = () : void => {
 		this.viewModel.reset();
 		this.errorModel.reset();
 	}
 
+	@action
 	public onChange(key: keyof IAddressModel, value: any) : void {
 		this.viewModel[key] = value;
 		this.validate(key);
 	}
 
+	@action
 	public onSave = async () : Promise<void> => {
 		clearTimeout(this.addressButtonStateTimeout);
 

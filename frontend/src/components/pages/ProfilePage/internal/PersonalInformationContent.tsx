@@ -131,6 +131,7 @@ class PersonalInformationContent extends React.Component<
 					/>
 
 					<ActionButtons onSave={() => controller.onSave()}
+						showReset={controller.showReset}
 						onReset={() => controller.onReset()}
 						saveButtonState={controller.saveButtonState}/>
 

@@ -20,6 +20,7 @@ const styles = (theme: Theme) => createStyles({
 interface IActionButtonsProps {
 	onSave: () => void
 	onReset: () => void
+	showReset: boolean
 	saveButtonState: LoadingButtonState
 }
 
@@ -36,17 +37,23 @@ class ActionButtons extends React.Component<
 			onSave,
 			onReset,
 			saveButtonState,
+			showReset,
 			classes
 		} = this.props;
 
+		let resetButton = (
+			<Button variant="contained"
+				onClick={() => onReset()}
+				className={classes.resetButton}>
+
+				<FormattedMessage id="actions.reset"/>
+			</Button>
+		);
+
 		return (
 			<div className={classes.saveButtonContainer}>
-				<Button variant="contained"
-					onClick={() => onReset()}
-					className={classes.resetButton}>
+				{showReset && resetButton}
 
-					<FormattedMessage id="actions.reset"/>
-				</Button>
 				<LoadingButton state={saveButtonState}
 					onClick={() => onSave()}>
 
