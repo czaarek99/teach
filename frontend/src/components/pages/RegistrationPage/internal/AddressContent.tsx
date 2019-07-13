@@ -133,7 +133,7 @@ class AddressContent extends React.Component<
 				</Box>
 
 
-				<Box mb={margin}>
+				<Box mb={margin} hidden={true}>
 					<CountrySelect value={controller.model.countryCode}
 						disabled={true}
 						onChange={value => controller.onChange("countryCode", value)}/>

@@ -3,7 +3,7 @@ import React from 'react';
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { WithStyles, createStyles } from "@material-ui/styles";
-import { Theme, withStyles, Paper, Typography } from "@material-ui/core";
+import { Theme, withStyles, Paper, Typography, Box } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
 import { simpleFormat } from "../../../../util/simpleFormat";
 import { CountrySelect, SaveButtons } from "../../../organisms";
@@ -146,9 +146,11 @@ class AddressContent extends React.Component<
 						}}
 					/>
 
-					<CountrySelect value={controller.viewModel.countryCode}
-						disabled={true}
-						onChange={value => controller.onChange("countryCode", value)}/>
+					<Box hidden={true}>
+						<CountrySelect value={controller.viewModel.countryCode}
+							disabled={true}
+							onChange={value => controller.onChange("countryCode", value)}/>
+					</Box>
 
 					<SaveButtons onSave={() => controller.onSave()}
 						showReset={controller.showReset}
