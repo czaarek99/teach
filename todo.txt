@@ -1,4 +1,3 @@
-* ad categories
 * add viewmodel to editadpage
 * decide on money handling
 * show user country on ads
