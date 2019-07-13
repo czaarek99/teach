@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Theme, createStyles, Typography } from "@material-ui/core";
-import { IEditAdPageController } from "../../../../interfaces/controllers/pages/INewAdPageController";
+import { IEditAdPageController } from "../../../../interfaces/controllers/pages/IEditAdPageController";
 import { observer } from "mobx-react";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { WithStyles, withStyles } from "@material-ui/styles";

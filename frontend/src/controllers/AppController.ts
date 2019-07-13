@@ -21,7 +21,7 @@ import { ISettingsPageController } from "../interfaces/controllers/pages/ISettin
 import { SettingsPageController } from "./pages/SettingsPageController";
 import { IMyAdsPageController } from "../interfaces/controllers/pages/IMyAdsPageController";
 import { MyAdsPageController } from "./pages/MyAdsPageController";
-import { IEditAdPageController } from "../interfaces/controllers/pages/INewAdPageController";
+import { IEditAdPageController } from "../interfaces/controllers/pages/IEditAdPageController";
 import { EditAdPageController } from "./pages/EditAdPageController";
 import { RootStore } from "../stores/RootStore";
 

@@ -14,7 +14,7 @@ import { RootStore } from "../../stores/RootStore";
 import {
 	IEditAdPageController,
 	IEditAdPageErrorState
-} from "../../interfaces/controllers/pages/INewAdPageController";
+} from "../../interfaces/controllers/pages/IEditAdPageController";
 
 import {
 	AD_NAME_MIN_LENGTH,
@@ -47,9 +47,9 @@ export class EditAdPageController implements IEditAdPageController {
 		]
 	}
 
-	@observable private readonly rootStore: RootStore;
 	private saveButtonStateTimeout?: number;
 
+	@observable private readonly rootStore: RootStore;
 	@observable private readonly imageUrls = new Map<number, string>();
 	@observable private id?: number;
 
