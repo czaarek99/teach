@@ -6,7 +6,7 @@ import { IEditAdPageController } from "../../../interfaces/controllers/pages/IEd
 import { observer } from "mobx-react";
 import { NavbarTemplate } from "../../templates";
 import { CustomTextField, LoadingButton } from "../../molecules";
-import { AdCategorySelect } from "../../organisms";
+import { AdCategorySelect, SaveButtons } from "../../organisms";
 import { simpleFormat } from "../../../util/simpleFormat";
 import { faInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -216,12 +216,10 @@ class EditAdPage extends React.Component<
 								label={privateLabel}/>
 						</div>
 
-						<div>
-							<LoadingButton onClick={() => controller.onSave()}
-								state={controller.saveButtonState}>
-								<FormattedMessage id="actions.save"/>
-							</LoadingButton>
-						</div>
+						<SaveButtons onSave={() => controller.onSave()}
+							onReset={() => controller.onReset()}
+							showReset={controller.showReset}
+							saveButtonState={controller.saveButtonState}/>
 					</Paper>
 				</div>
 

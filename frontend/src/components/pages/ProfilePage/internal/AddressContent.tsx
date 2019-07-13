@@ -1,5 +1,4 @@
 import React from 'react';
-import ActionButtons from "./ActionButtons";
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
@@ -7,7 +6,7 @@ import { WithStyles, createStyles } from "@material-ui/styles";
 import { Theme, withStyles, Paper, Typography } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
 import { simpleFormat } from "../../../../util/simpleFormat";
-import { CountrySelect } from "../../../organisms";
+import { CountrySelect, SaveButtons } from "../../../organisms";
 import { faMap } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -150,7 +149,7 @@ class AddressContent extends React.Component<
 					<CountrySelect value={controller.viewModel.countryCode}
 						onChange={value => controller.onChange("countryCode", value)}/>
 
-					<ActionButtons onSave={() => controller.onSave()}
+					<SaveButtons onSave={() => controller.onSave()}
 						showReset={controller.showReset}
 						onReset={() => controller.onReset()}
 						saveButtonState={controller.saveButtonState}/>

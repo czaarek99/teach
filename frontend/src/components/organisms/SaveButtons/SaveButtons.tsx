@@ -1,23 +1,23 @@
 import React from 'react';
+
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { WithStyles, Theme, createStyles, Button, withStyles } from "@material-ui/core";
-import { LoadingButtonState, LoadingButton } from "../../../molecules";
 import { observer } from "mobx-react";
+import { LoadingButtonState, LoadingButton } from "../../molecules";
 
 const styles = (theme: Theme) => createStyles({
+
 	saveButtonContainer: {
-		display: "flex",
-		justifyContent: "flex-end",
 		marginTop: 10
 	},
 
 	resetButton: {
-		marginRight: 10
+		marginLeft: 10
 	},
 
 })
 
-interface IActionButtonsProps {
+interface ISaveButtonsProps {
 	onSave: () => void
 	onReset: () => void
 	showReset: boolean
@@ -25,8 +25,8 @@ interface IActionButtonsProps {
 }
 
 @observer
-class ActionButtons extends React.Component<
-	IActionButtonsProps &
+class SaveButtons extends React.Component<
+	ISaveButtonsProps &
 	InjectedIntlProps &
 	WithStyles<typeof styles>
 > {
@@ -52,16 +52,16 @@ class ActionButtons extends React.Component<
 
 		return (
 			<div className={classes.saveButtonContainer}>
-				{showReset && resetButton}
-
 				<LoadingButton state={saveButtonState}
 					onClick={() => onSave()}>
 
 					<FormattedMessage id="actions.save"/>
 				</LoadingButton>
+
+				{showReset && resetButton}
 			</div>
 		)
 	}
 }
 
-export default withStyles(styles)(injectIntl(ActionButtons));
+export default withStyles(styles)(injectIntl(SaveButtons));

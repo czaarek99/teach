@@ -305,6 +305,11 @@ export class EditAdPageController implements IEditAdPageController {
 	}
 
 	@action
+	public onReset() : void {
+		this.viewModel.reset();
+	}
+
+	@action
 	public setImageIndex(index: number) : void {
 		this.imageIndex = index;
 	}

@@ -29,6 +29,7 @@ export interface IEditAdPageController {
 	onDrop: (files: File[]) => void
 	onCloseSnackbar: () => void
 	onSave: () => Promise<void>
+	onReset: () => void
 	onChange: (key: keyof IEditAdModel, value: any) => void
 	onDeleteImage: (index: number) => void
 	onWindowResize: () => void

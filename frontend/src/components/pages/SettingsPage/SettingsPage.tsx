@@ -20,6 +20,7 @@ import {
 	Typography,
 	Button
 } from "@material-ui/core";
+import { SaveButtons } from "../../organisms";
 
 const styles = (theme: Theme) => createStyles({
 	titlePaper: {
@@ -51,18 +52,6 @@ class SettingsPage extends React.Component<
 			controller
 		} = this.props;
 
-		let resetButton = null;
-		if(controller.showReset) {
-			resetButton = (
-				<Button variant="contained"
-					className={classes.resetButton}
-					onClick={() => controller.onReset()}>
-
-					<FormattedMessage id="actions.reset"/>
-				</Button>
-			)
-		}
-
 		return (
 			<NavbarTemplate controller={navbarController}>
 				<Paper className={classes.titlePaper}>
@@ -72,14 +61,10 @@ class SettingsPage extends React.Component<
 
 					<PrivacyContent controller={controller}/>
 
-					<div>
-						<LoadingButton onClick={() => controller.onSave()}
-							state={controller.saveButtonState}>
-
-							<FormattedMessage id="actions.save"/>
-						</LoadingButton>
-						{resetButton}
-					</div>
+					<SaveButtons saveButtonState={controller.saveButtonState}
+						onReset={() => controller.onReset()}
+						onSave={() => controller.onSave()}
+						showReset={controller.showReset}/>
 				</Paper>
 			</NavbarTemplate>
 		)

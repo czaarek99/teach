@@ -1,12 +1,13 @@
 import React from 'react';
-import ActionButtons from "./ActionButtons";
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { WithStyles, Theme, createStyles, withStyles, Paper, Typography } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
 import { simpleFormat } from "../../../../util/simpleFormat";
-import { CustomDatePicker } from "../../../organisms";
+import { CustomDatePicker, SaveButtons } from "../../../organisms";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignature, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 import {
 	FIRST_NAME_MAX_LENGTH,
@@ -20,8 +21,6 @@ import {
 import {
 	IPersonalInformationProfileController
 } from "../../../../interfaces/controllers/profile/IPersonalInformationProfileController";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignature, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 interface IPersonalInformationContentProps {
 	controller: IPersonalInformationProfileController
@@ -130,7 +129,7 @@ class PersonalInformationContent extends React.Component<
 						onChange={date => controller.onChange("birthDate", date)}
 					/>
 
-					<ActionButtons onSave={() => controller.onSave()}
+					<SaveButtons onSave={() => controller.onSave()}
 						showReset={controller.showReset}
 						onReset={() => controller.onReset()}
 						saveButtonState={controller.saveButtonState}/>
