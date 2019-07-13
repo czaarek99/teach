@@ -2,11 +2,9 @@ import { observable } from "mobx";
 import { ErrorModel } from "../../validation/ErrorModel";
 import { AddressModel } from "../../models/AddressModel";
 import { createViewModel } from "mobx-utils";
-import { IAddressModel } from "../../interfaces/models/IAddressModel";
 import { LoadingButtonState } from "../../components";
 import { minLength, maxLength } from "../../validation/validators";
 import { validate, ValidatorMap } from "../../validation/validate";
-import { ViewModel } from "../../interfaces/ViewModel";
 import { successTimeout } from "../../util/successTimeout";
 import { RootStore } from "../../stores/RootStore";
 import { ProfilePageController } from "../pages/ProfilePageController";
@@ -25,8 +23,10 @@ import {
 	IAddressProfileController,
 	IAddressErrorState
 } from "../../interfaces/controllers/profile/IAddressProfileController";
+import { IAddressModel } from "../../interfaces/models/IAddressModel";
+import { objectKeys } from "../../util/objectKeys";
 
-const validators : ValidatorMap<AddressModel> = {
+const validators : ValidatorMap<IAddressModel> = {
 	city: [
 		minLength(CITY_MIN_LENGTH),
 		maxLength(CITY_MAX_LENGTH)
@@ -55,9 +55,8 @@ export class AddressProfileController implements IAddressProfileController {
 	private addressButtonStateTimeout?: number;
 
 	@observable private model = new AddressModel();
-	@observable private _viewModel : ViewModel<AddressModel>;
 
-	@observable public viewModel : ViewModel<IAddressModel>;
+	@observable public viewModel = createViewModel(this.model);
 	@observable public saveButtonState : LoadingButtonState = "disabled";
 	@observable public loading = true;
 
@@ -74,9 +73,6 @@ export class AddressProfileController implements IAddressProfileController {
 	) {
 		this.rootStore = rootStore;
 		this.parent = parent;
-
-		this._viewModel = createViewModel(this.model);
-		this.viewModel = this._viewModel as any;
 	}
 
 	public loadUserFromCache() : void {
@@ -94,18 +90,18 @@ export class AddressProfileController implements IAddressProfileController {
 		const keyValidators = validators[key];
 
 		if(keyValidators !== undefined) {
-			const value = this._viewModel[key];
+			const value = this.viewModel[key];
 			this.errorModel.setErrors(key, validate(value, keyValidators));
 		}
 	}
 
 	public onReset = () : void => {
-		this._viewModel.reset();
+		this.viewModel.reset();
 		this.errorModel.reset();
 	}
 
-	public onChange(key: keyof IAddressModel, value: string) : void {
-		this._viewModel[key] = value;
+	public onChange(key: keyof IAddressModel, value: any) : void {
+		this.viewModel[key] = value;
 		this.validate(key);
 	}
 
@@ -113,10 +109,11 @@ export class AddressProfileController implements IAddressProfileController {
 		clearTimeout(this.addressButtonStateTimeout);
 
 		this.errorModel.submit();
-		this._viewModel.submit();
+		this.viewModel.submit();
 
-		for(const [key] of this._viewModel.changedValues.keys()) {
-			this.validate(key as (keyof IAddressModel));
+		const input = this.viewModel.toInput();
+		for(const key of objectKeys(input)) {
+			this.validate(key);
 		}
 
 		if(this.errorModel.hasErrors()) {
@@ -124,13 +121,13 @@ export class AddressProfileController implements IAddressProfileController {
 		} else {
 			this.saveButtonState = "loading";
 
-			const address = this.model.toInput();
-
 			try {
-				await this.rootStore.services.userService.updateAddress(address);
+				await this.rootStore.services.userService.updateAddress(input);
 				this.saveButtonState = "success";
 
-				this.rootStore.userCache.updateAddress(address);
+				this.rootStore.userCache.updateAddress(input);
+
+				this.viewModel.submit();
 
 				this.addressButtonStateTimeout = successTimeout(() => {
 					this.saveButtonState = "default";

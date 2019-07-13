@@ -7,6 +7,8 @@ import { CustomTextField } from "../../../molecules";
 import { simpleFormat } from "../../../../util/simpleFormat";
 import { CustomDatePicker } from "../../../organisms";
 import { IRegistrationContentProps } from "../RegistrationPage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignature, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 import {
 	FIRST_NAME_MIN_LENGTH,
@@ -16,8 +18,6 @@ import {
 	getUserMaxDate,
 	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignature, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 
 @observer

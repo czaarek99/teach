@@ -10,7 +10,7 @@ export interface IPersonalErrorState extends ErrorState {
 }
 
 export interface IPersonalInformationProfileController {
-	readonly viewModel: ViewModel<IPersonalInformationModel>
+	readonly viewModel: IPersonalInformationModel;
 	readonly errorModel: ErrorModel<IPersonalErrorState>
 	readonly saveButtonState: LoadingButtonState
 	readonly loading: boolean

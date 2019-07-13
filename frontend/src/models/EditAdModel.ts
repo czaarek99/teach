@@ -17,6 +17,16 @@ export class EditAdModel implements IEditAdModel {
 		this.category = ad.category;
 	}
 
+	public toValidate() : IEditAdModel {
+		return {
+			name: this.name,
+			description: this.description,
+			images: this.images,
+			private: this.private,
+			category: this.category
+		};
+	}
+
 	public toInput() : IEditAdInput {
 		if(this.category === "") {
 			throw new Error("Can not construct an ad without a category");

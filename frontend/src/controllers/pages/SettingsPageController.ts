@@ -17,7 +17,7 @@ export class SettingsPageController implements ISettingsPageController {
 	private successTimeout?: number;
 
 	@observable private model = new SettingsModel();
-	@observable public viewModel = createViewModel<ISettingsModel>(this.model);
+	@observable public viewModel = createViewModel(this.model);
 	@observable public saveButtonState : LoadingButtonState = "default";
 	@observable public loading = true;
 	@observable public errorMessage = "";
@@ -60,14 +60,9 @@ export class SettingsPageController implements ISettingsPageController {
 		this.loading = false;
 	}
 
-	@computed
-	private get _viewModel() : ViewModel<SettingsModel> {
-		return this.viewModel as any;
-	}
-
 	@action
 	public onChange(key: keyof ISettingsModel, value: any) : void {
-		this._viewModel[key] = value;
+		this.viewModel[key] = value;
 	}
 
 	@action
@@ -82,13 +77,13 @@ export class SettingsPageController implements ISettingsPageController {
 		this.saveButtonState = "loading";
 		this.loading = true;
 
-		this.viewModel.submit();
+		const input = this.viewModel.toInput();
 
 		try {
-			const input = this.model.toJson();
 			await this.rootStore.services.settingsService.updateSettings(input);
 
 			this.saveButtonState = "success";
+			this.viewModel.submit();
 
 			this.successTimeout = successTimeout(() => {
 				this.saveButtonState = "default";

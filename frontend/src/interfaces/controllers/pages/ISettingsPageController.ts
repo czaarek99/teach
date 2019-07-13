@@ -3,7 +3,7 @@ import { ViewModel } from "../../ViewModel";
 import { LoadingButtonState } from "../../../components";
 
 export interface ISettingsPageController {
-	readonly viewModel: ViewModel<ISettingsModel>
+	readonly viewModel: ISettingsModel
 	readonly loading: boolean
 	readonly saveButtonState: LoadingButtonState
 	readonly errorMessage: string

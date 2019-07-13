@@ -11,7 +11,7 @@ export interface IEditAdPageErrorState extends ErrorState {
 }
 
 export interface IEditAdPageController {
-	readonly viewModel: ViewModel<IEditAdModel>;
+	readonly viewModel: IEditAdModel;
 	readonly errorModel: ErrorModel<IEditAdPageErrorState>
 	readonly saveButtonState: LoadingButtonState
 	readonly pageError: string

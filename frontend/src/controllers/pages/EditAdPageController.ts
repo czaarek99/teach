@@ -10,6 +10,7 @@ import { successTimeout } from "../../util/successTimeout";
 import { requireLogin } from "../../util/requireLogin";
 import { RootStore } from "../../stores/RootStore";
 import { createViewModel } from "mobx-utils";
+import { objectKeys } from "../../util/objectKeys";
 
 import {
 	IEditAdPageController,
@@ -29,7 +30,7 @@ import {
 
 export class EditAdPageController implements IEditAdPageController {
 
-	private readonly validators : ValidatorMap<IEditAdModel> = {
+	private readonly validators : ValidatorMap<EditAdModel> = {
 		name: [
 			minLength(AD_NAME_MIN_LENGTH),
 			maxLength(AD_NAME_MAX_LENGTH)
@@ -55,7 +56,7 @@ export class EditAdPageController implements IEditAdPageController {
 
 	@observable public pageError = "";
 	@observable public saveButtonState : LoadingButtonState = "default";
-	@observable public viewModel = createViewModel<IEditAdModel>(this.model);
+	@observable public viewModel = createViewModel(this.model);
 	@observable public isDraggingOver = false;
 	@observable public loading = true;
 	@observable public imageIndex = 0;
@@ -199,7 +200,7 @@ export class EditAdPageController implements IEditAdPageController {
 	public async onSave() : Promise<void> {
 		clearTimeout(this.saveButtonStateTimeout);
 
-		for(const key of this.viewModel.changedValues.keys()) {
+		for(const key of objectKeys(this.viewModel.toValidate())) {
 			this.validate(key);
 		}
 
@@ -207,11 +208,10 @@ export class EditAdPageController implements IEditAdPageController {
 			this.saveButtonState = "error";
 		} else {
 			this.saveButtonState = "loading";
-			this.viewModel.submit();
 
 			try {
-				const editAdInput = this.model.toInput();
-				const imageInput = this.model.toImageInput();
+				const editAdInput = this.viewModel.toInput();
+				const imageInput = this.viewModel.toImageInput();
 
 				if(this.id === undefined) {
 					const output = await this.rootStore.services.adService.createAd(editAdInput);
@@ -250,6 +250,8 @@ export class EditAdPageController implements IEditAdPageController {
 
 				this.saveButtonState = "success";
 				this.pageError = "";
+
+				this.viewModel.submit();
 
 				this.saveButtonStateTimeout = successTimeout(() => {
 					this.saveButtonState = "default";

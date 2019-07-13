@@ -11,12 +11,12 @@ export interface IAddressErrorState extends ErrorState {
 }
 
 export interface IAddressProfileController {
-	readonly viewModel: ViewModel<IAddressModel>
+	readonly viewModel: IAddressModel
 	readonly errorModel: ErrorModel<IAddressErrorState>
 	readonly saveButtonState: LoadingButtonState
 	readonly loading: boolean
 
-	onChange: (key: keyof IAddressModel, value: string) => void
+	onChange: (key: keyof IAddressModel, value: any) => void
 	onSave: () => Promise<void>
 	onReset: () => void
 }

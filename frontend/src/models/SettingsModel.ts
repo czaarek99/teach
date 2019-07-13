@@ -14,7 +14,7 @@ export class SettingsModel implements ISettingsModel {
 		}
 	}
 
-	public toJson() : IManySettingsInput {
+	public toInput() : IManySettingsInput {
 		return {
 			changes: [
 				{

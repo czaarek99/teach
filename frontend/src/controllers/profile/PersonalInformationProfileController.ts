@@ -41,16 +41,15 @@ const validators : ValidatorMap<IPersonalInformationModel> = {
 
 export class PersonalInformationProfileController implements IPersonalInformationProfileController {
 
-	@observable private readonly rootStore: RootStore;
 	private readonly parent: ProfilePageController;
 	private saveButtonStateTimeout?: number;
 
-	@observable private _viewModel : ViewModel<PersonalInformationModel>;
+	@observable private readonly rootStore: RootStore;
 	@observable private model = new PersonalInformationModel();
 
 	@observable public loading = true;
 	@observable public saveButtonState: LoadingButtonState = "disabled";
-	@observable public viewModel : ViewModel<IPersonalInformationModel>;
+	@observable public viewModel = createViewModel(this.model);
 
 	@observable public errorModel = new ErrorModel<IPersonalErrorState>({
 		firstName: [],
@@ -64,9 +63,6 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 	) {
 		this.rootStore = rootStore;
 		this.parent = parent;
-
-		this._viewModel = createViewModel(this.model);
-		this.viewModel = this._viewModel as any;
 	}
 
 	public loadUserFromCache() : void {
@@ -83,10 +79,11 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 	public onSave = async () : Promise<void> => {
 		clearTimeout(this.saveButtonStateTimeout);
 
-		this._viewModel.submit();
+		this.viewModel.submit();
 		this.errorModel.submit();
 
-		for(const key of objectKeys(this.model.toInput())) {
+		const input = this.model.toInput();
+		for(const key of objectKeys(input)) {
 			this.validate(key);
 		}
 
@@ -95,13 +92,13 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 		} else {
 			this.saveButtonState = "loading";
 
-			const input = this.model.toInput();
-
 			try {
 				await this.rootStore.services.userService.updatePersonalInfo(input);
 				this.saveButtonState = "success";
 
 				this.rootStore.userCache.updatePersonalInfo(input);
+
+				this.viewModel.submit();
 
 				this.saveButtonStateTimeout = successTimeout(() => {
 					this.saveButtonState = "default";
@@ -115,12 +112,12 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 	}
 
 	public onChange(key: keyof IPersonalInformationModel, value: any) : void {
-		this._viewModel[key] = value;
+		this.viewModel[key] = value;
 		this.validate(key);
 	}
 
 	public onReset = () : void => {
-		this._viewModel.reset();
+		this.viewModel.reset();
 		this.errorModel.reset();
 	}
 
@@ -128,7 +125,7 @@ export class PersonalInformationProfileController implements IPersonalInformatio
 		const keyValidators = validators[key];
 
 		if(keyValidators !== undefined) {
-			const value = this._viewModel[key];
+			const value = this.viewModel[key];
 			this.errorModel.setErrors(key, validate(value, keyValidators));
 		}
 	}
