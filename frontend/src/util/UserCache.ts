@@ -25,6 +25,7 @@ export interface IUserCache {
 	logOut: () => void
 }
 
+//TODO: This should actually be a store
 export class UserCache implements IUserCache {
 
 	private readonly userService: IUserService;

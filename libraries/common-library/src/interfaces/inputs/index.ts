@@ -13,3 +13,4 @@ export * from "./ISimpleIdsInput";
 export * from "./IAdDeleteIndexesInput";
 export * from "./IDMListInput";
 export * from "./INewConversationInput";
+export * from "./INewDMInput";

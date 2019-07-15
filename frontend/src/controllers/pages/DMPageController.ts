@@ -3,6 +3,7 @@ import { RootStore } from "../../stores/RootStore";
 import { observable, action } from "mobx";
 import { requireLogin } from "../../util/requireLogin";
 import { IConversation } from "common-library";
+import { DMEditorController } from "../DMEditorController";
 
 export class DMPageController implements IDMPageController {
 
@@ -12,6 +13,7 @@ export class DMPageController implements IDMPageController {
 	@observable public dmCount = 0;
 	@observable public convos: IConversation[] = []
 	@observable public selectedConvo?: IConversation;
+	@observable public editorController = new DMEditorController(this.rootStore);
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -47,12 +49,14 @@ export class DMPageController implements IDMPageController {
 
 	@action
 	public onNewDM() : void {
-
+		this.editorController = new DMEditorController(this.rootStore);
 	}
 
 	@action
 	public selectConvo(convo: IConversation) : void {
 		this.selectedConvo = convo;
+
+		this.editorController = new DMEditorController(this.rootStore, convo);
 	}
 
 }

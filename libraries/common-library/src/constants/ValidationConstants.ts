@@ -45,3 +45,4 @@ export const MAX_AD_PICTURE_COUNT = 5;
 export const MAX_USER_AD_COUNT = 8;
 
 export const CONVERSATION_TITLE_MAX_LENGTH = 100;
+export const DM_MAX_LENGTH = 5000;

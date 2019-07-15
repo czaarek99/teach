@@ -5,10 +5,12 @@ import AdCarousel from "./internal/AdCarousel";
 import { IAdPageController } from "../../../interfaces/controllers/pages/IAdPageController";
 import { NavbarTemplate } from "../../templates";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
-import { getImageUrl } from "../../../util/imageAPI";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 import { observer } from "mobx-react";
 import { red } from "@material-ui/core/colors";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { CustomAvatar } from "../../molecules";
 
 import {
 	Card,
@@ -17,7 +19,6 @@ import {
 	WithStyles,
 	withStyles,
 	Typography,
-	Avatar,
 	Snackbar,
 	Button,
 	Dialog,
@@ -25,9 +26,6 @@ import {
 	DialogContent,
 	DialogActions,
 } from "@material-ui/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { CustomAvatar } from "../../molecules";
 
 const AD_SMALL_BREAKPOINT = "@media screen and (min-width: 400px)";
 const AD_MEDIUM_BREAKPOINT = "@media screen and (min-width: 1000px)";

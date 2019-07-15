@@ -12,6 +12,7 @@ export default {
 	"actions.back": "Back",
 	"actions.next": "Next",
 	"actions.save": "Save",
+	"actions.send": "Send",
 	"actions.reset": "Reset",
 	"actions.change": "Change",
 	"actions.clear": "Clear",

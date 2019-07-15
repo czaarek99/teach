@@ -1,6 +1,7 @@
 import React from 'react';
 import Skeleton from "react-loading-skeleton";
 import MenuIcon from "@material-ui/icons/Menu";
+import clsx from "clsx";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { InjectedIntlProps, injectIntl, FormattedMessage } from 'react-intl';
@@ -9,7 +10,6 @@ import { simpleFormat } from '../../../util/simpleFormat';
 import { Route } from '../../../interfaces/Routes';
 import { PRODUCT_NAME } from 'common-library';
 import { LoadingButton, CustomAvatar } from "../../molecules";
-import { getImageUrl } from "../../../util/imageAPI";
 
 import {
 	INavbarController
@@ -40,13 +40,13 @@ import {
 	WithStyles,
 	withStyles,
 	Divider,
-	Avatar,
 	Button
 } from '@material-ui/core';
 
 const drawerWidth = 270;
 
 const styles = (theme: Theme) => createStyles({
+
 	root: {
 		display: "flex",
 		minHeight: "100vh"
@@ -89,7 +89,10 @@ const styles = (theme: Theme) => createStyles({
 
 	main: {
 		flexGrow: 1,
-		padding: 10,
+	},
+
+	mainPadding: {
+		padding: 10
 	},
 
 	avatar: {
@@ -138,6 +141,7 @@ const styles = (theme: Theme) => createStyles({
 
 interface INavbarTemplateProps {
 	controller: INavbarController
+	padding?: boolean
 }
 
 type ExternalProps =
@@ -147,6 +151,10 @@ type ExternalProps =
 
 @observer
 class NavbarTemplate extends React.Component<ExternalProps> {
+
+	public static defaultProps: Partial<INavbarTemplateProps> = {
+		padding: true
+	}
 
 	private onResize = () : void => {
 		this.props.controller.onWindowResize();
@@ -335,8 +343,13 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 		const {
 			controller,
 			classes,
-			children
+			children,
+			padding
 		} = this.props;
+
+		const mainClasses = clsx(classes.main, {
+			[classes.mainPadding]: padding
+		});
 
 		return (
 			<div className={classes.root}>
@@ -376,7 +389,7 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 						</Drawer>
 					</Hidden>
 				</nav>
-				<main className={classes.main}>
+				<main className={mainClasses}>
 					<div className={classes.toolbar}/>
 					<div className={classes.content}>
 						{children}

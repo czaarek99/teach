@@ -3,14 +3,12 @@ import Skeleton from "react-loading-skeleton";
 
 import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IAdController } from "../../../interfaces/controllers/IAdController";
-import { getImageUrl } from "../../../util/imageAPI";
 import { observer } from "mobx-react";
 import { AdCategoryIcon, CustomAvatar } from "../../molecules";
 
 import {
 	Card,
 	CardHeader,
-	Avatar,
 	CardMedia,
 	CardContent,
 	Typography ,

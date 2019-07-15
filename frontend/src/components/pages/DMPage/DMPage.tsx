@@ -1,22 +1,43 @@
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
+import DM from "./internal/DM";
+import DMEditor from "./internal/DMEditor";
 
-import { Theme, createStyles, WithStyles, withStyles, Fab, Typography } from "@material-ui/core";
+import { Theme, createStyles, WithStyles, withStyles, Fab } from "@material-ui/core";
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import { NavbarTemplate } from "../../templates";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { IDMPageController } from "../../../interfaces/controllers/pages/IDMPageController";
 import { IConversation } from "common-library";
-import DM from "./internal/DM";
+import { grey } from "@material-ui/core/colors";
 
 const styles = (theme: Theme) => createStyles({
 
+	content: {
+		display: "flex",
+		position: "relative"
+	},
+
+	messages: {
+		flexBasis: 270,
+		flexGrow: 0,
+		flexShrink: 0,
+		borderRightWidth: 1,
+		borderRightColor: grey[300],
+		borderRightStyle: "solid"
+	},
+
+	editor: {
+		flexGrow: 1,
+		flexShrink: 0
+	},
+
 	fab: {
-		position: "fixed",
+		position: "absolute",
 		margin: 10,
 		bottom: 0,
-		right: 0
+		left: 0
 	},
 
 });
@@ -61,22 +82,30 @@ class DMPage extends React.Component<
 		} = this.props;
 
 		return (
-			<NavbarTemplate controller={navbarController}>
-				<div>
-					{this.renderUsers()}
+			<NavbarTemplate controller={navbarController}
+				padding={false}>
+
+				<div className={classes.content}>
+					<div className={classes.messages}>
+						{this.renderUsers()}
+
+
+					</div>
+
+					<div className={classes.editor}>
+						<DMEditor controller={controller.editorController}/>
+
+					</div>
+
+					<Fab className={classes.fab}
+						size="medium"
+						onClick={() => controller.onNewDM()}>
+
+						<AddIcon />
+					</Fab>
 				</div>
-
-				<div>
-
-				</div>
-
-				<Fab className={classes.fab}
-					onClick={() => controller.onNewDM()}>
-
-					<AddIcon />
-				</Fab>
 			</NavbarTemplate>
-		)
+		);
 	}
 
 }

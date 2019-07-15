@@ -1,8 +1,8 @@
 import React from "react";
+
 import { observer } from "mobx-react";
 import { Avatar } from "@material-ui/core";
 import { getImageUrl } from "../../../util/imageAPI";
-import Skeleton from "react-loading-skeleton";
 
 interface ICustomAvatarProps {
 	imageUrl?: string

@@ -35,5 +35,8 @@ export enum ErrorMessage {
 	WRONG_CURRENT_PASSWORD = "error.wrongCurrentPassword",
 
 	INVALID_IMAGE = "error.invalidImage",
-	IMAGE_UPLOAD_LIMIT_REACHED = "error.imageUploadLimit"
+	IMAGE_UPLOAD_LIMIT_REACHED = "error.imageUploadLimit",
+
+	CONVERSATION_NOT_FOUND = "error.convoNotFound",
+
 }

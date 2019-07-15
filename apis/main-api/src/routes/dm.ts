@@ -10,6 +10,7 @@ import { UserSetting } from "../database/models/UserSetting";
 import { ProfilePicture } from "../database/models/ProfilePicture";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { Op } from "sequelize";
+import { throwApiError } from "server-lib";
 
 import {
 	IDMListInput,
@@ -19,9 +20,10 @@ import {
 	IEdge,
 	INewConversationInput,
 	HttpError,
-	ErrorMessage
+	ErrorMessage,
+	INewDMInput,
+	DM_MAX_LENGTH
 } from "common-library";
-import { throwApiError } from "server-lib";
 
 const router = Router();
 
@@ -37,11 +39,23 @@ function resolveConversation(convo: Conversation) : IConversation {
 	const members : ITeacher[] = convo.members.map(resolveTeacher);
 
 	return {
+		id: convo.id,
 		members,
 		messages,
 		title: convo.title
 	};
 
+}
+
+function throwConversationNotFound(context: CustomContext) : void {
+	throwApiError(
+		context,
+		new HttpError(
+			400,
+			ErrorMessage.CONVERSATION_NOT_FOUND,
+			context.state.requestId
+		)
+	);
 }
 
 router.get("/list", {
@@ -159,12 +173,60 @@ router.put("/convo", {
 	const teachers = users.map(resolveTeacher);
 
 	const output : IConversation = {
+		id: conversation.id,
 		members: teachers,
 		messages: [],
 		title: input.title
 	}
 
 	context.body = output;
+	context.status = 200;
+});
+
+router.patch("", {
+	validate: {
+		body: {
+			message: Joi.string().min(1).max(DM_MAX_LENGTH).required(),
+			conversationId: Joi.number().min(0).required()
+		},
+		type: "json"
+	}
+}, async (context: CustomContext) => {
+
+	const input : INewDMInput = context.request.body;
+
+	const convo : Conversation = await Conversation.findOne<Conversation>({
+		where: {
+			id: input.conversationId
+		},
+		include: [
+			User
+		]
+	});
+
+	if(!convo) {
+		throwConversationNotFound(context);
+		return;
+	}
+
+	let isMember = false;
+	for(const member of convo.members) {
+		if(member.id === context.state.session.userId) {
+			isMember = true;
+			break;
+		}
+	}
+
+	if(!isMember) {
+		throwConversationNotFound(context);
+		return;
+	}
+
+	await Message.create({
+		converationId: convo.id,
+		content: input.message
+	});
+
 	context.status = 200;
 });
 
