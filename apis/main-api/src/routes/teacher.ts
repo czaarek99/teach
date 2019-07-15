@@ -7,7 +7,7 @@ import { Address } from "../database/models/Address";
 import { throwApiError } from "server-lib";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { UserSetting } from "../database/models/UserSetting";
-import { ISimpleIdInput, HttpError } from "common-library";
+import { ISimpleIdInput, HttpError, ErrorMessage } from "common-library";
 import { ProfilePicture } from "../database/models/ProfilePicture";
 
 const router = Router();
@@ -37,7 +37,9 @@ router.get("/:id", {
 		throwApiError(
 			context,
 			new HttpError(
-				404
+				404,
+				ErrorMessage.TEACHER_NOT_FOUND,
+				context.state.requestId
 			)
 		);
 

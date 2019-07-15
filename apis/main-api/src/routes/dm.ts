@@ -3,7 +3,6 @@ import { Joi } from "koa-joi-router";
 import { OFFSET_VALIDATOR } from "../validators";
 import { CustomContext } from "../Server";
 import { Message } from "../database/models/Message";
-import { IDMListInput, IConversation, IMessage, ITeacher, IEdge } from "common-library";
 import { User } from "../database/models/User";
 import { Conversation } from "../database/models/Conversation";
 import { Address } from "../database/models/Address";
@@ -11,6 +10,18 @@ import { UserSetting } from "../database/models/UserSetting";
 import { ProfilePicture } from "../database/models/ProfilePicture";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { Op } from "sequelize";
+
+import {
+	IDMListInput,
+	IConversation,
+	IMessage,
+	ITeacher,
+	IEdge,
+	INewConversationInput,
+	HttpError,
+	ErrorMessage
+} from "common-library";
+import { throwApiError } from "server-lib";
 
 const router = Router();
 
@@ -94,6 +105,66 @@ router.get("/list", {
 	};
 
 	context.body = edge;
+	context.status = 200;
+});
+
+router.put("/convo", {
+	validate: {
+		body: {
+			members: Joi.array().only(Joi.number().min(0)).required().max(10)
+		},
+		type: "json"
+	}
+}, async (context: CustomContext) => {
+
+	const input = context.request.body as INewConversationInput;
+	const conversation : Conversation = await Conversation.create({
+		title: input.title
+	});
+
+	const userId = context.state.session.userId;
+	const members: number[] = [...input.members, userId];
+
+	const users : User[] = await User.findAll<User>({
+		where: {
+			id: {
+				[Op.in]: members
+			}
+		},
+		include: [
+			{
+				model: User,
+				include: [
+					Address,
+					UserSetting,
+					ProfilePicture
+				]
+			}
+		]
+	});
+
+	if(users.length === 0) {
+		throwApiError(
+			context,
+			new HttpError(
+				404,
+				ErrorMessage.USER_NOT_FOUND,
+				context.state.requestId
+			)
+		);
+	}
+
+	await conversation.$add("userId", users);
+
+	const teachers = users.map(resolveTeacher);
+
+	const output : IConversation = {
+		members: teachers,
+		messages: [],
+		title: input.title
+	}
+
+	context.body = output;
 	context.status = 200;
 });
 

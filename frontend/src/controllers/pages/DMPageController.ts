@@ -11,6 +11,7 @@ export class DMPageController implements IDMPageController {
 	@observable public pageNumber = 0;
 	@observable public dmCount = 0;
 	@observable public convos: IConversation[] = []
+	@observable public selectedConvo?: IConversation;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -47,6 +48,11 @@ export class DMPageController implements IDMPageController {
 	@action
 	public onNewDM() : void {
 
+	}
+
+	@action
+	public selectConvo(convo: IConversation) : void {
+		this.selectedConvo = convo;
 	}
 
 }

@@ -1,6 +1,6 @@
 import { BaseService } from "./BaseService";
 import { IDMService } from "../interfaces/services/IDMService";
-import { IDMListInput, IConversation, IEdge } from "common-library";
+import { IDMListInput, IConversation, IEdge, INewConversationInput } from "common-library";
 import { objectToParams } from "../util/objectToParams";
 
 export class DMService extends BaseService implements IDMService {
@@ -16,6 +16,11 @@ export class DMService extends BaseService implements IDMService {
 			`/list?${params}`
 		);
 
+		return response.data;
+	}
+
+	public async addConversation(input: INewConversationInput) : Promise<IConversation> {
+		const response = await this.axios.put<IConversation>("/convo", input);
 		return response.data;
 	}
 

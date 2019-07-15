@@ -16,6 +16,7 @@ export enum ErrorMessage {
 	DATE_TOO_BIG = "error.dateTooBig",
 	DATE_TOO_SMALL = "error.dateTooSmall",
 
+	TEACHER_NOT_FOUND = "error.teacherNotFound",
 	USER_NOT_FOUND = "error.userNotFound",
 	USER_TOO_YOUNG = "error.userTooYoung",
 

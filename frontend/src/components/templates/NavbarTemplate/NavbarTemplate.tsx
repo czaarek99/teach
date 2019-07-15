@@ -8,7 +8,7 @@ import { observer } from 'mobx-react';
 import { simpleFormat } from '../../../util/simpleFormat';
 import { Route } from '../../../interfaces/Routes';
 import { PRODUCT_NAME } from 'common-library';
-import { LoadingButton } from "../../molecules";
+import { LoadingButton, CustomAvatar } from "../../molecules";
 import { getImageUrl } from "../../../util/imageAPI";
 
 import {
@@ -203,17 +203,10 @@ class NavbarTemplate extends React.Component<ExternalProps> {
 
 			if(cachedUser) {
 
-				if(cachedUser.avatarFileName) {
-					avatarComponent = (
-						<Avatar src={getImageUrl(cachedUser.avatarFileName)}/>
-					);
-				} else {
-					avatarComponent = (
-						<Avatar>
-							{cachedUser.firstName && cachedUser.firstName[0]}
-						</Avatar>
-					);
-				}
+				avatarComponent = (
+					<CustomAvatar imageUrl={cachedUser.avatarFileName}
+						alt={cachedUser.firstName[0]}/>
+				);
 
 				realNameComponent = cachedUser.firstName;
 				emailComponent = cachedUser.email;

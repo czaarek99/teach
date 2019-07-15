@@ -8,6 +8,7 @@ import { NavbarTemplate } from "../../templates";
 import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { IDMPageController } from "../../../interfaces/controllers/pages/IDMPageController";
 import { IConversation } from "common-library";
+import DM from "./internal/DM";
 
 const styles = (theme: Theme) => createStyles({
 
@@ -39,15 +40,9 @@ class DMPage extends React.Component<
 		} = this.props;
 
 		const convos = controller.convos.map((convo: IConversation) => {
-			const correspondent = convo.members[0];
-
 			return (
-				<div>
-					<Typography>
-						{correspondent.firstName} {correspondent.lastName}
-					</Typography>
-				</div>
-			)
+				<DM convo={convo} controller={controller} />
+			);
 		});
 
 		return (

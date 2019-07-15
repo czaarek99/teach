@@ -5,7 +5,7 @@ import { injectIntl, InjectedIntlProps } from "react-intl";
 import { IAdController } from "../../../interfaces/controllers/IAdController";
 import { getImageUrl } from "../../../util/imageAPI";
 import { observer } from "mobx-react";
-import { AdCategoryIcon } from "../../molecules";
+import { AdCategoryIcon, CustomAvatar } from "../../molecules";
 
 import {
 	Card,
@@ -93,7 +93,7 @@ interface IAdProps {
 
 
 @observer
-export class Ad extends React.Component<
+class Ad extends React.Component<
 	IAdProps &
 	InjectedIntlProps &
 	WithStyles<typeof styles>
@@ -168,17 +168,10 @@ export class Ad extends React.Component<
 				</div>
 			);
 
-			if(ad.teacher.avatarFileName) {
-				avatar = (
-					<Avatar src={getImageUrl(ad.teacher.avatarFileName)}/>
-				);
-			} else {
-				avatar = (
-					<Avatar>
-						{ad.teacher.firstName[0]}
-					</Avatar>
-				)
-			}
+			avatar = (
+				<CustomAvatar imageUrl={ad.teacher.avatarFileName}
+					alt={ad.teacher.firstName[0]}/>
+			);
 		}
 
 		return (

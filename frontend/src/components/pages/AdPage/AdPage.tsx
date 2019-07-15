@@ -27,6 +27,7 @@ import {
 } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { CustomAvatar } from "../../molecules";
 
 const AD_SMALL_BREAKPOINT = "@media screen and (min-width: 400px)";
 const AD_MEDIUM_BREAKPOINT = "@media screen and (min-width: 1000px)";
@@ -279,17 +280,10 @@ class AdPage extends React.Component<
 					imageClassName={classes.image}/>
 			);
 
-			if(model.teacher.avatarFileName) {
-				avatarComponent = (
-					<Avatar src={getImageUrl(model.teacher.avatarFileName)}/>
-				)
-			} else {
-				avatarComponent = (
-					<Avatar>
-						{model.teacher.firstName[0]}
-					</Avatar>
-				)
-			}
+			avatarComponent = (
+				<CustomAvatar alt={model.teacher.firstName[0]}
+					imageUrl={model.teacher.avatarFileName}/>
+			);
 
 			if(model.teacher.phoneNumber) {
 				phoneComponent = model.teacher.phoneNumber;
