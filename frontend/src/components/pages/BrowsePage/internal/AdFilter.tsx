@@ -109,12 +109,12 @@ class AdFilter extends React.Component<
 						</div>
 
 						<InputBase
+							type="search"
 							placeholder="Search…"
 							classes={{
 								root: classes.inputRoot,
 								input: classes.inputInput,
 							}}
-							inputProps={{ 'aria-label': 'Search' }}
 						/>
 					</div>
 

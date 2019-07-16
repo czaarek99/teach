@@ -8,6 +8,7 @@ export const LAST_NAME_MIN_LENGTH = 1;
 export const LAST_NAME_MAX_LENGTH = 200;
 
 export const USER_MIN_AGE = 18;
+export const USER_SEARCH_MIN_LENGTH = 3;
 
 export const STREET_MIN_LENGTH = 1;
 export const STREET_MAX_LENGTH = 100;

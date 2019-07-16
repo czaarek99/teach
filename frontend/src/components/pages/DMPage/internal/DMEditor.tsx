@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 import { observer } from "mobx-react";
 import { IDMEditorController } from "../../../../interfaces/controllers/IDMEditorController";
-import { IMessage } from "common-library";
+import { IMessage, DM_MAX_LENGTH, CONVERSATION_TITLE_MAX_LENGTH, ITeacher } from "common-library";
 import { FormattedDate, FormattedMessage, injectIntl, InjectedIntlProps } from "react-intl";
 import { grey } from "@material-ui/core/colors";
 import { simpleFormat } from "../../../../util/simpleFormat";
@@ -15,7 +15,9 @@ import {
 	InputBase,
 	Typography,
 	withStyles,
-	Button
+	Button,
+	Paper,
+	ClickAwayListener
 } from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
@@ -68,6 +70,17 @@ const styles = (theme: Theme) => createStyles({
 		borderTopColor: grey[300],
 		borderTopWidth: 1,
 		borderTopStyle: "solid",
+	},
+
+	searchContainer: {
+		position: "relative"
+	},
+
+	dropdown: {
+		position: "absolute",
+		left: 0,
+		right: 0,
+		zIndex: 10
 	}
 });
 
@@ -82,7 +95,7 @@ class DMEditor extends React.Component<
 	WithStyles<typeof styles>
 > {
 
-	public renderMessages() : React.ReactNode {
+	private renderMessages() : React.ReactNode {
 
 		const {
 			controller,
@@ -107,33 +120,54 @@ class DMEditor extends React.Component<
 		}
 	}
 
-	public render() : React.ReactNode {
+	private renderUserSearchInput() : React.ReactNode {
 
 		const {
 			controller,
-			classes,
+			classes
 		} = this.props;
 
-		const convo = controller.convo;
+		const topInputClasses = clsx(classes.input, classes.topInput);
+		const toPlaceholder = simpleFormat(this, "info.dmReceiver");
 
-		let topComponents;
-		if(convo) {
-			topComponents = (
-				<React.Fragment>
+		let dropdown;
+
+		if(controller.showUserDropdown) {
+			let dropdownContent;
+
+			const result = controller.userSearchResult;
+			if(result.length > 0) {
+				dropdownContent = result.map((teacher: ITeacher) => {
+					return (
+						<div>
+							<Typography>
+								{teacher.firstName} {teacher.lastName}
+							</Typography>
+						</div>
+					)
+				})
+			} else {
+				dropdownContent = (
 					<Typography>
-						{convo.title}
+						<FormattedMessage id="info.noUsers"/>
 					</Typography>
-				</React.Fragment>
-			)
-		} else {
-			const toPlaceholder = simpleFormat(this, "info.dmReceiver");
-			const titlePlaceholder = simpleFormat(this, "info.dmTitle");
+				);
+			}
 
-			const topInputClasses = clsx(classes.input, classes.topInput);
+			dropdown = (
+				<Paper className={classes.dropdown}>
+					{dropdownContent}
+				</Paper>
+			);
+		}
 
-			topComponents = (
-				<React.Fragment>
+		return (
+			<ClickAwayListener onClickAway={() => controller.onClickOutsideSearch()}>
+				<div className={classes.searchContainer}>
 					<InputBase value={controller.newConversationModel.receiver}
+						fullWidth={true}
+						onClick={() => controller.onSearchInputClick()}
+						type="search"
 						classes={{
 							inputAdornedStart: classes.inputAdorn
 						}}
@@ -150,7 +184,41 @@ class DMEditor extends React.Component<
 							event.target.value
 						)} />
 
+					{dropdown}
+				</div>
+			</ClickAwayListener>
+		);
+	}
+
+	private renderHeader() : React.ReactNode {
+
+		const {
+			controller,
+			classes
+		} = this.props;
+
+		const convo = controller.convo;
+
+		if(convo) {
+			return (
+				<React.Fragment>
+					<Typography>
+						{convo.title}
+					</Typography>
+				</React.Fragment>
+			);
+		} else {
+			const titlePlaceholder = simpleFormat(this, "info.dmTitle");
+			const topInputClasses = clsx(classes.input, classes.topInput);
+
+			return (
+				<React.Fragment>
+					{this.renderUserSearchInput()}
+
 					<InputBase value={controller.newConversationModel.title}
+						inputProps={{
+							maxLength: CONVERSATION_TITLE_MAX_LENGTH
+						}}
 						classes={{
 							inputAdornedStart: classes.inputAdorn
 						}}
@@ -168,15 +236,24 @@ class DMEditor extends React.Component<
 						)}
 						/>
 				</React.Fragment>
-			)
+			);
 		}
+	}
+
+	public render() : React.ReactNode {
+
+		const {
+			controller,
+			classes,
+		} = this.props;
+
 
 		const newMesssageInputClasses = clsx(classes.input, classes.newMessageInput);
 		const newMessagePlaceholder = simpleFormat(this, "info.typeMessage");
 
 		return (
 			<div className={classes.root}>
-				{topComponents}
+				{this.renderHeader()}
 
 				<div className={classes.messageList}>
 					{this.renderMessages()}
@@ -184,6 +261,9 @@ class DMEditor extends React.Component<
 
 				<div className={classes.messageEditorContainer}>
 					<InputBase className={newMesssageInputClasses}
+						inputProps={{
+							maxLength: DM_MAX_LENGTH
+						}}
 						multiline={true}
 						value={controller.dmModel.message}
 						onChange={(event) => controller.onDMChange("message", event.target.value)}

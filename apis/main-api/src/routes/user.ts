@@ -9,6 +9,8 @@ import { resolveUser } from "../database/resolvers/resolveUser";
 import { Joi } from "koa-joi-router";
 import { hashPassword } from "../util/hashPassword";
 import { ProfilePicture } from "../database/models/ProfilePicture";
+import { Op, Sequelize } from "sequelize";
+import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 
 import {
 	IPersonalInput,
@@ -16,6 +18,9 @@ import {
 	IPasswordInput,
 	HttpError,
 	ErrorMessage,
+	ISearchUsersInput,
+	ITeacher,
+	USER_SEARCH_MIN_LENGTH,
 } from "common-library";
 
 import {
@@ -167,6 +172,46 @@ router.patch("/password", {
 		}
 	});
 
+	context.status = 200;
+});
+
+router.get("/search", {
+	validate: {
+		query: {
+			search: Joi.string().min(USER_SEARCH_MIN_LENGTH).required()
+		}
+	}
+}, async (context: CustomContext) => {
+
+	const input = context.query  as ISearchUsersInput;
+	const lowercaseSearch = input.search.toLowerCase();
+
+	const users : User[] = User.findAll<User>({
+		where: {
+			[Op.or]: [
+				{
+					firstName: Sequelize.where(
+						Sequelize.fn("lower", Sequelize.col("firstName")),
+						{
+							[Op.like]: lowercaseSearch
+						}
+					)
+				},
+				{
+					lastName: Sequelize.where(
+						Sequelize.fn("lower", Sequelize.col("lastName")),
+						{
+							[Op.like]: lowercaseSearch
+						}
+					)
+				}
+			]
+		},
+		limit: 30
+	});
+
+	const output : ITeacher[] = users.map(resolveTeacher);
+	context.body = output;
 	context.status = 200;
 });
 

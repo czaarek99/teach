@@ -13,10 +13,11 @@ export class DMPageController implements IDMPageController {
 	@observable public dmCount = 0;
 	@observable public convos: IConversation[] = []
 	@observable public selectedConvo?: IConversation;
-	@observable public editorController = new DMEditorController(this.rootStore);
+	@observable public editorController : DMEditorController;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
+		this.editorController = new DMEditorController(rootStore);
 
 		this.load();
 	}

@@ -9,3 +9,4 @@
 * common components for registration + profile editing of info (maybe?)
 * improve errormodel validation
 * ux everything
+* elastic search for searching

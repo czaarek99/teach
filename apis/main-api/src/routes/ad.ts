@@ -113,7 +113,7 @@ router.get("/list", {
 		where.name = Sequelize.where(
 			Sequelize.fn("lower", Sequelize.col("name")),
 			{
-				[Op.like]: `%${query.search}%`
+				[Op.like]: `%${query.search.toLowerCase()}%`
 			}
 		)
 	}

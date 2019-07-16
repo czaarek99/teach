@@ -29,6 +29,8 @@ within itself.
 7. We copy paste the same validate function into all
 controllers. Maybe this should be more closely tied
 with our validators?
+8. We don't have any async functionality here at all.
+We should have that.
 
 
 Overall it's a hard design issue which probably does

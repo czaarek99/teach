@@ -5,6 +5,7 @@ export default {
 	"info.dmReceiver": "Type the name of the person you want to DM",
 	"info.dmTitle": "Type the title of the conversation",
 	"info.typeMessage": "Type a message...",
+	"info.noUsers": "Could not find any users matching this search",
 	"info.youHaveNoAds": "You have no ads! Create one now!",
 	"info.welcome": `
 		Welcome to teachelly! A platform for teachers to publish ads and for
