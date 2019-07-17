@@ -3,7 +3,7 @@ import React from "react";
 import { TextFieldProps } from "@material-ui/core/TextField";
 import { InputAdornment, TextField } from "@material-ui/core";
 import { InjectedIntlProps, MessageValue, injectIntl } from "react-intl";
-import { ErrorModel, ErrorState } from "../../../validation/ErrorModel";
+import { ErrorModel, ErrorState } from "../../../validation";
 import { observer } from "mobx-react";
 
 export const CUSTOM_TEXT_FIELD_DEFAULT_VARIANT : CustomTextFieldVariant = "filled";
