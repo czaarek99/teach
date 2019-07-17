@@ -3,7 +3,13 @@ import { RootStore } from "../../stores/RootStore";
 import { observable, action } from "mobx";
 import { requireLogin } from "../../util/requireLogin";
 import { IConversation } from "common-library";
-import { DMEditorController } from "../DMEditorController";
+import { NewConversationCreatorController } from "../NewConversationCreatorController";
+
+import {
+	INewConversationCreatorController
+} from "../../interfaces/controllers/INewConversationCreatorController";
+import { IConversationController } from "../../interfaces/controllers/IConversationController";
+import { ConversationController } from "../ConversationController";
 
 export class DMPageController implements IDMPageController {
 
@@ -12,12 +18,11 @@ export class DMPageController implements IDMPageController {
 	@observable public pageNumber = 0;
 	@observable public dmCount = 0;
 	@observable public convos: IConversation[] = []
-	@observable public selectedConvo?: IConversation;
-	@observable public editorController : DMEditorController;
+	@observable public newConvoController?: INewConversationCreatorController;
+	@observable public oldConvoController?: IConversationController;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
-		this.editorController = new DMEditorController(rootStore);
 
 		this.load();
 	}
@@ -50,14 +55,18 @@ export class DMPageController implements IDMPageController {
 
 	@action
 	public onNewDM() : void {
-		this.editorController = new DMEditorController(this.rootStore);
+		this.newConvoController = new NewConversationCreatorController(this.rootStore, this);
 	}
 
 	@action
 	public selectConvo(convo: IConversation) : void {
-		this.selectedConvo = convo;
+		this.oldConvoController = new ConversationController(this.rootStore, convo);
+	}
 
-		this.editorController = new DMEditorController(this.rootStore, convo);
+	@action
+	public onFinishConversationCreation(convo: IConversation) : void {
+		this.convos.unshift(convo);
+		this.selectConvo(convo);
 	}
 
 }

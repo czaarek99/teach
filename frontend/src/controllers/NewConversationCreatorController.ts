@@ -1,32 +1,31 @@
-import { IDMEditorController } from "../interfaces/controllers/IDMEditorController";
+import { INewConversationCreatorController } from "../interfaces/controllers/INewConversationCreatorController";
 import { observable, action } from "mobx";
 import { IConversation, USER_SEARCH_MIN_LENGTH, ITeacher } from "common-library";
 import { NewConversationModel } from "../models/NewConversationModel";
 import { INewConversationModel } from "../interfaces/models/INewConversationModel";
-import { IDMModel } from "../interfaces/models/IDMModel";
-import { DMModel } from "../models/DMModel";
 import { RootStore } from "../stores/RootStore";
+import { DMPageController } from "./pages/DMPageController";
 
-export class DMEditorController implements IDMEditorController {
+export class NewConversationCreatorController implements INewConversationCreatorController {
 
 	private readonly rootStore: RootStore;
+	private readonly parent: DMPageController;
+
 	private receiver?: ITeacher;
 	private searchTimeout?: number
 
 	@observable public readonly convo?: IConversation;
 	@observable public newConversationModel = new NewConversationModel();
 	@observable public userSearchResult : ITeacher[] = [];
-	@observable public dmModel : DMModel;
 	@observable public showUserDropdown = false;
 	@observable public dropdownMessage = "info.searchTooShort";
 
 	constructor(
 		rootStore: RootStore,
-		convo?: IConversation
+		parent: DMPageController
 	) {
 		this.rootStore = rootStore;
-		this.dmModel = new DMModel(convo);
-		this.convo = convo;
+		this.parent = parent;
 	}
 
 	@action
@@ -82,24 +81,12 @@ export class DMEditorController implements IDMEditorController {
 	}
 
 	@action
-	public onDMChange(key: keyof IDMModel, value: any) : void {
-		this.dmModel[key] = value;
-	}
-
-	@action
-	public async sendDM() : Promise<void> {
+	public async startConversation() : Promise<void> {
 		try {
-			const input = this.dmModel.toInput();
+			if(this.receiver) {
+				const input = this.newConversationModel.toInput(this.receiver);
 
-			await this.rootStore.services.dmService.addDM(input);
-
-			if(this.convo) {
-				this.convo.messages.push({
-					content: input.message,
-					sendDate: new Date()
-				});
-
-				this.dmModel = new DMModel(this.convo);
+				const convo = await this.rootStore.services.dmService.addConversation(input);
 			}
 
 		} catch(error) {

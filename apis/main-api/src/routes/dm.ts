@@ -168,14 +168,24 @@ router.put("/convo", {
 		);
 	}
 
-	await conversation.$add("userId", users);
+	await Promise.all([
+		Message.create({
+			conversationId: conversation.id,
+			content: input.firstMessage
+		}),
+
+		conversation.$add("userId", users)
+	]);
 
 	const teachers = users.map(resolveTeacher);
 
 	const output : IConversation = {
 		id: conversation.id,
 		members: teachers,
-		messages: [],
+		messages: [{
+			content: input.firstMessage,
+			sendDate: new Date()
+		}],
 		title: input.title
 	}
 

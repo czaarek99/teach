@@ -1,5 +1,6 @@
 * dms
 * images in dms
+* add sender to messages (db)
 
 * pricing information on ads
 * decide on money handling
@@ -11,3 +12,5 @@
 * ux everything
 * email confirmation on register
 * elastic search for searching
+* improve imports (just controllers, models, etc index.ts)
+* switch to graphql (look at how github did it)

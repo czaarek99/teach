@@ -1,5 +1,6 @@
 import { IConversation } from "common-library";
-import { IDMEditorController } from "../IDMEditorController";
+import { INewConversationCreatorController } from "../INewConversationCreatorController";
+import { IConversationController } from "../IConversationController";
 
 export interface IDMPageController {
 	readonly dmCount: number
@@ -7,7 +8,8 @@ export interface IDMPageController {
 	readonly pageNumber: number
 	readonly convos: IConversation[]
 	readonly selectedConvo?: IConversation
-	readonly editorController: IDMEditorController
+	readonly newConvoController?: INewConversationCreatorController
+	readonly oldConvoController?: IConversationController
 
 	selectConvo: (convo: IConversation) => void
 	onNewDM: () => void

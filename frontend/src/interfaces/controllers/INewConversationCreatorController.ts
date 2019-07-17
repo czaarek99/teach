@@ -1,19 +1,15 @@
-import { IConversation, ITeacher } from "common-library";
 import { INewConversationModel } from "../models/INewConversationModel";
-import { IDMModel } from "../models/IDMModel";
+import { ITeacher } from "common-library";
 
-export interface IDMEditorController {
-	readonly convo?: IConversation
+export interface INewConversationCreatorController {
 	readonly userSearchResult: ITeacher[]
 	readonly newConversationModel: INewConversationModel
-	readonly dmModel: IDMModel
 	readonly showUserDropdown: boolean
 	readonly dropdownMessage: string
 
-	sendDM: () => Promise<void>
+	startConversation: () => Promise<void>
 	onSearchInputClick: () => void
 	onClickOutsideSearch: () => void
-	onDMChange: (key: keyof IDMModel, value: any) => void
 	onSelectUserToMessage: (teacher: ITeacher) => void
 	onNewConversationChange: (key: keyof INewConversationModel, value: any) => void
 }

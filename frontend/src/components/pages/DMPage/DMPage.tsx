@@ -1,7 +1,7 @@
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import DM from "./internal/DM";
-import DMEditor from "./internal/DMEditor";
+import NewConversationCreator from "./internal/NewConversationCreator";
 
 import { Theme, createStyles, WithStyles, withStyles, Fab } from "@material-ui/core";
 import { observer } from "mobx-react";
@@ -11,6 +11,7 @@ import { INavbarController } from "../../../interfaces/controllers/templates/INa
 import { IDMPageController } from "../../../interfaces/controllers/pages/IDMPageController";
 import { IConversation } from "common-library";
 import { grey } from "@material-ui/core/colors";
+import Conversation from "./internal/Conversation";
 
 const styles = (theme: Theme) => createStyles({
 
@@ -81,6 +82,18 @@ class DMPage extends React.Component<
 			navbarController
 		} = this.props;
 
+		let content;
+
+		if(controller.newConvoController) {
+			content = (
+				<NewConversationCreator controller={controller.newConvoController}/>
+			);
+		} else if(controller.oldConvoController){
+			content = (
+				<Conversation controller={controller.oldConvoController}/>
+			);
+		}
+
 		return (
 			<NavbarTemplate controller={navbarController}
 				padding={false}>
@@ -88,13 +101,10 @@ class DMPage extends React.Component<
 				<div className={classes.content}>
 					<div className={classes.messages}>
 						{this.renderUsers()}
-
-
 					</div>
 
 					<div className={classes.editor}>
-						<DMEditor controller={controller.editorController}/>
-
+						{content}
 					</div>
 
 					<Fab className={classes.fab}
