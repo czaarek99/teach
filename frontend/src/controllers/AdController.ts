@@ -1,7 +1,7 @@
 import { IAdController } from "../interfaces/controllers/IAdController";
 import { observable, action, computed } from "mobx";
 import { v4 } from "uuid";
-import { Route } from "../interfaces/Routes";
+import { Route } from "../interfaces/Route";
 import { IAd } from "common-library";
 import { getImageUrl } from "../util/imageAPI";
 import { RootStore } from "../stores/RootStore";

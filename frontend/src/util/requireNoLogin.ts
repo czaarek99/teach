@@ -1,5 +1,5 @@
 import { RootStore } from "../stores/RootStore";
-import { Route } from "../interfaces/Routes";
+import { Route } from "../interfaces/Route";
 
 export async function requireNoLogin(rootStore: RootStore) : Promise<boolean> {
 	await rootStore.userCache.recache();

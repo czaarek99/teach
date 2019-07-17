@@ -6,7 +6,7 @@ import { IRegistrationPageController } from "../interfaces/controllers/pages/IRe
 import { RegistrationPageController } from "./pages/RegistrationPageController";
 import { IForgotPageController } from "../interfaces/controllers/pages/IForgotPageController";
 import { ForgotPageController } from "./pages/ForgotPageController";
-import { Route, DEFAULT_ROUTE } from "../interfaces/Routes";
+import { Route, DEFAULT_ROUTE } from "../interfaces/Route";
 import { IResetPasswordPageController } from "../interfaces/controllers/pages/IResetPasswordPageController";
 import { ResetPasswordPageController } from "./pages/ResetPasswordPageController";
 import { IBrowsePageController } from "../interfaces/controllers/pages/IBrowsePageController";

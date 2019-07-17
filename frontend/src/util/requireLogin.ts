@@ -1,4 +1,4 @@
-import { Route } from "../interfaces/Routes";
+import { Route } from "../interfaces/Route";
 import { RootStore } from "../stores/RootStore";
 
 export async function requireLogin(rootStore: RootStore) : Promise<boolean> {

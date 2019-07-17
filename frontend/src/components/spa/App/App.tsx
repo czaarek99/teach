@@ -1,9 +1,7 @@
 import React from 'react';
 
-import { IAppController } from '../../../interfaces/controllers/IAppController';
 import { observer, inject } from 'mobx-react';
-import { Route } from '../../../interfaces/Routes';
-import { IRoutingStoreProps } from '../../../interfaces/props/IRoutingStoreProps';
+import { IRoutingStoreProps, IAppController, Route } from '../../../interfaces';
 import { CssBaseline } from '@material-ui/core';
 
 import {

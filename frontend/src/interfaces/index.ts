@@ -3,5 +3,5 @@ export * from "./models";
 export * from "./props";
 export * from "./services";
 
-export * from "./Routes";
+export * from "./Route";
 export * from "./ViewModel";

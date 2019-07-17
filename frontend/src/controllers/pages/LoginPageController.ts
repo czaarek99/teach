@@ -9,7 +9,7 @@ import { HttpError, ErrorMessage } from "common-library";
 import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
 import { logIn } from "../../util/logIn";
 import { objectKeys } from "../../util/objectKeys";
-import { Route } from "../../interfaces/Routes";
+import { Route } from "../../interfaces/Route";
 import { RootStore } from "../../stores/RootStore";
 import { requireNoLogin } from "../../util/requireNoLogin";
 

@@ -6,14 +6,10 @@ import clsx from "clsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { InjectedIntlProps, injectIntl, FormattedMessage } from 'react-intl';
 import { observer } from 'mobx-react';
-import { simpleFormat } from '../../../util/simpleFormat';
-import { Route } from '../../../interfaces/Routes';
+import { simpleFormat } from '../../../util';
 import { PRODUCT_NAME } from 'common-library';
 import { LoadingButton, CustomAvatar } from "../../molecules";
-
-import {
-	INavbarController
-} from '../../../interfaces/controllers/templates/INavbarController';
+import { INavbarController, Route } from '../../../interfaces';
 
 import {
 	faCog,

@@ -1,7 +1,7 @@
 import { ILoginModel } from "../../models/ILoginModel";
 import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
 import { LoadingButtonState } from "../../../components/molecules/LoadingButton/LoadingButton";
-import { Route } from "../../Routes";
+import { Route } from "../../Route";
 
 export interface ILoginPageErrorState extends ErrorState {
 	email: string[]

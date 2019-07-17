@@ -1,4 +1,4 @@
-import { Route } from "../../Routes";
+import { Route } from "../../Route";
 import { LoadingButtonState } from "../../../components";
 import { IUser } from "common-library";
 

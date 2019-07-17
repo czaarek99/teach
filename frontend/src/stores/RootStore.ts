@@ -3,7 +3,7 @@ import { IUserCache, UserCache } from "./UserCache";
 import { RouterStore, syncHistoryWithStore, SynchronizedHistory } from "mobx-react-router";
 import { createBrowserHistory } from "history";
 import { observable } from "mobx";
-import { Route } from "../interfaces/Routes";
+import { Route } from "../interfaces/Route";
 
 export class RootStore {
 
