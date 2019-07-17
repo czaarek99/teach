@@ -5,6 +5,7 @@ import { Avatar } from "@material-ui/core";
 import { getImageUrl } from "../../../util/imageAPI";
 
 interface ICustomAvatarProps {
+	className?: string
 	imageUrl?: string
 	alt: React.ReactNode
 }
@@ -19,15 +20,17 @@ class CustomAvatar extends React.Component<
 		const {
 			imageUrl,
 			alt,
+			className
 		} = this.props;
 
 		if(imageUrl) {
 			return (
-				<Avatar src={getImageUrl(imageUrl)}/>
+				<Avatar src={getImageUrl(imageUrl)}
+					className={className}/>
 			);
 		} else {
 			return (
-				<Avatar>
+				<Avatar className={className}>
 					{alt}
 				</Avatar>
 			)

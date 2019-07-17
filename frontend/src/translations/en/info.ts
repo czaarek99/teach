@@ -7,6 +7,8 @@ export default {
 	"info.typeMessage": "Type a message...",
 	"info.noUsers": "Could not find any users matching this search",
 	"info.youHaveNoAds": "You have no ads! Create one now!",
+	"info.searchTooShort": "Enter more text to search",
+	"info.searching": "Searching...",
 	"info.welcome": `
 		Welcome to teachelly! A platform for teachers to publish ads and for
 		students to find their teacher.

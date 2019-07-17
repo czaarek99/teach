@@ -7,6 +7,7 @@ import { IMessage, DM_MAX_LENGTH, CONVERSATION_TITLE_MAX_LENGTH, ITeacher } from
 import { FormattedDate, FormattedMessage, injectIntl, InjectedIntlProps } from "react-intl";
 import { grey } from "@material-ui/core/colors";
 import { simpleFormat } from "../../../../util/simpleFormat";
+import { CustomAvatar } from "../../../molecules";
 
 import {
 	Theme,
@@ -78,9 +79,21 @@ const styles = (theme: Theme) => createStyles({
 
 	dropdown: {
 		position: "absolute",
+		padding: 10,
 		left: 0,
 		right: 0,
 		zIndex: 10
+	},
+
+	user: {
+		display: "flex",
+		alignItems: "center",
+		textTransform: "none",
+		marginBottom: 5
+	},
+
+	avatar: {
+		margin: 5
 	}
 });
 
@@ -139,17 +152,22 @@ class DMEditor extends React.Component<
 			if(result.length > 0) {
 				dropdownContent = result.map((teacher: ITeacher) => {
 					return (
-						<div>
+						<Button className={classes.user}
+							fullWidth={true}>
+
+							<CustomAvatar imageUrl={teacher.avatarFileName}
+								className={classes.avatar}
+								alt={teacher.firstName[0]}/>
 							<Typography>
 								{teacher.firstName} {teacher.lastName}
 							</Typography>
-						</div>
+						</Button>
 					)
 				})
-			} else {
+			} else if(controller.dropdownMessage){
 				dropdownContent = (
 					<Typography>
-						<FormattedMessage id="info.noUsers"/>
+						<FormattedMessage id={controller.dropdownMessage}/>
 					</Typography>
 				);
 			}

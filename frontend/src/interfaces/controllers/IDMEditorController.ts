@@ -8,7 +8,7 @@ export interface IDMEditorController {
 	readonly newConversationModel: INewConversationModel
 	readonly dmModel: IDMModel
 	readonly showUserDropdown: boolean
-	readonly dropdownMessage?: string
+	readonly dropdownMessage: string
 
 	sendDM: () => Promise<void>
 	onSearchInputClick: () => void

@@ -31,6 +31,7 @@ import {
 	ADDRESS_VALIDATOR,
 	PASSWORD_VALIDATOR
 } from "../validators";
+import { UserSetting } from "../database/models/UserSetting";
 
 const router = Router();
 
@@ -184,9 +185,9 @@ router.get("/search", {
 }, async (context: CustomContext) => {
 
 	const input = context.query  as ISearchUsersInput;
-	const lowercaseSearch = input.search.toLowerCase();
+	const lowercaseSearch = `%${input.search.toLowerCase()}%`;
 
-	const users : User[] = User.findAll<User>({
+	const users : User[] = await User.findAll<User>({
 		where: {
 			[Op.or]: [
 				{
@@ -205,8 +206,16 @@ router.get("/search", {
 						}
 					)
 				}
-			]
+			],
+			[Op.not]: {
+				id: context.state.session.userId
+			}
 		},
+		include: [
+			Address,
+			UserSetting,
+			ProfilePicture
+		],
 		limit: 30
 	});
 

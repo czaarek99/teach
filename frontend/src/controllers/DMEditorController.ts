@@ -17,7 +17,7 @@ export class DMEditorController implements IDMEditorController {
 	@observable public userSearchResult : ITeacher[] = [];
 	@observable public dmModel : DMModel;
 	@observable public showUserDropdown = false;
-	@observable public dropdownMessage?: string
+	@observable public dropdownMessage = "info.searchTooShort";
 
 	constructor(
 		rootStore: RootStore,
@@ -36,8 +36,10 @@ export class DMEditorController implements IDMEditorController {
 			clearTimeout(this.searchTimeout);
 			this.userSearchResult = [];
 
-			if(key.length >= USER_SEARCH_MIN_LENGTH) {
-				setTimeout(async () => {
+			this.dropdownMessage = "info.searchTooShort";
+
+			if(value.length >= USER_SEARCH_MIN_LENGTH) {
+				this.searchTimeout = window.setTimeout(async () => {
 					this.dropdownMessage = "info.searching"
 
 					const output = await this.rootStore.services.userService.searchUsers({
