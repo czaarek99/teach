@@ -8,11 +8,7 @@ import { observer } from "mobx-react";
 import { WithStyles } from "@material-ui/styles";
 import { injectIntl, InjectedIntlProps, FormattedMessage } from "react-intl";
 import { NavbarTemplate } from "../../templates";
-import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
-
-import {
-	IProfilePageController
-} from "../../../interfaces/controllers/pages/IProfilePageController";
+import { INavbarController, IProfilePageController } from "../../../interfaces";
 
 import {
 	Theme,

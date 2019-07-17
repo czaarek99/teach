@@ -3,7 +3,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { IRegistrationContentProps } from "../RegistrationPage";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
-import { simpleFormat } from "../../../../util/simpleFormat";
+import { simpleFormat } from "../../../../util";
 import { CustomTextField } from "../../../molecules";
 import { CountrySelect } from "../../../organisms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,7 +23,6 @@ import {
 	ZIP_CODE_MIN_LENGTH,
 	ZIP_CODE_MAX_LENGTH
 } from "common-library";
-
 
 @observer
 class AddressContent extends React.Component<

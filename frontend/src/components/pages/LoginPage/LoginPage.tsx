@@ -1,18 +1,14 @@
 import React from 'react';
 
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
-import { simpleFormat } from "../../../util/simpleFormat";
+import { simpleFormat } from "../../../util";
 import { observer } from "mobx-react";
 import { PASSWORD_MAX_LENGTH, EMAIL_MAX_LENGTH } from "common-library";
 import { InfoBox, CustomTextField, LoadingButton } from "../../molecules";
-import { Route } from "../../../interfaces/Routes";
+import { Route, ILoginPageController } from "../../../interfaces";
 import { AuthenticationTemplate, AUTHENTICATION_MARGIN } from "../../templates";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faKey, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-
-import {
-	ILoginPageController,
-} from "../../../interfaces/controllers/pages/ILoginPageController";
 
 import {
 	Theme,

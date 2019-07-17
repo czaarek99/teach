@@ -2,11 +2,8 @@ import React from 'react';
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
-import { simpleFormat } from "../../../../util/simpleFormat";
-
-import {
-	ISettingsPageController
-} from "../../../../interfaces/controllers/pages/ISettingsPageController";
+import { simpleFormat } from "../../../../util";
+import { ISettingsPageController } from "../../../../interfaces";
 
 import {
 	WithStyles,

@@ -2,9 +2,12 @@ import React from 'react';
 
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { observer } from "mobx-react";
-import { simpleFormat } from "../../../../util/simpleFormat";
+import { simpleFormat } from "../../../../util";
 import { CustomTextField, LoadingButton, InfoBox } from "../../../molecules";
 import { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } from "common-library";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faKey, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { IAccountDetailsProfileController } from "../../../../interfaces";
 
 import {
 	Theme,
@@ -16,11 +19,6 @@ import {
 	Button
 } from "@material-ui/core";
 
-import {
-	IAccountDetailsProfileController
-} from "../../../../interfaces/controllers/profile/IAccountDetailsProfileController";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faKey, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 const styles = (theme: Theme) => createStyles({
 	normalPaper: {

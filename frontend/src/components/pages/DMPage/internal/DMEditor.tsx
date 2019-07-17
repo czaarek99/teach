@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { DM_MAX_LENGTH } from "common-library";
 import { grey } from "@material-ui/core/colors";
-import { simpleFormat } from "../../../../util/simpleFormat";
+import { simpleFormat } from "../../../../util";
 
 import {
 	WithStyles,

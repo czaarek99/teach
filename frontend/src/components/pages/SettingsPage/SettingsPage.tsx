@@ -3,14 +3,9 @@ import PrivacyContent from "./internal/PrivacyContent";
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
-import { WithStyles } from "@material-ui/styles";
-import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { SaveButtons } from "../../organisms";
 import { NavbarTemplate } from "../../templates";
-
-import {
-	ISettingsPageController
-} from "../../../interfaces/controllers/pages/ISettingsPageController";
+import { ISettingsPageController, INavbarController } from "../../../interfaces";
 
 import {
 	Theme,
@@ -18,6 +13,7 @@ import {
 	withStyles,
 	Paper,
 	Typography,
+	WithStyles
 } from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({

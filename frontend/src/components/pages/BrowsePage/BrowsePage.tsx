@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import { NavbarTemplate } from '../../templates';
 import { LabelDisplayedRowsArgs } from "@material-ui/core/TablePagination";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
-import { simpleFormat } from "../../../util/simpleFormat";
+import { simpleFormat } from "../../../util";
 import { InfoBox } from "../../molecules";
 
 import {
@@ -22,13 +22,9 @@ import {
 } from "@material-ui/core";
 
 import {
-	IBrowsePageController
-} from '../../../interfaces/controllers/pages/IBrowsePageController';
-
-import {
+	IBrowsePageController,
 	INavbarController
-} from '../../../interfaces/controllers/templates/INavbarController';
-
+} from '../../../interfaces/';
 
 const styles = (theme: Theme) => createStyles({
 

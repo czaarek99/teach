@@ -5,7 +5,6 @@ import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { NavbarTemplate } from "../../templates";
 import { Ad } from "../../organisms";
-import { IAdController } from "../../../interfaces/controllers/IAdController";
 
 import {
 	Theme,
@@ -18,12 +17,10 @@ import {
 } from "@material-ui/core";
 
 import {
-	IMyAdsPageController
-} from "../../../interfaces/controllers/pages/IMyAdsPageController";
-
-import {
-	INavbarController
-} from "../../../interfaces/controllers/templates/INavbarController";
+	IMyAdsPageController,
+	INavbarController,
+	IAdController
+} from "../../../interfaces";
 
 const styles = (theme: Theme) => createStyles({
 

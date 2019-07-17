@@ -1,12 +1,14 @@
 import React from 'react';
 
-import { Theme, createStyles, Typography } from "@material-ui/core";
-import { IEditAdPageController } from "../../../../interfaces/controllers/pages/IEditAdPageController";
+import { IEditAdPageController } from "../../../../interfaces";
+import { ImageUploader } from "../../../organisms";
 import { observer } from "mobx-react";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { WithStyles, withStyles } from "@material-ui/styles";
 import { MAX_AD_PICTURE_COUNT, MAXIMUM_AD_PICTURE_SIZE } from "common-library";
-import { ImageUploader } from "../../../organisms";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
+import { Theme, createStyles, Typography } from "@material-ui/core";
 
 import {
 	MEDIUM_BREAKPOINT,
@@ -15,8 +17,6 @@ import {
 	XX_LARGE_BREAKPOINT,
 	X_LARGE_BREAKPOINT
 } from "../EditAdPage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 
 const styles = (theme: Theme) => createStyles({
 	uploader: {

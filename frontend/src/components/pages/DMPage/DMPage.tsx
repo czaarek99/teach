@@ -1,17 +1,23 @@
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
-import DM from "./internal/DM";
+import Conversation from "./internal/Conversation";
 import NewConversationCreator from "./internal/NewConversationCreator";
+import DM from "./internal/DM";
 
-import { Theme, createStyles, WithStyles, withStyles, Fab } from "@material-ui/core";
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import { NavbarTemplate } from "../../templates";
-import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
-import { IDMPageController } from "../../../interfaces/controllers/pages/IDMPageController";
+import { INavbarController, IDMPageController } from "../../../interfaces";
 import { IConversation } from "common-library";
 import { grey } from "@material-ui/core/colors";
-import Conversation from "./internal/Conversation";
+
+import {
+	Theme,
+	createStyles,
+	WithStyles,
+	withStyles,
+	Fab
+} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
+import { INavbarController } from "../../../interfaces";
 import { NavbarTemplate } from "../../templates";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 

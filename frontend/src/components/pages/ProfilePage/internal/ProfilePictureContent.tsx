@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { observer } from "mobx-react";
-import { IProfilePictureController } from "../../../../interfaces/controllers/profile/IProfilePictureController";
+import { IProfilePictureController } from "../../../../interfaces";
 import { LoadingButton } from "../../../molecules";
 import { MAXIMUM_PROFILE_PICTURE_SIZE } from "common-library";
 import { ImageUploader } from "../../../organisms";

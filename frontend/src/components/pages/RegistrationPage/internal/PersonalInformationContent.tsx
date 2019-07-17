@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { Box, Typography } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
-import { simpleFormat } from "../../../../util/simpleFormat";
+import { simpleFormat } from "../../../../util";
 import { CustomDatePicker } from "../../../organisms";
 import { IRegistrationContentProps } from "../RegistrationPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +18,6 @@ import {
 	getUserMaxDate,
 	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
-
 
 @observer
 class PersonalInformationContent extends React.Component<

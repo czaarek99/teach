@@ -1,14 +1,13 @@
 import React from 'react';
 import AdImageUploader from "./internal/AdImageUploader";
 
-import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
-import { IEditAdPageController } from "../../../interfaces/controllers/pages/IEditAdPageController";
-import { observer } from "mobx-react";
+import { IEditAdPageController, INavbarController } from "../../../interfaces";
+import { simpleFormat } from "../../../util";
 import { NavbarTemplate } from "../../templates";
 import { CustomTextField } from "../../molecules";
 import { AdCategorySelect, SaveButtons } from "../../organisms";
-import { simpleFormat } from "../../../util/simpleFormat";
 import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import { observer } from "mobx-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {

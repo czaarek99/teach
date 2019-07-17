@@ -1,8 +1,8 @@
 import React from "react";
 
-import { IForgotPageController } from "../../../interfaces/controllers/pages/IForgotPageController";
+import { IForgotPageController } from "../../../interfaces";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
-import { simpleFormat } from "../../../util/simpleFormat";
+import { simpleFormat } from "../../../util";
 import { observer } from "mobx-react";
 import { EMAIL_MAX_LENGTH, EMAIL_MIN_LENGTH } from "common-library";
 import { LoadingButton, CustomTextField, InfoBox } from "../../molecules";

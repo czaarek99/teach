@@ -5,17 +5,11 @@ import AddressContent from "./internal/AddressContent";
 
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
-import { simpleFormat } from "../../../util/simpleFormat";
+import { simpleFormat } from "../../../util";
 import { InfoBox, LoadingButton } from "../../molecules";
 import { CustomCaptcha } from "../../organisms";
-
-import {
-	AuthenticationTemplate, AUTHENTICATION_MARGIN
-} from "../../templates/";
-
-import {
-	IRegistrationPageController
-} from "../../../interfaces/controllers/pages/IRegistrationPageController";
+import { AuthenticationTemplate, AUTHENTICATION_MARGIN } from "../../templates/";
+import { IRegistrationPageController } from "../../../interfaces";
 
 import {
 	Theme,

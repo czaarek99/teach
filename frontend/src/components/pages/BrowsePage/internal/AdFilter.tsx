@@ -1,7 +1,7 @@
 import React from 'react';
 import SearchIcon from "@material-ui/icons/Search";
 
-import { IBrowsePageController } from "../../../../interfaces/controllers/pages/IBrowsePageController";
+import { IBrowsePageController } from "../../../../interfaces";
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { fade } from "@material-ui/core/styles";

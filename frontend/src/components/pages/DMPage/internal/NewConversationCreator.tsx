@@ -5,8 +5,9 @@ import DMEditor from "./DMEditor";
 import { observer } from "mobx-react";
 import { FormattedMessage, injectIntl, InjectedIntlProps } from "react-intl";
 import { grey } from "@material-ui/core/colors";
-import { simpleFormat } from "../../../../util/simpleFormat";
+import { simpleFormat } from "../../../../util";
 import { CustomAvatar } from "../../../molecules";
+import { INewConversationCreatorController } from "../../../../interfaces";
 
 import {
 	Theme,
@@ -24,7 +25,6 @@ import {
 	CONVERSATION_TITLE_MAX_LENGTH,
 	ITeacher
 } from "common-library";
-import { INewConversationCreatorController } from "../../../../interfaces/controllers/conversation/INewConversationCreatorController";
 
 const styles = (theme: Theme) => createStyles({
 

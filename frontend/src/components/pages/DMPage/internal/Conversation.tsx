@@ -1,13 +1,16 @@
 import React from "react";
 import DMEditor from "./DMEditor";
 
-import { Theme, createStyles, WithStyles, withStyles } from "@material-ui/core";
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
+import { IConversationController } from "../../../../interfaces";
 
 import {
-	IConversationController
-} from "../../../../interfaces/controllers/conversation/IConversationController";
+	Theme,
+	createStyles,
+	WithStyles,
+	withStyles
+} from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
 

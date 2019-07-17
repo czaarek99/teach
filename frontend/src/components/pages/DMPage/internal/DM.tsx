@@ -4,7 +4,7 @@ import { Theme, createStyles, WithStyles, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import { IConversation } from "common-library";
 import { CustomAvatar } from "../../../molecules";
-import { IDMPageController } from "../../../../interfaces/controllers/pages/IDMPageController";
+import { IDMPageController } from "../../../../interfaces";
 import { observer } from "mobx-react";
 
 const styles = (theme: Theme) => createStyles({

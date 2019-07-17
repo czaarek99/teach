@@ -4,10 +4,11 @@ import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { WithStyles, Theme, createStyles, withStyles, Paper, Typography } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
-import { simpleFormat } from "../../../../util/simpleFormat";
+import { simpleFormat } from "../../../../util";
 import { CustomDatePicker, SaveButtons } from "../../../organisms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignature, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { IPersonalInformationProfileController } from "../../../../interfaces";
 
 import {
 	FIRST_NAME_MAX_LENGTH,
@@ -18,9 +19,6 @@ import {
 	PHONE_NUMBER_MAX_LENGTH
 } from "common-library";
 
-import {
-	IPersonalInformationProfileController
-} from "../../../../interfaces/controllers/profile/IPersonalInformationProfileController";
 
 interface IPersonalInformationContentProps {
 	controller: IPersonalInformationProfileController

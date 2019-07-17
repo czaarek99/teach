@@ -5,10 +5,11 @@ import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { WithStyles, createStyles } from "@material-ui/styles";
 import { Theme, withStyles, Paper, Typography, Box } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
-import { simpleFormat } from "../../../../util/simpleFormat";
+import { simpleFormat } from "../../../../util";
 import { CountrySelect, SaveButtons } from "../../../organisms";
 import { faMap } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IAddressProfileController } from "../../../../interfaces";
 
 import {
 	STATE_MAX_LENGTH,
@@ -20,9 +21,6 @@ import {
 	ZIP_CODE_MIN_LENGTH,
 } from "common-library";
 
-import {
-	IAddressProfileController
-} from "../../../../interfaces/controllers/profile/IAddressProfileController";
 
 const styles = (theme: Theme) => createStyles({
 

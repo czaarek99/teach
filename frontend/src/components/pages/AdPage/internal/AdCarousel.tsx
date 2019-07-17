@@ -4,9 +4,10 @@ import SwipeableViews from "react-swipeable-views";
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { IAdImage } from "common-library";
-import { getImageUrl } from "../../../../util/imageAPI";
-import { IAdPageController } from "../../../../interfaces/controllers/pages/IAdPageController";
+import { getImageUrl } from "../../../../util";
+import { IAdPageController } from "../../../../interfaces/";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 import {
 	Theme,
@@ -17,7 +18,6 @@ import {
 	MobileStepper,
 	Button
 } from "@material-ui/core";
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 interface IAdCarouselProps {
 	controller: IAdPageController

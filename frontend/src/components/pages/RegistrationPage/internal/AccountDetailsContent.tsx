@@ -5,7 +5,9 @@ import { IRegistrationContentProps } from "../RegistrationPage";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { Box, Typography } from "@material-ui/core";
 import { CustomTextField } from "../../../molecules";
-import { simpleFormat } from "../../../../util/simpleFormat";
+import { simpleFormat } from "../../../../util";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
 
 import {
 	EMAIL_MIN_LENGTH,
@@ -13,8 +15,6 @@ import {
 	PASSWORD_MIN_LENGTH,
 	PASSWORD_MAX_LENGTH,
 } from "common-library";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faKey } from "@fortawesome/free-solid-svg-icons";
 
 @observer
 class AccountDetailsContent extends React.Component<

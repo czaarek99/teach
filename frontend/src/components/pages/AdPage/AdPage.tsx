@@ -2,15 +2,14 @@ import React from 'react';
 import Skeleton from "react-loading-skeleton";
 import AdCarousel from "./internal/AdCarousel";
 
-import { IAdPageController } from "../../../interfaces/controllers/pages/IAdPageController";
+import { IAdPageController, INavbarController } from "../../../interfaces";
+import { CustomAvatar } from "../../molecules";
 import { NavbarTemplate } from "../../templates";
-import { INavbarController } from "../../../interfaces/controllers/templates/INavbarController";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 import { observer } from "mobx-react";
 import { red } from "@material-ui/core/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { CustomAvatar } from "../../molecules";
 
 import {
 	Card,
