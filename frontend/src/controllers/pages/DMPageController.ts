@@ -3,13 +3,10 @@ import { RootStore } from "../../stores/RootStore";
 import { observable, action } from "mobx";
 import { requireLogin } from "../../util/requireLogin";
 import { IConversation } from "common-library";
-import { NewConversationCreatorController } from "../NewConversationCreatorController";
-
-import {
-	INewConversationCreatorController
-} from "../../interfaces/controllers/INewConversationCreatorController";
-import { IConversationController } from "../../interfaces/controllers/IConversationController";
-import { ConversationController } from "../ConversationController";
+import { NewConversationCreatorController } from "../conversation/NewConversationCreatorController";
+import { IConversationController } from "../../interfaces/controllers/conversation/IConversationController";
+import { ConversationController } from "../conversation/ConversationController";
+import { INewConversationCreatorController } from "../../interfaces/controllers/conversation/INewConversationCreatorController";
 
 export class DMPageController implements IDMPageController {
 

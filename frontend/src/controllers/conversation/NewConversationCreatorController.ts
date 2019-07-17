@@ -1,10 +1,10 @@
-import { INewConversationCreatorController } from "../interfaces/controllers/INewConversationCreatorController";
 import { observable, action } from "mobx";
 import { IConversation, USER_SEARCH_MIN_LENGTH, ITeacher } from "common-library";
-import { NewConversationModel } from "../models/NewConversationModel";
-import { INewConversationModel } from "../interfaces/models/INewConversationModel";
-import { RootStore } from "../stores/RootStore";
-import { DMPageController } from "./pages/DMPageController";
+import { NewConversationModel } from "../../models/NewConversationModel";
+import { INewConversationModel } from "../../interfaces/models/INewConversationModel";
+import { RootStore } from "../../stores/RootStore";
+import { DMPageController } from "../pages/DMPageController";
+import { INewConversationCreatorController } from "../../interfaces/controllers/conversation/INewConversationCreatorController";
 
 export class NewConversationCreatorController implements INewConversationCreatorController {
 

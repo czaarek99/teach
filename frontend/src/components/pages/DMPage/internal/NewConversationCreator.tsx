@@ -24,10 +24,7 @@ import {
 	CONVERSATION_TITLE_MAX_LENGTH,
 	ITeacher
 } from "common-library";
-
-import {
-	INewConversationCreatorController
-} from "../../../../interfaces/controllers/INewConversationCreatorController";
+import { INewConversationCreatorController } from "../../../../interfaces/controllers/conversation/INewConversationCreatorController";
 
 const styles = (theme: Theme) => createStyles({
 

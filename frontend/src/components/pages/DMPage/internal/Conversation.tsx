@@ -1,4 +1,5 @@
 import React from "react";
+import DMEditor from "./DMEditor";
 
 import { Theme, createStyles, WithStyles, withStyles } from "@material-ui/core";
 import { observer } from "mobx-react";
@@ -6,8 +7,7 @@ import { InjectedIntlProps, injectIntl } from "react-intl";
 
 import {
 	IConversationController
-} from "../../../../interfaces/controllers/IConversationController";
-import DMEditor from "./DMEditor";
+} from "../../../../interfaces/controllers/conversation/IConversationController";
 
 const styles = (theme: Theme) => createStyles({
 
@@ -40,6 +40,7 @@ class Conversation extends React.Component<
 		return (
 			<div className={classes.root}>
 				<DMEditor value={controller.model.message}
+					onSend={() => controller.onSendMessage()}
 					onChange={value => controller.onChange("message", value)}/>
 			</div>
 		)
