@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import theme from './theme/theme';
 import DateFnsUtils from "@date-io/date-fns";
 import englishLocale from "i18n-iso-countries/langs/en.json";
 import translations from './translations';
@@ -21,6 +20,7 @@ import { UserService } from "./services/UserService";
 import { AdService } from "./services/AdService";
 import { ImageService } from "./services/ImageService";
 import { DMService } from "./services/DMService";
+import { defaultTheme } from "./theme";
 
 registerLocale(englishLocale);
 
@@ -40,7 +40,7 @@ ReactDOM.render(
 	(
 		<Provider routingStore={rootStore.routingStore}>
 			<Router history={rootStore.getHistory()}>
-				<ThemeProvider theme={theme}>
+				<ThemeProvider theme={defaultTheme}>
 					<IntlProvider locale="en" messages={translations.en}>
 						<MuiPickersUtilsProvider utils={DateFnsUtils}>
 							<App controller={appController} />

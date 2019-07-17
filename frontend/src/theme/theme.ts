@@ -1,7 +1,7 @@
 import { createMuiTheme } from "@material-ui/core";
 import { pink, cyan } from "@material-ui/core/colors";
 
-export default createMuiTheme({
+export const defaultTheme = createMuiTheme({
 	breakpoints: {
 		values: {
 			xs: 0,
