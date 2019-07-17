@@ -82,7 +82,9 @@ const styles = (theme: Theme) => createStyles({
 		padding: 10,
 		left: 0,
 		right: 0,
-		zIndex: 10
+		zIndex: 10,
+		maxHeight: 500,
+		overflowY: "scroll"
 	},
 
 	user: {
@@ -153,6 +155,8 @@ class DMEditor extends React.Component<
 				dropdownContent = result.map((teacher: ITeacher) => {
 					return (
 						<Button className={classes.user}
+							key={teacher.id}
+							onClick={() => controller.onSelectUserToMessage(teacher)}
 							fullWidth={true}>
 
 							<CustomAvatar imageUrl={teacher.avatarFileName}

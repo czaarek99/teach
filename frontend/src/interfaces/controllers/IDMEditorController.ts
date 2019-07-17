@@ -14,5 +14,6 @@ export interface IDMEditorController {
 	onSearchInputClick: () => void
 	onClickOutsideSearch: () => void
 	onDMChange: (key: keyof IDMModel, value: any) => void
+	onSelectUserToMessage: (teacher: ITeacher) => void
 	onNewConversationChange: (key: keyof INewConversationModel, value: any) => void
 }

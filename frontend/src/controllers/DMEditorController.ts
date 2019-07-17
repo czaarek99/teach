@@ -10,6 +10,7 @@ import { RootStore } from "../stores/RootStore";
 export class DMEditorController implements IDMEditorController {
 
 	private readonly rootStore: RootStore;
+	private receiver?: ITeacher;
 	private searchTimeout?: number
 
 	@observable public readonly convo?: IConversation;
@@ -33,6 +34,9 @@ export class DMEditorController implements IDMEditorController {
 		this.newConversationModel[key] = value;
 
 		if(key === "receiver") {
+			this.showUserDropdown = true;
+			this.receiver = undefined;
+
 			clearTimeout(this.searchTimeout);
 			this.userSearchResult = [];
 
@@ -59,13 +63,22 @@ export class DMEditorController implements IDMEditorController {
 	}
 
 	@action
+	public onSelectUserToMessage(teacher: ITeacher) : void {
+		this.onNewConversationChange("receiver", teacher.firstName + " " + teacher.lastName);
+		this.receiver = teacher;
+		this.showUserDropdown = false;
+	}
+
+	@action
 	public onClickOutsideSearch() : void {
 		this.showUserDropdown = false;
 	}
 
 	@action
 	public onSearchInputClick() : void {
-		this.showUserDropdown = true;
+		if(this.receiver === undefined) {
+			this.showUserDropdown = true;
+		}
 	}
 
 	@action
