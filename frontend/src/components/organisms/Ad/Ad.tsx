@@ -2,7 +2,7 @@ import React from "react";
 import Skeleton from "react-loading-skeleton";
 
 import { injectIntl, InjectedIntlProps } from "react-intl";
-import { IAdController } from "../../../interfaces/controllers/IAdController";
+import { IAdController } from "../../../interfaces";
 import { observer } from "mobx-react";
 import { AdCategoryIcon, CustomAvatar } from "../../molecules";
 

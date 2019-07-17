@@ -3,7 +3,7 @@ import React from 'react';
 import { observer } from "mobx-react";
 import { InjectedIntlProps, FormattedMessage, injectIntl } from "react-intl";
 import { CATEGORY_MAP, IAdCategoryMapping, AdCategory } from "common-library";
-import { simpleFormat } from "../../../util/simpleFormat";
+import { simpleFormat } from "../../../util";
 import { CustomNativeSelect } from "../CustomNativeSelect";
 
 import {

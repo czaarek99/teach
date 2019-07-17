@@ -1,11 +1,11 @@
 import React from "react";
+import DatePickerTextField from "./internal/DatePickerTextField";
 
 import { observer } from "mobx-react";
 import { MaterialUiPickersDate, DatePicker } from "@material-ui/pickers";
 import { InjectedIntlProps, injectIntl } from "react-intl";
-import { simpleFormat } from "../../../util/simpleFormat";
+import { simpleFormat } from "../../../util";
 import { CustomTextField } from "../../molecules";
-import DatePickerTextField from "./internal/DatePickerTextField";
 
 interface ICustomDatePickerProps {
 	value?: MaterialUiPickersDate
