@@ -1,21 +1,24 @@
-import { IEditAdModel } from "../../interfaces/models/IEditAdModel";
 import { observable, action, computed } from "mobx";
-import { EditAdModel } from "../../models/EditAdModel";
-import { ErrorModel } from "../../validation/ErrorModel";
-import { ValidatorMap, validate, ValidationResult } from "../../validation/validate";
-import { minLength, maxLength } from "../../validation/validators";
-import { LoadingButtonState } from "../../components";
-import { getImageUrl } from "../../util/imageAPI";
-import { successTimeout } from "../../util/successTimeout";
-import { requireLogin } from "../../util/requireLogin";
-import { RootStore } from "../../stores/RootStore";
 import { createViewModel } from "mobx-utils";
-import { objectKeys } from "../../util/objectKeys";
+import { EditAdModel } from "../../models";
+import { RootStore } from "../../stores";
+import { LoadingButtonState } from "../../components";
+import { requireLogin, getImageUrl, objectKeys, successTimeout } from "../../util";
+
+import {
+	minLength,
+	maxLength,
+	ErrorModel,
+	ValidationResult,
+	validate,
+	ValidatorMap
+} from "../../validation";
 
 import {
 	IEditAdPageController,
-	IEditAdPageErrorState
-} from "../../interfaces/controllers/pages/IEditAdPageController";
+	IEditAdPageErrorState,
+	IEditAdModel
+} from "../../interfaces";
 
 import {
 	AD_NAME_MIN_LENGTH,

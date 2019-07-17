@@ -1,12 +1,14 @@
-import { IDMPageController } from "../../interfaces/controllers/pages/IDMPageController";
-import { RootStore } from "../../stores/RootStore";
 import { observable, action } from "mobx";
-import { requireLogin } from "../../util/requireLogin";
 import { IConversation } from "common-library";
-import { NewConversationCreatorController } from "../conversation/NewConversationCreatorController";
-import { IConversationController } from "../../interfaces/controllers/conversation/IConversationController";
-import { ConversationController } from "../conversation/ConversationController";
-import { INewConversationCreatorController } from "../../interfaces/controllers/conversation/INewConversationCreatorController";
+import { RootStore } from "../../stores";
+import { NewConversationCreatorController, ConversationController } from "../conversation";
+import { requireLogin } from "../../util";
+
+import {
+	IDMPageController,
+	INewConversationCreatorController,
+	IConversationController
+} from "../../interfaces";
 
 export class DMPageController implements IDMPageController {
 

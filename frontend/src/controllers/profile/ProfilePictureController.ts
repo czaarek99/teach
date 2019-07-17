@@ -1,10 +1,9 @@
-import { IProfilePictureController } from "../../interfaces/controllers/profile/IProfilePictureController";
 import { observable, action, computed } from "mobx";
+import { IProfilePictureController } from "../../interfaces";
+import { RootStore } from "../../stores";
+import { ProfilePageController } from "../pages";
 import { LoadingButtonState } from "../../components";
-import { successTimeout } from "../../util/successTimeout";
-import { ProfilePageController } from "../pages/ProfilePageController";
-import { getImageUrl } from "../../util/imageAPI";
-import { RootStore } from "../../stores/RootStore";
+import { getImageUrl, successTimeout } from "../../util";
 
 export class ProfilePictureController implements IProfilePictureController {
 

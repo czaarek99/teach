@@ -1,18 +1,24 @@
 import { observable, action } from "mobx";
-import { ResetPasswordModel } from "../../models/ResetPasswordModel";
-import { ErrorModel } from "../../validation/ErrorModel";
-import { LoadingButtonState, InfoBoxType } from "../../components";
 import { ErrorMessage, HttpError } from "common-library";
-import { IResetPasswordModel } from "../../interfaces/models/IResetPasswordModel";
-import { ValidatorMap, ValidationResult, validate } from "../../validation/validate";
-import { password, uuid4 } from "../../validation/validators";
-import { objectKeys } from "../../util/objectKeys";
-import { RootStore } from "../../stores/RootStore";
+import { RootStore } from "../../stores";
+import { ResetPasswordModel } from "../../models";
+import { LoadingButtonState, InfoBoxType } from "../../components";
+import { objectKeys } from "../../util";
 
 import {
 	IResetPasswordPageController,
+	IResetPasswordModel,
 	IResetPasswordPageErrorState
-} from "../../interfaces/controllers/pages/IResetPasswordPageController";
+} from "../../interfaces";
+
+import {
+	ValidatorMap,
+	password,
+	uuid4,
+	ErrorModel,
+	ValidationResult,
+	validate
+} from "../../validation";
 
 export class ResetPasswordPageController implements IResetPasswordPageController {
 

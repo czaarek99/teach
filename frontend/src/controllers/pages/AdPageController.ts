@@ -1,8 +1,7 @@
-import { IAdPageController } from "../../interfaces/controllers/pages/IAdPageController";
-import { observable, action, computed } from "mobx";
+import { IAdPageController, Route } from "../../interfaces";
+import { RootStore } from "../../stores";
 import { IAd, ErrorMessage, HttpError } from "common-library";
-import { Route } from "../../interfaces/Route";
-import { RootStore } from "../../stores/RootStore";
+import { observable, action, computed } from "mobx";
 
 export class AdPageController implements IAdPageController {
 

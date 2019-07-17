@@ -1,9 +1,8 @@
-import { INavbarController } from "../../interfaces/controllers/templates/INavbarController";
 import { observable, action, computed } from "mobx";
-import { Route } from "../../interfaces/Route";
-import { LoadingButtonState } from "../../components";
-import { RootStore } from "../../stores/RootStore";
 import { IUser } from "common-library";
+import { RootStore } from "../../stores";
+import { LoadingButtonState } from "../../components";
+import { INavbarController, Route } from "../../interfaces";
 
 export class NavbarController implements INavbarController {
 

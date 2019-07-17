@@ -1,31 +1,38 @@
 import { observable } from "mobx";
-import { IAppController } from "../interfaces/controllers/IAppController";
-import { ILoginPageController } from "../interfaces/controllers/pages/ILoginPageController";
-import { LoginPageController } from "./pages/LoginPageController";
-import { IRegistrationPageController } from "../interfaces/controllers/pages/IRegistrationPageController";
-import { RegistrationPageController } from "./pages/RegistrationPageController";
-import { IForgotPageController } from "../interfaces/controllers/pages/IForgotPageController";
-import { ForgotPageController } from "./pages/ForgotPageController";
-import { Route, DEFAULT_ROUTE } from "../interfaces/Route";
-import { IResetPasswordPageController } from "../interfaces/controllers/pages/IResetPasswordPageController";
-import { ResetPasswordPageController } from "./pages/ResetPasswordPageController";
-import { IBrowsePageController } from "../interfaces/controllers/pages/IBrowsePageController";
-import { BrowsePageController } from "./pages/BrowsePageController";
-import { NavbarController } from "./templates/NavbarController";
-import { INavbarController } from "../interfaces/controllers/templates/INavbarController";
-import { IAdPageController } from "../interfaces/controllers/pages/IAdPageController";
-import { AdPageController } from "./pages/AdPageController";
-import { IProfilePageController } from "../interfaces/controllers/pages/IProfilePageController";
-import { ProfilePageController } from "./pages/ProfilePageController";
-import { ISettingsPageController } from "../interfaces/controllers/pages/ISettingsPageController";
-import { SettingsPageController } from "./pages/SettingsPageController";
-import { IMyAdsPageController } from "../interfaces/controllers/pages/IMyAdsPageController";
-import { MyAdsPageController } from "./pages/MyAdsPageController";
-import { IEditAdPageController } from "../interfaces/controllers/pages/IEditAdPageController";
-import { EditAdPageController } from "./pages/EditAdPageController";
-import { RootStore } from "../stores/RootStore";
-import { IDMPageController } from "../interfaces/controllers/pages/IDMPageController";
-import { DMPageController } from "./pages/DMPageController";
+import { RootStore } from "../stores";
+import { NavbarController } from "./templates";
+
+import {
+	IAppController,
+	INavbarController,
+	IProfilePageController,
+	ISettingsPageController,
+	ILoginPageController,
+	IRegistrationPageController,
+	IForgotPageController,
+	IResetPasswordPageController,
+	IBrowsePageController,
+	IAdPageController,
+	IMyAdsPageController,
+	IEditAdPageController,
+	IDMPageController,
+	Route,
+	DEFAULT_ROUTE,
+} from "../interfaces";
+
+import {
+	LoginPageController,
+	RegistrationPageController,
+	ForgotPageController,
+	ResetPasswordPageController,
+	BrowsePageController,
+	AdPageController,
+	ProfilePageController,
+	SettingsPageController,
+	MyAdsPageController,
+	EditAdPageController,
+	DMPageController
+} from "./pages";
 
 export class AppController implements IAppController {
 

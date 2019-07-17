@@ -1,15 +1,10 @@
 import { observable, action, computed } from "mobx";
-import { ErrorModel } from "../../validation/ErrorModel";
-import { AddressModel } from "../../models/AddressModel";
 import { createViewModel } from "mobx-utils";
+import { RootStore } from "../../stores";
+import { ProfilePageController } from "../pages";
+import { AddressModel } from "../../models";
+import { objectKeys, successTimeout } from "../../util";
 import { LoadingButtonState } from "../../components";
-import { minLength, maxLength } from "../../validation/validators";
-import { validate, ValidatorMap } from "../../validation/validate";
-import { successTimeout } from "../../util/successTimeout";
-import { RootStore } from "../../stores/RootStore";
-import { ProfilePageController } from "../pages/ProfilePageController";
-import { IAddressModel } from "../../interfaces/models/IAddressModel";
-import { objectKeys } from "../../util/objectKeys";
 
 import {
 	CITY_MIN_LENGTH,
@@ -22,9 +17,18 @@ import {
 } from "common-library";
 
 import {
+	minLength,
+	maxLength,
+	ErrorModel,
+	validate,
+	ValidatorMap
+} from "../../validation";
+
+import {
+	IAddressModel,
 	IAddressProfileController,
 	IAddressErrorState
-} from "../../interfaces/controllers/profile/IAddressProfileController";
+} from "../../interfaces";
 
 const validators : ValidatorMap<IAddressModel> = {
 	city: [

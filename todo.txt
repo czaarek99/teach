@@ -1,7 +1,10 @@
+* finish import fixes
+
 * dms
 * images in dms
 * add sender to messages (db)
 
+* cors shit
 * pricing information on ads
 * decide on money handling
 * purse?

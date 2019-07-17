@@ -1,10 +1,9 @@
-import { IAdController } from "../interfaces/controllers/IAdController";
 import { observable, action, computed } from "mobx";
 import { v4 } from "uuid";
-import { Route } from "../interfaces/Route";
 import { IAd } from "common-library";
-import { getImageUrl } from "../util/imageAPI";
-import { RootStore } from "../stores/RootStore";
+import { RootStore } from "../stores";
+import { IAdController, Route } from "../interfaces";
+import { getImageUrl } from "../util";
 
 export class AdController implements IAdController {
 

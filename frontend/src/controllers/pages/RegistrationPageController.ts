@@ -1,15 +1,8 @@
 import { observable, action } from "mobx";
-import { RegistrationModel } from "../../models/RegistrationModel";
-import { ErrorModel } from "../../validation/ErrorModel";
-import { LoadingButtonState } from "../../components/molecules/LoadingButton/LoadingButton";
-import { IRegistrationModel } from "../../interfaces/models/IRegistrationModel";
-import { ValidatorMap, validate } from "../../validation/validate";
-import { email, minLength, maxLength, password, notSet } from "../../validation/validators";
-import { logIn } from "../../util/logIn";
-import { objectKeys } from "../../util/objectKeys";
-import { IRecaptchaFunctions } from "../../components";
-import { RootStore } from "../../stores/RootStore";
-import { requireNoLogin } from "../../util/requireNoLogin";
+import { RootStore } from "../../stores";
+import { IRecaptchaFunctions, LoadingButtonState } from "../../components";
+import { RegistrationModel } from "../../models";
+import { requireNoLogin, objectKeys, logIn } from "../../util";
 
 import {
 	FIRST_NAME_MIN_LENGTH,
@@ -29,9 +22,21 @@ import {
 } from "common-library";
 
 import {
+	IRegistrationModel,
 	IRegistrationPageController,
-	IRegistrationPageErrorState,
-} from "../../interfaces/controllers/pages/IRegistrationPageController";
+	IRegistrationPageErrorState
+} from "../../interfaces";
+
+import {
+	email,
+	minLength,
+	maxLength,
+	password,
+	notSet,
+	ErrorModel,
+	validate,
+	ValidatorMap
+} from "../../validation";
 
 const validators : ValidatorMap<IRegistrationModel> = {
 	email: [

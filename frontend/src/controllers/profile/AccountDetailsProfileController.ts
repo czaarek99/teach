@@ -1,19 +1,22 @@
 import { observable, action } from "mobx";
-import { AccountDetailsModel } from "../../models/AccountDetailsModel";
-import { LoadingButtonState } from "../../components";
-import { ErrorModel } from "../../validation/ErrorModel";
-import { IAccountDetailsModel } from "../../interfaces/models/IAccountDetailsModel";
-import { ValidatorMap, validate } from "../../validation/validate";
-import { password } from "../../validation/validators";
 import { ErrorMessage, HttpError } from "common-library";
-import { objectKeys } from "../../util/objectKeys";
-import { successTimeout } from "../../util/successTimeout";
-import { RootStore } from "../../stores/RootStore";
+import { RootStore } from "../../stores";
+import { AccountDetailsModel } from "../../models";
+import { LoadingButtonState } from "../../components";
+import { successTimeout, objectKeys } from "../../util";
 
 import {
+	IAccountDetailsModel,
 	IAccountDetailsProfileController,
 	IAccountDetailsErrorState
-} from "../../interfaces/controllers/profile/IAccountDetailsProfileController";
+} from "../../interfaces";
+
+import {
+	ValidatorMap,
+	password,
+	ErrorModel,
+	validate
+} from "../../validation";
 
 const validators : ValidatorMap<IAccountDetailsModel> = {
 	newPassword: [

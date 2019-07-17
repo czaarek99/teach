@@ -1,9 +1,8 @@
-import { IConversationController } from "../../interfaces/controllers/conversation/IConversationController";
 import { IConversation } from "common-library";
-import { RootStore } from "../../stores/RootStore";
-import { IDMModel } from "../../interfaces/models/IDMModel";
+import { RootStore } from "../../stores";
+import { DMModel } from "../../models";
+import { IConversationController, IDMModel } from "../../interfaces";
 import { observable } from "mobx";
-import { DMModel } from "../../models/DMModel";
 
 export class ConversationController implements IConversationController {
 

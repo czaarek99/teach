@@ -1,15 +1,10 @@
 import { observable, action } from "mobx";
-import { IAdController } from "../../interfaces/controllers/IAdController";
-import { AdController } from "../AdController";
-import { RootStore } from "../../stores/RootStore";
-import { IAdFilterModel } from "../../interfaces/models/IAdFilterModel";
-import { AdFilterModel } from "../../models/AdFilterModel";
-import { LoadingButtonState } from "../../components";
-
-import {
-	IBrowsePageController
-} from "../../interfaces/controllers/pages/IBrowsePageController";
 import { ErrorMessage, HttpError } from "common-library";
+import { IBrowsePageController, IAdController, IAdFilterModel } from "../../interfaces";
+import { RootStore } from "../../stores";
+import { LoadingButtonState } from "../../components";
+import { AdFilterModel } from "../../models";
+import { AdController } from "../AdController";
 
 export class BrowsePageController implements IBrowsePageController {
 

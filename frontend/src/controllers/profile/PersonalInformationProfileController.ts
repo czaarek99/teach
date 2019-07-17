@@ -1,20 +1,17 @@
 import { observable, action, computed } from "mobx";
-import { ErrorModel } from "../../validation/ErrorModel";
-import { IPersonalInformationModel } from "../../interfaces/models/IPersonalInformationModel";
-import { PersonalInformationModel } from "../../models/PersonalInformationModel";
-import { createViewModel } from "mobx-utils";
-import { minLength, maxLength } from "../../validation/validators";
-import { ValidatorMap, validate } from "../../validation/validate";
+import { ValidatorMap, minLength, maxLength, ErrorModel, validate } from "../../validation";
+import { ProfilePageController } from "../pages";
+import { RootStore } from "../../stores";
+import { PersonalInformationModel } from "../../models";
 import { LoadingButtonState } from "../../components";
-import { objectKeys } from "../../util/objectKeys";
-import { successTimeout } from "../../util/successTimeout";
-import { ProfilePageController } from "../pages/ProfilePageController";
-import { RootStore } from "../../stores/RootStore";
+import { createViewModel } from "mobx-utils";
+import { objectKeys, successTimeout } from "../../util";
 
 import {
+	IPersonalInformationModel,
 	IPersonalInformationProfileController,
 	IPersonalErrorState
-} from "../../interfaces/controllers/profile/IPersonalInformationProfileController";
+} from "../../interfaces";
 
 import {
 	FIRST_NAME_MAX_LENGTH,

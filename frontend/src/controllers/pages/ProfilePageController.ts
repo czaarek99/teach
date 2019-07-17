@@ -1,18 +1,15 @@
 import { observable, action } from "mobx";
-import { AddressProfileController } from "../profile/AddressProfileController";
-import { AccountDetailsProfileController } from "../profile/AccountDetailsProfileController";
-import { ProfilePictureController } from "../profile/ProfilePictureController";
 import { HttpError, ErrorMessage } from "common-library";
-import { requireLogin } from "../../util/requireLogin";
-import { RootStore } from "../../stores/RootStore";
+import { IProfilePageController } from "../../interfaces";
+import { RootStore } from "../../stores";
+import { requireLogin } from "../../util";
 
 import {
-	PersonalInformationProfileController
-} from "../profile/PersonalInformationProfileController";
-
-import {
-	IProfilePageController,
-} from "../../interfaces/controllers/pages/IProfilePageController";
+	PersonalInformationProfileController,
+	AddressProfileController,
+	AccountDetailsProfileController,
+	ProfilePictureController
+} from "../profile";
 
 export class ProfilePageController implements IProfilePageController {
 

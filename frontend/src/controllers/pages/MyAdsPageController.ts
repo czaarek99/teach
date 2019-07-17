@@ -1,10 +1,9 @@
-import { IMyAdsPageController } from "../../interfaces/controllers/pages/IMyAdsPageController";
 import { observable, action } from "mobx";
-import { IAdController } from "../../interfaces/controllers/IAdController";
 import { HttpError, ErrorMessage, MAX_USER_AD_COUNT } from "common-library";
-import { requireLogin } from "../../util/requireLogin";
+import { IMyAdsPageController, IAdController } from "../../interfaces";
+import { RootStore } from "../../stores";
+import { requireLogin } from "../../util";
 import { AdController } from "../AdController";
-import { RootStore } from "../../stores/RootStore";
 
 export class MyAdsPageController implements IMyAdsPageController {
 
