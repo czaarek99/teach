@@ -9,6 +9,7 @@ import { WithStyles } from "@material-ui/styles";
 import { injectIntl, InjectedIntlProps, FormattedMessage } from "react-intl";
 import { NavbarTemplate } from "../../templates";
 import { INavbarController, IProfilePageController } from "../../../interfaces";
+import { ErrorSnackbar } from "../../organisms";
 
 import {
 	Theme,
@@ -16,10 +17,8 @@ import {
 	withStyles,
 	Paper,
 	Typography,
-	Snackbar,
 	Button,
 } from "@material-ui/core";
-import { ErrorSnackbar } from "../../organisms";
 
 const styles = (theme: Theme) => createStyles({
 	titlePaper: {
