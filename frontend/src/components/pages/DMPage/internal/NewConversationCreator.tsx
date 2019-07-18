@@ -149,7 +149,7 @@ class NewConversationCreator extends React.Component<
 		return (
 			<ClickAwayListener onClickAway={() => controller.onClickOutsideSearch()}>
 				<div className={classes.searchContainer}>
-					<InputBase value={controller.newConversationModel.receiver}
+					<InputBase value={controller.model.receiver}
 						fullWidth={true}
 						onClick={() => controller.onSearchInputClick()}
 						type="search"
@@ -164,7 +164,7 @@ class NewConversationCreator extends React.Component<
 						}
 						placeholder={toPlaceholder}
 						className={topInputClasses}
-						onChange={(event) => controller.onNewConversationChange(
+						onChange={(event) => controller.onChange(
 							"receiver",
 							event.target.value
 						)} />
@@ -189,7 +189,7 @@ class NewConversationCreator extends React.Component<
 				<React.Fragment>
 					{this.renderUserSearchInput()}
 
-					<InputBase value={controller.newConversationModel.title}
+					<InputBase value={controller.model.title}
 						inputProps={{
 							maxLength: CONVERSATION_TITLE_MAX_LENGTH
 						}}
@@ -204,7 +204,7 @@ class NewConversationCreator extends React.Component<
 						}
 						placeholder={titlePlaceholder}
 						className={topInputClasses}
-						onChange={(event) => controller.onNewConversationChange(
+						onChange={(event) => controller.onChange(
 							"title",
 							event.target.value
 						)}
@@ -227,9 +227,9 @@ class NewConversationCreator extends React.Component<
 				<div className={classes.messageList}>
 				</div>
 
-				<DMEditor value={controller.newConversationModel.message}
+				<DMEditor value={controller.model.message}
 					onSend={() => controller.startConversation()}
-					onChange={value => controller.onNewConversationChange("message", value)}/>
+					onChange={value => controller.onChange("message", value)}/>
 
 			</div>
 		)

@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import { IConversation } from "common-library";
+import { IConversation, HttpError, ErrorMessage } from "common-library";
 import { RootStore } from "../../stores";
 import { NewConversationCreatorController, ConversationController } from "../conversation";
 import { requireLogin } from "../../util";
@@ -19,6 +19,7 @@ export class DMPageController implements IDMPageController {
 	@observable public convos: IConversation[] = []
 	@observable public newConvoController?: INewConversationCreatorController;
 	@observable public oldConvoController?: IConversationController;
+	@observable public errorMessage = "";
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -41,15 +42,29 @@ export class DMPageController implements IDMPageController {
 
 		this.dmCount = dms.totalCount;
 
-		const offset = this.pageNumber * this.dmsPerPage;
-		const amountToLoad = Math.min(this.dmCount - offset, this.dmsPerPage)
+		if(dms.totalCount === 0) {
+			this.onNewDM();
+		} else {
+			const offset = this.pageNumber * this.dmsPerPage;
+			const amountToLoad = Math.min(this.dmCount - offset, this.dmsPerPage)
 
-		const convos = await this.rootStore.services.dmService.getDMS({
-			offset,
-			limit: amountToLoad
-		});
+			const convos = await this.rootStore.services.dmService.getDMS({
+				offset,
+				limit: amountToLoad
+			});
 
-		this.convos = convos.data;
+			this.convos = convos.data;
+		}
+	}
+
+	@action
+	public serverError(error: any) : void {
+		if(error instanceof HttpError) {
+			this.errorMessage = error.error;
+		} else {
+			console.error(error);
+			this.errorMessage = ErrorMessage.COMPONENT;
+		}
 	}
 
 	@action

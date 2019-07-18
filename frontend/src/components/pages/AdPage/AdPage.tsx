@@ -5,6 +5,7 @@ import AdCarousel from "./internal/AdCarousel";
 import { IAdPageController, INavbarController } from "../../../interfaces";
 import { CustomAvatar } from "../../molecules";
 import { NavbarTemplate } from "../../templates";
+import { ErrorSnackbar } from "../../organisms";
 import { FormattedMessage, InjectedIntlProps, injectIntl } from "react-intl";
 import { observer } from "mobx-react";
 import { red } from "@material-ui/core/colors";
@@ -18,7 +19,6 @@ import {
 	WithStyles,
 	withStyles,
 	Typography,
-	Snackbar,
 	Button,
 	Dialog,
 	DialogTitle,
@@ -146,31 +146,18 @@ class AdPage extends React.Component<
 
 		const {
 			controller,
-			classes
 		} = this.props;
 
-		if(controller.errorMessage) {
-			return (
-				<Snackbar open={true}
-					key={controller.errorMessage}
-					ContentProps={{
-						"className": classes.errorSnackbarContent
-					}}
-					action={
-						<Button onClick={() => controller.goBackToBrowse()}>
-							<FormattedMessage id="actions.goBackToBrowse"/>
-						</Button>
-					}
-					message={
-						<FormattedMessage id={controller.errorMessage}/>
-					}
-					anchorOrigin={{
-						vertical: "bottom",
-						horizontal: "center"
-					}}
-					onClose={() => controller.closeSnackbar()}/>
-			);
-		}
+		return (
+			<ErrorSnackbar errorMessage={controller.errorMessage}
+				onClose={() => controller.closeSnackbar()}
+				action={
+					<Button onClick={() => controller.goBackToBrowse()}>
+						<FormattedMessage id="actions.goBackToBrowse"/>
+					</Button>
+				}
+			/>
+		);
 	}
 
 	private renderOwnerControls() : React.ReactNode {

@@ -45,5 +45,7 @@ export const MAXIMUM_AD_PICTURE_SIZE = 20 * Math.pow(10, 6);
 export const MAX_AD_PICTURE_COUNT = 5;
 export const MAX_USER_AD_COUNT = 8;
 
+export const CONVERSATION_TITLE_MIN_LENGTH = 2;
 export const CONVERSATION_TITLE_MAX_LENGTH = 100;
+export const DM_MIN_LENGTH = 1;
 export const DM_MAX_LENGTH = 5000;

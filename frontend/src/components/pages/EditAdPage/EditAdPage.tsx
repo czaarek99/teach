@@ -5,7 +5,7 @@ import { IEditAdPageController, INavbarController } from "../../../interfaces";
 import { simpleFormat } from "../../../util";
 import { NavbarTemplate } from "../../templates";
 import { CustomTextField } from "../../molecules";
-import { AdCategorySelect, SaveButtons } from "../../organisms";
+import { AdCategorySelect, SaveButtons, ErrorSnackbar } from "../../organisms";
 import { faInfo } from "@fortawesome/free-solid-svg-icons";
 import { observer } from "mobx-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -29,7 +29,6 @@ import {
 	WithStyles,
 	withStyles,
 	Paper,
-	Snackbar,
 	Button,
 	Checkbox,
 	FormControlLabel,
@@ -114,28 +113,16 @@ class EditAdPage extends React.Component<
 			classes
 		} = this.props;
 
-		if(controller.pageError) {
-			return (
-				<Snackbar open={true}
-					key={controller.pageError}
-					ContentProps={{
-						"className": classes.errorSnackbarContent
-					}}
-					action={
-						<Button onClick={() => controller.onCloseSnackbar()}>
-							<FormattedMessage id="actions.ok"/>
-						</Button>
-					}
-					message={
-						<FormattedMessage id={controller.pageError}/>
-					}
-					anchorOrigin={{
-						vertical: "bottom",
-						horizontal: "center"
-					}}
-					onClose={() => controller.onCloseSnackbar()}/>
-			);
-		}
+		return (
+			<ErrorSnackbar errorMessage={controller.pageError}
+				onClose={() => controller.onCloseSnackbar()}
+				action={
+					<Button onClick={() => controller.onCloseSnackbar()}>
+						<FormattedMessage id="actions.ok"/>
+					</Button>
+				}
+			/>
+		);
 	}
 
 	public render() : React.ReactNode {

@@ -1,7 +1,7 @@
 import React from 'react';
 import AdFilter from "./internal/AdFilter";
 
-import { Ad } from '../../organisms';
+import { Ad, ErrorSnackbar } from '../../organisms';
 import { observer } from 'mobx-react';
 import { NavbarTemplate } from '../../templates';
 import { LabelDisplayedRowsArgs } from "@material-ui/core/TablePagination";
@@ -17,7 +17,6 @@ import {
 	TablePagination,
 	CircularProgress,
 	Typography,
-	Snackbar,
 	Button,
 } from "@material-ui/core";
 
@@ -85,28 +84,16 @@ class BrowsePage extends React.Component<
 			classes
 		} = this.props;
 
-		if(controller.pageError) {
-			return (
-				<Snackbar open={true}
-					key={controller.pageError}
-					ContentProps={{
-						"className": classes.errorSnackbarContent
-					}}
-					action={
-						<Button onClick={() => controller.onCloseSnackbar()}>
-							<FormattedMessage id="actions.ok"/>
-						</Button>
-					}
-					message={
-						<FormattedMessage id={controller.pageError}/>
-					}
-					anchorOrigin={{
-						vertical: "bottom",
-						horizontal: "center"
-					}}
-					onClose={() => controller.onCloseSnackbar()}/>
-			);
-		}
+		return (
+			<ErrorSnackbar errorMessage={controller.pageError}
+				onClose={() => controller.onCloseSnackbar()}
+				action={
+					<Button onClick={() => controller.onCloseSnackbar()}>
+						<FormattedMessage id="actions.ok"/>
+					</Button>
+				}
+			/>
+		);
 	}
 
 	public render() : React.ReactNode {

@@ -1,23 +1,54 @@
 import { RootStore } from "../../stores";
-import { INewConversationCreatorController, INewConversationModel } from "../../interfaces";
-import { ITeacher, IConversation, USER_SEARCH_MIN_LENGTH } from "common-library";
 import { DMPageController } from "../pages";
 import { NewConversationModel } from "../../models";
 import { observable, action } from "mobx";
+import { ErrorModel, ValidatorMap, minLength, maxLength } from "../../validation";
+
+import {
+	ITeacher,
+	IConversation,
+	USER_SEARCH_MIN_LENGTH,
+	CONVERSATION_TITLE_MAX_LENGTH,
+	CONVERSATION_TITLE_MIN_LENGTH,
+	DM_MAX_LENGTH,
+	DM_MIN_LENGTH
+} from "common-library";
+
+import {
+	INewConversationCreatorController,
+	INewConversationModel,
+	INewConversationCreatorErrorState
+} from "../../interfaces";
 
 export class NewConversationCreatorController implements INewConversationCreatorController {
 
 	private readonly rootStore: RootStore;
 	private readonly parent: DMPageController;
+	private readonly validators : ValidatorMap<INewConversationModel> = {
+		title: [
+			minLength(CONVERSATION_TITLE_MIN_LENGTH),
+			maxLength(CONVERSATION_TITLE_MAX_LENGTH)
+		],
+		message: [
+			minLength(DM_MIN_LENGTH),
+			maxLength(DM_MAX_LENGTH)
+		]
+	}
+
 
 	private receiver?: ITeacher;
 	private searchTimeout?: number
 
 	@observable public readonly convo?: IConversation;
-	@observable public newConversationModel = new NewConversationModel();
+	@observable public model = new NewConversationModel();
 	@observable public userSearchResult : ITeacher[] = [];
 	@observable public showUserDropdown = false;
 	@observable public dropdownMessage = "info.searchTooShort";
+	@observable public errorModel = new ErrorModel<INewConversationCreatorErrorState>({
+		title: [],
+		message: [],
+		receiver: []
+	});
 
 	constructor(
 		rootStore: RootStore,
@@ -28,8 +59,8 @@ export class NewConversationCreatorController implements INewConversationCreator
 	}
 
 	@action
-	public onNewConversationChange(key: keyof INewConversationModel, value: any) : void {
-		this.newConversationModel[key] = value;
+	public onChange(key: keyof INewConversationModel, value: any) : void {
+		this.model[key] = value;
 
 		if(key === "receiver") {
 			this.showUserDropdown = true;
@@ -62,7 +93,7 @@ export class NewConversationCreatorController implements INewConversationCreator
 
 	@action
 	public onSelectUserToMessage(teacher: ITeacher) : void {
-		this.onNewConversationChange("receiver", teacher.firstName + " " + teacher.lastName);
+		this.onChange("receiver", teacher.firstName + " " + teacher.lastName);
 		this.receiver = teacher;
 		this.showUserDropdown = false;
 	}
@@ -81,16 +112,20 @@ export class NewConversationCreatorController implements INewConversationCreator
 
 	@action
 	public async startConversation() : Promise<void> {
-		try {
-			if(this.receiver) {
-				const input = this.newConversationModel.toInput(this.receiver);
+		if(!this.errorModel.hasErrors()) {
+			try {
+				if(this.receiver) {
+					const input = this.model.toInput(this.receiver);
 
-				const convo = await this.rootStore.services.dmService.addConversation(input);
+					const convo = await this.rootStore.services.dmService.addConversation(input);
+					this.parent.onFinishConversationCreation(convo);
+				}
+
+			} catch(error) {
+
 			}
-
-		} catch(error) {
-
 		}
+
 	}
 
 }

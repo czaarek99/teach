@@ -9,6 +9,7 @@ export interface IDMPageController {
 	readonly selectedConvo?: IConversation
 	readonly newConvoController?: INewConversationCreatorController
 	readonly oldConvoController?: IConversationController
+	readonly errorMessage: string
 
 	selectConvo: (convo: IConversation) => void
 	onNewDM: () => void

@@ -19,6 +19,7 @@ import {
 	Snackbar,
 	Button,
 } from "@material-ui/core";
+import { ErrorSnackbar } from "../../organisms";
 
 const styles = (theme: Theme) => createStyles({
 	titlePaper: {
@@ -42,6 +43,24 @@ class ProfilePage extends React.Component<
 	WithStyles<typeof styles>
 > {
 
+	private renderSnackbar() : React.ReactNode {
+
+		const {
+			controller
+		} = this.props;
+
+		return (
+			<ErrorSnackbar errorMessage={controller.errorMessage}
+				onClose={() => controller.onSnackbarClose()}
+				action={
+					<Button onClick={() => controller.onSnackbarClose()}>
+						<FormattedMessage id="actions.ok"/>
+					</Button>
+				}
+			/>
+		)
+	}
+
 	public render() : React.ReactNode {
 
 		const {
@@ -49,30 +68,6 @@ class ProfilePage extends React.Component<
 			navbarController,
 			classes
 		} = this.props;
-
-		let errorSnackbar = null;
-		if(controller.errorMessage) {
-			errorSnackbar = (
-				<Snackbar open={true}
-					key={controller.errorMessage}
-					ContentProps={{
-						"className": classes.errorSnackbarContent
-					}}
-					action={
-						<Button onClick={() => controller.onSnackbarClose()}>
-							<FormattedMessage id="actions.ok"/>
-						</Button>
-					}
-					message={
-						<FormattedMessage id={controller.errorMessage}/>
-					}
-					anchorOrigin={{
-						vertical: "bottom",
-						horizontal: "center"
-					}}
-					onClose={() => controller.onSnackbarClose()}/>
-			);
-		}
 
 		return (
 			<NavbarTemplate controller={navbarController}>
@@ -89,7 +84,7 @@ class ProfilePage extends React.Component<
 					<ProfilePictureContent controller={controller.profilePictureController}/>
 				</div>
 
-				{errorSnackbar}
+				{this.renderSnackbar()}
 			</NavbarTemplate>
 		)
 	}
