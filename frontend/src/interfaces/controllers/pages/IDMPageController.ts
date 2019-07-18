@@ -1,6 +1,5 @@
 import { IConversation } from "common-library";
-import { IConversationController } from "../conversation/IConversationController";
-import { INewConversationCreatorController } from "../conversation/INewConversationCreatorController";
+import { IConversationController, INewConversationCreatorController } from "../conversation";
 
 export interface IDMPageController {
 	readonly dmCount: number

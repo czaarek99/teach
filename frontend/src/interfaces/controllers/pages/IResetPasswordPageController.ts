@@ -1,6 +1,6 @@
-import { IResetPasswordModel } from "../../models/IResetPasswordModel";
-import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
 import { LoadingButtonState, InfoBoxType } from "../../../components";
+import { ErrorState, ErrorModel } from "../../../validation";
+import { IResetPasswordModel } from "../../models";
 
 export interface IResetPasswordPageErrorState extends ErrorState {
 	password: string[]

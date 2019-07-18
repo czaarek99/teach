@@ -1,5 +1,5 @@
 import { ITeacher } from "common-library";
-import { INewConversationModel } from "../../models/INewConversationModel";
+import { INewConversationModel } from "../../models";
 
 export interface INewConversationCreatorController {
 	readonly userSearchResult: ITeacher[]

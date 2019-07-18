@@ -1,4 +1,8 @@
-import { IProfilePictureOutput, IAdImagesOutput, IAdDeleteIndexesInput } from "common-library";
+import {
+	IProfilePictureOutput,
+	IAdImagesOutput,
+	IAdDeleteIndexesInput
+} from "common-library";
 
 export interface IImageService {
 	updateProfilePic: (file: File) => Promise<IProfilePictureOutput>

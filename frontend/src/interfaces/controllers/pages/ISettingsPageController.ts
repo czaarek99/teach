@@ -1,6 +1,5 @@
-import { ISettingsModel } from "../../models/ISettingsModel";
-import { ViewModel } from "../../ViewModel";
 import { LoadingButtonState } from "../../../components";
+import { ISettingsModel } from "../../models";
 
 export interface ISettingsPageController {
 	readonly viewModel: ISettingsModel

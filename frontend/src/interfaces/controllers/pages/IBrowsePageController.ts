@@ -1,6 +1,6 @@
-import { IAdController } from "../IAdController";
-import { IAdFilterModel } from "../../models/IAdFilterModel";
+import { IAdFilterModel } from "../../models";
 import { LoadingButtonState } from "../../../components";
+import { IAdController } from "../IAdController";
 
 export interface IBrowsePageController {
 	readonly pageLoading: boolean

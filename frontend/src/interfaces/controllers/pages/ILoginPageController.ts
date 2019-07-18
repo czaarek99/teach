@@ -1,6 +1,6 @@
-import { ILoginModel } from "../../models/ILoginModel";
-import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
-import { LoadingButtonState } from "../../../components/molecules/LoadingButton/LoadingButton";
+import { ErrorState, ErrorModel } from "../../../validation";
+import { ILoginModel } from "../../models";
+import { LoadingButtonState } from "../../../components";
 import { Route } from "../../Route";
 
 export interface ILoginPageErrorState extends ErrorState {

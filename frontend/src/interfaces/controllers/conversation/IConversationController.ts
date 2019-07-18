@@ -1,4 +1,4 @@
-import { IDMModel } from "../../models/IDMModel";
+import { IDMModel } from "../../models";
 
 export interface IConversationController {
 	readonly model: IDMModel

@@ -1,7 +1,9 @@
-import { IPersonalInformationProfileController } from "../profile/IPersonalInformationProfileController";
-import { IAddressProfileController } from "../profile/IAddressProfileController";
-import { IAccountDetailsProfileController } from "../profile/IAccountDetailsProfileController";
-import { IProfilePictureController } from "../profile/IProfilePictureController";
+import {
+	IPersonalInformationProfileController,
+	IAddressProfileController,
+	IAccountDetailsProfileController,
+	IProfilePictureController
+} from "../profile";
 
 export interface IProfilePageController {
 	readonly loading: boolean

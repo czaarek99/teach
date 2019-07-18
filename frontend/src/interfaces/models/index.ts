@@ -10,4 +10,3 @@ export * from "./IPersonalInformationModel";
 export * from "./IRegistrationModel";
 export * from "./IResetPasswordModel";
 export * from "./ISettingsModel";
-export * from "./ITeacherModel";

@@ -3,7 +3,6 @@ import {
 	IPersonalInput,
 	IAddress,
 	IPasswordInput,
-	ISimpleIdInput,
 	ITeacher,
 	ISearchUsersInput
 } from "common-library";

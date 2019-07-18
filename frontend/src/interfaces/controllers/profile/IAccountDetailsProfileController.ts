@@ -1,6 +1,6 @@
-import { IAccountDetailsModel } from "../../models/IAccountDetailsModel";
-import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
 import { LoadingButtonState } from "../../../components";
+import { ErrorState, ErrorModel } from "../../../validation";
+import { IAccountDetailsModel } from "../../models";
 
 export interface IAccountDetailsErrorState extends ErrorState {
 	password: string[]

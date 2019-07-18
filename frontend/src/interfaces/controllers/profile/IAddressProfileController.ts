@@ -1,7 +1,6 @@
-import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
-import { IAddressModel } from "../../models/IAddressModel";
-import { ViewModel } from "../../ViewModel";
 import { LoadingButtonState } from "../../../components";
+import { ErrorState, ErrorModel } from "../../../validation";
+import { IAddressModel } from "../../models";
 
 export interface IAddressErrorState extends ErrorState {
 	city: string[]

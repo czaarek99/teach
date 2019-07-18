@@ -1,7 +1,6 @@
-import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
-import { IRegistrationModel } from "../../models/IRegistrationModel";
-import { LoadingButtonState } from "../../../components/molecules/LoadingButton/LoadingButton";
-import { OnFunctions } from "../../../components";
+import { OnFunctions, LoadingButtonState } from "../../../components";
+import { ErrorState, ErrorModel } from "../../../validation";
+import { IRegistrationModel } from "../../models";
 
 export interface IRegistrationPageErrorState extends ErrorState {
 	email: string[]
@@ -18,7 +17,7 @@ export interface IRegistrationPageErrorState extends ErrorState {
 }
 
 export interface IRegistrationPageController {
-	readonly model: IRegistrationModel;
+	readonly model: IRegistrationModel
 	readonly errorModel: ErrorModel<IRegistrationPageErrorState>
 	readonly loading: boolean
 	readonly errorMessage: string | null

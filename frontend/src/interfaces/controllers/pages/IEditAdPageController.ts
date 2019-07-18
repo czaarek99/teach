@@ -1,7 +1,6 @@
-import { IEditAdModel } from "../../models/IEditAdModel";
-import { ErrorState, ErrorModel } from "../../../validation/ErrorModel";
 import { LoadingButtonState } from "../../../components";
-import { ViewModel } from "../../ViewModel";
+import { ErrorState, ErrorModel } from "../../../validation";
+import { IEditAdModel } from "../../models";
 
 export interface IEditAdPageErrorState extends ErrorState {
 	name: string[]

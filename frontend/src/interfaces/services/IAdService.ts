@@ -1,5 +1,4 @@
 import {
-	IPagination,
 	IEdge,
 	IAd,
 	ISimpleIdOutput,
