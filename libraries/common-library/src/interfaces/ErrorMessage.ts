@@ -38,5 +38,6 @@ export enum ErrorMessage {
 	IMAGE_UPLOAD_LIMIT_REACHED = "error.imageUploadLimit",
 
 	CONVERSATION_NOT_FOUND = "error.convoNotFound",
+	CONVERSATION_PLEASE_PICK_A_RECEIVER = "error.pickAReceiver"
 
 }

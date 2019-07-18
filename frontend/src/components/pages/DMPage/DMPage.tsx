@@ -63,7 +63,25 @@ class DMPage extends React.Component<
 	WithStyles<typeof styles>
 > {
 
+	private renderSnackbar() : React.ReactNode {
 
+		const {
+			controller
+		} = this.props;
+
+		if(controller.errorMessage) {
+			return (
+				<ErrorSnackbar errorMessage={controller.errorMessage}
+					onClose={() => controller.onCloseSnackbar()}
+					action={
+						<Button onClick={() => controller.onCloseSnackbar()}>
+							<FormattedMessage id="actions.ok"/>
+						</Button>
+					}
+				/>
+			);
+		}
+	}
 
 	private renderUsers() : React.ReactNode {
 
@@ -124,6 +142,8 @@ class DMPage extends React.Component<
 						<AddIcon />
 					</Fab>
 				</div>
+
+				{this.renderSnackbar()}
 			</NavbarTemplate>
 		);
 	}

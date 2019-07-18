@@ -16,4 +16,12 @@ export class NewConversationModel implements INewConversationModel {
 		}
 	}
 
+	public toValidate() : INewConversationModel {
+		return {
+			message: this.message,
+			title: this.title,
+			receiver: this.receiver
+		}
+	}
+
 }

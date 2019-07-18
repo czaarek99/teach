@@ -9,12 +9,14 @@ export class ConversationController implements IConversationController {
 	private readonly rootStore: RootStore;
 
 	@observable public model = new DMModel();
+	@observable public convo: IConversation;
 
 	constructor(
 		rootStore: RootStore,
 		convo: IConversation
 	) {
 		this.rootStore = rootStore;
+		this.convo = convo;
 	}
 
 	public onChange(key: keyof IDMModel, value: any) : void {

@@ -81,7 +81,6 @@ class BrowsePage extends React.Component<
 
 		const {
 			controller,
-			classes
 		} = this.props;
 
 		return (

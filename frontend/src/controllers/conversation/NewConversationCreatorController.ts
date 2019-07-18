@@ -2,7 +2,7 @@ import { RootStore } from "../../stores";
 import { DMPageController } from "../pages";
 import { NewConversationModel } from "../../models";
 import { observable, action } from "mobx";
-import { ErrorModel, ValidatorMap, minLength, maxLength } from "../../validation";
+import { ErrorModel, ValidatorMap, minLength, maxLength, ValidationResult, validate } from "../../validation";
 
 import {
 	ITeacher,
@@ -21,6 +21,7 @@ import {
 	INewConversationModel,
 	INewConversationCreatorErrorState
 } from "../../interfaces";
+import { objectKeys } from "../../util";
 
 export class NewConversationCreatorController implements INewConversationCreatorController {
 
@@ -34,6 +35,9 @@ export class NewConversationCreatorController implements INewConversationCreator
 		message: [
 			minLength(DM_MIN_LENGTH),
 			maxLength(DM_MAX_LENGTH)
+		],
+		receiver: [
+			this.receiverValidator.bind(this)
 		]
 	}
 
@@ -59,6 +63,14 @@ export class NewConversationCreatorController implements INewConversationCreator
 	) {
 		this.rootStore = rootStore;
 		this.parent = parent;
+	}
+
+	private receiverValidator() : ValidationResult {
+		if(!this.receiver) {
+			return ErrorMessage.CONVERSATION_PLEASE_PICK_A_RECEIVER;
+		}
+
+		return null;
 	}
 
 	@action
@@ -144,7 +156,21 @@ export class NewConversationCreatorController implements INewConversationCreator
 	}
 
 	@action
+	private validate(key: keyof INewConversationModel) : void {
+		const keyValidators = this.validators[key];
+
+		if(keyValidators !== undefined) {
+			const value = this.model[key];
+			this.errorModel.setErrors(key, validate(value, keyValidators));
+		}
+	}
+
+	@action
 	public async onStartConversation() : Promise<void> {
+		for(const key of objectKeys(this.model.toValidate())) {
+			this.validate(key);
+		}
+
 		if(!this.errorModel.hasErrors()) {
 			try {
 				if(this.receiver) {
