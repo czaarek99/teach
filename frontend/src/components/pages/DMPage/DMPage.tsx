@@ -5,18 +5,20 @@ import NewConversationCreator from "./internal/NewConversationCreator";
 import DM from "./internal/DM";
 
 import { observer } from "mobx-react";
-import { InjectedIntlProps, injectIntl } from "react-intl";
+import { InjectedIntlProps, injectIntl, FormattedMessage } from "react-intl";
 import { NavbarTemplate } from "../../templates";
 import { INavbarController, IDMPageController } from "../../../interfaces";
 import { IConversation } from "common-library";
 import { grey } from "@material-ui/core/colors";
+import { ErrorSnackbar } from "../../organisms";
 
 import {
 	Theme,
 	createStyles,
 	WithStyles,
 	withStyles,
-	Fab
+	Fab,
+	Button
 } from "@material-ui/core";
 
 const styles = (theme: Theme) => createStyles({
@@ -60,6 +62,8 @@ class DMPage extends React.Component<
 	InjectedIntlProps &
 	WithStyles<typeof styles>
 > {
+
+
 
 	private renderUsers() : React.ReactNode {
 

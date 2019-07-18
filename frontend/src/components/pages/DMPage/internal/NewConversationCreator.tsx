@@ -25,6 +25,7 @@ import {
 	CONVERSATION_TITLE_MAX_LENGTH,
 	ITeacher
 } from "common-library";
+import { ErrorSnackbar } from "../../../organisms";
 
 const styles = (theme: Theme) => createStyles({
 
@@ -97,6 +98,24 @@ class NewConversationCreator extends React.Component<
 	InjectedIntlProps &
 	WithStyles<typeof styles>
 > {
+
+	private renderSnackbar() : React.ReactNode {
+
+		const {
+			controller
+		} = this.props;
+
+		return (
+			<ErrorSnackbar errorMessage={controller.errorMessage}
+				onClose={() => controller.onCloseSnackbar()}
+				action={
+					<Button onClick={() => controller.onRetryStartConversation()}>
+						<FormattedMessage id="actions.tryAgain"/>
+					</Button>
+				}
+			/>
+		);
+	}
 
 	private renderUserSearchInput() : React.ReactNode {
 
@@ -228,9 +247,10 @@ class NewConversationCreator extends React.Component<
 				</div>
 
 				<DMEditor value={controller.model.message}
-					onSend={() => controller.startConversation()}
+					onSend={() => controller.onStartConversation()}
 					onChange={value => controller.onChange("message", value)}/>
 
+				{this.renderSnackbar()}
 			</div>
 		)
 	}

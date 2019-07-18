@@ -12,5 +12,6 @@ export interface IDMPageController {
 	readonly errorMessage: string
 
 	selectConvo: (convo: IConversation) => void
+	onCloseSnackbar: () => void
 	onNewDM: () => void
 }

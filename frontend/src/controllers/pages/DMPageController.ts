@@ -35,36 +35,45 @@ export class DMPageController implements IDMPageController {
 			return;
 		}
 
-		const dms = await this.rootStore.services.dmService.getDMS({
-			offset: 0,
-			limit: 0
-		});
-
-		this.dmCount = dms.totalCount;
-
-		if(dms.totalCount === 0) {
-			this.onNewDM();
-		} else {
-			const offset = this.pageNumber * this.dmsPerPage;
-			const amountToLoad = Math.min(this.dmCount - offset, this.dmsPerPage)
-
-			const convos = await this.rootStore.services.dmService.getDMS({
-				offset,
-				limit: amountToLoad
+		try {
+			const dms = await this.rootStore.services.dmService.getDMS({
+				offset: 0,
+				limit: 0
 			});
 
-			this.convos = convos.data;
+			this.dmCount = dms.totalCount;
+
+			if(dms.totalCount === 0) {
+				this.onNewDM();
+			} else {
+				const offset = this.pageNumber * this.dmsPerPage;
+				const amountToLoad = Math.min(this.dmCount - offset, this.dmsPerPage)
+
+				const convos = await this.rootStore.services.dmService.getDMS({
+					offset,
+					limit: amountToLoad
+				});
+
+				this.convos = convos.data;
+			}
+		} catch(error) {
+			this.serverError(error);
 		}
 	}
 
 	@action
-	public serverError(error: any) : void {
+	private serverError(error: any) : void {
 		if(error instanceof HttpError) {
 			this.errorMessage = error.error;
 		} else {
 			console.error(error);
 			this.errorMessage = ErrorMessage.COMPONENT;
 		}
+	}
+
+	@action
+	public onCloseSnackbar() : void {
+		this.errorMessage = "";
 	}
 
 	@action

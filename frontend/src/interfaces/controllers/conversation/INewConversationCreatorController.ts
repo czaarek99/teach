@@ -14,8 +14,11 @@ export interface INewConversationCreatorController {
 	readonly errorModel: ErrorModel<INewConversationCreatorErrorState>
 	readonly showUserDropdown: boolean
 	readonly dropdownMessage: string
+	readonly errorMessage: string
 
-	startConversation: () => Promise<void>
+	onStartConversation: () => Promise<void>
+	onRetryStartConversation: () => Promise<void>
+	onCloseSnackbar: () => void
 	onSearchInputClick: () => void
 	onClickOutsideSearch: () => void
 	onSelectUserToMessage: (teacher: ITeacher) => void

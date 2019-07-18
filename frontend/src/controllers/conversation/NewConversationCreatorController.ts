@@ -11,7 +11,9 @@ import {
 	CONVERSATION_TITLE_MAX_LENGTH,
 	CONVERSATION_TITLE_MIN_LENGTH,
 	DM_MAX_LENGTH,
-	DM_MIN_LENGTH
+	DM_MIN_LENGTH,
+	HttpError,
+	ErrorMessage
 } from "common-library";
 
 import {
@@ -44,6 +46,7 @@ export class NewConversationCreatorController implements INewConversationCreator
 	@observable public userSearchResult : ITeacher[] = [];
 	@observable public showUserDropdown = false;
 	@observable public dropdownMessage = "info.searchTooShort";
+	@observable public errorMessage = "";
 	@observable public errorModel = new ErrorModel<INewConversationCreatorErrorState>({
 		title: [],
 		message: [],
@@ -73,21 +76,30 @@ export class NewConversationCreatorController implements INewConversationCreator
 
 			if(value.length >= USER_SEARCH_MIN_LENGTH) {
 				this.searchTimeout = window.setTimeout(async () => {
-					this.dropdownMessage = "info.searching"
-
-					const output = await this.rootStore.services.userService.searchUsers({
-						search: value
-					});
-
-					if(output.length === 0) {
-						this.dropdownMessage = "info.noUsers";
-					} else {
-						this.dropdownMessage = "";
-					}
-
-					this.userSearchResult = output;
+					await this.userSearch(value);
 				}, 500)
 			}
+		}
+	}
+
+	@action
+	private async userSearch(search: string) : Promise<void> {
+		try {
+			this.dropdownMessage = "info.searching"
+
+			const output = await this.rootStore.services.userService.searchUsers({
+				search
+			});
+
+			if(output.length === 0) {
+				this.dropdownMessage = "info.noUsers";
+			} else {
+				this.dropdownMessage = "";
+			}
+
+			this.userSearchResult = output;
+		} catch(error) {
+			this.serverError(error);
 		}
 	}
 
@@ -111,7 +123,28 @@ export class NewConversationCreatorController implements INewConversationCreator
 	}
 
 	@action
-	public async startConversation() : Promise<void> {
+	private serverError(error: any) : void {
+		if(error instanceof HttpError) {
+			this.errorMessage = error.error;
+		} else {
+			console.error(error);
+			this.errorMessage = ErrorMessage.COMPONENT;
+		}
+	}
+
+	@action
+	public onCloseSnackbar() : void {
+		this.errorMessage = "";
+	}
+
+	@action
+	public async onRetryStartConversation() : Promise<void> {
+		this.onCloseSnackbar();
+		await this.onStartConversation();
+	}
+
+	@action
+	public async onStartConversation() : Promise<void> {
 		if(!this.errorModel.hasErrors()) {
 			try {
 				if(this.receiver) {
@@ -122,10 +155,9 @@ export class NewConversationCreatorController implements INewConversationCreator
 				}
 
 			} catch(error) {
-
+				this.serverError(error);
 			}
 		}
-
 	}
 
 }
