@@ -1,6 +1,6 @@
-import { ILoginModel } from "../interfaces/models/ILoginModel";
 import { observable } from "mobx";
 import { ILoginInput } from "common-library";
+import { ILoginModel } from "../interfaces";
 
 export class LoginModel implements ILoginModel {
 

@@ -1,5 +1,5 @@
-import { Route } from "../interfaces/Route";
-import { RootStore } from "../stores/RootStore";
+import { RootStore } from "../stores";
+import { Route } from "../interfaces";
 
 import {
 	SESSION_KEY_NAME,

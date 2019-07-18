@@ -1,6 +1,4 @@
-import { IUserService } from "../interfaces/services/IUserService";
 import { BaseService } from "./BaseService";
-import { objectToParams } from "../util/objectToParams";
 
 import {
 	IUser,
@@ -10,6 +8,8 @@ import {
 	ISearchUsersInput,
 	ITeacher
 } from "common-library";
+import { IUserService } from "../interfaces";
+import { objectToParams } from "../util";
 
 export class UserService extends BaseService implements IUserService {
 

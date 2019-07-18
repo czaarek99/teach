@@ -1,6 +1,6 @@
 import { observable } from "mobx";
-import { IForgotModel } from "../interfaces/models/IForgotModel";
 import { IForgotInput } from "common-library";
+import { IForgotModel } from "../interfaces";
 
 export class ForgotModel implements IForgotModel {
 

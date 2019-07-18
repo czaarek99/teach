@@ -1,6 +1,6 @@
-import { IAddressModel } from "../interfaces/models/IAddressModel";
 import { action, observable } from "mobx";
 import { IAddress } from "common-library";
+import { IAddressModel } from "../interfaces";
 
 export class AddressModel implements IAddressModel {
 

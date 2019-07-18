@@ -1,6 +1,6 @@
-import { IResetPasswordModel } from "../interfaces/models/IResetPasswordModel";
 import { observable } from "mobx";
 import { IResetPasswordInput } from "common-library";
+import { IResetPasswordModel } from "../interfaces";
 
 export class ResetPasswordModel implements IResetPasswordModel {
 

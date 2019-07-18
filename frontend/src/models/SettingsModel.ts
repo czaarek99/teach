@@ -1,6 +1,6 @@
 import { observable, action } from "mobx";
-import { ISettingsModel } from "../interfaces/models/ISettingsModel";
 import { ISetting, IManySettingsInput } from "common-library";
+import { ISettingsModel } from "../interfaces";
 
 export class SettingsModel implements ISettingsModel {
 

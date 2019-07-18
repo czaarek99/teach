@@ -1,5 +1,12 @@
-import { ErrorMessage, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, EMAIL_MIN_LENGTH, EMAIL_MAX_LENGTH } from "common-library";
 import { ValidationResult, Validator } from "./validate";
+
+import {
+	ErrorMessage,
+	PASSWORD_MAX_LENGTH,
+	PASSWORD_MIN_LENGTH,
+	EMAIL_MIN_LENGTH,
+	EMAIL_MAX_LENGTH
+} from "common-library";
 
 export function uuid4(value: string) : ValidationResult {
 	const regex = /[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}/i;

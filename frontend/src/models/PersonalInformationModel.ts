@@ -1,6 +1,6 @@
-import { IPersonalInformationModel } from "../interfaces/models/IPersonalInformationModel";
 import { observable, action } from "mobx";
 import { IUser, IPersonalInput } from "common-library";
+import { IPersonalInformationModel } from "../interfaces";
 
 export class PersonalInformationModel implements IPersonalInformationModel {
 

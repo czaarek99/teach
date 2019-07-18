@@ -1,5 +1,5 @@
 import { BaseService } from "./BaseService";
-import { IAuthenticationService } from "../interfaces/services/IAuthenticationService";
+import { IAuthenticationService } from "../interfaces";
 
 import {
 	ILoginInput,

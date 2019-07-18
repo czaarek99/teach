@@ -1,6 +1,6 @@
-import { IDMModel } from "../interfaces/models/IDMModel";
 import { observable } from "mobx";
 import { INewDMInput, IConversation } from "common-library";
+import { IDMModel } from "../interfaces";
 
 export class DMModel implements IDMModel {
 

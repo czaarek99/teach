@@ -1,6 +1,6 @@
-import { INewConversationModel } from "../interfaces/models/INewConversationModel";
 import { observable } from "mobx";
 import { INewConversationInput, ITeacher } from "common-library";
+import { INewConversationModel } from "../interfaces";
 
 export class NewConversationModel implements INewConversationModel {
 

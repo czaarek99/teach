@@ -1,6 +1,6 @@
 import { observable, action } from "mobx";
-import { IUserService } from "../interfaces/services/IUserService";
 import { isAfter } from "date-fns";
+import { IUserService } from "../interfaces";
 
 import {
 	IUser,

@@ -1,7 +1,7 @@
 import { observable } from "mobx";
 import { subMonths } from "date-fns";
 import { getUserMaxDate, IRegistrationInput } from "common-library";
-import { IRegistrationModel } from "../interfaces/models/IRegistrationModel";
+import { IRegistrationModel } from "../interfaces";
 
 export class RegistrationModel implements IRegistrationModel {
 

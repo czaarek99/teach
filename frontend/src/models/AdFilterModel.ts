@@ -1,6 +1,6 @@
-import { IAdFilterModel } from "../interfaces/models/IAdFilterModel";
 import { observable } from "mobx";
 import { AdCategory, IAdListInput } from "common-library";
+import { IAdFilterModel } from "../interfaces";
 
 export class AdFilterModel implements IAdFilterModel {
 

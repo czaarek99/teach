@@ -1,6 +1,6 @@
 import { BaseService } from "./BaseService";
-import { ISettingsService } from "../interfaces/services/ISettingsService";
 import { IManySettingsInput, ISetting } from "common-library";
+import { ISettingsService } from "../interfaces";
 
 export class SettingsService extends BaseService implements ISettingsService {
 

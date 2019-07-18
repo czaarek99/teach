@@ -1,6 +1,6 @@
-import { IAccountDetailsModel } from "../interfaces/models/IAccountDetailsModel";
 import { observable } from "mobx";
 import { IPasswordInput } from "common-library";
+import { IAccountDetailsModel } from "../interfaces";
 
 export class AccountDetailsModel implements IAccountDetailsModel {
 

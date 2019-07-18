@@ -1,6 +1,6 @@
-import { IAdService } from "../interfaces/services/IAdService";
 import { BaseService } from "./BaseService";
-import { objectToParams } from "../util/objectToParams";
+import { objectToParams } from "../util";
+import { IAdService } from "../interfaces";
 
 import {
 	IEdge,

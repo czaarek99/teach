@@ -1,6 +1,6 @@
-import { IEditAdModel } from "../interfaces/models/IEditAdModel";
 import { observable } from "mobx";
 import { IEditAdInput, IAd, AdCategory } from "common-library";
+import { IEditAdModel } from "../interfaces";
 
 export class EditAdModel implements IEditAdModel {
 

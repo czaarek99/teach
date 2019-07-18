@@ -1,6 +1,6 @@
 import { action, observable } from "mobx";
 import { createViewModel } from "mobx-utils";
-import { ViewModel } from "../interfaces/ViewModel";
+import { ViewModel } from "../interfaces";
 
 export interface ErrorState {
 	[key: string]: string[]

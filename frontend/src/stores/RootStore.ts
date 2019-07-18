@@ -1,9 +1,8 @@
-import { IServices } from "../interfaces/services/IServices";
 import { IUserCache, UserCache } from "./UserCache";
 import { RouterStore, syncHistoryWithStore, SynchronizedHistory } from "mobx-react-router";
 import { createBrowserHistory } from "history";
 import { observable } from "mobx";
-import { Route } from "../interfaces/Route";
+import { IServices, Route } from "../interfaces";
 
 export class RootStore {
 

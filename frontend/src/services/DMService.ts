@@ -1,7 +1,14 @@
 import { BaseService } from "./BaseService";
-import { IDMService } from "../interfaces/services/IDMService";
-import { IDMListInput, IConversation, IEdge, INewConversationInput, INewDMInput } from "common-library";
-import { objectToParams } from "../util/objectToParams";
+import { IDMService } from "../interfaces";
+import { objectToParams } from "../util";
+
+import {
+	IDMListInput,
+	IConversation,
+	IEdge,
+	INewConversationInput,
+	INewDMInput
+} from "common-library";
 
 export class DMService extends BaseService implements IDMService {
 

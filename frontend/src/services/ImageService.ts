@@ -1,6 +1,11 @@
-import { IImageService } from "../interfaces/services/IImageService";
 import { BaseService } from "./BaseService";
-import { IProfilePictureOutput, IAdImagesOutput, IAdDeleteIndexesInput } from "common-library";
+import { IImageService } from "../interfaces";
+
+import {
+	IProfilePictureOutput,
+	IAdImagesOutput,
+	IAdDeleteIndexesInput
+} from "common-library";
 
 export class ImageService extends BaseService implements IImageService  {
 
