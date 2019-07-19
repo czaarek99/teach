@@ -23,7 +23,8 @@ import {
 
 import {
 	CONVERSATION_TITLE_MAX_LENGTH,
-	ITeacher
+	ITeacher,
+	CONVERSATION_TITLE_MIN_LENGTH
 } from "common-library";
 
 const styles = (theme: Theme) => createStyles({
@@ -153,6 +154,9 @@ class NewConversationCreator extends React.Component<
 			);
 		}
 
+		const toLabel = simpleFormat(this, "info.to");
+		const toPlaceholder = simpleFormat(this, "info.dmReceiver");
+
 		return (
 			<ClickAwayListener onClickAway={() => controller.onClickOutsideSearch()}>
 				<div className={classes.searchContainer}>
@@ -161,8 +165,8 @@ class NewConversationCreator extends React.Component<
 						validationKey="receiver"
 						onClick={() => controller.onSearchInputClick()}
 						type="search"
-						label="info.to"
-						placeholder="info.dmReceiver"
+						label={toLabel}
+						placeholder={toPlaceholder}
 						className={classes.topInput}
 						onChange={(value) => controller.onChange(
 							"receiver",
@@ -182,18 +186,27 @@ class NewConversationCreator extends React.Component<
 			classes
 		} = this.props;
 
+		const titleLabel = simpleFormat(this, "things.title");
+		const titlePlaceholder = simpleFormat(this, "info.dmTitle");
+
 		return (
 			<React.Fragment>
 				{this.renderUserSearchInput()}
 
 				<DMInput value={controller.model.title}
 					inputProps={{
+						maxLength: CONVERSATION_TITLE_MAX_LENGTH,
+						minLength: CONVERSATION_TITLE_MIN_LENGTH
+					}}
+					errorTranslationValues={{
+						value: titleLabel,
+						minLength: CONVERSATION_TITLE_MIN_LENGTH,
 						maxLength: CONVERSATION_TITLE_MAX_LENGTH
 					}}
 					errorModel={controller.errorModel}
 					validationKey="title"
-					label="things.title"
-					placeholder="info.dmTitle"
+					label={titleLabel}
+					placeholder={titlePlaceholder}
 					className={classes.topInput}
 					onChange={(value) => controller.onChange(
 						"title",

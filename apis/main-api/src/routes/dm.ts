@@ -22,7 +22,9 @@ import {
 	HttpError,
 	ErrorMessage,
 	INewDMInput,
-	DM_MAX_LENGTH
+	DM_MAX_LENGTH,
+	CONVERSATION_TITLE_MIN_LENGTH,
+	CONVERSATION_TITLE_MAX_LENGTH
 } from "common-library";
 
 const router = Router();
@@ -125,7 +127,12 @@ router.get("/list", {
 router.put("/convo", {
 	validate: {
 		body: {
-			members: Joi.array().only(Joi.number().min(0)).required().max(10)
+			members: Joi.array().items(Joi.number().min(0)).required().max(10),
+			firstMessage: Joi.string().optional().allow(""),
+			title: Joi.string()
+				.min(CONVERSATION_TITLE_MIN_LENGTH)
+				.max(CONVERSATION_TITLE_MAX_LENGTH)
+				.required(),
 		},
 		type: "json"
 	}
@@ -146,14 +153,9 @@ router.put("/convo", {
 			}
 		},
 		include: [
-			{
-				model: User,
-				include: [
-					Address,
-					UserSetting,
-					ProfilePicture
-				]
-			}
+			Address,
+			UserSetting,
+			ProfilePicture
 		]
 	});
 
@@ -168,25 +170,29 @@ router.put("/convo", {
 		);
 	}
 
-	await Promise.all([
-		Message.create({
+	await conversation.$add("members", users)
+
+	const messages : IMessage[] = [];
+
+	if(input.firstMessage) {
+		await Message.create({
 			conversationId: conversation.id,
 			content: input.firstMessage
-		}),
+		});
 
-		conversation.$add("userId", users)
-	]);
+		messages.push({
+			content: input.firstMessage,
+			sendDate: new Date()
+		})
+	}
 
 	const teachers = users.map(resolveTeacher);
 
 	const output : IConversation = {
 		id: conversation.id,
 		members: teachers,
-		messages: [{
-			content: input.firstMessage,
-			sendDate: new Date()
-		}],
-		title: input.title
+		title: input.title,
+		messages,
 	}
 
 	context.body = output;

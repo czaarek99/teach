@@ -2,7 +2,16 @@ import { RootStore } from "../../stores";
 import { DMPageController } from "../pages";
 import { NewConversationModel } from "../../models";
 import { observable, action } from "mobx";
-import { ErrorModel, ValidatorMap, minLength, maxLength, ValidationResult, validate } from "../../validation";
+import { objectKeys } from "../../util";
+
+import {
+	ErrorModel,
+	ValidatorMap,
+	minLength,
+	maxLength,
+	ValidationResult,
+	validate
+} from "../../validation";
 
 import {
 	ITeacher,
@@ -11,7 +20,6 @@ import {
 	CONVERSATION_TITLE_MAX_LENGTH,
 	CONVERSATION_TITLE_MIN_LENGTH,
 	DM_MAX_LENGTH,
-	DM_MIN_LENGTH,
 	HttpError,
 	ErrorMessage
 } from "common-library";
@@ -21,7 +29,6 @@ import {
 	INewConversationModel,
 	INewConversationCreatorErrorState
 } from "../../interfaces";
-import { objectKeys } from "../../util";
 
 export class NewConversationCreatorController implements INewConversationCreatorController {
 
@@ -33,7 +40,6 @@ export class NewConversationCreatorController implements INewConversationCreator
 			maxLength(CONVERSATION_TITLE_MAX_LENGTH)
 		],
 		message: [
-			minLength(DM_MIN_LENGTH),
 			maxLength(DM_MAX_LENGTH)
 		],
 		receiver: [

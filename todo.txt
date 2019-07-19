@@ -5,6 +5,7 @@
 * add sender to messages (db)
 
 * cors shit
+* usercache to store (so we dont make a million requests each time)
 * pricing information on ads
 * decide on money handling
 * purse?

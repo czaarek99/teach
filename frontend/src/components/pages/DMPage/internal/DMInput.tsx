@@ -29,7 +29,7 @@ const styles = (theme: Theme) => createStyles({
 	},
 
 	helperText: {
-		margin: "8px 12px 0",
+		margin: "0 12px",
 		fontSize: 11,
 		color: theme.palette.error.main
 	}
@@ -80,10 +80,6 @@ class DMInput<T extends ErrorState = {}> extends React.Component<
 			errorTranslationValues
 		} = this.props;
 
-		const placeholderTranslation = intl.formatMessage({
-			id: placeholder
-		});
-
 		let translatedErrorComponent = null;
 
 		if(errorModel) {
@@ -121,11 +117,11 @@ class DMInput<T extends ErrorState = {}> extends React.Component<
 					inputProps={inputProps}
 					startAdornment={
 						<React.Fragment>
-							<FormattedMessage id={label}/>
+							{label}
 							<span>:</span>
 						</React.Fragment>
 					}
-					placeholder={placeholderTranslation}
+					placeholder={placeholder}
 					className={classes.input}
 					onChange={(event) => onChange(event.target.value)}
 				/>

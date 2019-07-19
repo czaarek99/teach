@@ -39,7 +39,7 @@ const styles = (theme: Theme) => createStyles({
 
 	editor: {
 		flexGrow: 1,
-		flexShrink: 0
+		flexShrink: 1
 	},
 
 	fab: {
@@ -91,7 +91,9 @@ class DMPage extends React.Component<
 
 		const convos = controller.convos.map((convo: IConversation) => {
 			return (
-				<DM convo={convo} controller={controller} />
+				<DM convo={convo}
+					key={convo.id}
+					controller={controller} />
 			);
 		});
 
