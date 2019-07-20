@@ -5,15 +5,11 @@ import {
 	Table,
 	Column,
 	Model,
-	AllowNull,
-	DataType,
-	BelongsToMany,
-	HasMany,
 	ForeignKey,
 } from "sequelize-typescript";
 
 @Table
-export class ConversationUsers extends Model<ConversationUsers> {
+export class ConversationUser extends Model<ConversationUser> {
 
 	@ForeignKey(() => User)
 	@Column

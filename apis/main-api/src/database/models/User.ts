@@ -4,6 +4,7 @@ import { Ad } from "./Ad";
 import { UserSetting } from "./UserSetting";
 import { ProfilePicture } from "./ProfilePicture";
 import { Conversation } from "./Conversation";
+import { ConversationUser } from "./ConversationUser";
 
 import {
 	Table,
@@ -16,6 +17,7 @@ import {
 	PrimaryKey,
 	AutoIncrement,
 	HasMany,
+	BelongsToMany,
 } from "sequelize-typescript";
 
 import {
@@ -61,7 +63,7 @@ export class User extends Model<User> {
 	@Column(DataType.STRING(PHONE_NUMBER_MAX_LENGTH))
 	public phoneNumber?: string
 
-	@HasMany(() => Conversation, "userId")
+	@BelongsToMany(() => Conversation, () => ConversationUser)
 	public conversations: Conversation[];
 
 	@HasOne(() => ProfilePicture,  "userId")

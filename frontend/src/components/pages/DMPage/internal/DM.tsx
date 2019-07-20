@@ -34,6 +34,11 @@ class DM extends React.Component<
 
 		const onlyOtherMember = convo.members[0];
 
+		let lastMessage;
+		if(convo.messages.length > 0) {
+			lastMessage = convo.messages[0].content;
+		}
+
 		return (
 			<div className={classes.root}
 				onClick={() => controller.selectConvo(convo)}>
@@ -45,7 +50,7 @@ class DM extends React.Component<
 						{onlyOtherMember.firstName} {onlyOtherMember.lastName}
 					</Typography>
 					<Typography>
-						{convo.messages[0]}
+						{lastMessage}
 					</Typography>
 				</div>
 			</div>

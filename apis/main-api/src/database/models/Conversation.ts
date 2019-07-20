@@ -1,7 +1,7 @@
 import { User } from "./User";
 import { Message } from "./Message";
 import { CONVERSATION_TITLE_MAX_LENGTH } from "common-library";
-import { ConversationUsers } from "./ConversationUsers";
+import { ConversationUser } from "./ConversationUser";
 
 import {
 	Table,
@@ -11,7 +11,6 @@ import {
 	DataType,
 	BelongsToMany,
 	HasMany,
-	ForeignKey,
 	Unique,
 	PrimaryKey,
 	AutoIncrement,
@@ -26,7 +25,7 @@ export class Conversation extends Model<Conversation> {
 	@Column(DataType.INTEGER.UNSIGNED)
 	public id: number;
 
-	@BelongsToMany(() => User, () => ConversationUsers, "userId")
+	@BelongsToMany(() => User, () => ConversationUser)
 	public members: User[];
 
 	@HasMany(() => Message, "conversationId")

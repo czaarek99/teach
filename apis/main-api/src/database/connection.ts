@@ -9,7 +9,7 @@ import { ProfilePicture } from "./models/ProfilePicture";
 import { AdImage } from "./models/AdImage";
 import { Conversation } from "./models/Conversation";
 import { Message } from "./models/Message";
-import { ConversationUsers } from "./models/ConversationUsers";
+import { ConversationUser } from "./models/ConversationUser";
 
 export function connectToDatabase() : Sequelize {
 	const connection = new Sequelize({
@@ -31,7 +31,7 @@ export function connectToDatabase() : Sequelize {
 		AdImage,
 		Conversation,
 		Message,
-		ConversationUsers
+		ConversationUser
 	]);
 
 	return connection;

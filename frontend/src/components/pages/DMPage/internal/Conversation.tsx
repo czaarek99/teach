@@ -4,6 +4,7 @@ import DMEditor from "./DMEditor";
 import { observer } from "mobx-react";
 import { InjectedIntlProps, injectIntl } from "react-intl";
 import { IConversationController } from "../../../../interfaces";
+import { IMessage } from "common-library";
 
 import {
 	Theme,
@@ -12,7 +13,6 @@ import {
 	withStyles,
 	Typography
 } from "@material-ui/core";
-import { IMessage } from "common-library";
 
 const styles = (theme: Theme) => createStyles({
 

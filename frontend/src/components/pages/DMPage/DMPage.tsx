@@ -29,12 +29,20 @@ const styles = (theme: Theme) => createStyles({
 	},
 
 	messages: {
-		flexBasis: 270,
+		flexBasis: 50,
 		flexGrow: 0,
 		flexShrink: 0,
 		borderRightWidth: 1,
 		borderRightColor: grey[300],
-		borderRightStyle: "solid"
+		borderRightStyle: "solid",
+
+		"@media screen and (min-width: 500px)": {
+			flexBasis: 100,
+		},
+
+		"@media screen and (min-width: 1000px)": {
+			flexBasis: 270,
+		}
 	},
 
 	editor: {
