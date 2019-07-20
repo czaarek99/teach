@@ -6,10 +6,17 @@ import {
 	Column,
 	Model,
 	ForeignKey,
+	BelongsTo,
 } from "sequelize-typescript";
 
 @Table
 export class ConversationUser extends Model<ConversationUser> {
+
+	@BelongsTo(() => Conversation, "conversationId")
+	public conversation: Conversation;
+
+	@BelongsTo(() => User, "userId")
+	public user: User;
 
 	@ForeignKey(() => User)
 	@Column

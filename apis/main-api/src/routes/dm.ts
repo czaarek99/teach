@@ -11,6 +11,7 @@ import { ProfilePicture } from "../database/models/ProfilePicture";
 import { resolveTeacher } from "../database/resolvers/resolveTeacher";
 import { Op } from "sequelize";
 import { throwApiError } from "server-lib";
+import { ConversationUser } from "../database/models/ConversationUser";
 
 import {
 	IDMListInput,
@@ -29,7 +30,9 @@ import {
 
 const router = Router();
 
-function resolveConversation(convo: Conversation) : IConversation {
+function resolveConversation(convoUser: ConversationUser) : IConversation {
+
+	const convo = convoUser.conversation;
 
 	const messages : IMessage[] = convo.messages.map((message: Message) => {
 		return {
@@ -75,8 +78,8 @@ router.get("/list", {
 		userId: context.state.session.userId
 	};
 
-	const [conversations, count] : [Conversation[], number] = await Promise.all([
-		Conversation.findAll({
+	const [convoUsers, count] : [ConversationUser[], number] = await Promise.all([
+		ConversationUser.findAll({
 			where,
 			limit: query.limit,
 			offset: query.offset,
@@ -85,33 +88,34 @@ router.get("/list", {
 			],
 			include: [
 				{
-					model: Message,
-					limit: 100,
-					order: [
-						["createdAt", "DESC"]
-					]
-				},
-				{
-					model: User,
-					where: {
-						id: {
-							[Op.not]: context.state.session.userId
-						}
-					},
+					model: Conversation,
 					include: [
-						Address,
-						UserSetting,
-						ProfilePicture
+						{
+							model: User,
+							where: {
+								id: {
+									[Op.not]: context.state.session.userId
+								}
+							},
+							include: [
+								Address,
+								UserSetting,
+								ProfilePicture,
+							]
+						},
+						{
+							model: Message
+						}
 					]
 				}
 			]
 		}),
-		Conversation.count({
+		ConversationUser.count({
 			where
 		})
 	]);
 
-	const resolved : IConversation[] = conversations.map(
+	const resolved : IConversation[] = convoUsers.map(
 		resolveConversation
 	);
 
@@ -139,17 +143,15 @@ router.put("/convo", {
 }, async (context: CustomContext) => {
 
 	const input = context.request.body as INewConversationInput;
-	const conversation : Conversation = await Conversation.create({
-		title: input.title
-	});
-
 	const userId = context.state.session.userId;
-	const members: number[] = [...input.members, userId];
+
+	const members = new Set<number>(input.members);
+	members.add(userId);
 
 	const users : User[] = await User.findAll<User>({
 		where: {
 			id: {
-				[Op.in]: members
+				[Op.in]: [...members]
 			}
 		},
 		include: [
@@ -170,7 +172,20 @@ router.put("/convo", {
 		);
 	}
 
-	await conversation.$add("members", users)
+	const conversation : Conversation = await Conversation.create({
+		title: input.title
+	});
+
+	const inserts : Partial<ConversationUser>[] = [];
+
+	for(const member of members) {
+		inserts.push({
+			userId: member,
+			conversationId: conversation.id
+		})
+	}
+
+	await ConversationUser.bulkCreate(inserts);
 
 	const messages : IMessage[] = [];
 
